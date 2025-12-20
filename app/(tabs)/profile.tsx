@@ -4,7 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 import { ChevronRight, RefreshCw, FileText, LogOut } from 'lucide-react-native'
 
-import { useUserStore, useAuthStore } from '@shared/stores'
+import { useUserStore } from '@shared/stores/user.store'
+import { useAuthStore } from '@shared/stores/auth.store'
 import { colors } from '@theme/colors'
 
 export default function ProfileScreen() {

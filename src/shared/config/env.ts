@@ -1,7 +1,8 @@
 import Constants from 'expo-constants'
 
 export const ENV = {
-  API_URL: (Constants.expoConfig?.extra?.apiUrl as string) ?? 'https://api-dev.skineasy.com',
+  API_URL: (Constants.expoConfig?.extra?.apiUrl as string) ?? 'http://localhost:3000',
+  API_KEY: (Constants.expoConfig?.extra?.apiKey as string) ?? '',
   TYPEFORM_ID: (Constants.expoConfig?.extra?.typeformId as string) ?? '',
   PRESTASHOP_URL: (Constants.expoConfig?.extra?.prestashopUrl as string) ?? 'https://skineasy.com',
   IS_DEV: __DEV__,

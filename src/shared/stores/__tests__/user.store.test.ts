@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { useUserStore } from '@shared/stores/user.store'
-import type { UserProfile } from '@shared/types'
+import type { UserProfile } from '@shared/types/user.types'
 
 describe('useUserStore', () => {
   beforeEach(() => {

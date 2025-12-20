@@ -863,6 +863,7 @@ eas build --platform android
 7. **Absolute Imports:** ALWAYS use absolute imports, never relative ones
 8. **Ask before committing:** Always confirm with user before creating git commits
 9. **i18n for all text:** NEVER hardcode text strings in components. Always use i18n translations via `t('key')`
+10. **No barrel index.ts files:** NEVER create index.ts files that only re-export from other files. Import directly from the source file instead (e.g., `import { Button } from '@shared/components/Button'` not `import { Button } from '@shared/components'`)
 
 ---
 

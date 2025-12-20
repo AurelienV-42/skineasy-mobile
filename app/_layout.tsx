@@ -13,8 +13,8 @@ import * as SplashScreen from 'expo-splash-screen'
 
 import '../src/global.css'
 import '../src/i18n'
-import { queryClient } from '@shared/config'
-import { useAuthStore } from '@shared/stores'
+import { queryClient } from '@shared/config/queryClient'
+import { useAuthStore } from '@shared/stores/auth.store'
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync()

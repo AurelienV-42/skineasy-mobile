@@ -1,5 +1,5 @@
 import { ENV } from '@shared/config/env'
-import type { RefreshTokenResponse } from '@shared/types'
+import type { RefreshTokenResponse } from '@shared/types/api.types'
 import {
   clearAllTokens,
   getRefreshToken,
@@ -21,6 +21,7 @@ class ApiClient {
 
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
+      'apikey': ENV.API_KEY,
       ...options.headers,
     }
 
@@ -92,10 +93,11 @@ class ApiClient {
         return null
       }
 
-      const response = await fetch(`${ENV.API_URL}/auth/refresh`, {
+      const response = await fetch(`${ENV.API_URL}/api/v1/auth/refresh`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'apikey': ENV.API_KEY,
         },
         body: JSON.stringify({ refresh_token: refreshToken }),
       })

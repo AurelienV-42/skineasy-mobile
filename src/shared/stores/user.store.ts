@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { UserProfile } from '@shared/types'
+import type { UserProfile } from '@shared/types/user.types'
 
 interface UserState {
   user: UserProfile | null

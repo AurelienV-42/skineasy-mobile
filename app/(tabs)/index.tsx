@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { useUserStore } from '@shared/stores'
+import { useUserStore } from '@shared/stores/user.store'
 
 export default function DashboardScreen() {
   const { t } = useTranslation()
