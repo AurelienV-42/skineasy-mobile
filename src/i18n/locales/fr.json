@@ -1,0 +1,102 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "done": "Terminé",
+    "noConnection": "Pas de connexion internet"
+  },
+  "auth": {
+    "login": "Connexion",
+    "register": "Créer un compte",
+    "email": "Email",
+    "password": "Mot de passe",
+    "firstname": "Prénom",
+    "lastname": "Nom",
+    "forgotPassword": "Mot de passe oublié ?",
+    "noAccount": "Pas encore de compte ?",
+    "hasAccount": "Déjà un compte ?",
+    "invalidCredentials": "Identifiants invalides",
+    "registerSuccess": "Compte créé avec succès"
+  },
+  "dashboard": {
+    "greeting": "Bonjour {{name}}",
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "tomorrow": "Demain",
+    "reminder": "Pense à entrer tes données quotidiennes"
+  },
+  "journal": {
+    "dailySummary": "Récapitulatif journalier",
+    "sleep": {
+      "title": "Sommeil",
+      "question": "Comment as-tu dormi ?",
+      "hours": "Heures de sommeil",
+      "quality": {
+        "bad": "Mal",
+        "neutral": "Neutre",
+        "good": "Bien"
+      }
+    },
+    "nutrition": {
+      "title": "Repas & Snacks",
+      "addMeal": "Ajouter une photo de mon repas/snack",
+      "addNote": "Ajouter une note au repas"
+    },
+    "sport": {
+      "title": "Exercice physique",
+      "addActivity": "Ajouter une activité",
+      "duration": "Durée",
+      "minutes": "min",
+      "note": "Note : Comment t'es-tu senti(e) ?",
+      "activities": {
+        "yoga": "Yoga",
+        "cardio": "Cardio",
+        "hiit": "HIIT",
+        "pilates": "Pilates",
+        "running": "Course à pied",
+        "walking": "Marche",
+        "strength": "Musculation",
+        "swimming": "Natation",
+        "cycling": "Vélo",
+        "other": "Autre"
+      }
+    }
+  },
+  "routine": {
+    "title": "Ma Routine",
+    "morning": "Matin",
+    "evening": "Soir",
+    "shopRoutine": "Commander ma Routine",
+    "whyThisProduct": "Pourquoi ce produit ?",
+    "step": "Étape {{number}}"
+  },
+  "profile": {
+    "title": "Profil",
+    "skinType": "Type de peau",
+    "retakeDiagnosis": "Refaire le diagnostic",
+    "termsConditions": "Conditions générales",
+    "logout": "Déconnexion",
+    "logoutConfirm": "Es-tu sûr(e) de vouloir te déconnecter ?"
+  },
+  "diagnosis": {
+    "required": "Diagnostic requis",
+    "requiredMessage": "Complète le diagnostic de peau pour obtenir ta routine personnalisée.",
+    "start": "Commencer le diagnostic"
+  },
+  "validation": {
+    "required": "Ce champ est requis",
+    "invalidEmail": "Adresse email invalide",
+    "passwordMin": "Le mot de passe doit contenir au moins {{min}} caractères",
+    "firstnameMin": "Le prénom doit contenir au moins {{min}} caractères",
+    "lastnameMin": "Le nom doit contenir au moins {{min}} caractères"
+  }
+}
