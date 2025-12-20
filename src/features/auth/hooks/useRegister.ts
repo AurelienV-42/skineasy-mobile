@@ -15,8 +15,8 @@ export function useRegister() {
   return useMutation({
     mutationFn: async (data: RegisterInput) => {
       const registerResponse = await authService.register(data)
-      await setTokens(registerResponse.access_token)
-      const user = await authService.getMe()
+      const { accessToken, refreshToken, user } = registerResponse.data
+      await setTokens(accessToken, refreshToken)
       return user
     },
     onSuccess: (user) => {

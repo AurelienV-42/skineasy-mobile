@@ -1,14 +1,29 @@
 // Auth types
+export interface AuthUser {
+  id: number
+  email: string
+  firstname: string
+  lastname: string
+}
+
 export interface LoginResponse {
-  access_token: string
+  data: {
+    accessToken: string
+    refreshToken: string
+    user: AuthUser
+  }
 }
 
 export interface RegisterResponse {
-  access_token: string
+  data: {
+    accessToken: string
+    refreshToken: string
+    user: AuthUser
+  }
 }
 
 export interface MeResponse {
-  id: string
+  id: number
   email: string
   firstname: string
   lastname: string
@@ -21,7 +36,7 @@ export interface RefreshTokenResponse {
 
 // User types
 export interface User {
-  id: string
+  id: number
   email: string
   firstname: string
   lastname: string

@@ -18,8 +18,8 @@ export function useLogin() {
       try {
         const loginResponse = await authService.login(data)
         console.log('[useLogin] Login response:', loginResponse)
-        await setTokens(loginResponse.access_token)
-        const user = await authService.getMe()
+        const { accessToken, refreshToken, user } = loginResponse.data
+        await setTokens(accessToken, refreshToken)
         console.log('[useLogin] User data:', user)
         return user
       } catch (error) {
