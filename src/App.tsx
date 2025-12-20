@@ -1,6 +1,6 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { View } from 'react-native'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
 import {
@@ -13,36 +13,24 @@ import * as SplashScreen from 'expo-splash-screen'
 
 import '@/global.css'
 import '@i18n/index'
+import { queryClient } from '@shared/config'
+import { useAuthStore } from '@shared/stores'
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync()
 
-// Create query client
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 2,
-      staleTime: 5 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
-    },
-    mutations: {
-      onError: (error) => {
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: error.message || 'Something went wrong',
-        })
-      },
-    },
-  },
-})
-
 export default function App() {
+  const loadToken = useAuthStore((state) => state.loadToken)
+
   const [fontsLoaded] = useFonts({
     Roboto_400Regular,
     Roboto_500Medium,
     Roboto_700Bold,
   })
+
+  useEffect(() => {
+    loadToken()
+  }, [loadToken])
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
