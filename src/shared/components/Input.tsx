@@ -9,7 +9,7 @@ interface InputProps extends TextInputProps {
 }
 
 export const Input = forwardRef<TextInput, InputProps>(
-  ({ label, error, className, ...props }, ref) => {
+  ({ label, error, className, style, ...props }, ref) => {
     return (
       <View className="w-full mb-4">
         {label && (
@@ -17,10 +17,12 @@ export const Input = forwardRef<TextInput, InputProps>(
         )}
         <TextInput
           ref={ref}
-          className={`w-full bg-surface border rounded-md px-4 py-3 text-base text-text ${
+          className={`w-full h-12 bg-surface border rounded-md px-4 text-text ${
             error ? 'border-error' : 'border-border'
           } ${className || ''}`}
           placeholderTextColor={colors.textLight}
+          textAlignVertical="center"
+          style={[{ fontSize: 16, lineHeight: 20 }, style]}
           {...props}
         />
         {error && (

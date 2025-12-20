@@ -1,4 +1,5 @@
-import { View, Text, Pressable, KeyboardAvoidingView, Platform } from 'react-native'
+import { useRef } from 'react'
+import { View, Text, Pressable, KeyboardAvoidingView, Platform, TextInput } from 'react-native'
 import { Link, useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -14,12 +15,14 @@ export default function LoginScreen() {
   const { t } = useTranslation()
   const router = useRouter()
   const { mutate: login, isPending } = useLogin()
+  const passwordRef = useRef<TextInput>(null)
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<LoginInput>({
+    mode: 'onChange',
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
@@ -56,6 +59,9 @@ export default function LoginScreen() {
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoComplete="email"
+                  autoFocus
+                  returnKeyType="next"
+                  onSubmitEditing={() => passwordRef.current?.focus()}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
@@ -69,11 +75,14 @@ export default function LoginScreen() {
               name="password"
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input
+                  ref={passwordRef}
                   label={t('auth.password')}
                   placeholder={t('auth.password')}
                   secureTextEntry
                   autoCapitalize="none"
                   autoComplete="password"
+                  returnKeyType="done"
+                  onSubmitEditing={handleSubmit(onSubmit)}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
@@ -86,6 +95,7 @@ export default function LoginScreen() {
               title={t('auth.login')}
               onPress={handleSubmit(onSubmit)}
               loading={isPending}
+              disabled={!isValid}
             />
           </View>
 

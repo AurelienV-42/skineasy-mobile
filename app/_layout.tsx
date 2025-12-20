@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Stack } from 'expo-router'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
 import {
   useFonts,
@@ -19,7 +19,8 @@ import { useAuthStore } from '@shared/stores/auth.store'
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync()
 
-export default function RootLayout() {
+function RootLayoutContent() {
+  const insets = useSafeAreaInsets()
   const loadToken = useAuthStore((state) => state.loadToken)
   const isLoading = useAuthStore((state) => state.isLoading)
 
@@ -44,13 +45,21 @@ export default function RootLayout() {
   }
 
   return (
+    <>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(tabs)" />
+      </Stack>
+      <Toast topOffset={insets.top + 8} />
+    </>
+  )
+}
+
+export default function RootLayout() {
+  return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(tabs)" />
-        </Stack>
-        <Toast />
+        <RootLayoutContent />
       </SafeAreaProvider>
     </QueryClientProvider>
   )
