@@ -19,17 +19,17 @@ export default function DashboardScreen() {
         {/* Placeholder - Cards will be added in Phase 6 */}
         <View className="bg-surface rounded-md p-4 mb-4 border border-border">
           <Text className="text-base font-medium text-text">{t('journal.sleep.title')}</Text>
-          <Text className="text-sm text-text-muted mt-2">Coming soon</Text>
+          <Text className="text-sm text-text-muted mt-2">{t('dashboard.comingSoon')}</Text>
         </View>
 
         <View className="bg-surface rounded-md p-4 mb-4 border border-border">
           <Text className="text-base font-medium text-text">{t('journal.nutrition.title')}</Text>
-          <Text className="text-sm text-text-muted mt-2">Coming soon</Text>
+          <Text className="text-sm text-text-muted mt-2">{t('dashboard.comingSoon')}</Text>
         </View>
 
         <View className="bg-surface rounded-md p-4 mb-4 border border-border">
           <Text className="text-base font-medium text-text">{t('journal.sport.title')}</Text>
-          <Text className="text-sm text-text-muted mt-2">Coming soon</Text>
+          <Text className="text-sm text-text-muted mt-2">{t('dashboard.comingSoon')}</Text>
         </View>
       </View>
     </SafeAreaView>

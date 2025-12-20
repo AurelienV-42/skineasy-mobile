@@ -14,7 +14,7 @@ export default function RegisterScreen() {
 
         {/* Placeholder - Form will be added in Phase 4 */}
         <View className="w-full bg-surface rounded-md p-4 mb-4">
-          <Text className="text-text-muted text-center">Register form coming soon</Text>
+          <Text className="text-text-muted text-center">{t('auth.registerFormPlaceholder')}</Text>
         </View>
 
         <Link href="/(auth)/login" asChild>

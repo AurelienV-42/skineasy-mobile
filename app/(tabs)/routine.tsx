@@ -52,9 +52,9 @@ export default function RoutineScreen() {
         {/* Placeholder - Products will be added in Phase 7 */}
         <View className="bg-surface rounded-md p-4 border border-border">
           <Text className="text-base font-medium text-text">
-            {t('routine.step', { number: 1 })}: Cleanse
+            {t('routine.step', { number: 1 })}: {t('routine.cleanse')}
           </Text>
-          <Text className="text-sm text-text-muted mt-2">Product details coming soon</Text>
+          <Text className="text-sm text-text-muted mt-2">{t('routine.productPlaceholder')}</Text>
         </View>
       </View>
     </SafeAreaView>

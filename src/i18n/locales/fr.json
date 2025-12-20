@@ -25,14 +25,17 @@
     "noAccount": "Pas encore de compte ?",
     "hasAccount": "Déjà un compte ?",
     "invalidCredentials": "Identifiants invalides",
-    "registerSuccess": "Compte créé avec succès"
+    "registerSuccess": "Compte créé avec succès",
+    "loginFormPlaceholder": "Formulaire de connexion bientôt disponible",
+    "registerFormPlaceholder": "Formulaire d'inscription bientôt disponible"
   },
   "dashboard": {
     "greeting": "Bonjour {{name}}",
     "today": "Aujourd'hui",
     "yesterday": "Hier",
     "tomorrow": "Demain",
-    "reminder": "Pense à entrer tes données quotidiennes"
+    "reminder": "Pense à entrer tes données quotidiennes",
+    "comingSoon": "Bientôt disponible"
   },
   "journal": {
     "dailySummary": "Récapitulatif journalier",
@@ -77,7 +80,9 @@
     "evening": "Soir",
     "shopRoutine": "Commander ma Routine",
     "whyThisProduct": "Pourquoi ce produit ?",
-    "step": "Étape {{number}}"
+    "step": "Étape {{number}}",
+    "cleanse": "Nettoyage",
+    "productPlaceholder": "Détails du produit bientôt disponibles"
   },
   "profile": {
     "title": "Profil",

@@ -862,6 +862,7 @@ eas build --platform android
 6. **Performance:** Use `React.memo` and `useCallback` where appropriate
 7. **Absolute Imports:** ALWAYS use absolute imports, never relative ones
 8. **Ask before committing:** Always confirm with user before creating git commits
+9. **i18n for all text:** NEVER hardcode text strings in components. Always use i18n translations via `t('key')`
 
 ---
 
