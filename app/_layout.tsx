@@ -1,5 +1,5 @@
-import { useCallback, useEffect } from 'react'
-import { View } from 'react-native'
+import { useEffect } from 'react'
+import { Stack } from 'expo-router'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
@@ -11,16 +11,17 @@ import {
 } from '@expo-google-fonts/roboto'
 import * as SplashScreen from 'expo-splash-screen'
 
-import '@/global.css'
-import '@i18n/index'
+import '../src/global.css'
+import '../src/i18n'
 import { queryClient } from '@shared/config'
 import { useAuthStore } from '@shared/stores'
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync()
 
-export default function App() {
+export default function RootLayout() {
   const loadToken = useAuthStore((state) => state.loadToken)
+  const isLoading = useAuthStore((state) => state.isLoading)
 
   const [fontsLoaded] = useFonts({
     Roboto_400Regular,
@@ -32,24 +33,23 @@ export default function App() {
     loadToken()
   }, [loadToken])
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync()
+  useEffect(() => {
+    if (fontsLoaded && !isLoading) {
+      SplashScreen.hideAsync()
     }
-  }, [fontsLoaded])
+  }, [fontsLoaded, isLoading])
 
-  if (!fontsLoaded) {
+  if (!fontsLoaded || isLoading) {
     return null
   }
 
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
-        <View className="flex-1 bg-background" onLayout={onLayoutRootView}>
-          <View className="flex-1 items-center justify-center">
-            {/* RootNavigator will go here */}
-          </View>
-        </View>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(tabs)" />
+        </Stack>
         <Toast />
       </SafeAreaProvider>
     </QueryClientProvider>

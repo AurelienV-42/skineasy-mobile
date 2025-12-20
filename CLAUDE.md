@@ -14,7 +14,7 @@
 ### Core Framework
 - **Expo SDK** (Managed Workflow)
 - **TypeScript** (strict mode)
-- **React Navigation** v6+
+- **Expo Router** - File-based routing
 
 ### State Management
 - **Zustand** - Multiple stores pattern:
@@ -26,7 +26,7 @@
   - Global error boundary for API errors
 
 ### Styling
-- **Uniwind** - Tailwind CSS bindings for React Native
+- **NativeWind** - Tailwind CSS for React Native
 - **Custom components** - No UI library, build from scratch
 
 ### Forms & Validation
@@ -66,112 +66,48 @@
 ## Project Structure
 
 ```
+app/                          # Expo Router - File-based routing
+├── _layout.tsx               # Root layout (providers, fonts)
+├── index.tsx                 # Entry redirect based on auth
+├── (auth)/                   # Auth group (unauthenticated)
+│   ├── _layout.tsx
+│   ├── login.tsx
+│   └── register.tsx
+└── (tabs)/                   # Main tabs (authenticated)
+    ├── _layout.tsx           # Tab navigator
+    ├── index.tsx             # Dashboard tab
+    ├── routine.tsx           # Routine tab
+    └── profile.tsx           # Profile tab
+
 src/
-├── features/
+├── features/                 # Feature-specific code
 │   ├── auth/
-│   │   ├── screens/
-│   │   │   ├── LoginScreen.tsx
-│   │   │   ├── RegisterScreen.tsx
-│   │   │   └── __tests__/
 │   │   ├── hooks/
-│   │   │   ├── useLogin.ts
-│   │   │   ├── useRegister.ts
-│   │   │   └── __tests__/
 │   │   ├── components/
-│   │   │   └── __tests__/
 │   │   └── schemas/
-│   │       └── auth.schema.ts
-│   │
 │   ├── journal/
-│   │   ├── screens/
-│   │   │   ├── DashboardScreen.tsx
-│   │   │   └── __tests__/
 │   │   ├── hooks/
-│   │   │   ├── useJournalEntries.ts
-│   │   │   ├── useAddEntry.ts
-│   │   │   └── __tests__/
 │   │   ├── components/
-│   │   │   ├── SleepCard.tsx
-│   │   │   ├── NutritionCard.tsx
-│   │   │   ├── SportCard.tsx
-│   │   │   ├── DatePicker.tsx
-│   │   │   └── __tests__/
 │   │   └── schemas/
-│   │       └── journal.schema.ts
-│   │
 │   ├── routine/
-│   │   ├── screens/
-│   │   │   ├── RoutineScreen.tsx
-│   │   │   └── __tests__/
 │   │   ├── hooks/
-│   │   │   ├── useRoutine.ts
-│   │   │   └── __tests__/
 │   │   ├── components/
-│   │   │   ├── RoutineToggle.tsx
-│   │   │   ├── ProductCard.tsx
-│   │   │   └── __tests__/
 │   │   └── schemas/
-│   │       └── routine.schema.ts
-│   │
 │   ├── diagnosis/
-│   │   ├── screens/
-│   │   │   ├── DiagnosisWebViewScreen.tsx
-│   │   │   └── __tests__/
 │   │   ├── hooks/
-│   │   │   ├── useDiagnosis.ts
-│   │   │   └── __tests__/
 │   │   └── schemas/
-│   │       └── diagnosis.schema.ts
-│   │
 │   └── profile/
-│       ├── screens/
-│       │   ├── ProfileScreen.tsx
-│       │   └── __tests__/
 │       ├── hooks/
-│       │   └── __tests__/
 │       └── components/
-│           └── __tests__/
 │
 ├── shared/
-│   ├── components/
-│   │   ├── Button.tsx
-│   │   ├── Input.tsx
-│   │   ├── Card.tsx
-│   │   ├── Avatar.tsx
-│   │   ├── Toast.tsx
-│   │   └── __tests__/
-│   ├── hooks/
-│   │   ├── useApi.ts
-│   │   └── __tests__/
-│   ├── services/
-│   │   ├── api.ts
-│   │   ├── auth.service.ts
-│   │   ├── journal.service.ts
-│   │   ├── diagnosis.service.ts
-│   │   └── routine.service.ts
-│   ├── stores/
-│   │   ├── auth.store.ts
-│   │   ├── user.store.ts
-│   │   └── journal.store.ts
-│   ├── utils/
-│   │   ├── storage.ts
-│   │   └── date.ts
-│   ├── config/
-│   │   ├── env.ts
-│   │   ├── queryClient.ts
-│   │   └── i18n.ts
-│   └── types/
-│       ├── api.types.ts
-│       ├── navigation.types.ts
-│       └── user.types.ts
-│
-├── navigation/
-│   ├── RootNavigator.tsx
-│   ├── AuthStack.tsx
-│   ├── MainTabs.tsx
-│   ├── DashboardStack.tsx
-│   ├── RoutineStack.tsx
-│   └── ProfileStack.tsx
+│   ├── components/           # Reusable UI components
+│   ├── hooks/                # Shared hooks
+│   ├── services/             # API services
+│   ├── stores/               # Zustand stores
+│   ├── utils/                # Utilities
+│   ├── config/               # App configuration
+│   └── types/                # TypeScript types
 │
 ├── i18n/
 │   ├── locales/
@@ -823,7 +759,7 @@ export default defineConfig({
 1. Initialize Expo project with TypeScript
 2. Configure ESLint + Prettier
 3. Setup Vitest
-4. Configure Uniwind
+4. Configure NativeWind
 5. Setup theme (colors, spacing, typography)
 6. Setup i18n with FR/EN
 7. **TEST CHECKPOINT**
@@ -925,6 +861,7 @@ eas build --platform android
 5. **Accessibility:** Add accessibilityLabel to interactive elements
 6. **Performance:** Use `React.memo` and `useCallback` where appropriate
 7. **Absolute Imports:** ALWAYS use absolute imports, never relative ones
+8. **Ask before committing:** Always confirm with user before creating git commits
 
 ---
 
@@ -980,7 +917,7 @@ Use the **context7** MCP server to retrieve up-to-date documentation and code ex
 - TanStack Query
 - Zustand
 - React Navigation
-- Uniwind
+- NativeWind
 - React Hook Form
 - Zod
 - i18next

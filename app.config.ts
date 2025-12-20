@@ -38,5 +38,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       projectId: 'dfbff412-fc10-4a77-b170-eb432c2969b9',
     },
   },
-  plugins: ['expo-secure-store', 'expo-localization'],
+  scheme: 'skineasy',
+  plugins: ['expo-router', 'expo-secure-store', 'expo-localization'],
 })
