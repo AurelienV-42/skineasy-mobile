@@ -25,6 +25,7 @@
     "noAccount": "Pas encore de compte ?",
     "hasAccount": "Déjà un compte ?",
     "invalidCredentials": "Identifiants invalides",
+    "registerError": "Impossible de créer le compte. Veuillez réessayer.",
     "registerSuccess": "Compte créé avec succès",
     "loginFormPlaceholder": "Formulaire de connexion bientôt disponible",
     "registerFormPlaceholder": "Formulaire d'inscription bientôt disponible"

@@ -26,11 +26,11 @@ export function useRegister() {
         text1: t('auth.registerSuccess'),
       })
     },
-    onError: (error: Error) => {
+    onError: () => {
       Toast.show({
         type: 'error',
         text1: t('common.error'),
-        text2: error.message,
+        text2: t('auth.registerError'),
       })
     },
   })

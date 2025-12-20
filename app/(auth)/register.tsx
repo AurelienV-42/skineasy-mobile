@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Input } from '@shared/components/Input'
 import { Button } from '@shared/components/Button'
+import { LanguageSwitcher } from '@shared/components/LanguageSwitcher'
 import { registerSchema, RegisterInput } from '@features/auth/schemas/auth.schema'
 import { useRegister } from '@features/auth/hooks/useRegister'
 
@@ -44,6 +45,7 @@ export default function RegisterScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
+      <LanguageSwitcher />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"

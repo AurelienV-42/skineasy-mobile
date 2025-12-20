@@ -1,8 +1,10 @@
 import * as SecureStore from 'expo-secure-store'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const KEYS = {
   ACCESS_TOKEN: 'access_token',
   REFRESH_TOKEN: 'refresh_token',
+  LOCALE: 'locale',
 } as const
 
 export async function getToken(): Promise<string | null> {
@@ -39,4 +41,16 @@ export async function removeRefreshToken(): Promise<void> {
 
 export async function clearAllTokens(): Promise<void> {
   await Promise.all([removeToken(), removeRefreshToken()])
+}
+
+export async function getLocale(): Promise<string | null> {
+  try {
+    return await AsyncStorage.getItem(KEYS.LOCALE)
+  } catch {
+    return null
+  }
+}
+
+export async function setLocale(locale: string): Promise<void> {
+  await AsyncStorage.setItem(KEYS.LOCALE, locale)
 }

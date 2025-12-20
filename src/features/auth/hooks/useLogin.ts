@@ -14,19 +14,27 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: async (data: LoginInput) => {
-      const loginResponse = await authService.login(data)
-      await setTokens(loginResponse.access_token)
-      const user = await authService.getMe()
-      return user
+      console.log('[useLogin] Attempting login with:', { email: data.email })
+      try {
+        const loginResponse = await authService.login(data)
+        console.log('[useLogin] Login response:', loginResponse)
+        await setTokens(loginResponse.access_token)
+        const user = await authService.getMe()
+        console.log('[useLogin] User data:', user)
+        return user
+      } catch (error) {
+        console.log('[useLogin] Error:', error)
+        throw error
+      }
     },
     onSuccess: (user) => {
       setUser(user)
     },
-    onError: (error: Error) => {
+    onError: () => {
       Toast.show({
         type: 'error',
         text1: t('common.error'),
-        text2: error.message || t('auth.invalidCredentials'),
+        text2: t('auth.invalidCredentials'),
       })
     },
   })

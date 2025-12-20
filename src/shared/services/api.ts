@@ -32,11 +32,21 @@ class ApiClient {
       }
     }
 
-    const response = await fetch(`${ENV.API_URL}${endpoint}`, {
-      ...fetchOptions,
-      headers,
-      body: body ? JSON.stringify(body) : undefined,
-    })
+    const url = `${ENV.API_URL}${endpoint}`
+    console.log('[API] Request:', { url, method: fetchOptions.method, body })
+
+    let response: Response
+    try {
+      response = await fetch(url, {
+        ...fetchOptions,
+        headers,
+        body: body ? JSON.stringify(body) : undefined,
+      })
+      console.log('[API] Response status:', response.status)
+    } catch (error) {
+      console.log('[API] Fetch error:', error)
+      throw error
+    }
 
     if (response.status === 401 && !skipAuth) {
       const newToken = await this.refreshAccessToken()

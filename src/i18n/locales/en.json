@@ -25,6 +25,7 @@
     "noAccount": "Don't have an account?",
     "hasAccount": "Already have an account?",
     "invalidCredentials": "Invalid credentials",
+    "registerError": "Unable to create account. Please try again.",
     "registerSuccess": "Account created successfully",
     "loginFormPlaceholder": "Login form coming soon",
     "registerFormPlaceholder": "Register form coming soon"

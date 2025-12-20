@@ -4,6 +4,7 @@ import * as Localization from 'expo-localization'
 
 import en from '@i18n/locales/en.json'
 import fr from '@i18n/locales/fr.json'
+import { getLocale, setLocale } from '@shared/utils/storage'
 
 const resources = {
   en: { translation: en },
@@ -27,6 +28,18 @@ i18n.use(initReactI18next).init({
   react: {
     useSuspense: false,
   },
+})
+
+// Load saved locale from storage
+getLocale().then((savedLocale) => {
+  if (savedLocale) {
+    i18n.changeLanguage(savedLocale)
+  }
+})
+
+// Save locale to storage when language changes
+i18n.on('languageChanged', (lng) => {
+  setLocale(lng)
 })
 
 export default i18n
