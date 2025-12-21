@@ -111,11 +111,11 @@ export default function ProfileScreen() {
 
         {/* User Info */}
         {!!user && (
-          <View className="pl-4 mb-8">
+          <View className="px-4 mb-8">
             <Text className="text-lg font-medium text-text">
               {user?.firstname} {user?.lastname}
             </Text>
-            <Text className="text-sm text-text-muted">{user?.email}</Text>
+            <Text className="text-sm text-textMuted">{user?.email}</Text>
             {user?.skinType && (
               <Text className="text-sm text-primary mt-1">
                 {t('profile.skinType')}: {user.skinType}
