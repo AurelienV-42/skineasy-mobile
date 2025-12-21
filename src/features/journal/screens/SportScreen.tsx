@@ -90,6 +90,7 @@ export default function SportScreen() {
       sport_type_id: sportTypeId,
       duration: Number(data.duration),
       intensity: data.intensity as SportIntensity,
+      note: data.note || null,
     }
 
     createSport.mutate(dto, {
@@ -153,7 +154,7 @@ export default function SportScreen() {
         </View>
 
         {/* Intensity Selector */}
-        <View className="mb-8">
+        <View className="mb-6">
           <Text className="text-sm font-medium text-text mb-3">
             {t('journal.sport.intensity.label')}
           </Text>
@@ -190,6 +191,26 @@ export default function SportScreen() {
           <Text className="text-sm text-textMuted text-center mt-2">
             {getIntensityLabel(selectedIntensity)}
           </Text>
+        </View>
+
+        {/* Note Input */}
+        <View className="mb-8">
+          <Controller
+            control={control}
+            name="note"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                label={t('journal.sport.note')}
+                value={value || ''}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                placeholder={t('journal.sport.notePlaceholder')}
+                multiline
+                numberOfLines={3}
+                error={errors.note?.message ? t(errors.note.message as string) : undefined}
+              />
+            )}
+          />
         </View>
 
         {/* Save Button */}

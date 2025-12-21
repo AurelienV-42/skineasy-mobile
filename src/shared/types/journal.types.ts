@@ -57,6 +57,7 @@ export interface SportEntry {
   sportType: SportTypeInfo // Populated sport type object from backend
   duration: number // minutes (min: 1)
   intensity: SportIntensity // 1-5
+  note: string | null // Optional text note
   created_at: string // ISO 8601
 }
 
@@ -89,6 +90,7 @@ export interface CreateSportEntryDto {
   sport_type_id: number // Sport type ID from backend
   duration: number // minutes (min: 1)
   intensity: SportIntensity // 1-5
+  note?: string | null // Optional text note (max 500 chars)
 }
 
 export interface CreateMealEntryDto {

@@ -280,23 +280,30 @@ export function DailySummary({
             {sportCount > 0 && Array.isArray(sportEntries) ? (
               <View className="gap-3">
                 {sportEntries.map((sport) => (
-                  <View key={sport.id} className="flex-row items-center justify-between">
-                    <View className="flex-row items-center gap-3">
-                      <View className="w-8 h-8 bg-primary/10 rounded-full items-center justify-center">
-                        <Activity size={16} color={colors.primary} />
+                  <View key={sport.id} className="gap-2">
+                    <View className="flex-row items-center justify-between">
+                      <View className="flex-row items-center gap-3">
+                        <View className="w-8 h-8 bg-primary/10 rounded-full items-center justify-center">
+                          <Activity size={16} color={colors.primary} />
+                        </View>
+                        <View>
+                          <Text className="text-sm font-medium text-text">
+                            {getSportTypeLabel(sport.sportType.name, t)}
+                          </Text>
+                          <Text className="text-xs text-textMuted">
+                            {t('dashboard.summary.intensity')} {sport.intensity}/5
+                          </Text>
+                        </View>
                       </View>
-                      <View>
-                        <Text className="text-sm font-medium text-text">
-                          {getSportTypeLabel(sport.sportType.name, t)}
-                        </Text>
-                        <Text className="text-xs text-textMuted">
-                          {t('dashboard.summary.intensity')} {sport.intensity}/5
-                        </Text>
-                      </View>
+                      <Text className="text-sm font-medium text-text">
+                        {sport.duration} {t('journal.sport.minutes')}
+                      </Text>
                     </View>
-                    <Text className="text-sm font-medium text-text">
-                      {sport.duration} {t('journal.sport.minutes')}
-                    </Text>
+                    {sport.note && (
+                      <Text className="text-xs text-textMuted italic pl-11">
+                        "{sport.note}"
+                      </Text>
+                    )}
                   </View>
                 ))}
                 {/* Add More Button */}

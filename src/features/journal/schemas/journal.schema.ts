@@ -89,6 +89,7 @@ export const sportFormSchema = z.object({
     message: 'journal.sport.durationMin',
   }),
   intensity: sportIntensitySchema,
+  note: z.string().max(500, 'journal.sport.noteMaxLength').nullable().optional(),
 })
 
 export type SportFormInput = z.infer<typeof sportFormSchema>
