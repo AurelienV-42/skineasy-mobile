@@ -1,10 +1,11 @@
-import { View, Text, Pressable, TextInput } from 'react-native'
+import { View, Text, TextInput } from 'react-native'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'expo-router'
 
 import { Button } from '@shared/components/Button'
-import { JournalLayout } from '@features/journal/components/JournalLayout'
+import { Pressable } from '@shared/components/Pressable'
+import { JournalLayout } from '@shared/components/ScreenHeader'
 import { colors } from '@theme/colors'
 
 type SportActivity =

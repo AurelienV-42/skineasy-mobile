@@ -238,6 +238,53 @@ export const typography = {
 }
 ```
 
+### Shared Components
+
+#### Pressable
+
+**ALWAYS use the custom Pressable component** instead of React Native's built-in Pressable for all interactive elements.
+
+The custom Pressable provides consistent opacity feedback (0.6 when pressed) which is a standard mobile UX pattern.
+
+**Location**: `src/shared/components/Pressable.tsx`
+
+**Usage**:
+
+```typescript
+import { Pressable } from '@shared/components/Pressable'
+
+// Basic usage
+<Pressable onPress={handlePress}>
+  <Text>Tap me</Text>
+</Pressable>
+
+// With accessibility label
+<Pressable onPress={handlePress} accessibilityLabel="Close">
+  <X size={24} color={colors.text} />
+</Pressable>
+
+// With custom styles
+<Pressable
+  onPress={handlePress}
+  className="p-4 bg-primary rounded-lg"
+>
+  <Text className="text-white">Button</Text>
+</Pressable>
+```
+
+**Features**:
+
+- Automatic opacity feedback (0.6 when pressed)
+- Supports all React Native PressableProps
+- Works with both function-based and object-based styles
+- Consistent UX across the entire app
+
+**Important**:
+
+- NEVER import Pressable from 'react-native'
+- ALWAYS import from '@shared/components/Pressable'
+- This ensures consistent press behavior across all interactive elements
+
 ---
 
 ## Navigation Structure
@@ -375,14 +422,14 @@ GET  /diagnosis/latest    -> includes routine: { morning: Step[], evening: Step[
 import { z } from 'zod'
 
 export const loginSchema = z.object({
-  email: z.string().email('Invalid email'),
+  email: z.email('Invalid email'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 })
 
 export const registerSchema = z.object({
   firstname: z.string().min(2, 'First name is required'),
   lastname: z.string().min(2, 'Last name is required'),
-  email: z.string().email('Invalid email'),
+  email: z.email('Invalid email'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 })
 
@@ -754,6 +801,63 @@ export default defineConfig({
   },
 })
 ```
+
+---
+
+## Code Quality & Linting
+
+### ESLint and Prettier
+
+The project is configured with ESLint and Prettier for code quality and formatting.
+
+#### Available Scripts
+
+```bash
+# Linting
+npm run lint              # Check for linting errors in src/ and app/
+npm run lint:fix          # Auto-fix linting errors
+
+# Formatting
+npm run format            # Format all TypeScript, JSON, and Markdown files
+npm run format:check      # Check formatting without making changes
+
+# Combined Check
+npm run check             # Run both lint and format:check (use before commits)
+```
+
+#### Pre-Commit Checklist
+
+**IMPORTANT:** Always run the following before committing changes:
+
+```bash
+npm run check
+```
+
+This ensures:
+
+- No ESLint errors in the codebase
+- All files are properly formatted with Prettier
+- Code follows project standards
+
+If `npm run check` fails:
+
+1. Run `npm run lint:fix` to auto-fix linting issues
+2. Run `npm run format` to auto-format files
+3. Manually fix any remaining errors
+4. Run `npm run check` again to verify
+
+#### ESLint Configuration
+
+- Configured for React, React Hooks, and TypeScript
+- Includes Prettier integration
+- Located in `eslint.config.js`
+- Custom rules for React Native Animated API (refs are allowed for animation values)
+
+#### Prettier Configuration
+
+- Formats: TypeScript, TSX, JSON, Markdown
+- Excludes: node_modules, .expo
+- Configuration in `.prettierrc` or `package.json`
 
 ---
 

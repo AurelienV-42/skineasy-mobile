@@ -2,17 +2,18 @@ import { useRouter } from 'expo-router'
 import { ChevronLeft } from 'lucide-react-native'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ScrollView, Text, View } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
 
-interface JournalLayoutProps {
+interface ScreenHeaderProps {
   title: string
   children: ReactNode
 }
 
-export function JournalLayout({ title, children }: JournalLayoutProps) {
+export function ScreenHeader({ title, children }: ScreenHeaderProps) {
   const { t } = useTranslation()
   const router = useRouter()
 
@@ -33,3 +34,6 @@ export function JournalLayout({ title, children }: JournalLayoutProps) {
     </SafeAreaView>
   )
 }
+
+// Keep JournalLayout as an alias for backward compatibility
+export { ScreenHeader as JournalLayout }

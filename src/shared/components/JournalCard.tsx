@@ -1,5 +1,7 @@
-import { View, Text, Pressable } from 'react-native'
+import { View, Text } from 'react-native'
 import { ReactNode } from 'react'
+
+import { Pressable } from '@shared/components/Pressable'
 
 interface JournalCardProps {
   icon: ReactNode

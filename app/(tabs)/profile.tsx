@@ -8,11 +8,13 @@ import {
   RefreshCw,
   Shield,
   Trash2,
+  UserPen,
 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { Alert, Linking, Pressable, Text, View } from 'react-native'
+import { Alert, Linking, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { Pressable } from '@shared/components/Pressable'
 import { useAuthStore } from '@shared/stores/auth.store'
 import { useUserStore } from '@shared/stores/user.store'
 import { colors } from '@theme/colors'
@@ -95,6 +97,17 @@ export default function ProfileScreen() {
 
         {/* Menu Items */}
         <View className="bg-surface mb-4">
+          <Pressable
+            onPress={() => router.push('/profile/edit')}
+            className="flex-row items-center justify-between p-4 border-b border-border"
+          >
+            <View className="flex-row items-center gap-3">
+              <UserPen size={20} color={colors.primary} />
+              <Text className="text-base text-text">{t('profile.editProfile')}</Text>
+            </View>
+            <ChevronRight size={20} color={colors.textMuted} />
+          </Pressable>
+
           <Pressable className="flex-row items-center justify-between p-4 border-b border-border">
             <View className="flex-row items-center gap-3">
               <RefreshCw size={20} color={colors.primary} />

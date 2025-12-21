@@ -1,7 +1,9 @@
-import { useEffect, useRef } from 'react'
-import { Animated, Pressable, Text, View } from 'react-native'
 import { ChevronRight, Sparkles } from 'lucide-react-native'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Animated, Text, View } from 'react-native'
+
+import { Pressable } from '@shared/components/Pressable'
 
 interface QuizBannerProps {
   onPress: () => void
@@ -9,10 +11,15 @@ interface QuizBannerProps {
 
 export function QuizBanner({ onPress }: QuizBannerProps) {
   const { t } = useTranslation()
+  // eslint-disable-next-line react-hooks/refs
   const scaleAnim = useRef(new Animated.Value(1)).current
+  // eslint-disable-next-line react-hooks/refs
   const pressScale = useRef(new Animated.Value(1)).current
+  // eslint-disable-next-line react-hooks/refs
   const float1 = useRef(new Animated.Value(0)).current
+  // eslint-disable-next-line react-hooks/refs
   const float2 = useRef(new Animated.Value(0)).current
+  // eslint-disable-next-line react-hooks/refs
   const float3 = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
@@ -66,6 +73,7 @@ export function QuizBanner({ onPress }: QuizBannerProps) {
       float2Anim.stop()
       float3Anim.stop()
     }
+    // eslint-disable-next-line react-hooks/refs
   }, [scaleAnim, float1, float2, float3])
 
   const handlePressIn = () => {
@@ -134,9 +142,7 @@ export function QuizBanner({ onPress }: QuizBannerProps) {
               <Sparkles size={32} color="#FFFFFF" strokeWidth={2} />
             </View>
             <View className="flex-1">
-              <Text className="text-lg font-bold text-white mb-1">
-                {t('dashboard.quiz.title')}
-              </Text>
+              <Text className="text-lg font-bold text-white mb-1">{t('dashboard.quiz.title')}</Text>
               <Text className="text-sm text-white/90">{t('dashboard.quiz.subtitle')}</Text>
             </View>
           </View>

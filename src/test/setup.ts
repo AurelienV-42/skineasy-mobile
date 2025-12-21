@@ -29,7 +29,6 @@ vi.mock('expo-localization', () => ({
 
 // Global test utilities
 declare global {
-  // eslint-disable-next-line no-var
   var __TEST__: boolean
 }
 

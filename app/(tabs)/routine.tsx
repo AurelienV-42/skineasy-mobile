@@ -1,9 +1,10 @@
-import { View, Text, Pressable } from 'react-native'
+import { View, Text } from 'react-native'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Sun, Moon } from 'lucide-react-native'
 
+import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
 
 export default function RoutineScreen() {

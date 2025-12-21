@@ -10,9 +10,11 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
-    "lint": "eslint src/",
-    "lint:fix": "eslint src/ --fix",
-    "format": "prettier --write \"src/**/*.{ts,tsx,json}\""
+    "lint": "eslint src/ app/",
+    "lint:fix": "eslint src/ app/ --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\" \"!node_modules/**\" \"!.expo/**\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,md}\" \"!node_modules/**\" \"!.expo/**\"",
+    "check": "npm run lint && npm run format:check"
   },
   "dependencies": {
     "@expo-google-fonts/roboto": "^0.4.2",

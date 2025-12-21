@@ -1,11 +1,5 @@
 import { create } from 'zustand'
-import {
-  getToken,
-  setToken,
-  removeToken,
-  setRefreshToken,
-  clearAllTokens,
-} from '@shared/utils/storage'
+import { getToken, setToken, setRefreshToken, clearAllTokens } from '@shared/utils/storage'
 
 interface AuthState {
   token: string | null

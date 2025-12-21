@@ -97,6 +97,7 @@
   "profile": {
     "title": "Profile",
     "skinType": "Skin Type",
+    "editProfile": "Edit Profile",
     "retakeDiagnosis": "Retake Diagnosis",
     "language": "Language",
     "languageEnglish": "English",
@@ -112,7 +113,9 @@
     "deleteAccountTitle": "Delete Account",
     "logout": "Log Out",
     "logoutConfirm": "Are you sure you want to log out?",
-    "logoutTitle": "Log Out"
+    "logoutTitle": "Log Out",
+    "updateSuccess": "Profile Updated",
+    "emailReadOnly": "Email cannot be changed"
   },
   "diagnosis": {
     "required": "Diagnosis Required",

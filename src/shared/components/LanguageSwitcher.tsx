@@ -1,6 +1,7 @@
-import { View, Pressable, Text } from 'react-native'
+import { View, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
+import { Pressable } from '@shared/components/Pressable'
 import { appConfig } from '@shared/config/appConfig'
 
 export function LanguageSwitcher() {

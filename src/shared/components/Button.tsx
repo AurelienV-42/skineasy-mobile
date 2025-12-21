@@ -1,5 +1,6 @@
-import { Pressable, Text, ActivityIndicator, PressableProps } from 'react-native'
+import { Text, ActivityIndicator, PressableProps } from 'react-native'
 
+import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline'
