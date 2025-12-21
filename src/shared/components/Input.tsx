@@ -18,6 +18,11 @@ interface InputProps extends TextInputProps {
    * Show password visibility toggle (only for secureTextEntry inputs)
    */
   showPasswordToggle?: boolean
+  /**
+   * Number of lines for multiline input (default: 4)
+   * Used to calculate the height of the input
+   */
+  numberOfLines?: number
 }
 
 export const Input = forwardRef<TextInput, InputProps>(
@@ -33,11 +38,15 @@ export const Input = forwardRef<TextInput, InputProps>(
       multiline,
       showPasswordToggle = false,
       secureTextEntry,
+      numberOfLines = 4,
       value,
       ...props
     },
     ref
   ) => {
+    // Calculate height for multiline inputs based on numberOfLines
+    // lineHeight (18) + some padding
+    const multilineHeight = numberOfLines * 18 + 24
     const scrollContext = useScrollContext()
     const containerRef = useRef<View>(null)
     const [isPasswordVisible, setIsPasswordVisible] = useState(false)
@@ -111,7 +120,7 @@ export const Input = forwardRef<TextInput, InputProps>(
     return (
       <View ref={containerRef} className="w-full mb-6">
         <View
-          className={`relative ${multiline ? 'min-h-24' : 'h-14'} ${
+          className={`relative ${
             isFocused
               ? 'border-2 border-primary'
               : error
@@ -119,6 +128,7 @@ export const Input = forwardRef<TextInput, InputProps>(
                 : 'border border-border'
           } bg-surface rounded-xl ${className || ''}`}
           style={{
+            height: multiline ? multilineHeight : 56,
             shadowColor: isFocused ? colors.primary : '#000',
             shadowOffset: { width: 0, height: isFocused ? 4 : 2 },
             shadowOpacity: isFocused ? 0.15 : 0.05,

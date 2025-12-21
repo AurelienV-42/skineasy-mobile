@@ -17,17 +17,27 @@ import { useRouter } from 'expo-router'
 import { Activity, ChevronDown, Frown, Meh, Moon, Plus, Smile, Utensils } from 'lucide-react-native'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Image, LayoutAnimation, Platform, Text, UIManager, View } from 'react-native'
+import { Image, LayoutAnimation, Text, View } from 'react-native'
 
 import { getSportTypeLabel } from '@features/journal/utils/sportMapping'
 import { Pressable } from '@shared/components/Pressable'
+import { ENV } from '@shared/config/env'
 import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
 import { isPast } from '@shared/utils/date'
+import { logger } from '@shared/utils/logger'
 import { colors } from '@theme/colors'
 
-// Enable LayoutAnimation on Android
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true)
+/**
+ * Build full image URL from relative path
+ */
+function getImageUrl(path: string | null): string | null {
+  if (!path) return null
+  // If already a full URL, return as-is
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path
+  }
+  // Otherwise prepend API base URL
+  return `${ENV.API_URL}${path}`
 }
 
 interface DailySummaryProps {
@@ -211,19 +221,35 @@ export function DailySummary({
           <View className="px-4 pb-4 border-t border-border pt-4">
             {mealCount > 0 && Array.isArray(mealEntries) ? (
               <View className="gap-3">
-                {mealEntries.map((meal) => (
+                {mealEntries.map((meal) => {
+                  const imageUrl = getImageUrl(meal.photo_url)
+                  logger.debug('[DailySummary] Meal entry:', {
+                    id: meal.id,
+                    photo_url: meal.photo_url,
+                    imageUrl,
+                    meal_type: meal.meal_type,
+                  })
+                  return (
                   <View key={meal.id} className="flex-row gap-3">
-                    {meal.photo_url && (
+                    {imageUrl ? (
                       <Image
-                        source={{ uri: meal.photo_url }}
-                        className="w-16 h-16 rounded-lg"
+                        source={{ uri: imageUrl }}
+                        className="w-16 h-16 rounded-lg bg-border"
                         resizeMode="cover"
                       />
+                    ) : (
+                      <View className="w-16 h-16 rounded-lg bg-secondary/20 items-center justify-center">
+                        <Utensils size={24} color={colors.secondary} />
+                      </View>
                     )}
                     <View className="flex-1 justify-center">
-                      {meal.meal_type && (
+                      {meal.meal_type ? (
                         <Text className="text-xs font-medium text-primary uppercase">
                           {t(`dashboard.summary.mealType.${meal.meal_type}`)}
+                        </Text>
+                      ) : (
+                        <Text className="text-sm font-medium text-text">
+                          {t('journal.nutrition.meal')}
                         </Text>
                       )}
                       {meal.note && (
@@ -233,7 +259,8 @@ export function DailySummary({
                       )}
                     </View>
                   </View>
-                ))}
+                  )
+                })}
                 {/* Add More Button - Only show for today */}
                 {canLogEntries && (
                   <Pressable

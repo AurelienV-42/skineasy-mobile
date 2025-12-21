@@ -96,6 +96,7 @@
     "nutrition": {
       "title": "Meals & Snacks",
       "screenTitle": "Meals & Snacks",
+      "meal": "Meal",
       "addMeal": "Add a photo of your meal/snack",
       "addNote": "Add a note to your meal",
       "notePlaceholder": "Optional note about your meal...",
