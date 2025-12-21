@@ -18,9 +18,25 @@ export const useAuthStore = create<AuthState>((set) => ({
   isLoading: true,
 
   setTokens: async (accessToken, refreshToken) => {
+    logger.info('[authStore] setTokens - Saving tokens:', {
+      hasAccessToken: !!accessToken,
+      hasRefreshToken: !!refreshToken,
+      refreshTokenLength: refreshToken?.length,
+    })
     await setToken(accessToken)
     if (refreshToken) {
       await setRefreshToken(refreshToken)
+      logger.info('[authStore] setTokens - Refresh token saved')
+
+      // Verify it was saved correctly
+      const { getRefreshToken } = await import('@shared/utils/storage')
+      const savedRefreshToken = await getRefreshToken()
+      logger.info('[authStore] setTokens - Verification:', {
+        wasSaved: !!savedRefreshToken,
+        matchesOriginal: savedRefreshToken === refreshToken,
+      })
+    } else {
+      logger.warn('[authStore] setTokens - No refresh token provided!')
     }
     set({ token: accessToken, isAuthenticated: true })
   },

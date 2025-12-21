@@ -39,9 +39,34 @@
     "tomorrow": "Tomorrow",
     "reminder": "Remember to enter your daily data",
     "comingSoon": "Coming soon",
+    "quickAdd": "Quick Add",
     "quiz": {
       "title": "Quiz: Personalized Routine",
       "subtitle": "Discover your ideal routine"
+    },
+    "summary": {
+      "title": "Daily Summary",
+      "notLogged": "Not logged yet",
+      "logSleep": "Log your sleep",
+      "logMeal": "Log a meal",
+      "logActivity": "Log an activity",
+      "addMore": "Add more",
+      "meal": "meal",
+      "meals": "meals",
+      "activity": "activity",
+      "activities": "activities",
+      "intensity": "Intensity",
+      "mealType": {
+        "breakfast": "Breakfast",
+        "lunch": "Lunch",
+        "dinner": "Dinner",
+        "snack": "Snack"
+      }
+    },
+    "navigation": {
+      "previousDay": "Previous day",
+      "nextDay": "Next day",
+      "selectDate": "Select date"
     }
   },
   "journal": {
@@ -55,31 +80,66 @@
         "bad": "Bad",
         "neutral": "Neutral",
         "good": "Good"
-      }
+      },
+      "hoursMin": "Hours must be at least 0",
+      "hoursMax": "Hours cannot exceed 24",
+      "hoursInvalid": "Please enter a valid number",
+      "saveSuccess": "Sleep entry saved successfully",
+      "saveError": "Failed to save sleep entry",
+      "deleteSuccess": "Sleep entry deleted",
+      "deleteError": "Failed to delete sleep entry"
     },
     "nutrition": {
       "title": "Meals & Snacks",
       "screenTitle": "Meals & Snacks",
       "addMeal": "Add a photo of your meal/snack",
-      "addNote": "Add a note to your meal"
+      "addNote": "Add a note to your meal",
+      "notePlaceholder": "Optional note about your meal...",
+      "takePhoto": "Take Photo",
+      "gallery": "Gallery",
+      "cameraPermissionRequired": "Permission to access camera is required!",
+      "galleryPermissionRequired": "Permission to access camera roll is required!",
+      "noteMaxLength": "Note cannot exceed 500 characters",
+      "saveSuccess": "Meal saved successfully",
+      "saveError": "Failed to save meal",
+      "deleteSuccess": "Meal deleted",
+      "deleteError": "Failed to delete meal",
+      "uploadError": "Failed to upload image"
     },
     "sport": {
       "title": "Physical Exercise",
       "screenTitle": "Physical Exercise",
-      "addActivity": "Add Activity",
+      "addActivity": "Activity Type",
+      "selectActivity": "Select Activity",
+      "moreActivities": "More activities...",
+      "searchActivities": "Search activities...",
+      "noActivitiesFound": "No activities found",
       "duration": "Duration",
       "minutes": "min",
       "note": "Note: How did you feel?",
+      "durationMin": "Duration must be at least 1 minute",
+      "saveSuccess": "Activity saved successfully",
+      "saveError": "Failed to save activity",
+      "deleteSuccess": "Activity deleted",
+      "deleteError": "Failed to delete activity",
+      "intensity": {
+        "label": "Intensity",
+        "veryLight": "Very Light",
+        "light": "Light",
+        "moderate": "Moderate",
+        "hard": "Hard",
+        "veryHard": "Very Hard"
+      },
       "activities": {
         "yoga": "Yoga",
         "cardio": "Cardio",
-        "hiit": "HIIT",
-        "pilates": "Pilates",
-        "running": "Running",
-        "walking": "Walking",
-        "strength": "Strength Training",
         "swimming": "Swimming",
+        "running": "Running",
         "cycling": "Cycling",
+        "strength": "Strength Training",
+        "pilates": "Pilates",
+        "hiking": "Hiking",
+        "dancing": "Dancing",
         "other": "Other"
       }
     }

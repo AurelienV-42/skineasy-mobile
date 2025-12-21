@@ -14,12 +14,14 @@
     "lint:fix": "eslint src/ app/ --fix",
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\" \"!node_modules/**\" \"!.expo/**\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,json,md}\" \"!node_modules/**\" \"!.expo/**\"",
-    "check": "npm run lint && npm run format:check"
+    "typecheck": "tsc --noEmit",
+    "check": "npm run lint && npm run format:check && npm run typecheck"
   },
   "dependencies": {
     "@expo-google-fonts/roboto": "^0.4.2",
     "@hookform/resolvers": "^5.2.2",
     "@react-native-async-storage/async-storage": "2.2.0",
+    "@react-native-community/datetimepicker": "8.4.4",
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/native": "^7.1.8",
     "@react-navigation/native-stack": "^7.3.16",

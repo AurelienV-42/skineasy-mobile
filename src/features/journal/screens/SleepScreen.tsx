@@ -1,86 +1,135 @@
-import { View, Text, TextInput } from 'react-native'
-import { useState } from 'react'
+/**
+ * Sleep Screen
+ *
+ * Allows users to log sleep data with:
+ * - Hours of sleep (decimal input)
+ * - Sleep quality (1-5 scale: 1=Bad, 3=Neutral, 5=Good)
+ *
+ * Connected to real backend API with validation
+ */
+
+import { View, Text, ScrollView } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'expo-router'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Frown, Meh, Smile } from 'lucide-react-native'
 
 import { Button } from '@shared/components/Button'
 import { Pressable } from '@shared/components/Pressable'
+import { Input } from '@shared/components/Input'
 import { JournalLayout } from '@shared/components/ScreenHeader'
-import { logger } from '@shared/utils/logger'
+import { useUpsertSleep } from '@features/journal/hooks/useJournal'
+import { sleepFormSchema, type SleepFormInput } from '@features/journal/schemas/journal.schema'
+import { getTodayUTC } from '@shared/utils/date'
 import { colors } from '@theme/colors'
+import type { SleepQuality } from '@shared/types/journal.types'
 
-type SleepQuality = 'bad' | 'neutral' | 'good'
+const QUALITY_LEVELS = [
+  { value: 1 as SleepQuality, icon: Frown, labelKey: 'journal.sleep.quality.bad' },
+  { value: 3 as SleepQuality, icon: Meh, labelKey: 'journal.sleep.quality.neutral' },
+  { value: 5 as SleepQuality, icon: Smile, labelKey: 'journal.sleep.quality.good' },
+]
 
 export default function SleepScreen() {
   const { t } = useTranslation()
   const router = useRouter()
-  const [hours, setHours] = useState('')
-  const [quality, setQuality] = useState<SleepQuality | null>(null)
+  const upsertSleep = useUpsertSleep()
 
-  const handleSave = () => {
-    if (hours && quality) {
-      // TODO: Save to API
-      logger.info('Sleep data:', { hours: parseFloat(hours), quality })
-      router.back()
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+    setValue,
+    watch,
+  } = useForm<SleepFormInput>({
+    resolver: zodResolver(sleepFormSchema),
+    mode: 'onChange',
+    defaultValues: {
+      quality: 3, // Default to Neutral
+    },
+  })
+
+  const selectedQuality = watch('quality') ?? 3
+
+  const onSubmit = (data: SleepFormInput) => {
+    const dto = {
+      date: getTodayUTC(),
+      hours: Number(data.hours),
+      quality: data.quality as SleepQuality,
     }
-  }
 
-  const qualityOptions: { value: SleepQuality; icon: typeof Frown; label: string }[] = [
-    { value: 'bad', icon: Frown, label: t('journal.sleep.quality.bad') },
-    { value: 'neutral', icon: Meh, label: t('journal.sleep.quality.neutral') },
-    { value: 'good', icon: Smile, label: t('journal.sleep.quality.good') },
-  ]
+    upsertSleep.mutate(dto, {
+      onSuccess: () => {
+        router.back()
+      },
+    })
+  }
 
   return (
     <JournalLayout title={t('journal.sleep.screenTitle')}>
-      {/* Hours Input */}
-      <View className="mb-8">
-        <Text className="text-base font-medium text-text mb-3">{t('journal.sleep.hours')}</Text>
-        <TextInput
-          value={hours}
-          onChangeText={setHours}
-          keyboardType="decimal-pad"
-          placeholder="8"
-          className="bg-surface border border-border rounded-lg px-4 py-4 text-lg text-text"
-          placeholderTextColor={colors.textLight}
-        />
-      </View>
-
-      {/* Quality Selector */}
-      <View className="mb-8">
-        <Text className="text-base font-medium text-text mb-3">{t('journal.sleep.question')}</Text>
-        <View className="flex-row gap-3">
-          {qualityOptions.map(({ value, icon: Icon, label }) => (
-            <Pressable
-              key={value}
-              onPress={() => setQuality(value)}
-              className={`flex-1 items-center justify-center py-6 rounded-xl border-2 ${
-                quality === value ? 'border-primary bg-primary/10' : 'border-border bg-surface'
-              }`}
-              accessibilityLabel={label}
-              accessibilityRole="button"
-              haptic="light"
-            >
-              <Icon
-                size={40}
-                color={quality === value ? colors.primary : colors.textMuted}
-                strokeWidth={2}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Hours Input */}
+        <View className="mb-8">
+          <Controller
+            control={control}
+            name="hours"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                label={t('journal.sleep.hours')}
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                keyboardType="decimal-pad"
+                placeholder="8"
+                error={errors.hours?.message ? t(errors.hours.message as string) : undefined}
               />
-              <Text
-                className={`text-sm mt-3 ${
-                  quality === value ? 'text-primary font-medium' : 'text-text-muted'
-                }`}
-              >
-                {label}
-              </Text>
-            </Pressable>
-          ))}
+            )}
+          />
         </View>
-      </View>
 
-      {/* Save Button */}
-      <Button title={t('common.save')} onPress={handleSave} disabled={!hours || !quality} />
+        {/* Quality Selector */}
+        <View className="mb-8">
+          <Text className="text-sm font-medium text-text mb-3">{t('journal.sleep.question')}</Text>
+          <View className="flex-row gap-3">
+            {QUALITY_LEVELS.map(({ value, icon: Icon, labelKey }) => (
+              <Pressable
+                key={value}
+                onPress={() => setValue('quality', value)}
+                haptic="light"
+                className={`flex-1 items-center justify-center py-6 rounded-xl border-2 ${
+                  selectedQuality === value
+                    ? 'border-primary bg-primary/10'
+                    : 'border-border bg-surface'
+                }`}
+                accessibilityLabel={t(labelKey)}
+                accessibilityRole="button"
+              >
+                <Icon
+                  size={40}
+                  color={selectedQuality === value ? colors.primary : colors.textMuted}
+                  strokeWidth={2}
+                />
+                <Text
+                  className={`text-sm mt-3 ${
+                    selectedQuality === value ? 'text-primary font-medium' : 'text-textMuted'
+                  }`}
+                >
+                  {t(labelKey)}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        </View>
+
+        {/* Save Button */}
+        <Button
+          title={t('common.save')}
+          onPress={handleSubmit(onSubmit)}
+          disabled={!isValid || upsertSleep.isPending}
+          loading={upsertSleep.isPending}
+        />
+      </ScrollView>
     </JournalLayout>
   )
 }

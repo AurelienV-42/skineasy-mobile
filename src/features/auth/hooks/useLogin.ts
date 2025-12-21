@@ -21,13 +21,25 @@ export function useLogin() {
       logger.info('[useLogin] Attempting login with:', { email: data.email })
       try {
         const loginResponse = await authService.login(data)
-        logger.info('[useLogin] Login response:', loginResponse)
+        logger.info('[useLogin] Full login response:', loginResponse)
+        logger.info('[useLogin] Response type:', typeof loginResponse)
+        logger.info('[useLogin] Response keys:', Object.keys(loginResponse))
+
+        // API client automatically unwraps { data: T } wrapper
         const { accessToken, refreshToken, user } = loginResponse.data
+        logger.info('[useLogin] Extracted values:', {
+          hasAccessToken: !!accessToken,
+          hasRefreshToken: !!refreshToken,
+          hasUser: !!user,
+          accessTokenLength: accessToken?.length,
+          refreshTokenLength: refreshToken?.length,
+        })
+
         await setTokens(accessToken, refreshToken)
-        logger.info('[useLogin] User data:', user)
+        logger.info('[useLogin] Tokens stored successfully')
         return user
       } catch (error) {
-        logger.info('[useLogin] Error:', error)
+        logger.error('[useLogin] Login error:', error)
         throw error
       }
     },

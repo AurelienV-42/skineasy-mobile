@@ -1,6 +1,6 @@
+import { logger } from '@shared/utils/logger'
 import * as Haptics from 'expo-haptics'
 import { Platform } from 'react-native'
-import { logger } from '@shared/utils/logger'
 
 const IS_NATIVE = Platform.OS === 'ios' || Platform.OS === 'android'
 
@@ -27,10 +27,6 @@ type NotificationType = 'success' | 'error' | 'warning'
  */
 export const impact = (level: ImpactLevel): void => {
   if (!IS_NATIVE) return
-
-  if (__DEV__) {
-    logger.debug(`[Haptic] Impact: ${level}`)
-  }
 
   try {
     switch (level) {
@@ -60,10 +56,6 @@ export const impact = (level: ImpactLevel): void => {
 export const selection = (): void => {
   if (!IS_NATIVE) return
 
-  if (__DEV__) {
-    logger.debug('[Haptic] Selection')
-  }
-
   try {
     Haptics.selectionAsync()
   } catch (error) {
@@ -82,10 +74,6 @@ export const selection = (): void => {
  */
 export const notification = (type: NotificationType): void => {
   if (!IS_NATIVE) return
-
-  if (__DEV__) {
-    logger.debug(`[Haptic] Notification: ${type}`)
-  }
 
   try {
     switch (type) {

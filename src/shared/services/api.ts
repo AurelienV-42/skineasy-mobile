@@ -48,6 +48,19 @@ class ApiClient {
 
       clearTimeout(timeoutId)
       logger.info('[API] Response status:', response.status)
+
+      // Log response body in DEV mode
+      if (__DEV__ && response.ok) {
+        const clonedResponse = response.clone()
+        clonedResponse
+          .json()
+          .then((data) => {
+            logger.info('[API] Response body:', data)
+          })
+          .catch(() => {
+            // Ignore parse errors for logging
+          })
+      }
     } catch (error) {
       logger.error('[API] Fetch error:', error)
       // Log network errors to Sentry
@@ -122,29 +135,54 @@ class ApiClient {
     try {
       logger.info('[API] Attempting to refresh access token')
       const refreshToken = await getRefreshToken()
+      logger.info('[API] Retrieved refresh token from storage:', {
+        hasToken: !!refreshToken,
+        tokenLength: refreshToken?.length,
+        tokenPreview: refreshToken?.substring(0, 20) + '...',
+      })
+
       if (!refreshToken) {
-        logger.warn('[API] No refresh token found')
+        logger.warn('[API] No refresh token found in secure storage')
         return null
       }
 
+      logger.info('[API] Sending refresh request to:', `${ENV.API_URL}/api/v1/auth/refresh`)
       const response = await fetch(`${ENV.API_URL}/api/v1/auth/refresh`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           apikey: ENV.API_KEY,
         },
-        body: JSON.stringify({ refresh_token: refreshToken }),
+        body: JSON.stringify({ refreshToken }), // Changed from refresh_token to refreshToken
       })
 
+      logger.info('[API] Refresh response status:', response.status)
+
       if (!response.ok) {
-        logger.warn('[API] Token refresh failed:', response.status)
+        const errorText = await response.text()
+        logger.warn('[API] Token refresh failed:', {
+          status: response.status,
+          error: errorText,
+        })
         return null
       }
 
       const data: RefreshTokenResponse = await response.json()
-      await setToken(data.access_token)
-      logger.info('[API] Token refresh successful')
-      return data.access_token
+      logger.info('[API] Refresh response data:', data)
+
+      // Backend returns { data: { accessToken, refreshToken } }
+      const { accessToken, refreshToken: newRefreshToken } = data.data
+      await setToken(accessToken)
+
+      // Store new refresh token if provided
+      if (newRefreshToken) {
+        const { setRefreshToken } = await import('@shared/utils/storage')
+        await setRefreshToken(newRefreshToken)
+        logger.info('[API] New refresh token saved')
+      }
+
+      logger.info('[API] Token refresh successful, new access token saved')
+      return accessToken
     } catch (error) {
       logger.error('[API] Token refresh error:', error)
       return null

@@ -31,7 +31,7 @@ interface CustomPressableProps extends PressableProps {
  * ```
  */
 export function Pressable({ style, haptic: hapticLevel, onPress, ...props }: CustomPressableProps) {
-  const handlePress = (event: any) => {
+  const handlePress = (event: Parameters<NonNullable<PressableProps['onPress']>>[0]) => {
     // Trigger haptic if configured
     if (hapticLevel) {
       haptic.impact(hapticLevel)

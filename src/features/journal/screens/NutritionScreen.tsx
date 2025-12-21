@@ -1,27 +1,53 @@
-import { View, Text, TextInput, Image, Alert } from 'react-native'
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useRouter } from 'expo-router'
-import * as ImagePicker from 'expo-image-picker'
-import { Camera, X } from 'lucide-react-native'
+/**
+ * Nutrition Screen
+ *
+ * Allows users to log meals/snacks with:
+ * - Photo upload (camera or gallery)
+ * - Optional note (max 500 characters)
+ * - Optional meal type (breakfast, lunch, dinner, snack)
+ *
+ * Connected to real backend API with image upload and validation
+ */
 
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as ImagePicker from 'expo-image-picker'
+import { useRouter } from 'expo-router'
+import { Camera, ImageIcon, X } from 'lucide-react-native'
+import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { Alert, Image, ScrollView, Text, View } from 'react-native'
+
+import { useCreateMeal, useUploadMealImage } from '@features/journal/hooks/useJournal'
+import { mealFormSchema, type MealFormInput } from '@features/journal/schemas/journal.schema'
 import { Button } from '@shared/components/Button'
+import { Input } from '@shared/components/Input'
 import { Pressable } from '@shared/components/Pressable'
 import { JournalLayout } from '@shared/components/ScreenHeader'
-import { logger } from '@shared/utils/logger'
+import { getTodayUTC } from '@shared/utils/date'
 import { colors } from '@theme/colors'
 
 export default function NutritionScreen() {
   const { t } = useTranslation()
   const router = useRouter()
+  const uploadImage = useUploadMealImage()
+  const createMeal = useCreateMeal()
   const [imageUri, setImageUri] = useState<string | null>(null)
-  const [note, setNote] = useState('')
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<MealFormInput>({
+    resolver: zodResolver(mealFormSchema),
+    mode: 'onChange',
+  })
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
 
     if (permissionResult.granted === false) {
-      Alert.alert(t('common.error'), 'Permission to access camera roll is required!')
+      Alert.alert(t('common.error'), t('journal.nutrition.galleryPermissionRequired'))
       return
     }
 
@@ -41,7 +67,7 @@ export default function NutritionScreen() {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync()
 
     if (permissionResult.granted === false) {
-      Alert.alert(t('common.error'), 'Permission to access camera is required!')
+      Alert.alert(t('common.error'), t('journal.nutrition.cameraPermissionRequired'))
       return
     }
 
@@ -56,86 +82,120 @@ export default function NutritionScreen() {
     }
   }
 
-  const handleSave = () => {
-    if (imageUri) {
-      // TODO: Save to API with image and note
-      logger.info('Nutrition data:', { imageUri, note })
-      router.back()
-    }
-  }
-
   const removeImage = () => {
     setImageUri(null)
   }
 
+  const onSubmit = async (data: MealFormInput) => {
+    if (!imageUri) return
+
+    try {
+      // Upload image first (returns URL string)
+      const photoUrl = await uploadImage.mutateAsync(imageUri)
+
+      // Create meal entry with uploaded image URL
+      const dto = {
+        date: getTodayUTC(),
+        photo_url: photoUrl,
+        note: data.note || null,
+        meal_type: data.meal_type || null,
+      }
+
+      createMeal.mutate(dto, {
+        onSuccess: () => {
+          router.back()
+        },
+      })
+    } catch {
+      // Error is already handled by uploadImage mutation
+    }
+  }
+
+  const isLoading = uploadImage.isPending || createMeal.isPending
+
   return (
     <JournalLayout title={t('journal.nutrition.screenTitle')}>
-      {/* Image Picker */}
-      <View className="mb-6">
-        <Text className="text-base font-medium text-text mb-3">
-          {t('journal.nutrition.addMeal')}
-        </Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Image Picker */}
+        <View className="mb-6">
+          <Text className="text-sm font-medium text-text mb-3">
+            {t('journal.nutrition.addMeal')}
+          </Text>
 
-        {imageUri ? (
-          <View className="relative">
-            <Image
-              source={{ uri: imageUri }}
-              className="w-full h-64 rounded-xl"
-              resizeMode="cover"
-            />
-            <Pressable
-              onPress={removeImage}
-              className="absolute top-2 right-2 bg-error rounded-full p-2"
-              accessibilityLabel={t('common.delete')}
-              haptic="light"
-            >
-              <X size={20} color="#FFF" />
-            </Pressable>
-          </View>
-        ) : (
-          <View className="flex-row gap-3">
-            <Pressable
-              onPress={takePhoto}
-              className="flex-1 bg-surface border-2 border-dashed border-border rounded-xl py-8 items-center justify-center"
-              accessibilityLabel="Take photo"
-              haptic="light"
-            >
-              <Camera size={32} color={colors.primary} strokeWidth={2} />
-              <Text className="text-sm text-text-muted mt-2">Take Photo</Text>
-            </Pressable>
+          {imageUri ? (
+            <View className="relative">
+              <Image
+                source={{ uri: imageUri }}
+                className="w-full h-64 rounded-xl"
+                resizeMode="cover"
+              />
+              <Pressable
+                onPress={removeImage}
+                className="absolute top-2 right-2 bg-error rounded-full p-2"
+                accessibilityLabel={t('common.delete')}
+                haptic="light"
+              >
+                <X size={20} color="#FFF" />
+              </Pressable>
+            </View>
+          ) : (
+            <View className="flex-row gap-3">
+              <Pressable
+                onPress={takePhoto}
+                className="flex-1 bg-surface border-2 border-dashed border-border rounded-xl py-8 items-center justify-center"
+                accessibilityLabel={t('journal.nutrition.takePhoto')}
+                haptic="light"
+              >
+                <Camera size={32} color={colors.primary} strokeWidth={2} />
+                <Text className="text-sm text-textMuted mt-2">
+                  {t('journal.nutrition.takePhoto')}
+                </Text>
+              </Pressable>
 
-            <Pressable
-              onPress={pickImage}
-              className="flex-1 bg-surface border-2 border-dashed border-border rounded-xl py-8 items-center justify-center"
-              accessibilityLabel="Choose from gallery"
-              haptic="light"
-            >
-              <Camera size={32} color={colors.primary} strokeWidth={2} />
-              <Text className="text-sm text-text-muted mt-2">Gallery</Text>
-            </Pressable>
-          </View>
-        )}
-      </View>
+              <Pressable
+                onPress={pickImage}
+                className="flex-1 bg-surface border-2 border-dashed border-border rounded-xl py-8 items-center justify-center"
+                accessibilityLabel={t('journal.nutrition.gallery')}
+                haptic="light"
+              >
+                <ImageIcon size={32} color={colors.primary} strokeWidth={2} />
+                <Text className="text-sm text-textMuted mt-2">
+                  {t('journal.nutrition.gallery')}
+                </Text>
+              </Pressable>
+            </View>
+          )}
+        </View>
 
-      {/* Note Input */}
-      <View className="mb-8">
-        <Text className="text-base font-medium text-text mb-3">
-          {t('journal.nutrition.addNote')}
-        </Text>
-        <TextInput
-          value={note}
-          onChangeText={setNote}
-          placeholder="Optional note about your meal..."
-          multiline
-          numberOfLines={4}
-          textAlignVertical="top"
-          className="bg-surface border border-border rounded-lg px-4 py-3 text-base text-text min-h-24"
-          placeholderTextColor={colors.textLight}
+        {/* Note Input */}
+        <View className="mb-0">
+          <Controller
+            control={control}
+            name="note"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                label={t('journal.nutrition.addNote')}
+                value={value || ''}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                placeholder={t('journal.nutrition.notePlaceholder')}
+                multiline
+                numberOfLines={4}
+                textAlignVertical="top"
+                error={errors.note?.message ? t(errors.note.message as string) : undefined}
+              />
+            )}
+          />
+        </View>
+
+        {/* Save Button */}
+        <Button
+          title={t('common.save')}
+          onPress={handleSubmit(onSubmit)}
+          disabled={!imageUri || isLoading}
+          loading={isLoading}
         />
-      </View>
-
-      {/* Save Button */}
-      <Button title={t('common.save')} onPress={handleSave} disabled={!imageUri} />
+      </ScrollView>
     </JournalLayout>
   )
 }

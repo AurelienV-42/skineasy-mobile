@@ -1,17 +1,17 @@
-import { useRef } from 'react'
-import { View, Text, KeyboardAvoidingView, Platform, TextInput } from 'react-native'
-import { Link, useRouter } from 'expo-router'
-import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Link, useRouter } from 'expo-router'
+import { useRef } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { KeyboardAvoidingView, Platform, Text, TextInput, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Input } from '@shared/components/Input'
-import { Button } from '@shared/components/Button'
-import { Pressable } from '@shared/components/Pressable'
-import { LanguageSwitcher } from '@shared/components/LanguageSwitcher'
-import { loginSchema, LoginInput } from '@features/auth/schemas/auth.schema'
 import { useLogin } from '@features/auth/hooks/useLogin'
+import { LoginInput, loginSchema } from '@features/auth/schemas/auth.schema'
+import { Button } from '@shared/components/Button'
+import { Input } from '@shared/components/Input'
+import { LanguageSwitcher } from '@shared/components/LanguageSwitcher'
+import { Pressable } from '@shared/components/Pressable'
 
 export default function LoginScreen() {
   const { t } = useTranslation()
@@ -102,6 +102,19 @@ export default function LoginScreen() {
               loading={isPending}
               disabled={!isValid}
             />
+            {__DEV__ && (
+              <Button
+                className="mt-6"
+                title="Login Dev"
+                onPress={() =>
+                  login({
+                    email: 'aurelienvpro@gmail.com',
+                    password:
+                      'Localhost is not in the list of supported domains for this site key.',
+                  })
+                }
+              />
+            )}
           </View>
 
           <Link href="/(auth)/register" asChild>

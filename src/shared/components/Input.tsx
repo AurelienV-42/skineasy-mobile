@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { TextInput, View, Text, TextInputProps } from 'react-native'
+import { TextInput, View, Text, type TextInputProps } from 'react-native'
 
 import { haptic } from '@shared/utils/haptic'
 import { colors } from '@theme/colors'
@@ -15,14 +15,16 @@ interface InputProps extends TextInputProps {
 
 export const Input = forwardRef<TextInput, InputProps>(
   ({ label, error, className, style, onFocus, enableHaptic = true, ...props }, ref) => {
-    const handleFocus = (event: any) => {
+    const handleFocus = (event: Parameters<NonNullable<TextInputProps['onFocus']>>[0]) => {
       // Trigger selection haptic on focus
       if (enableHaptic) {
         haptic.selection()
       }
 
       // Call original onFocus handler
-      onFocus?.(event)
+      if (onFocus) {
+        onFocus(event)
+      }
     }
 
     return (

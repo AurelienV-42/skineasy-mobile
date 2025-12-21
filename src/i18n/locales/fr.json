@@ -39,9 +39,34 @@
     "tomorrow": "Demain",
     "reminder": "Pense à entrer tes données quotidiennes",
     "comingSoon": "Bientôt disponible",
+    "quickAdd": "Ajout rapide",
     "quiz": {
       "title": "Quiz : Routine personnalisée",
       "subtitle": "Découvre ta routine idéale"
+    },
+    "summary": {
+      "title": "Récapitulatif quotidien",
+      "notLogged": "Pas encore enregistré",
+      "logSleep": "Enregistrer ton sommeil",
+      "logMeal": "Enregistrer un repas",
+      "logActivity": "Enregistrer une activité",
+      "addMore": "Ajouter plus",
+      "meal": "repas",
+      "meals": "repas",
+      "activity": "activité",
+      "activities": "activités",
+      "intensity": "Intensité",
+      "mealType": {
+        "breakfast": "Petit-déjeuner",
+        "lunch": "Déjeuner",
+        "dinner": "Dîner",
+        "snack": "Collation"
+      }
+    },
+    "navigation": {
+      "previousDay": "Jour précédent",
+      "nextDay": "Jour suivant",
+      "selectDate": "Sélectionner une date"
     }
   },
   "journal": {
@@ -55,31 +80,66 @@
         "bad": "Mal",
         "neutral": "Neutre",
         "good": "Bien"
-      }
+      },
+      "hoursMin": "Les heures doivent être au moins 0",
+      "hoursMax": "Les heures ne peuvent pas dépasser 24",
+      "hoursInvalid": "Veuillez entrer un nombre valide",
+      "saveSuccess": "Sommeil enregistré avec succès",
+      "saveError": "Échec de l'enregistrement du sommeil",
+      "deleteSuccess": "Sommeil supprimé",
+      "deleteError": "Échec de la suppression du sommeil"
     },
     "nutrition": {
       "title": "Repas & Snacks",
       "screenTitle": "Repas & Snacks",
       "addMeal": "Ajouter une photo de ton repas/snack",
-      "addNote": "Ajouter une note au repas"
+      "addNote": "Ajouter une note au repas",
+      "notePlaceholder": "Note optionnelle sur ton repas...",
+      "takePhoto": "Prendre une photo",
+      "gallery": "Galerie",
+      "cameraPermissionRequired": "L'accès à l'appareil photo est requis !",
+      "galleryPermissionRequired": "L'accès à la galerie est requis !",
+      "noteMaxLength": "La note ne peut pas dépasser 500 caractères",
+      "saveSuccess": "Repas enregistré avec succès",
+      "saveError": "Échec de l'enregistrement du repas",
+      "deleteSuccess": "Repas supprimé",
+      "deleteError": "Échec de la suppression du repas",
+      "uploadError": "Échec du téléchargement de l'image"
     },
     "sport": {
       "title": "Exercice physique",
       "screenTitle": "Exercice physique",
-      "addActivity": "Ajouter une activité",
+      "addActivity": "Type d'activité",
+      "selectActivity": "Sélectionner une activité",
+      "moreActivities": "Plus d'activités...",
+      "searchActivities": "Rechercher des activités...",
+      "noActivitiesFound": "Aucune activité trouvée",
       "duration": "Durée",
       "minutes": "min",
       "note": "Note : Comment t'es-tu senti(e) ?",
+      "durationMin": "La durée doit être d'au moins 1 minute",
+      "saveSuccess": "Activité enregistrée avec succès",
+      "saveError": "Échec de l'enregistrement de l'activité",
+      "deleteSuccess": "Activité supprimée",
+      "deleteError": "Échec de la suppression de l'activité",
+      "intensity": {
+        "label": "Intensité",
+        "veryLight": "Très léger",
+        "light": "Léger",
+        "moderate": "Modéré",
+        "hard": "Intense",
+        "veryHard": "Très intense"
+      },
       "activities": {
         "yoga": "Yoga",
         "cardio": "Cardio",
-        "hiit": "HIIT",
-        "pilates": "Pilates",
-        "running": "Course à pied",
-        "walking": "Marche",
-        "strength": "Musculation",
         "swimming": "Natation",
+        "running": "Course à pied",
         "cycling": "Vélo",
+        "strength": "Musculation",
+        "pilates": "Pilates",
+        "hiking": "Randonnée",
+        "dancing": "Danse",
         "other": "Autre"
       }
     }

@@ -33,7 +33,10 @@ export interface MeResponse {
 }
 
 export interface RefreshTokenResponse {
-  access_token: string
+  data: {
+    accessToken: string
+    refreshToken: string
+  }
 }
 
 // User types
@@ -100,6 +103,11 @@ export interface SportData {
   activity: string
   duration: number
   note?: string
+}
+
+// Generic API Response
+export interface ApiResponse<T> {
+  data: T
 }
 
 // API Error

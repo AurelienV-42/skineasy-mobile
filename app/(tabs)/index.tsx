@@ -1,19 +1,36 @@
-import { View, Text, ScrollView } from 'react-native'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useRouter } from 'expo-router'
-import { Moon, UtensilsCrossed, Dumbbell } from 'lucide-react-native'
 
-import { useUserStore } from '@shared/stores/user.store'
-import { JournalCard } from '@shared/components/JournalCard'
+import { DailySummary } from '@features/dashboard/components/DailySummary'
+import { DateNavigation } from '@features/dashboard/components/DateNavigation'
+import {
+  useMealEntries,
+  useSleepEntries,
+  useSportEntries,
+} from '@features/journal/hooks/useJournal'
 import { QuizBanner } from '@shared/components/QuizBanner'
+import { useUserStore } from '@shared/stores/user.store'
+import { toUTCDateString } from '@shared/utils/date'
 import { logger } from '@shared/utils/logger'
-import { colors } from '@theme/colors'
 
 export default function DashboardScreen() {
   const { t } = useTranslation()
-  const router = useRouter()
   const user = useUserStore((state) => state.user)
+
+  // Selected date state
+  const [selectedDate, setSelectedDate] = useState(new Date())
+
+  // Convert selected date to UTC string for API
+  const dateString = toUTCDateString(selectedDate)
+
+  // Fetch journal data for selected date
+  const { data: sleepEntries = [], isLoading: sleepLoading } = useSleepEntries(dateString)
+  const { data: mealEntries = [], isLoading: mealLoading } = useMealEntries(dateString)
+  const { data: sportEntries = [], isLoading: sportLoading } = useSportEntries(dateString)
+
+  const isLoading = sleepLoading || mealLoading || sportLoading
 
   const handleQuizPress = () => {
     // TODO: Navigate to typeform webview
@@ -23,36 +40,34 @@ export default function DashboardScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        <View className="px-4 pt-4">
-          <Text className="text-2xl font-bold text-text mb-2">
+        {/* Greeting */}
+        <View className="px-4 pt-4 pb-2">
+          <Text className="text-2xl font-bold text-text mb-1">
             {t('dashboard.greeting', { name: user?.firstname || 'User' })}
           </Text>
-          <Text className="text-sm text-text-muted mb-6">{t('dashboard.reminder')}</Text>
+          <Text className="text-sm text-textMuted">{t('dashboard.reminder')}</Text>
+        </View>
 
-          {/* Journal Cards - Single Row */}
-          <Text className="text-lg font-semibold text-text mb-4">Daily Journal</Text>
-          <View className="flex-row gap-3 mb-8">
-            <JournalCard
-              icon={<Moon size={48} color={colors.primary} strokeWidth={1.5} />}
-              title={t('journal.sleep.title')}
-              onPress={() => router.push('/journal/sleep')}
-            />
-            <JournalCard
-              icon={<UtensilsCrossed size={48} color={colors.primary} strokeWidth={1.5} />}
-              title={t('journal.nutrition.title')}
-              onPress={() => router.push('/journal/nutrition')}
-            />
-            <JournalCard
-              icon={<Dumbbell size={48} color={colors.primary} strokeWidth={1.5} />}
-              title={t('journal.sport.title')}
-              onPress={() => router.push('/journal/sport')}
-            />
-          </View>
+        {/* Date Navigation */}
 
-          {/* Quiz Banner */}
-          <View className="mb-8">
-            <QuizBanner onPress={handleQuizPress} />
-          </View>
+        <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
+        {/* Daily Summary - Expandable Cards */}
+        <View className="pt-2 pb-8">
+          <Text className="text-lg font-semibold text-text mb-4 px-4">
+            {t('dashboard.summary.title')}
+          </Text>
+          <DailySummary
+            sleepEntries={sleepEntries}
+            mealEntries={mealEntries}
+            sportEntries={sportEntries}
+            isLoading={isLoading}
+            date={dateString}
+          />
+        </View>
+
+        {/* Quiz Banner */}
+        <View className="px-4 pb-8">
+          <QuizBanner onPress={handleQuizPress} />
         </View>
       </ScrollView>
     </SafeAreaView>
