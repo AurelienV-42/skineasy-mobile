@@ -89,9 +89,18 @@
     "title": "Profil",
     "skinType": "Type de peau",
     "retakeDiagnosis": "Refaire le diagnostic",
-    "termsConditions": "Conditions générales",
+    "termsOfSale": "Conditions générales de vente",
+    "termsOfSaleUrl": "https://skineasy.com/fr/content/3-conditions-generales-vente",
+    "termsOfUse": "Conditions générales d'utilisation",
+    "termsOfUseUrl": "https://skineasy.com/fr/content/1-conditions-generales-d-utilisation",
+    "privacyPolicy": "Politique de confidentialité",
+    "privacyPolicyUrl": "https://skineasy.com/fr/content/5-politique-de-confidentialite",
+    "deleteAccount": "Supprimer mon compte",
+    "deleteAccountConfirm": "Es-tu sûr(e) de vouloir supprimer ton compte ? Cette action est irréversible.",
+    "deleteAccountTitle": "Supprimer le compte",
     "logout": "Déconnexion",
-    "logoutConfirm": "Es-tu sûr(e) de vouloir te déconnecter ?"
+    "logoutConfirm": "Es-tu sûr(e) de vouloir te déconnecter ?",
+    "logoutTitle": "Déconnexion"
   },
   "diagnosis": {
     "required": "Diagnostic requis",

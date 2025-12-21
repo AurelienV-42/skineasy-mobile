@@ -89,9 +89,18 @@
     "title": "Profile",
     "skinType": "Skin Type",
     "retakeDiagnosis": "Retake Diagnosis",
-    "termsConditions": "Terms & Conditions",
+    "termsOfSale": "Terms of Sale",
+    "termsOfSaleUrl": "https://skineasy.com/en/content/3-conditions-generales-vente",
+    "termsOfUse": "Terms of Use",
+    "termsOfUseUrl": "https://skineasy.com/en/content/1-conditions-generales-d-utilisation",
+    "privacyPolicy": "Privacy Policy",
+    "privacyPolicyUrl": "https://skineasy.com/en/content/5-politique-de-confidentialite",
+    "deleteAccount": "Delete Account",
+    "deleteAccountConfirm": "Are you sure you want to delete your account? This action cannot be undone.",
+    "deleteAccountTitle": "Delete Account",
     "logout": "Log Out",
-    "logoutConfirm": "Are you sure you want to log out?"
+    "logoutConfirm": "Are you sure you want to log out?",
+    "logoutTitle": "Log Out"
   },
   "diagnosis": {
     "required": "Diagnosis Required",
