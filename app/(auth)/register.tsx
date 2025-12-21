@@ -11,7 +11,6 @@ import {
   ScrollView,
   Text,
   TextInput,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -67,15 +66,15 @@ export default function RegisterScreen() {
           contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
           bounces={false}
+          onScrollBeginDrag={Keyboard.dismiss}
         >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View className="flex-1 px-8 justify-between" style={{ minHeight: '100%' }}>
+          <View className="flex-1 px-8 justify-between" style={{ minHeight: '100%' }}>
               <View>
                 {/* Logo Section - Minimal top */}
                 <View className="pt-8 pb-8 items-center">
                   <Image
                     source={require('@assets/logo.png')}
-                    className="w-28 h-28"
+                    className="w-40 h-40"
                     resizeMode="contain"
                   />
                 </View>
@@ -205,6 +204,8 @@ export default function RegisterScreen() {
                     )}
                   />
 
+                  {/* TODO: Add DateInput with new picker solution */}
+
                   <Button
                     title={t('auth.register')}
                     onPress={handleSubmit(onSubmit)}
@@ -226,7 +227,6 @@ export default function RegisterScreen() {
                 </Link>
               </View>
             </View>
-          </TouchableWithoutFeedback>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
