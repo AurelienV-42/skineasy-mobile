@@ -19,18 +19,21 @@
   "auth": {
     "login": "Login",
     "register": "Create Account",
-    "email": "Email",
+    "email": "Email address",
     "password": "Password",
     "firstname": "First Name",
     "lastname": "Last Name",
-    "forgotPassword": "Forgot Password?",
+    "forgotPassword": "Forgot password?",
     "noAccount": "Don't have an account?",
     "hasAccount": "Already have an account?",
     "invalidCredentials": "Invalid credentials",
     "registerError": "Unable to create account. Please try again.",
     "registerSuccess": "Account created successfully",
     "loginFormPlaceholder": "Login form coming soon",
-    "registerFormPlaceholder": "Register form coming soon"
+    "registerFormPlaceholder": "Register form coming soon",
+    "welcomeBack": "Welcome back",
+    "signInToContinue": "Sign in to continue your journey",
+    "createAccountSubtitle": "Join us for your skincare journey"
   },
   "dashboard": {
     "greeting": "Hello {{name}}",

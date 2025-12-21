@@ -48,9 +48,16 @@ export function Button({
 
   return (
     <Pressable
-      className={`w-full py-4 rounded-md items-center justify-center ${styles.container} ${
+      className={`w-full h-14 rounded-xl items-center justify-center ${styles.container} ${
         isDisabled ? 'opacity-50' : ''
       } ${className || ''}`}
+      style={{
+        shadowColor: variant === 'primary' ? colors.primary : '#000',
+        shadowOffset: { width: 0, height: isDisabled ? 0 : 4 },
+        shadowOpacity: isDisabled ? 0 : variant === 'primary' ? 0.25 : 0.1,
+        shadowRadius: isDisabled ? 0 : 8,
+        elevation: isDisabled ? 0 : 4,
+      }}
       disabled={isDisabled}
       haptic={isDisabled ? false : haptic} // Disable haptic when button disabled
       {...props}
@@ -58,7 +65,7 @@ export function Button({
       {loading ? (
         <ActivityIndicator color={variant === 'primary' ? colors.surface : colors.primary} />
       ) : (
-        <Text className={`text-base font-medium ${styles.text}`}>{title}</Text>
+        <Text className={`text-base font-semibold ${styles.text}`}>{title}</Text>
       )}
     </Pressable>
   )

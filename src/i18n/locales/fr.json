@@ -19,7 +19,7 @@
   "auth": {
     "login": "Connexion",
     "register": "Créer un compte",
-    "email": "Email",
+    "email": "Adresse email",
     "password": "Mot de passe",
     "firstname": "Prénom",
     "lastname": "Nom",
@@ -30,7 +30,10 @@
     "registerError": "Impossible de créer le compte. Veuillez réessayer.",
     "registerSuccess": "Compte créé avec succès",
     "loginFormPlaceholder": "Formulaire de connexion bientôt disponible",
-    "registerFormPlaceholder": "Formulaire d'inscription bientôt disponible"
+    "registerFormPlaceholder": "Formulaire d'inscription bientôt disponible",
+    "welcomeBack": "Bon retour",
+    "signInToContinue": "Connecte-toi pour continuer ton parcours",
+    "createAccountSubtitle": "Rejoins-nous pour ton parcours beauté"
   },
   "dashboard": {
     "greeting": "Bonjour {{name}}",
