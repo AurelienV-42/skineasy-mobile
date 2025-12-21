@@ -1011,6 +1011,22 @@ eas build --platform android
   - `logger.warn('[Feature] Deprecated method used')`
 - **Never use console directly**: Import and use logger instead of console for all logging needs
 
+15. **Environment Variables:** NEVER use `process.env` directly in runtime code. Always use the `ENV` object from `@shared/config/env`
+
+- **Location**: `@shared/config/env` - centralized environment configuration
+- **Why**: `process.env` is undefined in React Native runtime. Expo reads environment variables at build time in `app.config.ts` and exposes them via `expo-constants`
+- **Usage**:
+  ```typescript
+  // CORRECT - Use ENV object
+  import { ENV } from '@shared/config/env'
+  const apiUrl = ENV.API_URL
+
+  // WRONG - process.env is undefined at runtime
+  const apiUrl = process.env.API_URL // undefined!
+  ```
+- **Available variables**: `ENV.API_URL`, `ENV.TYPEFORM_ID`, `ENV.PRESTASHOP_URL`, `ENV.IS_DEV`
+- **Note**: `process.env` is only valid in `app.config.ts` where Expo reads it at build time
+
 ---
 
 ## Import Convention

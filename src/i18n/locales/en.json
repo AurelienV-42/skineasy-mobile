@@ -29,8 +29,6 @@
     "invalidCredentials": "Invalid credentials",
     "registerError": "Unable to create account. Please try again.",
     "registerSuccess": "Account created successfully",
-    "loginFormPlaceholder": "Login form coming soon",
-    "registerFormPlaceholder": "Register form coming soon",
     "welcomeBack": "Welcome back",
     "signInToContinue": "Sign in to continue your journey",
     "createAccountSubtitle": "Join us for your skincare journey"
@@ -97,9 +95,12 @@
       "title": "Meals & Snacks",
       "screenTitle": "Meals & Snacks",
       "meal": "Meal",
+      "mealType": "Meal type (optional)",
       "addMeal": "Add a photo of your meal/snack",
-      "addNote": "Add a note to your meal",
-      "notePlaceholder": "Optional note about your meal...",
+      "foodName": "Meal name",
+      "foodNameRequired": "Meal name is required",
+      "foodNameMaxLength": "Meal name cannot exceed 200 characters",
+      "addNote": "Add a note to your meal (optional)",
       "takePhoto": "Take Photo",
       "gallery": "Gallery",
       "cameraPermissionRequired": "Permission to access camera is required!",
@@ -122,7 +123,6 @@
       "duration": "Duration",
       "minutes": "min",
       "note": "Note (optional)",
-      "notePlaceholder": "How did you feel during this activity?",
       "noteMaxLength": "Note cannot exceed 500 characters",
       "durationMin": "Duration must be at least 1 minute",
       "saveSuccess": "Activity saved successfully",
@@ -158,8 +158,7 @@
     "shopRoutine": "Shop my Routine",
     "whyThisProduct": "Why this product?",
     "step": "Step {{number}}",
-    "cleanse": "Cleanse",
-    "productPlaceholder": "Product details coming soon"
+    "cleanse": "Cleanse"
   },
   "profile": {
     "title": "Profile",

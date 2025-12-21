@@ -243,15 +243,20 @@ export function DailySummary({
                       </View>
                     )}
                     <View className="flex-1 justify-center">
-                      {meal.meal_type ? (
-                        <Text className="text-xs font-medium text-primary uppercase">
-                          {t(`dashboard.summary.mealType.${meal.meal_type}`)}
+                      {meal.food_name && (
+                        <Text className="text-sm font-medium text-text">
+                          {meal.food_name}
                         </Text>
-                      ) : (
+                      )}
+                      {meal.meal_type ? (
+                        <Text className="text-xs text-primary">
+                          {t(`dashboard.summary.mealType.${meal.meal_type.toLowerCase()}`)}
+                        </Text>
+                      ) : !meal.food_name ? (
                         <Text className="text-sm font-medium text-text">
                           {t('journal.nutrition.meal')}
                         </Text>
-                      )}
+                      ) : null}
                       {meal.note && (
                         <Text className="text-sm text-textMuted mt-1" numberOfLines={2}>
                           {meal.note}

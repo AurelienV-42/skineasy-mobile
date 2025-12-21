@@ -169,7 +169,6 @@ Create a new user account.
 
 ```http
 Content-Type: application/json
-apikey: <API_KEY>
 ```
 
 **Request Body:**
@@ -218,7 +217,6 @@ Authenticate an existing user.
 
 ```http
 Content-Type: application/json
-apikey: <API_KEY>
 ```
 
 **Request Body:**
@@ -265,7 +263,6 @@ Get a new access token using a refresh token.
 
 ```http
 Content-Type: application/json
-apikey: <API_KEY>
 ```
 
 **Request Body:**
@@ -302,7 +299,6 @@ Get the authenticated user's profile.
 
 ```http
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Response (200 OK):**
@@ -336,7 +332,6 @@ Update the authenticated user's profile.
 ```http
 Content-Type: application/json
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Request Body (all fields optional):**
@@ -383,7 +378,6 @@ Get the user's most recent diagnosis (including routine).
 
 ```http
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Response (200 OK):**
@@ -458,7 +452,6 @@ Create a new sleep entry or update existing one for the date.
 ```http
 Content-Type: application/json
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Request Body:**
@@ -514,7 +507,6 @@ Get all sleep entries for the authenticated user.
 
 ```http
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Response (200 OK):**
@@ -564,7 +556,6 @@ Get a specific sleep entry by ID.
 
 ```http
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Response (200 OK):**
@@ -604,7 +595,6 @@ Update an existing sleep entry.
 ```http
 Content-Type: application/json
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Request Body (all fields optional):**
@@ -654,7 +644,6 @@ Delete a sleep entry.
 
 ```http
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Response (204 No Content)**
@@ -699,7 +688,6 @@ Get all available sport types from the backend.
 
 ```http
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Response (200 OK):**
@@ -792,7 +780,6 @@ Create a new sport entry.
 ```http
 Content-Type: application/json
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Request Body:**
@@ -846,7 +833,6 @@ Get all sport entries for the authenticated user.
 
 ```http
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Response (200 OK):**
@@ -894,7 +880,6 @@ Get a specific sport entry by ID.
 
 ```http
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Response (200 OK):**
@@ -935,7 +920,6 @@ Update an existing sport entry.
 ```http
 Content-Type: application/json
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Request Body (all fields optional):**
@@ -987,7 +971,6 @@ Delete a sport entry.
 
 ```http
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Response (204 No Content)**
@@ -1027,7 +1010,6 @@ Upload a photo for a meal entry.
 ```http
 Content-Type: multipart/form-data
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Request Body (FormData):**
@@ -1075,7 +1057,6 @@ Create a new meal entry.
 ```http
 Content-Type: application/json
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Request Body:**
@@ -1084,6 +1065,7 @@ apikey: <API_KEY>
 {
   "date": "2025-01-15T00:00:00.000Z",
   "photo_url": "https://yourdomain.com/uploads/meals/abc123.jpg",
+  "food_name": "Oatmeal with berries",
   "note": "Healthy breakfast with oats and berries",
   "meal_type": "breakfast"
 }
@@ -1093,6 +1075,7 @@ apikey: <API_KEY>
 
 - `date`: Required, ISO 8601 UTC format
 - `photo_url`: Optional, valid URL format
+- `food_name`: Optional, max 200 characters - Name/title of the meal
 - `note`: Optional, max 500 characters
 - `meal_type`: Optional, must be one of predefined enum values
 
@@ -1105,6 +1088,7 @@ apikey: <API_KEY>
     "customer_id": 1,
     "date": "2025-01-15T00:00:00.000Z",
     "photo_url": "https://yourdomain.com/uploads/meals/abc123.jpg",
+    "food_name": "Oatmeal with berries",
     "note": "Healthy breakfast with oats and berries",
     "meal_type": "breakfast",
     "created_at": "2025-01-15T08:00:00.000Z"
@@ -1129,7 +1113,6 @@ Get all meal entries for the authenticated user.
 
 ```http
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Response (200 OK):**
@@ -1142,6 +1125,7 @@ apikey: <API_KEY>
       "customer_id": 1,
       "date": "2025-01-16T00:00:00.000Z",
       "photo_url": "https://yourdomain.com/uploads/meals/def456.jpg",
+      "food_name": "Grilled chicken salad",
       "note": "Salad with grilled chicken",
       "meal_type": "lunch",
       "created_at": "2025-01-16T12:30:00.000Z"
@@ -1151,6 +1135,7 @@ apikey: <API_KEY>
       "customer_id": 1,
       "date": "2025-01-15T00:00:00.000Z",
       "photo_url": "https://yourdomain.com/uploads/meals/abc123.jpg",
+      "food_name": "Oatmeal with berries",
       "note": "Healthy breakfast with oats and berries",
       "meal_type": "breakfast",
       "created_at": "2025-01-15T08:00:00.000Z"
@@ -1177,7 +1162,6 @@ Get a specific meal entry by ID.
 
 ```http
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Response (200 OK):**
@@ -1189,6 +1173,7 @@ apikey: <API_KEY>
     "customer_id": 1,
     "date": "2025-01-15T00:00:00.000Z",
     "photo_url": "https://yourdomain.com/uploads/meals/abc123.jpg",
+    "food_name": "Oatmeal with berries",
     "note": "Healthy breakfast with oats and berries",
     "meal_type": "breakfast",
     "created_at": "2025-01-15T08:00:00.000Z"
@@ -1218,7 +1203,6 @@ Update an existing meal entry.
 ```http
 Content-Type: application/json
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Request Body (all fields optional):**
@@ -1227,6 +1211,7 @@ apikey: <API_KEY>
 {
   "date": "2025-01-15T00:00:00.000Z",
   "photo_url": "https://yourdomain.com/uploads/meals/new123.jpg",
+  "food_name": "Updated meal name",
   "note": "Updated note",
   "meal_type": "brunch"
 }
@@ -1241,6 +1226,7 @@ apikey: <API_KEY>
     "customer_id": 1,
     "date": "2025-01-15T00:00:00.000Z",
     "photo_url": "https://yourdomain.com/uploads/meals/new123.jpg",
+    "food_name": "Updated meal name",
     "note": "Updated note",
     "meal_type": "brunch",
     "created_at": "2025-01-15T08:00:00.000Z"
@@ -1270,7 +1256,6 @@ Delete a meal entry.
 
 ```http
 Authorization: Bearer <access_token>
-apikey: <API_KEY>
 ```
 
 **Response (204 No Content)**
@@ -1456,6 +1441,7 @@ interface MealEntry {
   customer_id: number
   date: string // ISO 8601 UTC
   photo_url: string | null
+  food_name: string | null // max 200 chars
   note: string | null
   meal_type: MealType | null
   created_at: string // ISO 8601
@@ -1464,6 +1450,7 @@ interface MealEntry {
 interface CreateMealEntryDto {
   date: string // ISO 8601 UTC
   photo_url?: string
+  food_name?: string // max 200 chars
   note?: string
   meal_type?: MealType
 }
@@ -1471,6 +1458,7 @@ interface CreateMealEntryDto {
 interface UpdateMealEntryDto {
   date?: string
   photo_url?: string
+  food_name?: string
   note?: string
   meal_type?: MealType
 }

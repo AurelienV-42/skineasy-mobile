@@ -62,7 +62,8 @@ export type SportEntryInput = z.infer<typeof sportEntrySchema>
  * Meal Entry Schema (API DTO)
  */
 export const mealEntrySchema = z.object({
-  photo_url: z.string().url().nullable().optional(),
+  photo_url: z.url().nullable().optional(),
+  food_name: z.string().min(1, 'journal.nutrition.foodNameRequired').max(200, 'journal.nutrition.foodNameMaxLength'),
   note: z.string().max(500, 'journal.nutrition.noteMaxLength').nullable().optional(),
   meal_type: mealTypeSchema.nullable().optional(),
 })
@@ -96,6 +97,7 @@ export type SportFormInput = z.infer<typeof sportFormSchema>
 
 export const mealFormSchema = z.object({
   imageUri: z.string().nullable().optional(), // Local image URI before upload
+  food_name: z.string().min(1, 'journal.nutrition.foodNameRequired').max(200, 'journal.nutrition.foodNameMaxLength'),
   note: z.string().max(500, 'journal.nutrition.noteMaxLength').nullable().optional(),
   meal_type: mealTypeSchema.nullable().optional(),
 })

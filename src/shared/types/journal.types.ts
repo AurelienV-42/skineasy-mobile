@@ -70,6 +70,7 @@ export interface MealEntry {
   customer_id: number
   date: string // ISO 8601 UTC format: "2025-01-15T00:00:00.000Z"
   photo_url: string | null
+  food_name: string | null // max 200 chars - Name/title of the meal
   note: string | null
   meal_type: MealType | null
   created_at: string // ISO 8601
@@ -96,6 +97,7 @@ export interface CreateSportEntryDto {
 export interface CreateMealEntryDto {
   date: string // ISO 8601 UTC format: "2025-01-15T00:00:00.000Z"
   photo_url?: string | null
+  food_name?: string | null // max 200 chars - Name/title of the meal
   note?: string | null
   meal_type?: MealType | null
 }

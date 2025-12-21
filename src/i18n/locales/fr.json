@@ -29,8 +29,6 @@
     "invalidCredentials": "Identifiants invalides",
     "registerError": "Impossible de créer le compte. Veuillez réessayer.",
     "registerSuccess": "Compte créé avec succès",
-    "loginFormPlaceholder": "Formulaire de connexion bientôt disponible",
-    "registerFormPlaceholder": "Formulaire d'inscription bientôt disponible",
     "welcomeBack": "Bon retour",
     "signInToContinue": "Connecte-toi pour continuer ton parcours",
     "createAccountSubtitle": "Rejoins-nous pour ton parcours beauté"
@@ -97,9 +95,12 @@
       "title": "Repas & Snacks",
       "screenTitle": "Repas & Snacks",
       "meal": "Repas",
+      "mealType": "Type de repas (optionnel)",
       "addMeal": "Ajouter une photo de ton repas/snack",
-      "addNote": "Ajouter une note au repas",
-      "notePlaceholder": "Note optionnelle sur ton repas...",
+      "foodName": "Nom du repas",
+      "foodNameRequired": "Le nom du repas est requis",
+      "foodNameMaxLength": "Le nom du repas ne peut pas dépasser 200 caractères",
+      "addNote": "Ajouter une note au repas (optionnel)",
       "takePhoto": "Prendre une photo",
       "gallery": "Galerie",
       "cameraPermissionRequired": "L'accès à l'appareil photo est requis !",
@@ -122,7 +123,6 @@
       "duration": "Durée",
       "minutes": "min",
       "note": "Note (optionnelle)",
-      "notePlaceholder": "Comment t'es-tu senti(e) pendant cette activité ?",
       "noteMaxLength": "La note ne peut pas dépasser 500 caractères",
       "durationMin": "La durée doit être d'au moins 1 minute",
       "saveSuccess": "Activité enregistrée avec succès",
@@ -158,8 +158,7 @@
     "shopRoutine": "Commander ma Routine",
     "whyThisProduct": "Pourquoi ce produit ?",
     "step": "Étape {{number}}",
-    "cleanse": "Nettoyage",
-    "productPlaceholder": "Détails du produit bientôt disponibles"
+    "cleanse": "Nettoyage"
   },
   "profile": {
     "title": "Profil",

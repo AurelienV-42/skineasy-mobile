@@ -1,8 +1,8 @@
 import * as Sentry from '@sentry/react-native'
 import { ENV } from '@shared/config/env'
 import type { RefreshTokenResponse } from '@shared/types/api.types'
-import { getRefreshToken, getToken, setToken } from '@shared/utils/storage'
 import { logger } from '@shared/utils/logger'
+import { getRefreshToken, getToken, setToken } from '@shared/utils/storage'
 import Toast from 'react-native-toast-message'
 
 interface ApiOptions extends Omit<RequestInit, 'body'> {
@@ -19,7 +19,6 @@ class ApiClient {
 
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
-      apikey: ENV.API_KEY,
       ...options.headers,
     }
 
@@ -151,7 +150,6 @@ class ApiClient {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          apikey: ENV.API_KEY,
         },
         body: JSON.stringify({ refreshToken }), // Changed from refresh_token to refreshToken
       })

@@ -6,6 +6,7 @@
  */
 
 import { api } from '@shared/services/api'
+import { ENV } from '@shared/config/env'
 import type {
   SleepEntry,
   SportEntry,
@@ -136,7 +137,7 @@ export const mealService = {
 
     // Use fetch directly for FormData upload
     const response = await fetch(
-      `${process.env.API_URL || 'http://localhost:3000'}/api/v1/journal/meal/upload`,
+      `${ENV.API_URL}/api/v1/journal/meal/upload`,
       {
         method: 'POST',
         body: formData,
