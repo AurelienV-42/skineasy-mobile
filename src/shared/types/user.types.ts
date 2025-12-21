@@ -4,6 +4,7 @@ export interface UserProfile {
   firstname: string
   lastname: string
   skinType?: string
+  birthday?: string // YYYY-MM-DD format
 }
 
 export interface AuthState {

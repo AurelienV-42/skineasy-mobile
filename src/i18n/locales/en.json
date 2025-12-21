@@ -178,7 +178,10 @@
     "logoutConfirm": "Are you sure you want to log out?",
     "logoutTitle": "Log Out",
     "updateSuccess": "Profile Updated",
-    "emailReadOnly": "Email cannot be changed"
+    "updateSuccessMessage": "Your profile has been successfully updated.",
+    "emailReadOnly": "Email cannot be changed",
+    "birthday": "Birthday",
+    "selectBirthday": "Select birthday"
   },
   "diagnosis": {
     "required": "Diagnosis Required",

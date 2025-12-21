@@ -178,7 +178,10 @@
     "logoutConfirm": "Es-tu sûr(e) de vouloir te déconnecter ?",
     "logoutTitle": "Déconnexion",
     "updateSuccess": "Profil mis à jour",
-    "emailReadOnly": "L'email ne peut pas être modifié"
+    "updateSuccessMessage": "Ton profil a été mis à jour avec succès.",
+    "emailReadOnly": "L'email ne peut pas être modifié",
+    "birthday": "Date de naissance",
+    "selectBirthday": "Sélectionner la date de naissance"
   },
   "diagnosis": {
     "required": "Diagnostic requis",

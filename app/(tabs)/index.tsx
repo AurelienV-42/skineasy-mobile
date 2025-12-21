@@ -38,7 +38,7 @@ export default function DashboardScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Greeting */}
         <View className="px-4 pt-4 pb-2">
