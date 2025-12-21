@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { TextInput, View, Text, type TextInputProps } from 'react-native'
+import { Text, TextInput, View, type TextInputProps } from 'react-native'
 
 import { haptic } from '@shared/utils/haptic'
 import { colors } from '@theme/colors'
@@ -14,7 +14,7 @@ interface InputProps extends TextInputProps {
 }
 
 export const Input = forwardRef<TextInput, InputProps>(
-  ({ label, error, className, style, onFocus, enableHaptic = true, ...props }, ref) => {
+  ({ label, error, className, style, onFocus, enableHaptic = true, multiline, ...props }, ref) => {
     const handleFocus = (event: Parameters<NonNullable<TextInputProps['onFocus']>>[0]) => {
       // Trigger selection haptic on focus
       if (enableHaptic) {
@@ -32,13 +32,14 @@ export const Input = forwardRef<TextInput, InputProps>(
         {label && <Text className="text-sm font-medium text-text mb-2">{label}</Text>}
         <TextInput
           ref={ref}
-          className={`w-full h-12 bg-surface border rounded-md px-4 text-text ${
+          className={`w-full ${multiline ? 'min-h-20 py-3' : 'h-12'} bg-surface border rounded-md px-4 text-text ${
             error ? 'border-error' : 'border-border'
           } ${className || ''}`}
           placeholderTextColor={colors.textLight}
-          textAlignVertical="center"
+          textAlignVertical={multiline ? 'top' : 'center'}
           style={[{ fontSize: 16, lineHeight: 20 }, style]}
           onFocus={handleFocus}
+          multiline={multiline}
           {...props}
         />
         {error && <Text className="text-sm text-error mt-1">{error}</Text>}

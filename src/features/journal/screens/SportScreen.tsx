@@ -9,24 +9,24 @@
  * Connected to real backend API with validation
  */
 
-import { View, Text, ScrollView } from 'react-native'
-import { useTranslation } from 'react-i18next'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useTranslation } from 'react-i18next'
+import { ScrollView, Text, View } from 'react-native'
 
-import { Button } from '@shared/components/Button'
-import { Pressable } from '@shared/components/Pressable'
-import { Input } from '@shared/components/Input'
-import { JournalLayout } from '@shared/components/ScreenHeader'
 import { SportTypeSelector } from '@features/journal/components/SportTypeSelector'
 import { useCreateSport, useSportTypes } from '@features/journal/hooks/useJournal'
 import { sportFormSchema, type SportFormInput } from '@features/journal/schemas/journal.schema'
-import { getTodayUTC } from '@shared/utils/date'
-import type { SportIntensity } from '@shared/types/journal.types'
 import { enrichSportTypes } from '@features/journal/utils/sportMapping'
-import { useMemo, useEffect } from 'react'
+import { Button } from '@shared/components/Button'
+import { Input } from '@shared/components/Input'
+import { Pressable } from '@shared/components/Pressable'
+import { JournalLayout } from '@shared/components/ScreenHeader'
+import type { SportIntensity } from '@shared/types/journal.types'
+import { getTodayUTC } from '@shared/utils/date'
 import { logger } from '@shared/utils/logger'
+import { useEffect, useMemo } from 'react'
 
 const INTENSITY_LEVELS = [1, 2, 3, 4, 5] as const
 
@@ -113,7 +113,7 @@ export default function SportScreen() {
 
   return (
     <JournalLayout title={t('journal.sport.screenTitle')}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 24 }}>
         {/* Sport Type Selector */}
         <View className="mb-6">
           <Controller
