@@ -112,7 +112,11 @@ export const Input = forwardRef<TextInput, InputProps>(
       <View ref={containerRef} className="w-full mb-6">
         <View
           className={`relative ${multiline ? 'min-h-24' : 'h-14'} ${
-            isFocused ? 'border-2 border-primary' : error ? 'border-2 border-error' : 'border border-border'
+            isFocused
+              ? 'border-2 border-primary'
+              : error
+                ? 'border-2 border-error'
+                : 'border border-border'
           } bg-surface rounded-xl ${className || ''}`}
           style={{
             shadowColor: isFocused ? colors.primary : '#000',
