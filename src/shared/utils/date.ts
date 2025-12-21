@@ -16,6 +16,7 @@ import {
   isTomorrow as isTomorrowFns,
   subDays,
   addDays,
+  startOfDay,
 } from 'date-fns'
 
 /**
@@ -142,4 +143,18 @@ export function isYesterday(date: Date | string): boolean {
 export function isTomorrow(date: Date | string): boolean {
   const dateObj = typeof date === 'string' ? parseISO(date) : date
   return isTomorrowFns(dateObj)
+}
+
+/**
+ * Check if a date is in the past (before today)
+ *
+ * @param date - Date to check (can be Date object or UTC ISO string)
+ * @returns True if the date is before today
+ */
+export function isPast(date: Date | string): boolean {
+  const dateObj = typeof date === 'string' ? parseISO(date) : date
+  const today = startOfDay(new Date())
+  const compareDate = startOfDay(dateObj)
+  // Compare start of day for both dates to ignore time component
+  return compareDate < today
 }

@@ -13,16 +13,17 @@
  * - Loading states
  */
 
-import { useState } from 'react'
-import { View, Text, Image, LayoutAnimation, Platform, UIManager } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import { useRouter } from 'expo-router'
-import { Moon, Utensils, Activity, ChevronDown, Plus, Frown, Meh, Smile } from 'lucide-react-native'
+import { Activity, ChevronDown, Frown, Meh, Moon, Plus, Smile, Utensils } from 'lucide-react-native'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Image, LayoutAnimation, Platform, Text, UIManager, View } from 'react-native'
 
-import { Pressable } from '@shared/components/Pressable'
-import type { SleepEntry, MealEntry, SportEntry } from '@shared/types/journal.types'
-import { colors } from '@theme/colors'
 import { getSportTypeLabel } from '@features/journal/utils/sportMapping'
+import { Pressable } from '@shared/components/Pressable'
+import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
+import { isPast } from '@shared/utils/date'
+import { colors } from '@theme/colors'
 
 // Enable LayoutAnimation on Android
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -42,11 +43,16 @@ export function DailySummary({
   mealEntries,
   sportEntries,
   isLoading,
+  date,
 }: DailySummaryProps) {
   const { t } = useTranslation()
   const router = useRouter()
 
   const [expandedCard, setExpandedCard] = useState<'sleep' | 'nutrition' | 'sport' | null>(null)
+
+  // Only allow logging entries for today and future dates (not past)
+  const canLogEntries = !isPast(date)
+  const isPastDate = isPast(date)
 
   const toggleCard = (card: 'sleep' | 'nutrition' | 'sport') => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
@@ -85,8 +91,12 @@ export function DailySummary({
     <View className="px-4 gap-3">
       {/* Sleep Card */}
       <Pressable
-        onPress={() => toggleCard('sleep')}
-        haptic="light"
+        onPress={() => {
+          // Don't allow expanding if it's past date with no entry
+          if (isPastDate && !sleepEntry) return
+          toggleCard('sleep')
+        }}
+        haptic={isPastDate && !sleepEntry ? undefined : 'light'}
         className="bg-surface rounded-2xl border border-border overflow-hidden"
       >
         {/* Header */}
@@ -102,17 +112,22 @@ export function DailySummary({
                   {sleepEntry.hours}h · {getSleepQualityLabel(sleepEntry.quality, t)}
                 </Text>
               ) : (
-                <Text className="text-sm text-textMuted">{t('dashboard.summary.notLogged')}</Text>
+                <Text className="text-sm text-textMuted">
+                  {isPastDate ? t('dashboard.summary.noLogs') : t('dashboard.summary.notLogged')}
+                </Text>
               )}
             </View>
           </View>
-          <ChevronDown
-            size={20}
-            color={colors.textMuted}
-            style={{
-              transform: [{ rotate: expandedCard === 'sleep' ? '180deg' : '0deg' }],
-            }}
-          />
+          {/* Hide chevron for past dates with no entry */}
+          {!(isPastDate && !sleepEntry) && (
+            <ChevronDown
+              size={20}
+              color={colors.textMuted}
+              style={{
+                transform: [{ rotate: expandedCard === 'sleep' ? '180deg' : '0deg' }],
+              }}
+            />
+          )}
         </View>
 
         {/* Expanded Content */}
@@ -131,7 +146,7 @@ export function DailySummary({
                   <Text className="text-sm text-textMuted">{t('journal.sleep.hours')}</Text>
                 </View>
               </View>
-            ) : (
+            ) : canLogEntries ? (
               <Pressable
                 onPress={() => router.push('/journal/sleep')}
                 haptic="light"
@@ -142,15 +157,19 @@ export function DailySummary({
                 </Text>
                 <Plus size={20} color={colors.primary} />
               </Pressable>
-            )}
+            ) : null}
           </View>
         )}
       </Pressable>
 
       {/* Nutrition Card */}
       <Pressable
-        onPress={() => toggleCard('nutrition')}
-        haptic="light"
+        onPress={() => {
+          // Don't allow expanding if it's past date with no entry
+          if (isPastDate && mealCount === 0) return
+          toggleCard('nutrition')
+        }}
+        haptic={isPastDate && mealCount === 0 ? undefined : 'light'}
         className="bg-surface rounded-2xl border border-border overflow-hidden"
       >
         {/* Header */}
@@ -169,17 +188,22 @@ export function DailySummary({
                   {mealCount === 1 ? t('dashboard.summary.meal') : t('dashboard.summary.meals')}
                 </Text>
               ) : (
-                <Text className="text-sm text-textMuted">{t('dashboard.summary.notLogged')}</Text>
+                <Text className="text-sm text-textMuted">
+                  {isPastDate ? t('dashboard.summary.noLogs') : t('dashboard.summary.notLogged')}
+                </Text>
               )}
             </View>
           </View>
-          <ChevronDown
-            size={20}
-            color={colors.textMuted}
-            style={{
-              transform: [{ rotate: expandedCard === 'nutrition' ? '180deg' : '0deg' }],
-            }}
-          />
+          {/* Hide chevron for past dates with no entry */}
+          {!(isPastDate && mealCount === 0) && (
+            <ChevronDown
+              size={20}
+              color={colors.textMuted}
+              style={{
+                transform: [{ rotate: expandedCard === 'nutrition' ? '180deg' : '0deg' }],
+              }}
+            />
+          )}
         </View>
 
         {/* Expanded Content */}
@@ -210,19 +234,21 @@ export function DailySummary({
                     </View>
                   </View>
                 ))}
-                {/* Add More Button */}
-                <Pressable
-                  onPress={() => router.push('/journal/nutrition')}
-                  haptic="light"
-                  className="bg-secondary/10 rounded-xl p-3 flex-row items-center justify-center mt-2"
-                >
-                  <Plus size={18} color={colors.secondary} />
-                  <Text className="text-sm text-secondary font-medium ml-2">
-                    {t('dashboard.summary.addMore')}
-                  </Text>
-                </Pressable>
+                {/* Add More Button - Only show for today */}
+                {canLogEntries && (
+                  <Pressable
+                    onPress={() => router.push('/journal/nutrition')}
+                    haptic="light"
+                    className="bg-secondary/10 rounded-xl p-3 flex-row items-center justify-center mt-2"
+                  >
+                    <Plus size={18} color={colors.secondary} />
+                    <Text className="text-sm text-secondary font-medium ml-2">
+                      {t('dashboard.summary.addMore')}
+                    </Text>
+                  </Pressable>
+                )}
               </View>
-            ) : (
+            ) : canLogEntries ? (
               <Pressable
                 onPress={() => router.push('/journal/nutrition')}
                 haptic="light"
@@ -233,15 +259,19 @@ export function DailySummary({
                 </Text>
                 <Plus size={20} color={colors.secondary} />
               </Pressable>
-            )}
+            ) : null}
           </View>
         )}
       </Pressable>
 
       {/* Sport Card */}
       <Pressable
-        onPress={() => toggleCard('sport')}
-        haptic="light"
+        onPress={() => {
+          // Don't allow expanding if it's past date with no entry
+          if (isPastDate && sportCount === 0) return
+          toggleCard('sport')
+        }}
+        haptic={isPastDate && sportCount === 0 ? undefined : 'light'}
         className="bg-surface rounded-2xl border border-border overflow-hidden"
       >
         {/* Header */}
@@ -261,17 +291,22 @@ export function DailySummary({
                   · {totalDuration} {t('journal.sport.minutes')}
                 </Text>
               ) : (
-                <Text className="text-sm text-textMuted">{t('dashboard.summary.notLogged')}</Text>
+                <Text className="text-sm text-textMuted">
+                  {isPastDate ? t('dashboard.summary.noLogs') : t('dashboard.summary.notLogged')}
+                </Text>
               )}
             </View>
           </View>
-          <ChevronDown
-            size={20}
-            color={colors.textMuted}
-            style={{
-              transform: [{ rotate: expandedCard === 'sport' ? '180deg' : '0deg' }],
-            }}
-          />
+          {/* Hide chevron for past dates with no entry */}
+          {!(isPastDate && sportCount === 0) && (
+            <ChevronDown
+              size={20}
+              color={colors.textMuted}
+              style={{
+                transform: [{ rotate: expandedCard === 'sport' ? '180deg' : '0deg' }],
+              }}
+            />
+          )}
         </View>
 
         {/* Expanded Content */}
@@ -301,24 +336,26 @@ export function DailySummary({
                     </View>
                     {sport.note && (
                       <Text className="text-xs text-textMuted italic pl-11">
-                        "{sport.note}"
+                        &ldquo;{sport.note}&rdquo;
                       </Text>
                     )}
                   </View>
                 ))}
-                {/* Add More Button */}
-                <Pressable
-                  onPress={() => router.push('/journal/sport')}
-                  haptic="light"
-                  className="bg-primary/5 rounded-xl p-3 flex-row items-center justify-center mt-2"
-                >
-                  <Plus size={18} color={colors.primary} />
-                  <Text className="text-sm text-primary font-medium ml-2">
-                    {t('dashboard.summary.addMore')}
-                  </Text>
-                </Pressable>
+                {/* Add More Button - Only show for today */}
+                {canLogEntries && (
+                  <Pressable
+                    onPress={() => router.push('/journal/sport')}
+                    haptic="light"
+                    className="bg-primary/5 rounded-xl p-3 flex-row items-center justify-center mt-2"
+                  >
+                    <Plus size={18} color={colors.primary} />
+                    <Text className="text-sm text-primary font-medium ml-2">
+                      {t('dashboard.summary.addMore')}
+                    </Text>
+                  </Pressable>
+                )}
               </View>
-            ) : (
+            ) : canLogEntries ? (
               <Pressable
                 onPress={() => router.push('/journal/sport')}
                 haptic="light"
@@ -329,7 +366,7 @@ export function DailySummary({
                 </Text>
                 <Plus size={20} color={colors.primary} />
               </Pressable>
-            )}
+            ) : null}
           </View>
         )}
       </Pressable>

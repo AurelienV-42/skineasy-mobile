@@ -10,10 +10,10 @@
 
 import { View, Text, Platform } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react-native'
+import { ChevronLeft, Calendar } from 'lucide-react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useState } from 'react'
-import { format, isToday, isYesterday, isTomorrow, addDays, subDays } from 'date-fns'
+import { format, isToday, isYesterday, isTomorrow, subDays } from 'date-fns'
 
 import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
@@ -31,8 +31,8 @@ export function DateNavigation({ selectedDate, onDateChange }: DateNavigationPro
     onDateChange(subDays(selectedDate, 1))
   }
 
-  const handleNextDay = () => {
-    onDateChange(addDays(selectedDate, 1))
+  const handleTodayPress = () => {
+    onDateChange(new Date())
   }
 
   const handleDatePress = () => {
@@ -79,15 +79,19 @@ export function DateNavigation({ selectedDate, onDateChange }: DateNavigationPro
           <Text className="text-base font-medium text-text">{getDateLabel()}</Text>
         </Pressable>
 
-        {/* Next Day */}
-        <Pressable
-          onPress={handleNextDay}
-          haptic="light"
-          className="w-10 h-10 items-center justify-center"
-          accessibilityLabel={t('dashboard.navigation.nextDay')}
-        >
-          <ChevronRight size={20} color={colors.text} />
-        </Pressable>
+        {/* Today button (only show if not viewing today) */}
+        {!isToday(selectedDate) ? (
+          <Pressable
+            onPress={handleTodayPress}
+            haptic="light"
+            className="px-3 h-10 items-center justify-center bg-primary/10 rounded-lg"
+            accessibilityLabel={t('dashboard.today')}
+          >
+            <Text className="text-xs font-medium text-primary">{t('dashboard.today')}</Text>
+          </Pressable>
+        ) : (
+          <View className="w-10 h-10" />
+        )}
       </View>
 
       {/* Date Picker */}

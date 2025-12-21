@@ -38,7 +38,7 @@ export default function DashboardScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Greeting */}
         <View className="px-4 pt-4 pb-2">
@@ -49,14 +49,14 @@ export default function DashboardScreen() {
         </View>
 
         {/* Date Navigation */}
-
         <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
         {/* Daily Summary - Expandable Cards */}
-        <View className="pt-2 pb-8">
+        <View className="pt-2">
           <Text className="text-lg font-semibold text-text mb-4 px-4">
             {t('dashboard.summary.title')}
           </Text>
           <DailySummary
+            key={dateString}
             sleepEntries={sleepEntries}
             mealEntries={mealEntries}
             sportEntries={sportEntries}
@@ -66,7 +66,7 @@ export default function DashboardScreen() {
         </View>
 
         {/* Quiz Banner */}
-        <View className="px-4 pb-8">
+        <View className="px-4 py-4">
           <QuizBanner onPress={handleQuizPress} />
         </View>
       </ScrollView>
