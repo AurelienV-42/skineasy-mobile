@@ -118,7 +118,6 @@ export default function SportScreen() {
               onChangeText={onChange}
               onBlur={onBlur}
               keyboardType="number-pad"
-              placeholder="30"
               error={errors.duration?.message ? t(errors.duration.message as string) : undefined}
             />
           )}
@@ -173,7 +172,6 @@ export default function SportScreen() {
               value={value || ''}
               onChangeText={onChange}
               onBlur={onBlur}
-              placeholder={t('journal.sport.notePlaceholder')}
               multiline
               numberOfLines={3}
               error={errors.note?.message ? t(errors.note.message as string) : undefined}

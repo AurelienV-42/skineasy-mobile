@@ -1,11 +1,18 @@
-import { Tabs } from 'expo-router'
+import { Redirect, Tabs } from 'expo-router'
 import { Home, Sparkles, User } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 
+import { useAuthStore } from '@shared/stores/auth.store'
 import { colors } from '@theme/colors'
 
 export default function TabsLayout() {
   const { t } = useTranslation()
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+
+  // Redirect to auth if not authenticated
+  if (!isAuthenticated) {
+    return <Redirect href="/(auth)/login" />
+  }
 
   return (
     <Tabs

@@ -70,7 +70,6 @@ export default function EditProfileScreen() {
                     keyboardType="email-address"
                     autoCapitalize="none"
                     editable={false}
-                    placeholder={t('profile.emailReadOnly')}
                   />
                 )}
               />

@@ -7,15 +7,15 @@
  * - All sport types are validated for translations and icons
  */
 
-import React, { useState, useMemo } from 'react'
-import { Text, TextInput, View, FlatList, ActivityIndicator } from 'react-native'
 import { Search, X } from 'lucide-react-native'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ActivityIndicator, FlatList, Text, TextInput, View } from 'react-native'
 
-import { Pressable } from '@shared/components/Pressable'
-import { BottomSheet } from '@shared/components/BottomSheet'
 import { useSportTypes } from '@features/journal/hooks/useJournal'
 import { enrichSportTypes } from '@features/journal/utils/sportMapping'
+import { BottomSheet } from '@shared/components/BottomSheet'
+import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
 
 interface SportTypeSelectorProps {
@@ -146,8 +146,6 @@ export function SportTypeSelector({ value, onChange }: SportTypeSelectorProps) {
               <TextInput
                 value={searchQuery}
                 onChangeText={setSearchQuery}
-                placeholder={t('journal.sport.searchActivities')}
-                placeholderTextColor={colors.textMuted}
                 className="flex-1 ml-2 text-base text-text"
                 autoFocus
               />

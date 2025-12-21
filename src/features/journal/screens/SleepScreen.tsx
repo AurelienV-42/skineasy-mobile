@@ -15,15 +15,15 @@ import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
-import { Button } from '@shared/components/Button'
-import { Pressable } from '@shared/components/Pressable'
-import { Input } from '@shared/components/Input'
-import { JournalLayout } from '@shared/components/ScreenHeader'
 import { useUpsertSleep } from '@features/journal/hooks/useJournal'
 import { sleepFormSchema, type SleepFormInput } from '@features/journal/schemas/journal.schema'
+import { Button } from '@shared/components/Button'
+import { Input } from '@shared/components/Input'
+import { Pressable } from '@shared/components/Pressable'
+import { JournalLayout } from '@shared/components/ScreenHeader'
+import type { SleepQuality } from '@shared/types/journal.types'
 import { getTodayUTC } from '@shared/utils/date'
 import { colors } from '@theme/colors'
-import type { SleepQuality } from '@shared/types/journal.types'
 
 const QUALITY_LEVELS = [
   { value: 1 as SleepQuality, icon: Frown, labelKey: 'journal.sleep.quality.bad' },
@@ -80,7 +80,6 @@ export default function SleepScreen() {
               onChangeText={onChange}
               onBlur={onBlur}
               keyboardType="decimal-pad"
-              placeholder="8"
               error={errors.hours?.message ? t(errors.hours.message as string) : undefined}
             />
           )}

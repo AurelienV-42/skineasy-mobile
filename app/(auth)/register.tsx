@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link, useRouter } from 'expo-router'
+import { Link } from 'expo-router'
 import { useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -23,7 +23,6 @@ import { Pressable } from '@shared/components/Pressable'
 
 export default function RegisterScreen() {
   const { t } = useTranslation()
-  const router = useRouter()
   const { mutate: register, isPending } = useRegister()
   const lastnameRef = useRef<TextInput>(null)
   const emailRef = useRef<TextInput>(null)
@@ -48,11 +47,7 @@ export default function RegisterScreen() {
 
   const onSubmit = (data: RegisterInput) => {
     setHasAttemptedSubmit(true)
-    register(data, {
-      onSuccess: () => {
-        router.replace('/(tabs)')
-      },
-    })
+    register(data)
   }
 
   return (

@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link, useRouter } from 'expo-router'
-import { useEffect, useRef, useState } from 'react'
+import { Link } from 'expo-router'
+import { useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import {
@@ -24,18 +24,11 @@ import { Pressable } from '@shared/components/Pressable'
 
 export default function LoginScreen() {
   const { t } = useTranslation()
-  const router = useRouter()
-  const { mutate: login, isPending, isSuccess } = useLogin()
+  const { mutate: login, isPending } = useLogin()
   const passwordRef = useRef<TextInput>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false)
 
-  // Navigate to tabs after successful login
-  useEffect(() => {
-    if (isSuccess) {
-      router.replace('/(tabs)')
-    }
-  }, [isSuccess, router])
 
   const {
     control,

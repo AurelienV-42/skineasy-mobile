@@ -173,7 +173,6 @@ export default function NutritionScreen() {
               value={value || ''}
               onChangeText={onChange}
               onBlur={onBlur}
-              placeholder={t('journal.nutrition.notePlaceholder')}
               multiline
               numberOfLines={4}
               error={errors.note?.message ? t(errors.note.message as string) : undefined}
