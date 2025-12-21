@@ -13,7 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 
 import { SportTypeSelector } from '@features/journal/components/SportTypeSelector'
 import { useCreateSport, useSportTypes } from '@features/journal/hooks/useJournal'
@@ -25,8 +25,7 @@ import { Pressable } from '@shared/components/Pressable'
 import { JournalLayout } from '@shared/components/ScreenHeader'
 import type { SportIntensity } from '@shared/types/journal.types'
 import { getTodayUTC } from '@shared/utils/date'
-import { logger } from '@shared/utils/logger'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 
 const INTENSITY_LEVELS = [1, 2, 3, 4, 5] as const
 
@@ -46,7 +45,7 @@ export default function SportScreen() {
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid, isDirty, isValidating },
+    formState: { errors, isValid },
     setValue,
     watch,
   } = useForm<SportFormInput>({
@@ -58,23 +57,6 @@ export default function SportScreen() {
   })
 
   const selectedIntensity = watch('intensity') ?? 3
-  const formValues = watch()
-
-  // Log form state changes
-  useEffect(() => {
-    // Try manual validation to see what's wrong
-    const validationResult = sportFormSchema.safeParse(formValues)
-
-    logger.info('[SportScreen] Form state changed:', {
-      formValues,
-      errors,
-      isValid,
-      isDirty,
-      isValidating,
-      selectedIntensity,
-      manualValidation: validationResult.success ? 'VALID' : validationResult.error.issues,
-    })
-  }, [formValues, errors, isValid, isDirty, isValidating, selectedIntensity])
 
   const onSubmit = (data: SportFormInput) => {
     // Get backend ID from sport type name
@@ -113,114 +95,103 @@ export default function SportScreen() {
 
   return (
     <JournalLayout title={t('journal.sport.screenTitle')}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 24 }}>
-        {/* Sport Type Selector */}
-        <View className="mb-6">
-          <Controller
-            control={control}
-            name="type"
-            render={({ field: { onChange, value } }) => (
-              <SportTypeSelector
-                value={value}
-                onChange={(newValue) => {
-                  logger.info('[SportScreen] Sport type changed:', newValue)
-                  onChange(newValue)
-                }}
-              />
-            )}
-          />
-        </View>
-
-        {/* Duration Input */}
-        <View className="mb-6">
-          <Controller
-            control={control}
-            name="duration"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                label={`${t('journal.sport.duration')} (${t('journal.sport.minutes')})`}
-                value={value}
-                onChangeText={(text) => {
-                  logger.info('[SportScreen] Duration changed:', text)
-                  onChange(text)
-                }}
-                onBlur={onBlur}
-                keyboardType="number-pad"
-                placeholder="30"
-                error={errors.duration?.message ? t(errors.duration.message as string) : undefined}
-              />
-            )}
-          />
-        </View>
-
-        {/* Intensity Selector */}
-        <View className="mb-6">
-          <Text className="text-sm font-medium text-text mb-3">
-            {t('journal.sport.intensity.label')}
-          </Text>
-
-          <View className="flex-row justify-between gap-2">
-            {INTENSITY_LEVELS.map((level) => (
-              <Pressable
-                key={level}
-                onPress={() => {
-                  logger.info('[SportScreen] Intensity changed:', level)
-                  setValue('intensity', level)
-                }}
-                haptic="light"
-                className={`flex-1 items-center justify-center py-3 rounded-lg border ${
-                  selectedIntensity === level
-                    ? 'bg-primary border-primary'
-                    : 'bg-surface border-border'
-                }`}
-                accessibilityLabel={`${t('journal.sport.intensity.label')} ${level}`}
-                accessibilityRole="button"
-              >
-                <Text
-                  className={`text-2xl font-bold ${
-                    selectedIntensity === level ? 'text-white' : 'text-text'
-                  }`}
-                >
-                  {level}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-
-          {/* Intensity Label */}
-          <Text className="text-sm text-textMuted text-center mt-2">
-            {getIntensityLabel(selectedIntensity)}
-          </Text>
-        </View>
-
-        {/* Note Input */}
-        <View className="mb-8">
-          <Controller
-            control={control}
-            name="note"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                label={t('journal.sport.note')}
-                value={value || ''}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                placeholder={t('journal.sport.notePlaceholder')}
-                multiline
-                numberOfLines={3}
-                error={errors.note?.message ? t(errors.note.message as string) : undefined}
-              />
-            )}
-          />
-        </View>
-
-        {/* Save Button */}
-        <Button
-          title={t('common.save')}
-          onPress={handleSubmit(onSubmit)}
-          disabled={!isValid || createSport.isPending}
-          loading={createSport.isPending}
+      {/* Sport Type Selector */}
+      <View className="mb-6">
+        <Controller
+          control={control}
+          name="type"
+          render={({ field: { onChange, value } }) => (
+            <SportTypeSelector
+              value={value}
+              onChange={onChange}
+            />
+          )}
         />
-      </ScrollView>
+      </View>
+
+      {/* Duration Input */}
+      <View className="mb-6">
+        <Controller
+          control={control}
+          name="duration"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              label={`${t('journal.sport.duration')} (${t('journal.sport.minutes')})`}
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              keyboardType="number-pad"
+              placeholder="30"
+              error={errors.duration?.message ? t(errors.duration.message as string) : undefined}
+            />
+          )}
+        />
+      </View>
+
+      {/* Intensity Selector */}
+      <View className="mb-6">
+        <Text className="text-sm font-medium text-text mb-3">
+          {t('journal.sport.intensity.label')}
+        </Text>
+
+        <View className="flex-row justify-between gap-2">
+          {INTENSITY_LEVELS.map((level) => (
+            <Pressable
+              key={level}
+              onPress={() => setValue('intensity', level)}
+              haptic="light"
+              className={`flex-1 items-center justify-center py-3 rounded-lg border ${
+                selectedIntensity === level
+                  ? 'bg-primary border-primary'
+                  : 'bg-surface border-border'
+              }`}
+              accessibilityLabel={`${t('journal.sport.intensity.label')} ${level}`}
+              accessibilityRole="button"
+            >
+              <Text
+                className={`text-2xl font-bold ${
+                  selectedIntensity === level ? 'text-white' : 'text-text'
+                }`}
+              >
+                {level}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+
+        {/* Intensity Label */}
+        <Text className="text-sm text-textMuted text-center mt-2">
+          {getIntensityLabel(selectedIntensity)}
+        </Text>
+      </View>
+
+      {/* Note Input */}
+      <View className="mb-8">
+        <Controller
+          control={control}
+          name="note"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              label={t('journal.sport.note')}
+              value={value || ''}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              placeholder={t('journal.sport.notePlaceholder')}
+              multiline
+              numberOfLines={3}
+              error={errors.note?.message ? t(errors.note.message as string) : undefined}
+            />
+          )}
+        />
+      </View>
+
+      {/* Save Button */}
+      <Button
+        title={t('common.save')}
+        onPress={handleSubmit(onSubmit)}
+        disabled={!isValid || createSport.isPending}
+        loading={createSport.isPending}
+      />
     </JournalLayout>
   )
 }

@@ -1,8 +1,8 @@
 import { useRouter } from 'expo-router'
 import { ChevronLeft } from 'lucide-react-native'
-import { ReactNode } from 'react'
+import { createContext, ReactNode, useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, Text, View } from 'react-native'
+import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Pressable } from '@shared/components/Pressable'
@@ -13,9 +13,29 @@ interface ScreenHeaderProps {
   children: ReactNode
 }
 
+// Context to provide scroll functionality to child components
+interface ScrollContextType {
+  scrollToPosition: (y: number) => void
+}
+
+const ScrollContext = createContext<ScrollContextType | null>(null)
+
+export const useScrollContext = () => {
+  const context = useContext(ScrollContext)
+  return context
+}
+
 export function ScreenHeader({ title, children }: ScreenHeaderProps) {
   const { t } = useTranslation()
   const router = useRouter()
+  const scrollViewRef = useRef<ScrollView>(null)
+
+  const scrollToPosition = (y: number) => {
+    scrollViewRef.current?.scrollTo({
+      y,
+      animated: true,
+    })
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -32,9 +52,17 @@ export function ScreenHeader({ title, children }: ScreenHeaderProps) {
         <View className="w-7" />
       </View>
 
-      <ScrollView className="flex-1">
-        <View className="flex-1 px-4 pb-8">{children}</View>
-      </ScrollView>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
+        keyboardVerticalOffset={0}
+      >
+        <ScrollContext.Provider value={{ scrollToPosition }}>
+          <ScrollView ref={scrollViewRef} className="flex-1" keyboardShouldPersistTaps="handled">
+            <View className="flex-1 px-4 pb-8">{children}</View>
+          </ScrollView>
+        </ScrollContext.Provider>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }
