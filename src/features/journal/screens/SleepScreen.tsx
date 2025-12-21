@@ -8,12 +8,12 @@
  * Connected to real backend API with validation
  */
 
-import { View, Text, ScrollView } from 'react-native'
-import { useTranslation } from 'react-i18next'
-import { useRouter } from 'expo-router'
-import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'expo-router'
 import { Frown, Meh, Smile } from 'lucide-react-native'
+import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
 
 import { Button } from '@shared/components/Button'
 import { Pressable } from '@shared/components/Pressable'
@@ -68,68 +68,66 @@ export default function SleepScreen() {
 
   return (
     <JournalLayout title={t('journal.sleep.screenTitle')}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Hours Input */}
-        <View className="mb-8">
-          <Controller
-            control={control}
-            name="hours"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                label={t('journal.sleep.hours')}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                keyboardType="decimal-pad"
-                placeholder="8"
-                error={errors.hours?.message ? t(errors.hours.message as string) : undefined}
-              />
-            )}
-          />
-        </View>
-
-        {/* Quality Selector */}
-        <View className="mb-8">
-          <Text className="text-sm font-medium text-text mb-3">{t('journal.sleep.question')}</Text>
-          <View className="flex-row gap-3">
-            {QUALITY_LEVELS.map(({ value, icon: Icon, labelKey }) => (
-              <Pressable
-                key={value}
-                onPress={() => setValue('quality', value)}
-                haptic="light"
-                className={`flex-1 items-center justify-center py-6 rounded-xl border-2 ${
-                  selectedQuality === value
-                    ? 'border-primary bg-primary/10'
-                    : 'border-border bg-surface'
-                }`}
-                accessibilityLabel={t(labelKey)}
-                accessibilityRole="button"
-              >
-                <Icon
-                  size={40}
-                  color={selectedQuality === value ? colors.primary : colors.textMuted}
-                  strokeWidth={2}
-                />
-                <Text
-                  className={`text-sm mt-3 ${
-                    selectedQuality === value ? 'text-primary font-medium' : 'text-textMuted'
-                  }`}
-                >
-                  {t(labelKey)}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        </View>
-
-        {/* Save Button */}
-        <Button
-          title={t('common.save')}
-          onPress={handleSubmit(onSubmit)}
-          disabled={!isValid || upsertSleep.isPending}
-          loading={upsertSleep.isPending}
+      {/* Hours Input */}
+      <View className="mb-8">
+        <Controller
+          control={control}
+          name="hours"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              label={t('journal.sleep.hours')}
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              keyboardType="decimal-pad"
+              placeholder="8"
+              error={errors.hours?.message ? t(errors.hours.message as string) : undefined}
+            />
+          )}
         />
-      </ScrollView>
+      </View>
+
+      {/* Quality Selector */}
+      <View className="mb-8">
+        <Text className="text-sm font-medium text-text mb-3">{t('journal.sleep.question')}</Text>
+        <View className="flex-row gap-3">
+          {QUALITY_LEVELS.map(({ value, icon: Icon, labelKey }) => (
+            <Pressable
+              key={value}
+              onPress={() => setValue('quality', value)}
+              haptic="light"
+              className={`flex-1 items-center justify-center py-6 rounded-xl border-2 ${
+                selectedQuality === value
+                  ? 'border-primary bg-primary/10'
+                  : 'border-border bg-surface'
+              }`}
+              accessibilityLabel={t(labelKey)}
+              accessibilityRole="button"
+            >
+              <Icon
+                size={40}
+                color={selectedQuality === value ? colors.primary : colors.textMuted}
+                strokeWidth={2}
+              />
+              <Text
+                className={`text-sm mt-3 ${
+                  selectedQuality === value ? 'text-primary font-medium' : 'text-textMuted'
+                }`}
+              >
+                {t(labelKey)}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+      </View>
+
+      {/* Save Button */}
+      <Button
+        title={t('common.save')}
+        onPress={handleSubmit(onSubmit)}
+        disabled={!isValid || upsertSleep.isPending}
+        loading={upsertSleep.isPending}
+      />
     </JournalLayout>
   )
 }

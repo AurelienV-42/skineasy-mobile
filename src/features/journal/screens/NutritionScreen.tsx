@@ -16,7 +16,7 @@ import { Camera, ImageIcon, X } from 'lucide-react-native'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { Alert, Image, ScrollView, Text, View } from 'react-native'
+import { Alert, Image, Text, View } from 'react-native'
 
 import { useCreateMeal, useUploadMealImage } from '@features/journal/hooks/useJournal'
 import { mealFormSchema, type MealFormInput } from '@features/journal/schemas/journal.schema'
@@ -115,87 +115,80 @@ export default function NutritionScreen() {
 
   return (
     <JournalLayout title={t('journal.nutrition.screenTitle')}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Image Picker */}
-        <View className="mb-6">
-          <Text className="text-sm font-medium text-text mb-3">
-            {t('journal.nutrition.addMeal')}
-          </Text>
+      {/* Image Picker */}
+      <View className="mb-6">
+        <Text className="text-sm font-medium text-text mb-3">{t('journal.nutrition.addMeal')}</Text>
 
-          {imageUri ? (
-            <View className="relative">
-              <Image
-                source={{ uri: imageUri }}
-                className="w-full h-64 rounded-xl"
-                resizeMode="cover"
-              />
-              <Pressable
-                onPress={removeImage}
-                className="absolute top-2 right-2 bg-error rounded-full p-2"
-                accessibilityLabel={t('common.delete')}
-                haptic="light"
-              >
-                <X size={20} color="#FFF" />
-              </Pressable>
-            </View>
-          ) : (
-            <View className="flex-row gap-3">
-              <Pressable
-                onPress={takePhoto}
-                className="flex-1 bg-surface border-2 border-dashed border-border rounded-xl py-8 items-center justify-center"
-                accessibilityLabel={t('journal.nutrition.takePhoto')}
-                haptic="light"
-              >
-                <Camera size={32} color={colors.primary} strokeWidth={2} />
-                <Text className="text-sm text-textMuted mt-2">
-                  {t('journal.nutrition.takePhoto')}
-                </Text>
-              </Pressable>
+        {imageUri ? (
+          <View className="relative">
+            <Image
+              source={{ uri: imageUri }}
+              className="w-full h-64 rounded-xl"
+              resizeMode="cover"
+            />
+            <Pressable
+              onPress={removeImage}
+              className="absolute top-2 right-2 bg-error rounded-full p-2"
+              accessibilityLabel={t('common.delete')}
+              haptic="light"
+            >
+              <X size={20} color="#FFF" />
+            </Pressable>
+          </View>
+        ) : (
+          <View className="flex-row gap-3">
+            <Pressable
+              onPress={takePhoto}
+              className="flex-1 bg-surface border-2 border-dashed border-border rounded-xl py-8 items-center justify-center"
+              accessibilityLabel={t('journal.nutrition.takePhoto')}
+              haptic="light"
+            >
+              <Camera size={32} color={colors.primary} strokeWidth={2} />
+              <Text className="text-sm text-textMuted mt-2">
+                {t('journal.nutrition.takePhoto')}
+              </Text>
+            </Pressable>
 
-              <Pressable
-                onPress={pickImage}
-                className="flex-1 bg-surface border-2 border-dashed border-border rounded-xl py-8 items-center justify-center"
-                accessibilityLabel={t('journal.nutrition.gallery')}
-                haptic="light"
-              >
-                <ImageIcon size={32} color={colors.primary} strokeWidth={2} />
-                <Text className="text-sm text-textMuted mt-2">
-                  {t('journal.nutrition.gallery')}
-                </Text>
-              </Pressable>
-            </View>
+            <Pressable
+              onPress={pickImage}
+              className="flex-1 bg-surface border-2 border-dashed border-border rounded-xl py-8 items-center justify-center"
+              accessibilityLabel={t('journal.nutrition.gallery')}
+              haptic="light"
+            >
+              <ImageIcon size={32} color={colors.primary} strokeWidth={2} />
+              <Text className="text-sm text-textMuted mt-2">{t('journal.nutrition.gallery')}</Text>
+            </Pressable>
+          </View>
+        )}
+      </View>
+
+      {/* Note Input */}
+      <View className="mb-8">
+        <Controller
+          control={control}
+          name="note"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              label={t('journal.nutrition.addNote')}
+              value={value || ''}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              placeholder={t('journal.nutrition.notePlaceholder')}
+              multiline
+              numberOfLines={4}
+              error={errors.note?.message ? t(errors.note.message as string) : undefined}
+            />
           )}
-        </View>
-
-        {/* Note Input */}
-        <View className="mb-0">
-          <Controller
-            control={control}
-            name="note"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                label={t('journal.nutrition.addNote')}
-                value={value || ''}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                placeholder={t('journal.nutrition.notePlaceholder')}
-                multiline
-                numberOfLines={4}
-                textAlignVertical="top"
-                error={errors.note?.message ? t(errors.note.message as string) : undefined}
-              />
-            )}
-          />
-        </View>
-
-        {/* Save Button */}
-        <Button
-          title={t('common.save')}
-          onPress={handleSubmit(onSubmit)}
-          disabled={!imageUri || isLoading}
-          loading={isLoading}
         />
-      </ScrollView>
+      </View>
+
+      {/* Save Button */}
+      <Button
+        title={t('common.save')}
+        onPress={handleSubmit(onSubmit)}
+        disabled={!imageUri || isLoading}
+        loading={isLoading}
+      />
     </JournalLayout>
   )
 }

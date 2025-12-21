@@ -47,6 +47,7 @@
     "summary": {
       "title": "Récapitulatif quotidien",
       "notLogged": "Pas encore enregistré",
+      "noLogs": "Aucun enregistrement",
       "logSleep": "Enregistrer ton sommeil",
       "logMeal": "Enregistrer un repas",
       "logActivity": "Enregistrer une activité",

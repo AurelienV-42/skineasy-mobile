@@ -101,10 +101,7 @@ export default function SportScreen() {
           control={control}
           name="type"
           render={({ field: { onChange, value } }) => (
-            <SportTypeSelector
-              value={value}
-              onChange={onChange}
-            />
+            <SportTypeSelector value={value} onChange={onChange} />
           )}
         />
       </View>
@@ -166,7 +163,7 @@ export default function SportScreen() {
       </View>
 
       {/* Note Input */}
-      <View className="mb-8">
+      <View className="mb-2">
         <Controller
           control={control}
           name="note"

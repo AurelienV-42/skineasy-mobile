@@ -47,6 +47,7 @@
     "summary": {
       "title": "Daily Summary",
       "notLogged": "Not logged yet",
+      "noLogs": "No logs",
       "logSleep": "Log your sleep",
       "logMeal": "Log a meal",
       "logActivity": "Log an activity",
