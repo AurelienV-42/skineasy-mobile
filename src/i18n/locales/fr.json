@@ -38,7 +38,11 @@
     "yesterday": "Hier",
     "tomorrow": "Demain",
     "reminder": "Pense à entrer tes données quotidiennes",
-    "comingSoon": "Bientôt disponible"
+    "comingSoon": "Bientôt disponible",
+    "quiz": {
+      "title": "Quiz : Routine personnalisée",
+      "subtitle": "Découvre ta routine idéale"
+    }
   },
   "journal": {
     "dailySummary": "Récapitulatif journalier",

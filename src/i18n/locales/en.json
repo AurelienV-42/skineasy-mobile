@@ -38,7 +38,11 @@
     "yesterday": "Yesterday",
     "tomorrow": "Tomorrow",
     "reminder": "Remember to enter your daily data",
-    "comingSoon": "Coming soon"
+    "comingSoon": "Coming soon",
+    "quiz": {
+      "title": "Quiz: Personalized Routine",
+      "subtitle": "Discover your ideal routine"
+    }
   },
   "journal": {
     "dailySummary": "Daily Summary",
