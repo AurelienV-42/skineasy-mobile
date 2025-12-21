@@ -7,6 +7,7 @@ import { useUserStore } from '@shared/stores/user.store'
 import { queryKeys } from '@shared/config/queryKeys'
 import type { EditProfileInput } from '@features/profile/schemas/profile.schema'
 import { haptic } from '@shared/utils/haptic'
+import { logger } from '@shared/utils/logger'
 
 export function useUpdateProfile() {
   const { t } = useTranslation()
@@ -15,9 +16,9 @@ export function useUpdateProfile() {
 
   return useMutation({
     mutationFn: async (data: EditProfileInput) => {
-      console.log('[useUpdateProfile] Updating profile with:', data)
+      logger.info('[useUpdateProfile] Updating profile with:', data)
       const response = await profileService.updateProfile(data)
-      console.log('[useUpdateProfile] Profile updated:', response.data)
+      logger.info('[useUpdateProfile] Profile updated:', response.data)
       return response.data
     },
     onSuccess: (updatedUser) => {
@@ -32,7 +33,7 @@ export function useUpdateProfile() {
     },
     onError: (error: Error) => {
       haptic.error()
-      console.error('[useUpdateProfile] Error:', error)
+      logger.error('[useUpdateProfile] Error:', error)
       Toast.show({
         type: 'error',
         text1: t('common.error'),

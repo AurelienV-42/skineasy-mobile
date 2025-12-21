@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/react-native'
+import { logger } from '@shared/utils/logger'
 import Constants from 'expo-constants'
 
 const SENTRY_DSN = Constants.expoConfig?.extra?.sentryDsn as string | undefined
@@ -10,7 +11,7 @@ const SENTRY_DSN = Constants.expoConfig?.extra?.sentryDsn as string | undefined
 export function initSentry() {
   if (!SENTRY_DSN) {
     if (__DEV__) {
-      console.warn('[Sentry] SENTRY_DSN not found - error tracking disabled')
+      logger.warn('[Sentry] SENTRY_DSN not found - error tracking disabled')
     }
     return
   }
@@ -18,12 +19,13 @@ export function initSentry() {
   Sentry.init({
     dsn: SENTRY_DSN,
     environment: __DEV__ ? 'development' : 'production',
-    tracesSampleRate: 0.2,
+    tracesSampleRate: __DEV__ ? 1.0 : 0.2,
     enableAutoSessionTracking: true,
     sessionTrackingIntervalMillis: 10000,
+    enabled: !__DEV__,
   })
 
   if (__DEV__) {
-    console.log('[Sentry] Initialized successfully')
+    logger.info('[Sentry] Initialized successfully')
   }
 }

@@ -16,6 +16,7 @@ import * as Sentry from '@sentry/react-native'
 import { queryClient } from '@shared/config/queryClient'
 import { initSentry } from '@shared/config/sentry'
 import { useAuthStore } from '@shared/stores/auth.store'
+import { logger } from '@shared/utils/logger'
 import '../src/global.css'
 import '../src/i18n'
 
@@ -41,24 +42,24 @@ function RootLayoutContent() {
   const { isLoading: isUserLoading } = useInitializeUser()
 
   useEffect(() => {
-    console.log('[_layout] Loading token...')
+    logger.info('[_layout] Loading token...')
     loadToken()
   }, [loadToken])
 
   useEffect(() => {
-    console.log('[_layout] State:', {
+    logger.info('[_layout] State:', {
       fontsLoaded,
       isAuthLoading,
       isUserLoading,
       isAuthenticated,
     })
     if (fontsLoaded && !isAuthLoading && !isUserLoading) {
-      console.log('[_layout] All ready, hiding splash screen')
+      logger.info('[_layout] All ready, hiding splash screen')
       SplashScreen.hideAsync()
     }
   }, [fontsLoaded, isAuthLoading, isUserLoading, isAuthenticated])
 
-  console.log(
+  logger.info(
     '[_layout] Render check - showing splash?',
     !fontsLoaded || isAuthLoading || isUserLoading
   )

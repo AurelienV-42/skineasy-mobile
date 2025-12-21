@@ -7,6 +7,7 @@ import { Frown, Meh, Smile } from 'lucide-react-native'
 import { Button } from '@shared/components/Button'
 import { Pressable } from '@shared/components/Pressable'
 import { JournalLayout } from '@shared/components/ScreenHeader'
+import { logger } from '@shared/utils/logger'
 import { colors } from '@theme/colors'
 
 type SleepQuality = 'bad' | 'neutral' | 'good'
@@ -20,7 +21,7 @@ export default function SleepScreen() {
   const handleSave = () => {
     if (hours && quality) {
       // TODO: Save to API
-      console.log('Sleep data:', { hours: parseFloat(hours), quality })
+      logger.info('Sleep data:', { hours: parseFloat(hours), quality })
       router.back()
     }
   }

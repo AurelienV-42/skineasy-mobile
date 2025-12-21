@@ -8,6 +8,7 @@ import { Camera, X } from 'lucide-react-native'
 import { Button } from '@shared/components/Button'
 import { Pressable } from '@shared/components/Pressable'
 import { JournalLayout } from '@shared/components/ScreenHeader'
+import { logger } from '@shared/utils/logger'
 import { colors } from '@theme/colors'
 
 export default function NutritionScreen() {
@@ -58,7 +59,7 @@ export default function NutritionScreen() {
   const handleSave = () => {
     if (imageUri) {
       // TODO: Save to API with image and note
-      console.log('Nutrition data:', { imageUri, note })
+      logger.info('Nutrition data:', { imageUri, note })
       router.back()
     }
   }

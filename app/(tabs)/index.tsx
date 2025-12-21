@@ -7,6 +7,7 @@ import { Moon, UtensilsCrossed, Dumbbell } from 'lucide-react-native'
 import { useUserStore } from '@shared/stores/user.store'
 import { JournalCard } from '@shared/components/JournalCard'
 import { QuizBanner } from '@shared/components/QuizBanner'
+import { logger } from '@shared/utils/logger'
 import { colors } from '@theme/colors'
 
 export default function DashboardScreen() {
@@ -16,7 +17,7 @@ export default function DashboardScreen() {
 
   const handleQuizPress = () => {
     // TODO: Navigate to typeform webview
-    console.log('Quiz banner pressed')
+    logger.info('Quiz banner pressed')
   }
 
   return (

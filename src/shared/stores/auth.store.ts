@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { getToken, setToken, setRefreshToken, clearAllTokens } from '@shared/utils/storage'
+import { logger } from '@shared/utils/logger'
 
 interface AuthState {
   token: string | null
@@ -41,17 +42,17 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   loadToken: async () => {
-    console.log('[authStore] loadToken - Starting...')
+    logger.info('[authStore] loadToken - Starting...')
     try {
       const token = await getToken()
-      console.log('[authStore] loadToken - Token loaded:', !!token)
+      logger.info('[authStore] loadToken - Token loaded:', !!token)
       set({
         token,
         isAuthenticated: !!token,
         isLoading: false,
       })
     } catch (error) {
-      console.log('[authStore] loadToken - Error:', error)
+      logger.info('[authStore] loadToken - Error:', error)
       set({
         token: null,
         isAuthenticated: false,

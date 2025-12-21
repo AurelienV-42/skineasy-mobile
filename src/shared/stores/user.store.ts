@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import type { UserProfile } from '@shared/types/user.types'
+import { logger } from '@shared/utils/logger'
 
 interface UserState {
   user: UserProfile | null
@@ -14,17 +15,17 @@ export const useUserStore = create<UserState>((set) => ({
   hasDiagnosis: false,
 
   setUser: (user) => {
-    console.log('[userStore] setUser called with:', user)
+    logger.info('[userStore] setUser called with:', user)
     set({ user })
   },
 
   setHasDiagnosis: (value) => {
-    console.log('[userStore] setHasDiagnosis called with:', value)
+    logger.info('[userStore] setHasDiagnosis called with:', value)
     set({ hasDiagnosis: value })
   },
 
   clearUser: () => {
-    console.log('[userStore] clearUser called')
+    logger.info('[userStore] clearUser called')
     set({ user: null, hasDiagnosis: false })
   },
 }))

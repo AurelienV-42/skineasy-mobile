@@ -8,6 +8,7 @@ import { useUserStore } from '@shared/stores/user.store'
 import { queryKeys } from '@shared/config/queryKeys'
 import type { LoginInput } from '@features/auth/schemas/auth.schema'
 import { haptic } from '@shared/utils/haptic'
+import { logger } from '@shared/utils/logger'
 
 export function useLogin() {
   const { t } = useTranslation()
@@ -17,16 +18,16 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: async (data: LoginInput) => {
-      console.log('[useLogin] Attempting login with:', { email: data.email })
+      logger.info('[useLogin] Attempting login with:', { email: data.email })
       try {
         const loginResponse = await authService.login(data)
-        console.log('[useLogin] Login response:', loginResponse)
+        logger.info('[useLogin] Login response:', loginResponse)
         const { accessToken, refreshToken, user } = loginResponse.data
         await setTokens(accessToken, refreshToken)
-        console.log('[useLogin] User data:', user)
+        logger.info('[useLogin] User data:', user)
         return user
       } catch (error) {
-        console.log('[useLogin] Error:', error)
+        logger.info('[useLogin] Error:', error)
         throw error
       }
     },

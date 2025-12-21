@@ -995,6 +995,22 @@ eas build --platform android
 - **Utility location**: `@shared/utils/haptic` - centralized service with DEV-only logging using `__DEV__` flag
 - **Platform support**: iOS and Android only, gracefully degrades on web
 
+14. **Logging Guidelines:** NEVER use console.log/console.warn/console.error directly. Always use the centralized logger utility
+
+- **Location**: `@shared/utils/logger` - centralized logging service
+- **Auto-disabled in production**: All logs are automatically disabled when `__DEV__` is false
+- **Timestamp included**: Each log includes a timestamp in HH:MM:SS.mmm format
+- **Log levels**:
+  - `logger.debug()` - Detailed debugging information, verbose data dumps
+  - `logger.info()` - General information, app flow tracking, state changes
+  - `logger.warn()` - Non-critical issues, deprecated API usage, fallback behaviors
+  - `logger.error()` - Errors and exceptions, API failures, validation errors
+- **Usage examples**:
+  - `logger.info('[Component] Action performed:', { data })`
+  - `logger.error('[API] Request failed:', error)`
+  - `logger.warn('[Feature] Deprecated method used')`
+- **Never use console directly**: Import and use logger instead of console for all logging needs
+
 ---
 
 ## Import Convention

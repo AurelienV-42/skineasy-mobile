@@ -1,5 +1,6 @@
 import * as Haptics from 'expo-haptics'
 import { Platform } from 'react-native'
+import { logger } from '@shared/utils/logger'
 
 const IS_NATIVE = Platform.OS === 'ios' || Platform.OS === 'android'
 
@@ -28,7 +29,7 @@ export const impact = (level: ImpactLevel): void => {
   if (!IS_NATIVE) return
 
   if (__DEV__) {
-    console.log(`[Haptic] Impact: ${level}`)
+    logger.debug(`[Haptic] Impact: ${level}`)
   }
 
   try {
@@ -46,7 +47,7 @@ export const impact = (level: ImpactLevel): void => {
   } catch (error) {
     // Fail silently - haptic feedback is non-critical
     if (__DEV__) {
-      console.warn('[Haptic] Impact failed:', error)
+      logger.warn('[Haptic] Impact failed:', error)
     }
   }
 }
@@ -60,14 +61,14 @@ export const selection = (): void => {
   if (!IS_NATIVE) return
 
   if (__DEV__) {
-    console.log('[Haptic] Selection')
+    logger.debug('[Haptic] Selection')
   }
 
   try {
     Haptics.selectionAsync()
   } catch (error) {
     if (__DEV__) {
-      console.warn('[Haptic] Selection failed:', error)
+      logger.warn('[Haptic] Selection failed:', error)
     }
   }
 }
@@ -83,7 +84,7 @@ export const notification = (type: NotificationType): void => {
   if (!IS_NATIVE) return
 
   if (__DEV__) {
-    console.log(`[Haptic] Notification: ${type}`)
+    logger.debug(`[Haptic] Notification: ${type}`)
   }
 
   try {
@@ -100,7 +101,7 @@ export const notification = (type: NotificationType): void => {
     }
   } catch (error) {
     if (__DEV__) {
-      console.warn('[Haptic] Notification failed:', error)
+      logger.warn('[Haptic] Notification failed:', error)
     }
   }
 }

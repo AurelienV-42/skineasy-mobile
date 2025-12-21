@@ -5,6 +5,7 @@ import { authService } from '@features/auth/services/auth.service'
 import { useAuthStore } from '@shared/stores/auth.store'
 import { useUserStore } from '@shared/stores/user.store'
 import { queryKeys } from '@shared/config/queryKeys'
+import { logger } from '@shared/utils/logger'
 
 /**
  * Hook to initialize user data on app start
@@ -17,7 +18,7 @@ export function useInitializeUser() {
   const clearUser = useUserStore((state) => state.clearUser)
   const user = useUserStore((state) => state.user)
 
-  console.log('[useInitializeUser] Hook state:', {
+  logger.info('[useInitializeUser] Hook state:', {
     isAuthenticated,
     isAuthLoading,
     hasUser: !!user,
@@ -27,9 +28,9 @@ export function useInitializeUser() {
   const { data, error, isLoading, isFetching } = useQuery({
     queryKey: queryKeys.user,
     queryFn: async () => {
-      console.log('[useInitializeUser] Fetching user data from /me endpoint')
+      logger.info('[useInitializeUser] Fetching user data from /me endpoint')
       const result = await authService.getMe()
-      console.log('[useInitializeUser] /me response:', result)
+      logger.info('[useInitializeUser] /me response:', result)
       return result
     },
     enabled: isAuthenticated && !isAuthLoading,
@@ -37,7 +38,7 @@ export function useInitializeUser() {
     staleTime: Infinity, // User data doesn't change often
   })
 
-  console.log('[useInitializeUser] Query state:', {
+  logger.info('[useInitializeUser] Query state:', {
     isLoading,
     isFetching,
     hasData: !!data,
@@ -47,14 +48,14 @@ export function useInitializeUser() {
 
   useEffect(() => {
     if (data) {
-      console.log('[useInitializeUser] Setting user data in store:', data.data)
+      logger.info('[useInitializeUser] Setting user data in store:', data.data)
       setUser(data.data)
     }
   }, [data, setUser])
 
   useEffect(() => {
     if (error) {
-      console.log('[useInitializeUser] Error fetching user, clearing user data:', error)
+      logger.info('[useInitializeUser] Error fetching user, clearing user data:', error)
       // If /me fails, clear user data (likely token is invalid)
       clearUser()
     }

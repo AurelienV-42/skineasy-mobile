@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/react-native'
 import { ENV } from '@shared/config/env'
 import type { RefreshTokenResponse } from '@shared/types/api.types'
 import { getRefreshToken, getToken, setToken } from '@shared/utils/storage'
+import { logger } from '@shared/utils/logger'
 import Toast from 'react-native-toast-message'
 
 interface ApiOptions extends Omit<RequestInit, 'body'> {
@@ -30,7 +31,7 @@ class ApiClient {
     }
 
     const url = `${ENV.API_URL}${endpoint}`
-    console.log('[API] Request:', { url, method: fetchOptions.method, body })
+    logger.info('[API] Request:', { url, method: fetchOptions.method, body })
 
     let response: Response
     try {
@@ -46,9 +47,9 @@ class ApiClient {
       })
 
       clearTimeout(timeoutId)
-      console.log('[API] Response status:', response.status)
+      logger.info('[API] Response status:', response.status)
     } catch (error) {
-      console.log('[API] Fetch error:', error)
+      logger.error('[API] Fetch error:', error)
       // Log network errors to Sentry
       Sentry.captureException(error, {
         contexts: {
@@ -119,10 +120,10 @@ class ApiClient {
 
   private async doRefresh(): Promise<string | null> {
     try {
-      console.log('[API] Attempting to refresh access token')
+      logger.info('[API] Attempting to refresh access token')
       const refreshToken = await getRefreshToken()
       if (!refreshToken) {
-        console.log('[API] No refresh token found')
+        logger.warn('[API] No refresh token found')
         return null
       }
 
@@ -136,22 +137,22 @@ class ApiClient {
       })
 
       if (!response.ok) {
-        console.log('[API] Token refresh failed:', response.status)
+        logger.warn('[API] Token refresh failed:', response.status)
         return null
       }
 
       const data: RefreshTokenResponse = await response.json()
       await setToken(data.access_token)
-      console.log('[API] Token refresh successful')
+      logger.info('[API] Token refresh successful')
       return data.access_token
     } catch (error) {
-      console.log('[API] Token refresh error:', error)
+      logger.error('[API] Token refresh error:', error)
       return null
     }
   }
 
   private async handleSessionExpired(): Promise<void> {
-    console.log('[API] Session expired - clearing tokens and updating auth state')
+    logger.warn('[API] Session expired - clearing tokens and updating auth state')
 
     // Dynamically import to avoid circular dependency
     const { useAuthStore } = await import('@shared/stores/auth.store')

@@ -6,6 +6,7 @@ import { useRouter } from 'expo-router'
 import { Button } from '@shared/components/Button'
 import { Pressable } from '@shared/components/Pressable'
 import { JournalLayout } from '@shared/components/ScreenHeader'
+import { logger } from '@shared/utils/logger'
 import { colors } from '@theme/colors'
 
 type SportActivity =
@@ -43,7 +44,7 @@ export default function SportScreen() {
   const handleSave = () => {
     if (selectedActivity && duration) {
       // TODO: Save to API
-      console.log('Sport data:', {
+      logger.info('Sport data:', {
         activity: selectedActivity,
         duration: parseInt(duration),
         note,
