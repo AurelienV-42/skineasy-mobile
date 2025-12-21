@@ -23,6 +23,7 @@ export function JournalCard({
       style={{ backgroundColor }}
       accessibilityLabel={title}
       accessibilityRole="button"
+      haptic="medium"
     >
       <View className="items-center justify-center flex-1">
         {icon}

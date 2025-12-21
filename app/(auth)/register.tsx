@@ -1,13 +1,6 @@
 import { useRef } from 'react'
-import {
-  View,
-  Text,
-  Pressable,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  TextInput,
-} from 'react-native'
+import { View, Text, KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native'
+import { Pressable } from '@shared/components/Pressable'
 import { Link, useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -166,7 +159,7 @@ export default function RegisterScreen() {
             </View>
 
             <Link href="/(auth)/login" asChild>
-              <Pressable className="mt-6">
+              <Pressable className="mt-6" haptic="light">
                 <Text className="text-primary">
                   {t('auth.hasAccount')} <Text className="font-bold">{t('auth.login')}</Text>
                 </Text>

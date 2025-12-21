@@ -20,6 +20,7 @@ export default function RoutineScreen() {
         <View className="flex-row bg-surface rounded-md p-1 mb-6">
           <Pressable
             onPress={() => setActiveTab('morning')}
+            haptic="medium"
             className={`flex-1 flex-row items-center justify-center py-3 rounded-md gap-2 ${
               activeTab === 'morning' ? 'bg-primary' : ''
             }`}
@@ -35,6 +36,7 @@ export default function RoutineScreen() {
           </Pressable>
           <Pressable
             onPress={() => setActiveTab('evening')}
+            haptic="medium"
             className={`flex-1 flex-row items-center justify-center py-3 rounded-md gap-2 ${
               activeTab === 'evening' ? 'bg-primary' : ''
             }`}

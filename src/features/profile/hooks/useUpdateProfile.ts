@@ -6,6 +6,7 @@ import { profileService } from '@features/profile/services/profile.service'
 import { useUserStore } from '@shared/stores/user.store'
 import { queryKeys } from '@shared/config/queryKeys'
 import type { EditProfileInput } from '@features/profile/schemas/profile.schema'
+import { haptic } from '@shared/utils/haptic'
 
 export function useUpdateProfile() {
   const { t } = useTranslation()
@@ -20,6 +21,7 @@ export function useUpdateProfile() {
       return response.data
     },
     onSuccess: (updatedUser) => {
+      haptic.success()
       setUser(updatedUser)
       queryClient.invalidateQueries({ queryKey: queryKeys.user })
       Toast.show({
@@ -29,6 +31,7 @@ export function useUpdateProfile() {
       })
     },
     onError: (error: Error) => {
+      haptic.error()
       console.error('[useUpdateProfile] Error:', error)
       Toast.show({
         type: 'error',

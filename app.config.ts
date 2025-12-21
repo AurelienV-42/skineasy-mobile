@@ -34,10 +34,23 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     apiUrl: process.env.API_URL ?? 'https://api-dev.skineasy.com',
     typeformId: process.env.TYPEFORM_ID ?? '',
     prestashopUrl: process.env.PRESTASHOP_URL ?? 'https://skineasy.com',
+    sentryDsn: process.env.SENTRY_DSN,
     eas: {
       projectId: 'dfbff412-fc10-4a77-b170-eb432c2969b9',
     },
   },
   scheme: 'skineasy',
-  plugins: ['expo-router', 'expo-secure-store', 'expo-localization'],
+  plugins: [
+    'expo-router',
+    'expo-secure-store',
+    'expo-localization',
+    [
+      '@sentry/react-native/expo',
+      {
+        url: 'https://sentry.io/',
+        project: 'skineasy',
+        organization: 'aurelien-vandaele',
+      },
+    ],
+  ],
 })

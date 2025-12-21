@@ -105,7 +105,7 @@ export default function LoginScreen() {
           </View>
 
           <Link href="/(auth)/register" asChild>
-            <Pressable className="mt-6">
+            <Pressable className="mt-6" haptic="light">
               <Text className="text-primary">
                 {t('auth.noAccount')} <Text className="font-bold">{t('auth.register')}</Text>
               </Text>

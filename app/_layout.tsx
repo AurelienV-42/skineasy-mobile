@@ -1,21 +1,26 @@
-import { useEffect } from 'react'
-import { Stack } from 'expo-router'
-import { QueryClientProvider } from '@tanstack/react-query'
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
-import Toast from 'react-native-toast-message'
 import {
-  useFonts,
   Roboto_400Regular,
   Roboto_500Medium,
   Roboto_700Bold,
+  useFonts,
 } from '@expo-google-fonts/roboto'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
+import { useEffect } from 'react'
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
+import Toast from 'react-native-toast-message'
 
+import { useInitializeUser } from '@features/auth/hooks/useInitializeUser'
+import * as Sentry from '@sentry/react-native'
+import { queryClient } from '@shared/config/queryClient'
+import { initSentry } from '@shared/config/sentry'
+import { useAuthStore } from '@shared/stores/auth.store'
 import '../src/global.css'
 import '../src/i18n'
-import { queryClient } from '@shared/config/queryClient'
-import { useAuthStore } from '@shared/stores/auth.store'
-import { useInitializeUser } from '@features/auth/hooks/useInitializeUser'
+
+// Initialize Sentry before app starts
+initSentry()
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync()
@@ -73,7 +78,7 @@ function RootLayoutContent() {
   )
 }
 
-export default function RootLayout() {
+export default Sentry.wrap(function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
@@ -81,4 +86,4 @@ export default function RootLayout() {
       </SafeAreaProvider>
     </QueryClientProvider>
   )
-}
+})

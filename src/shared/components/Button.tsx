@@ -4,11 +4,16 @@ import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline'
+type HapticLevel = 'light' | 'medium' | 'heavy' | false
 
 interface ButtonProps extends Omit<PressableProps, 'children'> {
   title: string
   variant?: ButtonVariant
   loading?: boolean
+  /**
+   * Haptic feedback level - defaults to 'heavy' for buttons (save/submit actions)
+   */
+  haptic?: HapticLevel
 }
 
 const variantStyles = {
@@ -35,6 +40,7 @@ export function Button({
   loading = false,
   disabled,
   className,
+  haptic = 'heavy', // Default to heavy for buttons (save/submit actions)
   ...props
 }: ButtonProps) {
   const styles = variantStyles[variant]
@@ -46,6 +52,7 @@ export function Button({
         isDisabled ? 'opacity-50' : ''
       } ${className || ''}`}
       disabled={isDisabled}
+      haptic={isDisabled ? false : haptic} // Disable haptic when button disabled
       {...props}
     >
       {loading ? (

@@ -86,6 +86,7 @@ export default function NutritionScreen() {
               onPress={removeImage}
               className="absolute top-2 right-2 bg-error rounded-full p-2"
               accessibilityLabel={t('common.delete')}
+              haptic="light"
             >
               <X size={20} color="#FFF" />
             </Pressable>
@@ -96,6 +97,7 @@ export default function NutritionScreen() {
               onPress={takePhoto}
               className="flex-1 bg-surface border-2 border-dashed border-border rounded-xl py-8 items-center justify-center"
               accessibilityLabel="Take photo"
+              haptic="light"
             >
               <Camera size={32} color={colors.primary} strokeWidth={2} />
               <Text className="text-sm text-text-muted mt-2">Take Photo</Text>
@@ -105,6 +107,7 @@ export default function NutritionScreen() {
               onPress={pickImage}
               className="flex-1 bg-surface border-2 border-dashed border-border rounded-xl py-8 items-center justify-center"
               accessibilityLabel="Choose from gallery"
+              haptic="light"
             >
               <Camera size={32} color={colors.primary} strokeWidth={2} />
               <Text className="text-sm text-text-muted mt-2">Gallery</Text>

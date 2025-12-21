@@ -106,7 +106,12 @@ export function QuizBanner({ onPress }: QuizBannerProps) {
   })
 
   return (
-    <Pressable onPress={onPress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
+    <Pressable
+      onPress={onPress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      haptic="medium"
+    >
       <Animated.View
         style={{
           transform: [{ scale: Animated.multiply(scaleAnim, pressScale) }],

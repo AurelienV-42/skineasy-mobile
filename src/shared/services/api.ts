@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react-native'
 import { ENV } from '@shared/config/env'
 import type { RefreshTokenResponse } from '@shared/types/api.types'
 import { getRefreshToken, getToken, setToken } from '@shared/utils/storage'
@@ -33,14 +34,31 @@ class ApiClient {
 
     let response: Response
     try {
+      // Add 30 second timeout to prevent hanging requests
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 30000)
+
       response = await fetch(url, {
         ...fetchOptions,
         headers,
         body: body ? JSON.stringify(body) : undefined,
+        signal: controller.signal,
       })
+
+      clearTimeout(timeoutId)
       console.log('[API] Response status:', response.status)
     } catch (error) {
       console.log('[API] Fetch error:', error)
+      // Log network errors to Sentry
+      Sentry.captureException(error, {
+        contexts: {
+          api: {
+            url,
+            method: fetchOptions.method || 'GET',
+            endpoint,
+          },
+        },
+      })
       throw error
     }
 
@@ -48,11 +66,18 @@ class ApiClient {
       const newToken = await this.refreshAccessToken()
       if (newToken) {
         ;(headers as Record<string, string>)['Authorization'] = `Bearer ${newToken}`
+
+        const retryController = new AbortController()
+        const retryTimeoutId = setTimeout(() => retryController.abort(), 30000)
+
         const retryResponse = await fetch(`${ENV.API_URL}${endpoint}`, {
           ...fetchOptions,
           headers,
           body: body ? JSON.stringify(body) : undefined,
+          signal: retryController.signal,
         })
+
+        clearTimeout(retryTimeoutId)
 
         if (!retryResponse.ok) {
           throw await this.handleError(retryResponse)
@@ -146,9 +171,41 @@ class ApiClient {
   private async handleError(response: Response): Promise<Error> {
     try {
       const error = await response.json()
-      return new Error(error.message || `HTTP Error: ${response.status}`)
+      const errorMessage = error.message || `HTTP Error: ${response.status}`
+      const errorObject = new Error(errorMessage)
+
+      // Log API errors to Sentry (exclude 4xx client errors except 401)
+      if (response.status >= 500 || response.status === 401) {
+        Sentry.captureException(errorObject, {
+          contexts: {
+            api: {
+              status: response.status,
+              statusText: response.statusText,
+              url: response.url,
+              errorData: error,
+            },
+          },
+        })
+      }
+
+      return errorObject
     } catch {
-      return new Error(`HTTP Error: ${response.status}`)
+      const errorObject = new Error(`HTTP Error: ${response.status}`)
+
+      // Log parsing errors to Sentry for server errors
+      if (response.status >= 500) {
+        Sentry.captureException(errorObject, {
+          contexts: {
+            api: {
+              status: response.status,
+              statusText: response.statusText,
+              url: response.url,
+            },
+          },
+        })
+      }
+
+      return errorObject
     }
   }
 

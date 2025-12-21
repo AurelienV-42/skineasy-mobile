@@ -59,6 +59,7 @@ export default function SleepScreen() {
               }`}
               accessibilityLabel={label}
               accessibilityRole="button"
+              haptic="light"
             >
               <Icon
                 size={40}

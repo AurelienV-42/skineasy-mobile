@@ -6,6 +6,7 @@ import { authService } from '@features/auth/services/auth.service'
 import { useAuthStore } from '@shared/stores/auth.store'
 import { useUserStore } from '@shared/stores/user.store'
 import type { RegisterInput } from '@features/auth/schemas/auth.schema'
+import { haptic } from '@shared/utils/haptic'
 
 export function useRegister() {
   const { t } = useTranslation()
@@ -20,6 +21,7 @@ export function useRegister() {
       return user
     },
     onSuccess: (user) => {
+      haptic.success()
       setUser(user)
       Toast.show({
         type: 'success',
@@ -27,6 +29,7 @@ export function useRegister() {
       })
     },
     onError: () => {
+      haptic.error()
       Toast.show({
         type: 'error',
         text1: t('common.error'),

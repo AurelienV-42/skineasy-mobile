@@ -7,6 +7,7 @@ import { useAuthStore } from '@shared/stores/auth.store'
 import { useUserStore } from '@shared/stores/user.store'
 import { queryKeys } from '@shared/config/queryKeys'
 import type { LoginInput } from '@features/auth/schemas/auth.schema'
+import { haptic } from '@shared/utils/haptic'
 
 export function useLogin() {
   const { t } = useTranslation()
@@ -30,11 +31,13 @@ export function useLogin() {
       }
     },
     onSuccess: (user) => {
+      haptic.success()
       setUser(user)
       // Invalidate user query to trigger refetch and keep cache in sync
       queryClient.invalidateQueries({ queryKey: queryKeys.user })
     },
     onError: () => {
+      haptic.error()
       Toast.show({
         type: 'error',
         text1: t('common.error'),

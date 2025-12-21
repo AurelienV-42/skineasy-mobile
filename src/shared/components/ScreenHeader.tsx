@@ -21,7 +21,11 @@ export function ScreenHeader({ title, children }: ScreenHeaderProps) {
     <SafeAreaView className="flex-1 bg-background">
       {/* Custom Header */}
       <View className="flex-row items-center justify-between px-4 pt-2 pb-4">
-        <Pressable onPress={() => router.back()} accessibilityLabel={t('common.back')}>
+        <Pressable
+          onPress={() => router.back()}
+          accessibilityLabel={t('common.back')}
+          haptic="light"
+        >
           <ChevronLeft size={28} color={colors.text} />
         </Pressable>
         <Text className="text-3xl font-bold text-primary">{title}</Text>

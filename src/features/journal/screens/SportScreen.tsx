@@ -71,6 +71,7 @@ export default function SportScreen() {
               }`}
               accessibilityLabel={t(`journal.sport.activities.${activity}`)}
               accessibilityRole="button"
+              haptic="light"
             >
               <Text
                 className={`text-sm ${

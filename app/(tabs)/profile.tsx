@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router'
 import {
+  Bug,
   ChevronRight,
   FileText,
   Languages,
@@ -14,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { Alert, Linking, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import * as Sentry from '@sentry/react-native'
 import { Pressable } from '@shared/components/Pressable'
 import { useAuthStore } from '@shared/stores/auth.store'
 import { useUserStore } from '@shared/stores/user.store'
@@ -75,6 +77,33 @@ export default function ProfileScreen() {
     Linking.openURL(url)
   }
 
+  const handleTestSentry = () => {
+    Alert.alert(
+      'Test Sentry Error Tracking',
+      'This will send a test error to Sentry. Choose a test type:',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Test Error',
+          onPress: () => {
+            Sentry.captureException(new Error('Test error from DEV mode'))
+            Alert.alert('Success', 'Test error sent to Sentry!')
+          },
+        },
+        {
+          text: 'Test Message',
+          onPress: () => {
+            Sentry.captureMessage('Test message from DEV mode', 'info')
+            Alert.alert('Success', 'Test message sent to Sentry!')
+          },
+        },
+      ]
+    )
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1 pt-4">
@@ -99,6 +128,7 @@ export default function ProfileScreen() {
         <View className="bg-surface mb-4">
           <Pressable
             onPress={() => router.push('/profile/edit')}
+            haptic="medium"
             className="flex-row items-center justify-between p-4 border-b border-border"
           >
             <View className="flex-row items-center gap-3">
@@ -108,7 +138,10 @@ export default function ProfileScreen() {
             <ChevronRight size={20} color={colors.textMuted} />
           </Pressable>
 
-          <Pressable className="flex-row items-center justify-between p-4 border-b border-border">
+          <Pressable
+            haptic="medium"
+            className="flex-row items-center justify-between p-4 border-b border-border"
+          >
             <View className="flex-row items-center gap-3">
               <RefreshCw size={20} color={colors.primary} />
               <Text className="text-base text-text">{t('profile.retakeDiagnosis')}</Text>
@@ -118,6 +151,7 @@ export default function ProfileScreen() {
 
           <Pressable
             onPress={handleLanguageChange}
+            haptic="light"
             className="flex-row items-center justify-between p-4"
           >
             <View className="flex-row items-center gap-3">
@@ -135,6 +169,7 @@ export default function ProfileScreen() {
         <View className="bg-surface mb-4">
           <Pressable
             onPress={() => openUrl(t('profile.termsOfSaleUrl'))}
+            haptic="medium"
             className="flex-row items-center justify-between p-4 border-b border-border"
           >
             <View className="flex-row items-center gap-3">
@@ -146,6 +181,7 @@ export default function ProfileScreen() {
 
           <Pressable
             onPress={() => openUrl(t('profile.termsOfUseUrl'))}
+            haptic="medium"
             className="flex-row items-center justify-between p-4 border-b border-border"
           >
             <View className="flex-row items-center gap-3">
@@ -157,6 +193,7 @@ export default function ProfileScreen() {
 
           <Pressable
             onPress={() => openUrl(t('profile.privacyPolicyUrl'))}
+            haptic="medium"
             className="flex-row items-center justify-between p-4"
           >
             <View className="flex-row items-center gap-3">
@@ -171,6 +208,7 @@ export default function ProfileScreen() {
         <View className="bg-surface">
           <Pressable
             onPress={handleLogout}
+            haptic="heavy"
             className="flex-row items-center justify-between p-4 border-b border-border"
           >
             <View className="flex-row items-center gap-3">
@@ -181,6 +219,7 @@ export default function ProfileScreen() {
 
           <Pressable
             onPress={handleDeleteAccount}
+            haptic="heavy"
             className="flex-row items-center justify-between p-4"
           >
             <View className="flex-row items-center gap-3">
@@ -189,6 +228,22 @@ export default function ProfileScreen() {
             </View>
           </Pressable>
         </View>
+
+        {/* DEV Only - Sentry Test Button */}
+        {__DEV__ && (
+          <View className="bg-surface mt-4">
+            <Pressable
+              onPress={handleTestSentry}
+              haptic="light"
+              className="flex-row items-center justify-between p-4"
+            >
+              <View className="flex-row items-center gap-3">
+                <Bug size={20} color={colors.warning} />
+                <Text className="text-base text-warning">Test Sentry (DEV only)</Text>
+              </View>
+            </Pressable>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   )

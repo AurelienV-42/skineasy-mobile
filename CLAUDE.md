@@ -62,6 +62,7 @@
 - `expo-constants` - Environment config
 - `expo-image-picker` - Meal photos
 - `expo-localization` - Device locale
+- `expo-haptics` - Tactile feedback for user interactions
 - `react-native-webview` - Typeform integration
 - `react-native-web` - Web platform support
 - `react-native-svg` + `lucide-react-native` - Icons
@@ -983,6 +984,16 @@ eas build --platform android
 10. **No barrel index.ts files:** NEVER create index.ts files that only re-export from other files. Import directly from the source file instead (e.g., `import { Button } from '@shared/components/Button'` not `import { Button } from '@shared/components'`)
 11. **No backend error messages in UI:** NEVER display error messages from the backend API directly to users. Backend errors are not translated. Always use i18n translation keys for error messages (e.g., `t('auth.invalidCredentials')` instead of `error.message`)
 12. **DRY Principle (Don't Repeat Yourself):** When implementing multiple similar features or screens, ALWAYS create reusable layout components or shared utilities. Extract common patterns into shared components instead of duplicating code. Example: Multiple screens with the same header pattern should use a shared layout component (e.g., `JournalLayout` for journal screens)
+13. **Haptic Feedback Guidelines:** Follow these intensity rules for consistent premium UX
+
+- **Heavy**: Data persistence (save, submit), authentication (login, register), irreversible actions (logout, delete account)
+- **Medium**: Navigation and context switches (journal cards, routine toggle, profile menu items, quiz banner)
+- **Light**: Reversible selections (mood picker, activity selector, back button, image picker, language switcher)
+- **Selection**: Text input focus states (automatic in Input component)
+- **Notification**: Form validation results - `haptic.success()` for successful submissions, `haptic.error()` for failures
+- **Disable haptic**: When buttons are disabled or loading
+- **Utility location**: `@shared/utils/haptic` - centralized service with DEV-only logging using `__DEV__` flag
+- **Platform support**: iOS and Android only, gracefully degrades on web
 
 ---
 
