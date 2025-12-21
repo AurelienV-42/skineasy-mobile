@@ -19,7 +19,7 @@ describe('useUserStore', () => {
 
   it('should set user', () => {
     const mockUser: UserProfile = {
-      id: '1',
+      id: 1,
       email: 'test@example.com',
       firstname: 'John',
       lastname: 'Doe',
@@ -45,7 +45,7 @@ describe('useUserStore', () => {
     // Set initial state with user
     useUserStore.setState({
       user: {
-        id: '1',
+        id: 1,
         email: 'test@example.com',
         firstname: 'John',
         lastname: 'Doe',

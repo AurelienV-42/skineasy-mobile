@@ -1,11 +1,7 @@
 import { ENV } from '@shared/config/env'
 import type { RefreshTokenResponse } from '@shared/types/api.types'
-import {
-  clearAllTokens,
-  getRefreshToken,
-  getToken,
-  setToken,
-} from '@shared/utils/storage'
+import { getRefreshToken, getToken, setToken } from '@shared/utils/storage'
+import Toast from 'react-native-toast-message'
 
 interface ApiOptions extends Omit<RequestInit, 'body'> {
   skipAuth?: boolean
@@ -21,7 +17,7 @@ class ApiClient {
 
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
-      'apikey': ENV.API_KEY,
+      apikey: ENV.API_KEY,
       ...options.headers,
     }
 
@@ -64,7 +60,7 @@ class ApiClient {
 
         return retryResponse.json()
       } else {
-        await clearAllTokens()
+        await this.handleSessionExpired()
         throw new Error('Session expired')
       }
     }
@@ -98,8 +94,10 @@ class ApiClient {
 
   private async doRefresh(): Promise<string | null> {
     try {
+      console.log('[API] Attempting to refresh access token')
       const refreshToken = await getRefreshToken()
       if (!refreshToken) {
+        console.log('[API] No refresh token found')
         return null
       }
 
@@ -107,21 +105,42 @@ class ApiClient {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'apikey': ENV.API_KEY,
+          apikey: ENV.API_KEY,
         },
         body: JSON.stringify({ refresh_token: refreshToken }),
       })
 
       if (!response.ok) {
+        console.log('[API] Token refresh failed:', response.status)
         return null
       }
 
       const data: RefreshTokenResponse = await response.json()
       await setToken(data.access_token)
+      console.log('[API] Token refresh successful')
       return data.access_token
-    } catch {
+    } catch (error) {
+      console.log('[API] Token refresh error:', error)
       return null
     }
+  }
+
+  private async handleSessionExpired(): Promise<void> {
+    console.log('[API] Session expired - clearing tokens and updating auth state')
+
+    // Dynamically import to avoid circular dependency
+    const { useAuthStore } = await import('@shared/stores/auth.store')
+    const i18n = await import('i18next')
+
+    await useAuthStore.getState().handleSessionExpiry()
+
+    // Show toast notification with i18n
+    Toast.show({
+      type: 'error',
+      text1: i18n.default.t('common.sessionExpired'),
+      text2: i18n.default.t('common.sessionExpiredMessage'),
+      visibilityTime: 4000,
+    })
   }
 
   private async handleError(response: Response): Promise<Error> {

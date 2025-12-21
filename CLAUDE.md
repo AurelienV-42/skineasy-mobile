@@ -12,11 +12,13 @@
 ## Tech Stack & Dependencies
 
 ### Core Framework
+
 - **Expo SDK** (Managed Workflow)
 - **TypeScript** (strict mode)
 - **Expo Router** - File-based routing
 
 ### State Management
+
 - **Zustand** - Multiple stores pattern:
   - `useAuthStore` - Authentication state, tokens
   - `useUserStore` - User profile, diagnosis status
@@ -26,30 +28,36 @@
   - Global error boundary for API errors
 
 ### Styling
+
 - **NativeWind** - Tailwind CSS for React Native
 - **Custom components** - No UI library, build from scratch
 
 ### Forms & Validation
+
 - **React Hook Form** - Form state management
 - **Zod** - Schema validation (shared between forms and API responses)
 
 ### Internationalization
+
 - **i18next** + **react-i18next** + **expo-localization**
 - Languages: FR (French), EN (English)
 - Default: Device locale
 
 ### Testing
+
 - **Vitest** - Test runner
 - **React Native Testing Library** - Component testing
 - Unit tests only for V1
 
 ### Build & Tooling
+
 - **Vite** - Build tool (for tests)
 - **ESLint** - Standard config
 - **Prettier** - Code formatting
 - **EAS Build** - Production builds
 
 ### Additional Libraries
+
 - `expo-secure-store` - JWT storage
 - `expo-constants` - Environment config
 - `expo-image-picker` - Meal photos
@@ -132,20 +140,20 @@ src/
 // theme/colors.ts
 export const colors = {
   // Primary
-  primary: '#55C4B8',        // Soft teal/aqua - buttons, key accents
-  primaryDark: '#2C8F84',    // Darker teal - links, pressed states
+  primary: '#55C4B8', // Soft teal/aqua - buttons, key accents
+  primaryDark: '#2C8F84', // Darker teal - links, pressed states
 
   // Secondary
-  secondary: '#F7B6A8',      // Warm peach-pink - highlights, badges
+  secondary: '#F7B6A8', // Warm peach-pink - highlights, badges
 
   // Background
-  background: '#FFF9F5',     // Off-white/cream - main background
-  surface: '#FFFFFF',        // Pure white - cards, sections
+  background: '#FFF9F5', // Off-white/cream - main background
+  surface: '#FFFFFF', // Pure white - cards, sections
 
   // Text
-  text: '#333333',           // Dark grey - primary body text
-  textMuted: '#6B7280',      // Medium grey - captions, meta
-  textLight: '#9CA3AF',      // Light grey - placeholders
+  text: '#333333', // Dark grey - primary body text
+  textMuted: '#6B7280', // Medium grey - captions, meta
+  textLight: '#9CA3AF', // Light grey - placeholders
 
   // Semantic
   error: '#EF4444',
@@ -293,10 +301,7 @@ interface ApiOptions extends RequestInit {
   skipAuth?: boolean
 }
 
-export async function api<T>(
-  endpoint: string,
-  options: ApiOptions = {}
-): Promise<T> {
+export async function api<T>(endpoint: string, options: ApiOptions = {}): Promise<T> {
   const { skipAuth = false, ...fetchOptions } = options
 
   const headers: HeadersInit = {
@@ -399,7 +404,7 @@ export const queryClient = new QueryClient({
     queries: {
       retry: 2,
       staleTime: 5 * 60 * 1000, // 5 minutes
-      gcTime: 10 * 60 * 1000,   // 10 minutes (formerly cacheTime)
+      gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
     },
     mutations: {
       onError: (error) => {
@@ -466,7 +471,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({
       token,
       isAuthenticated: !!token,
-      isLoading: false
+      isLoading: false,
     })
   },
 }))
@@ -554,19 +559,17 @@ import * as Localization from 'expo-localization'
 import en from '../../i18n/locales/en.json'
 import fr from '../../i18n/locales/fr.json'
 
-i18n
-  .use(initReactI18next)
-  .init({
-    resources: {
-      en: { translation: en },
-      fr: { translation: fr },
-    },
-    lng: Localization.locale.split('-')[0], // 'en' from 'en-US'
-    fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false,
-    },
-  })
+i18n.use(initReactI18next).init({
+  resources: {
+    en: { translation: en },
+    fr: { translation: fr },
+  },
+  lng: Localization.locale.split('-')[0], // 'en' from 'en-US'
+  fallbackLng: 'en',
+  interpolation: {
+    escapeValue: false,
+  },
+})
 
 export default i18n
 ```
@@ -706,6 +709,7 @@ import Toast from 'react-native-toast-message'
 ## Testing Strategy
 
 ### File Naming Convention
+
 - Test files: `ComponentName.test.tsx` or `hookName.test.ts`
 - Located in `__tests__/` folders within each feature
 
@@ -756,6 +760,7 @@ export default defineConfig({
 ## Implementation Phases
 
 ### Phase 1: Project Setup & Foundation
+
 1. Initialize Expo project with TypeScript
 2. Configure ESLint + Prettier
 3. Setup Vitest
@@ -765,6 +770,7 @@ export default defineConfig({
 7. **TEST CHECKPOINT**
 
 ### Phase 2: Core Infrastructure
+
 1. Setup environment config (expo-constants)
 2. Create API client with fetch
 3. Setup Zustand stores (auth, user)
@@ -773,6 +779,7 @@ export default defineConfig({
 6. **TEST CHECKPOINT**
 
 ### Phase 3: Navigation Shell
+
 1. Create RootNavigator
 2. Create AuthStack (empty screens)
 3. Create MainTabs (empty screens)
@@ -780,6 +787,7 @@ export default defineConfig({
 5. **TEST CHECKPOINT**
 
 ### Phase 4: Authentication Feature
+
 1. Create shared Input component
 2. Create shared Button component
 3. Implement LoginScreen with form
@@ -789,6 +797,7 @@ export default defineConfig({
 7. **TEST CHECKPOINT**
 
 ### Phase 5: Diagnosis Feature
+
 1. Implement DiagnosisWebViewScreen
 2. Implement useDiagnosis hook
 3. Add diagnosis check on MainTabs mount
@@ -796,6 +805,7 @@ export default defineConfig({
 5. **TEST CHECKPOINT**
 
 ### Phase 6: Dashboard Feature (Journal)
+
 1. Create DatePicker component
 2. Create Card component
 3. Implement SleepCard
@@ -805,6 +815,7 @@ export default defineConfig({
 7. **TEST CHECKPOINT**
 
 ### Phase 7: Routine Feature
+
 1. Create RoutineToggle (Morning/Evening)
 2. Create ProductCard component
 3. Implement RoutineScreen
@@ -812,6 +823,7 @@ export default defineConfig({
 5. **TEST CHECKPOINT**
 
 ### Phase 8: Profile Feature
+
 1. Create Avatar component
 2. Implement ProfileScreen
 3. Add logout functionality
@@ -820,6 +832,7 @@ export default defineConfig({
 6. **TEST CHECKPOINT**
 
 ### Phase 9: Polish & Production
+
 1. Add loading states
 2. Add empty states
 3. Review error handling
@@ -865,6 +878,7 @@ eas build --platform android
 9. **i18n for all text:** NEVER hardcode text strings in components. Always use i18n translations via `t('key')`
 10. **No barrel index.ts files:** NEVER create index.ts files that only re-export from other files. Import directly from the source file instead (e.g., `import { Button } from '@shared/components/Button'` not `import { Button } from '@shared/components'`)
 11. **No backend error messages in UI:** NEVER display error messages from the backend API directly to users. Backend errors are not translated. Always use i18n translation keys for error messages (e.g., `t('auth.invalidCredentials')` instead of `error.message`)
+12. **DRY Principle (Don't Repeat Yourself):** When implementing multiple similar features or screens, ALWAYS create reusable layout components or shared utilities. Extract common patterns into shared components instead of duplicating code. Example: Multiple screens with the same header pattern should use a shared layout component (e.g., `JournalLayout` for journal screens)
 
 ---
 
@@ -912,10 +926,12 @@ import { useAuthStore } from '../../stores/auth.store'
 Use the **context7** MCP server to retrieve up-to-date documentation and code examples for any library.
 
 **Available tools:**
+
 - `mcp__context-7__resolve-library-id` - Find the library ID for a package
 - `mcp__context-7__get-library-docs` - Get documentation for a library
 
 **Usage:** When implementing features, use Context7 to fetch the latest documentation for:
+
 - Expo packages (expo-image-picker, expo-secure-store, etc.)
 - TanStack Query
 - Zustand

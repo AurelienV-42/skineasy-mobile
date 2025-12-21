@@ -13,9 +13,18 @@ export const useUserStore = create<UserState>((set) => ({
   user: null,
   hasDiagnosis: false,
 
-  setUser: (user) => set({ user }),
+  setUser: (user) => {
+    console.log('[userStore] setUser called with:', user)
+    set({ user })
+  },
 
-  setHasDiagnosis: (value) => set({ hasDiagnosis: value }),
+  setHasDiagnosis: (value) => {
+    console.log('[userStore] setHasDiagnosis called with:', value)
+    set({ hasDiagnosis: value })
+  },
 
-  clearUser: () => set({ user: null, hasDiagnosis: false }),
+  clearUser: () => {
+    console.log('[userStore] clearUser called')
+    set({ user: null, hasDiagnosis: false })
+  },
 }))

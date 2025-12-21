@@ -48,9 +48,7 @@ export function Button({
       {...props}
     >
       {loading ? (
-        <ActivityIndicator
-          color={variant === 'primary' ? colors.surface : colors.primary}
-        />
+        <ActivityIndicator color={variant === 'primary' ? colors.surface : colors.primary} />
       ) : (
         <Text className={`text-base font-medium ${styles.text}`}>{title}</Text>
       )}

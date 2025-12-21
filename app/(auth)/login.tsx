@@ -88,7 +88,9 @@ export default function LoginScreen() {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  error={errors.password ? t(errors.password.message as string, { min: 6 }) : undefined}
+                  error={
+                    errors.password ? t(errors.password.message as string, { min: 6 }) : undefined
+                  }
                 />
               )}
             />

@@ -3,7 +3,7 @@ import { colors } from '@theme/colors'
 
 describe('colors', () => {
   it('should have primary color defined', () => {
-    expect(colors.primary).toBe('#55C4B8')
+    expect(colors.primary).toBe('#F7B6A8')
   })
 
   it('should have background color defined', () => {

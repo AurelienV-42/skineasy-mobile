@@ -21,9 +21,7 @@ export function LanguageSwitcher() {
         onPress={toggleLanguage}
         className="px-3 py-2 bg-surface rounded-full border border-border"
       >
-        <Text className="text-text font-medium">
-          {i18n.language.toUpperCase()}
-        </Text>
+        <Text className="text-text font-medium">{i18n.language.toUpperCase()}</Text>
       </Pressable>
     </View>
   )

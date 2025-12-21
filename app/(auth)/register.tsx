@@ -1,5 +1,13 @@
 import { useRef } from 'react'
-import { View, Text, Pressable, KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native'
+import {
+  View,
+  Text,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TextInput,
+} from 'react-native'
 import { Link, useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -74,7 +82,11 @@ export default function RegisterScreen() {
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
-                    error={errors.firstname ? t(errors.firstname.message as string, { min: 2 }) : undefined}
+                    error={
+                      errors.firstname
+                        ? t(errors.firstname.message as string, { min: 2 })
+                        : undefined
+                    }
                   />
                 )}
               />
@@ -94,7 +106,9 @@ export default function RegisterScreen() {
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
-                    error={errors.lastname ? t(errors.lastname.message as string, { min: 2 }) : undefined}
+                    error={
+                      errors.lastname ? t(errors.lastname.message as string, { min: 2 }) : undefined
+                    }
                   />
                 )}
               />
@@ -136,7 +150,9 @@ export default function RegisterScreen() {
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
-                    error={errors.password ? t(errors.password.message as string, { min: 6 }) : undefined}
+                    error={
+                      errors.password ? t(errors.password.message as string, { min: 6 }) : undefined
+                    }
                   />
                 )}
               />

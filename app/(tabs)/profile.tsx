@@ -1,27 +1,36 @@
-import { View, Text, Pressable, Alert, Linking } from 'react-native'
-import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 import {
   ChevronRight,
-  RefreshCw,
   FileText,
-  Shield,
+  Languages,
   Lock,
   LogOut,
+  RefreshCw,
+  Shield,
   Trash2,
 } from 'lucide-react-native'
+import { useTranslation } from 'react-i18next'
+import { Alert, Linking, Pressable, Text, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { useUserStore } from '@shared/stores/user.store'
 import { useAuthStore } from '@shared/stores/auth.store'
+import { useUserStore } from '@shared/stores/user.store'
 import { colors } from '@theme/colors'
 
 export default function ProfileScreen() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const router = useRouter()
   const user = useUserStore((state) => state.user)
   const clearUser = useUserStore((state) => state.clearUser)
   const clearAuth = useAuthStore((state) => state.clearAuth)
+
+  const currentLanguage =
+    i18n.language === 'fr' ? t('profile.languageFrench') : t('profile.languageEnglish')
+
+  const handleLanguageChange = () => {
+    const newLang = i18n.language === 'fr' ? 'en' : 'fr'
+    i18n.changeLanguage(newLang)
+  }
 
   const handleLogout = () => {
     Alert.alert(t('profile.logoutTitle'), t('profile.logoutConfirm'), [
@@ -64,31 +73,25 @@ export default function ProfileScreen() {
     Linking.openURL(url)
   }
 
-  const getInitials = () => {
-    if (!user) return '?'
-    return `${user.firstname?.[0] || ''}${user.lastname?.[0] || ''}`.toUpperCase()
-  }
-
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1 pt-4">
         <Text className="text-2xl font-bold text-text mb-6 px-4">{t('profile.title')}</Text>
 
         {/* User Info */}
-        <View className="items-center mb-8">
-          <View className="w-20 h-20 rounded-full bg-primary items-center justify-center mb-3">
-            <Text className="text-2xl font-bold text-white">{getInitials()}</Text>
-          </View>
-          <Text className="text-lg font-medium text-text">
-            {user?.firstname} {user?.lastname}
-          </Text>
-          <Text className="text-sm text-text-muted">{user?.email}</Text>
-          {user?.skinType && (
-            <Text className="text-sm text-primary mt-1">
-              {t('profile.skinType')}: {user.skinType}
+        {!!user && (
+          <View className="pl-4 mb-8">
+            <Text className="text-lg font-medium text-text">
+              {user?.firstname} {user?.lastname}
             </Text>
-          )}
-        </View>
+            <Text className="text-sm text-text-muted">{user?.email}</Text>
+            {user?.skinType && (
+              <Text className="text-sm text-primary mt-1">
+                {t('profile.skinType')}: {user.skinType}
+              </Text>
+            )}
+          </View>
+        )}
 
         {/* Menu Items */}
         <View className="bg-surface mb-4">
@@ -98,6 +101,20 @@ export default function ProfileScreen() {
               <Text className="text-base text-text">{t('profile.retakeDiagnosis')}</Text>
             </View>
             <ChevronRight size={20} color={colors.textMuted} />
+          </Pressable>
+
+          <Pressable
+            onPress={handleLanguageChange}
+            className="flex-row items-center justify-between p-4"
+          >
+            <View className="flex-row items-center gap-3">
+              <Languages size={20} color={colors.primary} />
+              <Text className="text-base text-text">{t('profile.language')}</Text>
+            </View>
+            <View className="flex-row items-center gap-2">
+              <Text className="text-sm text-text-muted">{currentLanguage}</Text>
+              <ChevronRight size={20} color={colors.textMuted} />
+            </View>
           </Pressable>
         </View>
 
@@ -149,7 +166,10 @@ export default function ProfileScreen() {
             </View>
           </Pressable>
 
-          <Pressable onPress={handleDeleteAccount} className="flex-row items-center justify-between p-4">
+          <Pressable
+            onPress={handleDeleteAccount}
+            className="flex-row items-center justify-between p-4"
+          >
             <View className="flex-row items-center gap-3">
               <Trash2 size={20} color={colors.error} />
               <Text className="text-base text-error">{t('profile.deleteAccount')}</Text>

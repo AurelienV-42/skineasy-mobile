@@ -15,6 +15,7 @@ import '../src/global.css'
 import '../src/i18n'
 import { queryClient } from '@shared/config/queryClient'
 import { useAuthStore } from '@shared/stores/auth.store'
+import { useInitializeUser } from '@features/auth/hooks/useInitializeUser'
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync()
@@ -22,7 +23,8 @@ SplashScreen.preventAutoHideAsync()
 function RootLayoutContent() {
   const insets = useSafeAreaInsets()
   const loadToken = useAuthStore((state) => state.loadToken)
-  const isLoading = useAuthStore((state) => state.isLoading)
+  const isAuthLoading = useAuthStore((state) => state.isLoading)
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 
   const [fontsLoaded] = useFonts({
     Roboto_400Regular,
@@ -30,17 +32,33 @@ function RootLayoutContent() {
     Roboto_700Bold,
   })
 
+  // Initialize user data from /me endpoint
+  const { isLoading: isUserLoading } = useInitializeUser()
+
   useEffect(() => {
+    console.log('[_layout] Loading token...')
     loadToken()
   }, [loadToken])
 
   useEffect(() => {
-    if (fontsLoaded && !isLoading) {
+    console.log('[_layout] State:', {
+      fontsLoaded,
+      isAuthLoading,
+      isUserLoading,
+      isAuthenticated,
+    })
+    if (fontsLoaded && !isAuthLoading && !isUserLoading) {
+      console.log('[_layout] All ready, hiding splash screen')
       SplashScreen.hideAsync()
     }
-  }, [fontsLoaded, isLoading])
+  }, [fontsLoaded, isAuthLoading, isUserLoading, isAuthenticated])
 
-  if (!fontsLoaded || isLoading) {
+  console.log(
+    '[_layout] Render check - showing splash?',
+    !fontsLoaded || isAuthLoading || isUserLoading
+  )
+
+  if (!fontsLoaded || isAuthLoading || isUserLoading) {
     return null
   }
 

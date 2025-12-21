@@ -23,11 +23,13 @@ export interface RegisterResponse {
 }
 
 export interface MeResponse {
-  id: number
-  email: string
-  firstname: string
-  lastname: string
-  skinType?: string
+  data: {
+    id: number
+    email: string
+    firstname: string
+    lastname: string
+    skinType?: string
+  }
 }
 
 export interface RefreshTokenResponse {

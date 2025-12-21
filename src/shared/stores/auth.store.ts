@@ -14,6 +14,7 @@ interface AuthState {
   setTokens: (accessToken: string, refreshToken?: string) => Promise<void>
   clearAuth: () => Promise<void>
   loadToken: () => Promise<void>
+  handleSessionExpiry: () => Promise<void>
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -32,17 +33,31 @@ export const useAuthStore = create<AuthState>((set) => ({
   clearAuth: async () => {
     await clearAllTokens()
     set({ token: null, isAuthenticated: false })
+    // Clear user data when logging out
+    const { useUserStore } = await import('@shared/stores/user.store')
+    useUserStore.getState().clearUser()
+  },
+
+  handleSessionExpiry: async () => {
+    await clearAllTokens()
+    set({ token: null, isAuthenticated: false })
+    // Clear user data when session expires
+    const { useUserStore } = await import('@shared/stores/user.store')
+    useUserStore.getState().clearUser()
   },
 
   loadToken: async () => {
+    console.log('[authStore] loadToken - Starting...')
     try {
       const token = await getToken()
+      console.log('[authStore] loadToken - Token loaded:', !!token)
       set({
         token,
         isAuthenticated: !!token,
         isLoading: false,
       })
-    } catch {
+    } catch (error) {
+      console.log('[authStore] loadToken - Error:', error)
       set({
         token: null,
         isAuthenticated: false,

@@ -12,7 +12,9 @@
     "back": "Back",
     "next": "Next",
     "done": "Done",
-    "noConnection": "No internet connection"
+    "noConnection": "No internet connection",
+    "sessionExpired": "Session Expired",
+    "sessionExpiredMessage": "Please log in again"
   },
   "auth": {
     "login": "Login",
@@ -42,6 +44,7 @@
     "dailySummary": "Daily Summary",
     "sleep": {
       "title": "Sleep",
+      "screenTitle": "Sleep",
       "question": "How did you sleep?",
       "hours": "Hours of sleep",
       "quality": {
@@ -52,11 +55,13 @@
     },
     "nutrition": {
       "title": "Meals & Snacks",
-      "addMeal": "Add a photo of my meal/snack",
+      "screenTitle": "Meals & Snacks",
+      "addMeal": "Add a photo of your meal/snack",
       "addNote": "Add a note to your meal"
     },
     "sport": {
       "title": "Physical Exercise",
+      "screenTitle": "Physical Exercise",
       "addActivity": "Add Activity",
       "duration": "Duration",
       "minutes": "min",
@@ -89,6 +94,9 @@
     "title": "Profile",
     "skinType": "Skin Type",
     "retakeDiagnosis": "Retake Diagnosis",
+    "language": "Language",
+    "languageEnglish": "English",
+    "languageFrench": "Français",
     "termsOfSale": "Terms of Sale",
     "termsOfSaleUrl": "https://skineasy.com/en/content/3-conditions-generales-vente",
     "termsOfUse": "Terms of Use",
