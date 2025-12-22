@@ -6,10 +6,9 @@ import {
   Languages,
   Lock,
   LogOut,
-  RefreshCw,
   Shield,
   Trash2,
-  UserPen,
+  UserPen
 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { Alert, Linking, Text, View } from 'react-native'
@@ -134,17 +133,6 @@ export default function ProfileScreen() {
             <View className="flex-row items-center gap-3">
               <UserPen size={20} color={colors.primary} />
               <Text className="text-base text-text">{t('profile.editProfile')}</Text>
-            </View>
-            <ChevronRight size={20} color={colors.textMuted} />
-          </Pressable>
-
-          <Pressable
-            haptic="medium"
-            className="flex-row items-center justify-between p-4 border-b border-border"
-          >
-            <View className="flex-row items-center gap-3">
-              <RefreshCw size={20} color={colors.primary} />
-              <Text className="text-base text-text">{t('profile.retakeDiagnosis')}</Text>
             </View>
             <ChevronRight size={20} color={colors.textMuted} />
           </Pressable>

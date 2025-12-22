@@ -674,7 +674,6 @@ export default i18n
   },
   "profile": {
     "title": "Profile",
-    "retakeDiagnosis": "Retake Diagnosis",
     "termsConditions": "Terms & Conditions",
     "logout": "Log Out"
   }
