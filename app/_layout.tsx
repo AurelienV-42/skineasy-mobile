@@ -9,6 +9,7 @@ import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
 
@@ -83,11 +84,13 @@ function RootLayoutContent() {
 export default Sentry.wrap(function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <QueryClientProvider client={queryClient}>
-        <SafeAreaProvider>
-          <RootLayoutContent />
-        </SafeAreaProvider>
-      </QueryClientProvider>
+      <KeyboardProvider statusBarTranslucent navigationBarTranslucent>
+        <QueryClientProvider client={queryClient}>
+          <SafeAreaProvider>
+            <RootLayoutContent />
+          </SafeAreaProvider>
+        </QueryClientProvider>
+      </KeyboardProvider>
     </GestureHandlerRootView>
   )
 })

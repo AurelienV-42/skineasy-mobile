@@ -25,6 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
     package: 'com.skineasy.app',
     edgeToEdgeEnabled: true,
+    softwareKeyboardLayoutMode: 'pan',
   },
   web: {
     favicon: './assets/favicon.png',

@@ -8,7 +8,7 @@ import {
   LogOut,
   Shield,
   Trash2,
-  UserPen
+  UserPen,
 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { Alert, Linking, Text, View } from 'react-native'

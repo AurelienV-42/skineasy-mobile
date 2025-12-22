@@ -26,9 +26,7 @@ export default function WelcomeScreen() {
             />
 
             <View className="mt-8 items-center">
-              <Text className="text-3xl font-bold text-text text-center">
-                {t('welcome.title')}
-              </Text>
+              <Text className="text-3xl font-bold text-text text-center">{t('welcome.title')}</Text>
               <Text className="text-base text-textMuted text-center mt-3 px-4">
                 {t('welcome.subtitle')}
               </Text>

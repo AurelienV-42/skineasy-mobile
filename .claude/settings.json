@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__ios-simulator__*",
+      "mcp__playwright__*",
+      "mcp__context-7__*"
+    ]
+  }
+}

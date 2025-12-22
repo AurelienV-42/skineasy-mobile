@@ -70,7 +70,18 @@ function formatAsUserTypes(input: string, previousValue: string): string {
 
 export const DateInput = forwardRef<TextInput, DateInputProps>(
   (
-    { label, error, className, style, onFocus, onBlur, enableHaptic = true, value, onChangeText, ...props },
+    {
+      label,
+      error,
+      className,
+      style,
+      onFocus,
+      onBlur,
+      enableHaptic = true,
+      value,
+      onChangeText,
+      ...props
+    },
     ref
   ) => {
     const scrollContext = useScrollContext()
