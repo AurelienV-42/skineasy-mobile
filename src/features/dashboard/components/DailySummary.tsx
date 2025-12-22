@@ -291,7 +291,9 @@ export function DailySummary({
                       )}
                       <View className="flex-1 justify-center">
                         {meal.food_name && (
-                          <Text className="text-sm font-medium text-text">{meal.food_name}</Text>
+                          <Text className="text-sm font-medium text-text" numberOfLines={1}>
+                            {meal.food_name}
+                          </Text>
                         )}
                         {meal.meal_type ? (
                           <Text className="text-xs text-primary">
@@ -303,7 +305,7 @@ export function DailySummary({
                           </Text>
                         ) : null}
                         {meal.note && (
-                          <Text className="text-sm text-textMuted mt-1" numberOfLines={2}>
+                          <Text className="text-sm text-textMuted mt-1" numberOfLines={1}>
                             {meal.note}
                           </Text>
                         )}
@@ -435,7 +437,7 @@ export function DailySummary({
                       </View>
                     </View>
                     {sport.note && (
-                      <Text className="text-xs text-textMuted italic pl-11">
+                      <Text className="text-xs text-textMuted italic pl-11" numberOfLines={1}>
                         &ldquo;{sport.note}&rdquo;
                       </Text>
                     )}
