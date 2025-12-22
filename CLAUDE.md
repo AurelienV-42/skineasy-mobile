@@ -1115,3 +1115,70 @@ Use the **context7** MCP server to retrieve up-to-date documentation and code ex
 - Any other dependency
 
 This ensures we use the correct, up-to-date APIs rather than outdated patterns.
+
+---
+
+### iOS Simulator - Device Testing & Automation
+
+Use the **ios-simulator** MCP server to interact with the iOS Simulator for testing and screenshots.
+
+**Available tools:**
+
+- `mcp__ios-simulator__get_booted_sim_id` - Get the UDID of the currently booted simulator
+- `mcp__ios-simulator__open_simulator` - Open the iOS Simulator app
+- `mcp__ios-simulator__screenshot` - Take a screenshot of the simulator
+- `mcp__ios-simulator__record_video` - Start recording video of the simulator
+- `mcp__ios-simulator__stop_recording` - Stop video recording
+- `mcp__ios-simulator__install_app` - Install an app on the simulator
+- `mcp__ios-simulator__launch_app` - Launch an app on the simulator
+- `mcp__ios-simulator__ui_describe_all` - Get accessibility tree of all UI elements
+- `mcp__ios-simulator__ui_describe_point` - Describe UI element at a specific point
+- `mcp__ios-simulator__ui_view` - Get view hierarchy
+- `mcp__ios-simulator__ui_tap` - Tap at coordinates
+- `mcp__ios-simulator__ui_type` - Type text
+- `mcp__ios-simulator__ui_swipe` - Perform swipe gesture
+
+**Usage:** Use these tools to:
+
+- Take screenshots of the app for visual verification
+- Record videos for demos or bug reproduction
+- Automate UI interactions for testing
+- Inspect UI elements and accessibility
+
+---
+
+### Playwright - Browser Automation
+
+Use the **playwright** MCP server for web browser automation and testing.
+
+**Available tools:**
+
+- `mcp__playwright__browser_navigate` - Navigate to a URL
+- `mcp__playwright__browser_navigate_back` - Go back in browser history
+- `mcp__playwright__browser_click` - Click on an element
+- `mcp__playwright__browser_type` - Type text into an input
+- `mcp__playwright__browser_fill_form` - Fill a form
+- `mcp__playwright__browser_take_screenshot` - Take a screenshot
+- `mcp__playwright__browser_snapshot` - Get page accessibility snapshot
+- `mcp__playwright__browser_evaluate` - Execute JavaScript in browser
+- `mcp__playwright__browser_console_messages` - Get console messages
+- `mcp__playwright__browser_network_requests` - Get network requests
+- `mcp__playwright__browser_tabs` - Manage browser tabs
+- `mcp__playwright__browser_close` - Close the browser
+- `mcp__playwright__browser_resize` - Resize browser window
+- `mcp__playwright__browser_handle_dialog` - Handle browser dialogs
+- `mcp__playwright__browser_file_upload` - Upload files
+- `mcp__playwright__browser_press_key` - Press keyboard key
+- `mcp__playwright__browser_hover` - Hover over element
+- `mcp__playwright__browser_drag` - Drag element
+- `mcp__playwright__browser_select_option` - Select dropdown option
+- `mcp__playwright__browser_wait_for` - Wait for element/condition
+- `mcp__playwright__browser_install` - Install browser
+- `mcp__playwright__browser_run_code` - Run Playwright code
+
+**Usage:** Use these tools to:
+
+- Test web-related features (WebView content, OAuth flows)
+- Automate browser interactions
+- Debug web content issues
+- Take screenshots of web pages

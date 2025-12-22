@@ -1,4 +1,11 @@
 {
+  "welcome": {
+    "title": "Your skin deserves personalized care",
+    "subtitle": "Discover your ideal skincare routine with our personalized diagnosis",
+    "getStarted": "Get Started",
+    "signIn": "I already have an account",
+    "termsNotice": "By continuing, you agree to our Terms of Use and Privacy Policy"
+  },
   "common": {
     "loading": "Loading...",
     "error": "An error occurred",
