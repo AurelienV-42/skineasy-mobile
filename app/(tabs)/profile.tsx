@@ -15,6 +15,7 @@ import { Alert, Linking, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import * as Sentry from '@sentry/react-native'
+import { useDeleteAccount } from '@features/profile/hooks/useDeleteAccount'
 import { Pressable } from '@shared/components/Pressable'
 import { useAuthStore } from '@shared/stores/auth.store'
 import { useUserStore } from '@shared/stores/user.store'
@@ -26,6 +27,7 @@ export default function ProfileScreen() {
   const user = useUserStore((state) => state.user)
   const clearUser = useUserStore((state) => state.clearUser)
   const clearAuth = useAuthStore((state) => state.clearAuth)
+  const { mutate: deleteAccount, isPending: isDeleting } = useDeleteAccount()
 
   const currentLanguage =
     i18n.language === 'fr' ? t('profile.languageFrench') : t('profile.languageEnglish')
@@ -54,6 +56,8 @@ export default function ProfileScreen() {
   }
 
   const handleDeleteAccount = () => {
+    if (isDeleting) return
+
     Alert.alert(t('profile.deleteAccountTitle'), t('profile.deleteAccountConfirm'), [
       {
         text: t('common.cancel'),
@@ -62,11 +66,8 @@ export default function ProfileScreen() {
       {
         text: t('common.delete'),
         style: 'destructive',
-        onPress: async () => {
-          // TODO: Call delete account API
-          await clearAuth()
-          clearUser()
-          router.replace('/(auth)/login')
+        onPress: () => {
+          deleteAccount()
         },
       },
     ])

@@ -178,7 +178,6 @@ export const Input = forwardRef<TextInput, InputProps>(
           <TextInput
             ref={ref}
             className={`w-full h-full ${showPasswordToggle && secureTextEntry ? 'pr-14' : 'pr-4'} pl-4 text-text`}
-            placeholderTextColor={colors.textLight}
             textAlignVertical={multiline ? 'top' : 'center'}
             style={[{ fontSize: 14, lineHeight: 18, paddingTop: multiline ? 12 : 0 }, style]}
             onFocus={handleFocus}

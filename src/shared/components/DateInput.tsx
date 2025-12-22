@@ -209,7 +209,6 @@ export const DateInput = forwardRef<TextInput, DateInputProps>(
           <TextInput
             ref={ref}
             className="w-full h-full pr-4 pl-4 text-text"
-            placeholderTextColor={colors.textLight}
             textAlignVertical="center"
             style={[{ fontSize: 14, lineHeight: 18 }, style]}
             onFocus={handleFocus}
@@ -217,7 +216,6 @@ export const DateInput = forwardRef<TextInput, DateInputProps>(
             value={displayValue}
             onChangeText={handleChangeText}
             keyboardType="number-pad"
-            placeholder="DD-MM-YYYY"
             maxLength={10}
             {...props}
           />

@@ -10,4 +10,8 @@ export const profileService = {
   updateProfile: (data: UpdateProfileDto): Promise<UpdateProfileResponse> => {
     return api.put<UpdateProfileResponse>('/api/v1/auth/me', data)
   },
+
+  deleteAccount: (): Promise<void> => {
+    return api.delete('/api/v1/auth/me')
+  },
 }

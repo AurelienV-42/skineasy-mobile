@@ -21,6 +21,12 @@ import { Button } from '@shared/components/Button'
 import { Input } from '@shared/components/Input'
 import { Pressable } from '@shared/components/Pressable'
 
+const GENDER_OPTIONS = [
+  { value: 1, labelKey: 'auth.genderMr' },
+  { value: 2, labelKey: 'auth.genderMrs' },
+  { value: 3, labelKey: 'auth.genderOther' },
+] as const
+
 export default function RegisterScreen() {
   const { t } = useTranslation()
   const { mutate: register, isPending } = useRegister()
@@ -42,6 +48,7 @@ export default function RegisterScreen() {
       lastname: '',
       email: '',
       password: '',
+      id_gender: undefined,
     },
   })
 
@@ -197,7 +204,45 @@ export default function RegisterScreen() {
                   )}
                 />
 
-                {/* TODO: Add DateInput with new picker solution */}
+                {/* Gender Selector */}
+                <Controller
+                  control={control}
+                  name="id_gender"
+                  render={({ field: { onChange, value } }) => (
+                    <View className="mb-6">
+                      <Text className="text-sm font-medium text-textMuted mb-3">
+                        {t('auth.gender')}
+                      </Text>
+                      <View className="flex-row gap-3">
+                        {GENDER_OPTIONS.map(({ value: optionValue, labelKey }) => (
+                          <Pressable
+                            key={optionValue}
+                            onPress={() => onChange(optionValue)}
+                            haptic="light"
+                            className={`flex-1 items-center justify-center py-3 rounded-xl border-2 ${
+                              value === optionValue
+                                ? 'border-primary bg-primary/10'
+                                : 'border-border bg-surface'
+                            }`}
+                          >
+                            <Text
+                              className={`text-sm ${
+                                value === optionValue ? 'text-primary font-medium' : 'text-textMuted'
+                              }`}
+                            >
+                              {t(labelKey)}
+                            </Text>
+                          </Pressable>
+                        ))}
+                      </View>
+                      {errors.id_gender && hasAttemptedSubmit && (
+                        <Text className="text-xs text-error mt-1 ml-1">
+                          {t('auth.genderRequired')}
+                        </Text>
+                      )}
+                    </View>
+                  )}
+                />
 
                 <Button
                   title={t('auth.register')}
