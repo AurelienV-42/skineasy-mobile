@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient'
 import { Link } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, Linking, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Button } from '@shared/components/Button'
@@ -50,7 +50,20 @@ export default function WelcomeScreen() {
 
             {/* Terms & Privacy */}
             <Text className="text-xs text-textMuted text-center mt-6 px-4">
-              {t('welcome.termsNotice')}
+              {t('welcome.termsNoticeStart')}
+              <Text
+                className="text-xs text-primary underline"
+                onPress={() => Linking.openURL(t('profile.termsOfUseUrl'))}
+              >
+                {t('welcome.termsOfUse')}
+              </Text>
+              {t('welcome.termsNoticeAnd')}
+              <Text
+                className="text-xs text-primary underline"
+                onPress={() => Linking.openURL(t('profile.privacyPolicyUrl'))}
+              >
+                {t('welcome.privacyPolicy')}
+              </Text>
             </Text>
           </View>
         </View>

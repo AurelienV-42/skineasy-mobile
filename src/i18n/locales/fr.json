@@ -4,7 +4,10 @@
     "subtitle": "Découvre ta routine idéale grâce à notre diagnostic personnalisé",
     "getStarted": "Commencer",
     "signIn": "J'ai déjà un compte",
-    "termsNotice": "En continuant, tu acceptes nos Conditions d'utilisation et notre Politique de confidentialité"
+    "termsNoticeStart": "En continuant, tu acceptes nos ",
+    "termsOfUse": "Conditions d'utilisation",
+    "termsNoticeAnd": " et notre ",
+    "privacyPolicy": "Politique de confidentialité"
   },
   "common": {
     "loading": "Chargement...",
