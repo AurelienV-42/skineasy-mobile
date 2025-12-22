@@ -1,70 +1,91 @@
-import { Eye, EyeOff } from 'lucide-react-native'
+import { format, isValid, parse } from 'date-fns'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import { Animated, Text, TextInput, View, type TextInputProps } from 'react-native'
 
-import { Pressable } from '@shared/components/Pressable'
 import { useScrollContext } from '@shared/components/ScreenHeader'
 import { haptic } from '@shared/utils/haptic'
 import { colors } from '@theme/colors'
 
-interface InputProps extends TextInputProps {
+interface DateInputProps extends Omit<TextInputProps, 'value' | 'onChangeText'> {
   label?: string
   error?: string
+  /**
+   * Value in YYYY-MM-DD format (API format), can also be ISO format
+   */
+  value?: string
+  /**
+   * Callback with value in YYYY-MM-DD format
+   */
+  onChangeText?: (value: string) => void
   /**
    * Enable haptic feedback on focus (default: true)
    */
   enableHaptic?: boolean
-  /**
-   * Show password visibility toggle (only for secureTextEntry inputs)
-   */
-  showPasswordToggle?: boolean
-  /**
-   * Number of lines for multiline input (default: 4)
-   * Used to calculate the height of the input
-   */
-  numberOfLines?: number
 }
 
-export const Input = forwardRef<TextInput, InputProps>(
+/**
+ * Converts YYYY-MM-DD (or ISO format) to DD-MM-YYYY for display
+ */
+function toDisplayFormat(apiDate: string | undefined): string {
+  if (!apiDate) return ''
+
+  // Handle ISO format by extracting date part
+  const dateOnly = apiDate.includes('T') ? apiDate.split('T')[0] : apiDate
+
+  const parsed = parse(dateOnly, 'yyyy-MM-dd', new Date())
+  if (!isValid(parsed)) return ''
+
+  return format(parsed, 'dd-MM-yyyy')
+}
+
+/**
+ * Converts DD-MM-YYYY to YYYY-MM-DD for API
+ */
+function toApiFormat(displayDate: string): string {
+  const parsed = parse(displayDate, 'dd-MM-yyyy', new Date())
+  if (!isValid(parsed)) return ''
+
+  return format(parsed, 'yyyy-MM-dd')
+}
+
+/**
+ * Formats input as DD-MM-YYYY while typing
+ */
+function formatAsUserTypes(input: string, previousValue: string): string {
+  // Remove any non-digit characters
+  const digits = input.replace(/\D/g, '')
+
+  // Limit to 8 digits (DDMMYYYY)
+  const limited = digits.slice(0, 8)
+
+  // Add dashes as user types
+  if (limited.length <= 2) {
+    return limited
+  } else if (limited.length <= 4) {
+    return `${limited.slice(0, 2)}-${limited.slice(2)}`
+  } else {
+    return `${limited.slice(0, 2)}-${limited.slice(2, 4)}-${limited.slice(4)}`
+  }
+}
+
+export const DateInput = forwardRef<TextInput, DateInputProps>(
   (
-    {
-      label,
-      error,
-      className,
-      style,
-      onFocus,
-      onBlur,
-      enableHaptic = true,
-      multiline,
-      showPasswordToggle = false,
-      secureTextEntry,
-      numberOfLines = 4,
-      value,
-      ...props
-    },
+    { label, error, className, style, onFocus, onBlur, enableHaptic = true, value, onChangeText, ...props },
     ref
   ) => {
-    // Calculate height for multiline inputs based on numberOfLines
-    // lineHeight (18) + some padding
-    const multilineHeight = numberOfLines * 18 + 24
     const scrollContext = useScrollContext()
     const containerRef = useRef<View>(null)
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false)
     const [isFocused, setIsFocused] = useState(false)
+    const [displayValue, setDisplayValue] = useState(toDisplayFormat(value))
+
+    // Sync display value when value prop changes (e.g., form loads with default values)
+    useEffect(() => {
+      const formatted = toDisplayFormat(value)
+      setDisplayValue(formatted)
+    }, [value])
 
     // Floating label animation
     const labelAnimation = useRef(new Animated.Value(value ? 1 : 0)).current
-
-    // Sync label animation when value changes (e.g., when editing existing data)
-    useEffect(() => {
-      if (value && !isFocused) {
-        Animated.timing(labelAnimation, {
-          toValue: 1,
-          duration: 0, // Instant, no animation needed for initial load
-          useNativeDriver: false,
-        }).start()
-      }
-    }, [value, isFocused, labelAnimation])
 
     const handleFocus = (event: Parameters<NonNullable<TextInputProps['onFocus']>>[0]) => {
       setIsFocused(true)
@@ -83,7 +104,6 @@ export const Input = forwardRef<TextInput, InputProps>(
 
       // Scroll to make input visible above keyboard (if in ScreenHeader context)
       if (scrollContext) {
-        // Simple scroll up to make room for keyboard
         scrollContext.scrollToPosition(200)
       }
 
@@ -97,7 +117,7 @@ export const Input = forwardRef<TextInput, InputProps>(
       setIsFocused(false)
 
       // Animate label down if no value
-      if (!value) {
+      if (!displayValue) {
         Animated.timing(labelAnimation, {
           toValue: 0,
           duration: 200,
@@ -111,8 +131,19 @@ export const Input = forwardRef<TextInput, InputProps>(
       }
     }
 
-    const togglePasswordVisibility = () => {
-      setIsPasswordVisible(!isPasswordVisible)
+    const handleChangeText = (text: string) => {
+      const formatted = formatAsUserTypes(text, displayValue)
+      setDisplayValue(formatted)
+
+      // Only call onChangeText with API format when we have a complete date
+      if (onChangeText) {
+        if (formatted.length === 10) {
+          // Complete date DD-MM-YYYY
+          onChangeText(toApiFormat(formatted))
+        } else if (formatted.length === 0) {
+          onChangeText('')
+        }
+      }
     }
 
     // Label position interpolation
@@ -144,7 +175,7 @@ export const Input = forwardRef<TextInput, InputProps>(
                 : 'border border-border'
           } bg-surface rounded-xl ${className || ''}`}
           style={{
-            height: multiline ? multilineHeight : 56,
+            height: 56,
             shadowColor: isFocused ? colors.primary : '#000',
             shadowOffset: { width: 0, height: isFocused ? 4 : 2 },
             shadowOpacity: isFocused ? 0.15 : 0.05,
@@ -177,33 +208,19 @@ export const Input = forwardRef<TextInput, InputProps>(
           {/* Input */}
           <TextInput
             ref={ref}
-            className={`w-full h-full ${showPasswordToggle && secureTextEntry ? 'pr-14' : 'pr-4'} pl-4 text-text`}
+            className="w-full h-full pr-4 pl-4 text-text"
             placeholderTextColor={colors.textLight}
-            textAlignVertical={multiline ? 'top' : 'center'}
-            style={[{ fontSize: 14, lineHeight: 18, paddingTop: multiline ? 12 : 0 }, style]}
+            textAlignVertical="center"
+            style={[{ fontSize: 14, lineHeight: 18 }, style]}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            multiline={multiline}
-            secureTextEntry={secureTextEntry && !isPasswordVisible}
-            value={value}
+            value={displayValue}
+            onChangeText={handleChangeText}
+            keyboardType="number-pad"
+            placeholder="DD-MM-YYYY"
+            maxLength={10}
             {...props}
           />
-
-          {/* Password Toggle */}
-          {showPasswordToggle && secureTextEntry && (
-            <Pressable
-              onPress={togglePasswordVisibility}
-              haptic="light"
-              className="absolute right-2 top-0 bottom-0 w-12 items-center justify-center"
-              accessibilityLabel={isPasswordVisible ? 'Hide password' : 'Show password'}
-            >
-              {isPasswordVisible ? (
-                <EyeOff size={20} color={colors.textMuted} />
-              ) : (
-                <Eye size={20} color={colors.textMuted} />
-              )}
-            </Pressable>
-          )}
         </View>
 
         {/* Error Message */}
@@ -213,4 +230,4 @@ export const Input = forwardRef<TextInput, InputProps>(
   }
 )
 
-Input.displayName = 'Input'
+DateInput.displayName = 'DateInput'

@@ -7,6 +7,7 @@ import { View } from 'react-native'
 import { useUpdateProfile } from '@features/profile/hooks/useUpdateProfile'
 import { editProfileSchema, type EditProfileInput } from '@features/profile/schemas/profile.schema'
 import { Button } from '@shared/components/Button'
+import { DateInput } from '@shared/components/DateInput'
 import { Input } from '@shared/components/Input'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
 import { useUserStore } from '@shared/stores/user.store'
@@ -89,7 +90,20 @@ export default function EditProfileScreen() {
         )}
       />
 
-      {/* Birthday Picker */}
+      <Controller
+        control={control}
+        name="birthday"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <DateInput
+            label={t('profile.birthday')}
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            error={errors.birthday?.message}
+            editable={!isUpdating}
+          />
+        )}
+      />
 
       <View className="mt-6">
         <Button
