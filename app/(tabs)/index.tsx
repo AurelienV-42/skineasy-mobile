@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, Text, View } from 'react-native'
@@ -6,17 +7,22 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { DailySummary } from '@features/dashboard/components/DailySummary'
 import { DateNavigation } from '@features/dashboard/components/DateNavigation'
 import {
+  useDeleteMeal,
+  useDeleteSleep,
+  useDeleteSport,
   useMealEntries,
   useSleepEntries,
   useSportEntries,
 } from '@features/journal/hooks/useJournal'
 import { QuizBanner } from '@shared/components/QuizBanner'
 import { useUserStore } from '@shared/stores/user.store'
+import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
 import { toUTCDateString } from '@shared/utils/date'
 import { logger } from '@shared/utils/logger'
 
 export default function DashboardScreen() {
   const { t } = useTranslation()
+  const router = useRouter()
   const user = useUserStore((state) => state.user)
 
   // Selected date state
@@ -30,11 +36,42 @@ export default function DashboardScreen() {
   const { data: mealEntries = [], isLoading: mealLoading } = useMealEntries(dateString)
   const { data: sportEntries = [], isLoading: sportLoading } = useSportEntries(dateString)
 
+  // Delete mutations
+  const deleteSleep = useDeleteSleep()
+  const deleteMeal = useDeleteMeal()
+  const deleteSport = useDeleteSport()
+
   const isLoading = sleepLoading || mealLoading || sportLoading
 
   const handleQuizPress = () => {
     // TODO: Navigate to typeform webview
     logger.info('Quiz banner pressed')
+  }
+
+  // Delete handlers
+  const handleDeleteSleep = (id: number) => {
+    deleteSleep.mutate({ id, date: dateString })
+  }
+
+  const handleDeleteMeal = (id: number) => {
+    deleteMeal.mutate({ id, date: dateString })
+  }
+
+  const handleDeleteSport = (id: number) => {
+    deleteSport.mutate({ id, date: dateString })
+  }
+
+  // Edit handlers - navigate to edit screens with entry data
+  const handleEditSleep = (entry: SleepEntry) => {
+    router.push({ pathname: '/journal/sleep', params: { id: entry.id, date: dateString } })
+  }
+
+  const handleEditMeal = (entry: MealEntry) => {
+    router.push({ pathname: '/journal/nutrition', params: { id: entry.id, date: dateString } })
+  }
+
+  const handleEditSport = (entry: SportEntry) => {
+    router.push({ pathname: '/journal/sport', params: { id: entry.id, date: dateString } })
   }
 
   return (
@@ -62,6 +99,12 @@ export default function DashboardScreen() {
             sportEntries={sportEntries}
             isLoading={isLoading}
             date={dateString}
+            onDeleteSleep={handleDeleteSleep}
+            onDeleteMeal={handleDeleteMeal}
+            onDeleteSport={handleDeleteSport}
+            onEditSleep={handleEditSleep}
+            onEditMeal={handleEditMeal}
+            onEditSport={handleEditSport}
           />
         </View>
 

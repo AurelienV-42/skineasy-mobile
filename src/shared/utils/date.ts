@@ -158,3 +158,32 @@ export function isPast(date: Date | string): boolean {
   // Compare start of day for both dates to ignore time component
   return compareDate < today
 }
+
+/**
+ * Convert a YYYY-MM-DD date string to ISO 8601 UTC format
+ * Used when sending dates to API endpoints that require full ISO format
+ *
+ * @param dateString - Date string in YYYY-MM-DD format (e.g., "2025-01-15")
+ * @returns ISO 8601 UTC string (e.g., "2025-01-15T00:00:00.000Z")
+ *
+ * @example
+ * toISODateString("2025-01-15") // "2025-01-15T00:00:00.000Z"
+ */
+export function toISODateString(dateString: string): string {
+  return `${dateString}T00:00:00.000Z`
+}
+
+/**
+ * Extract YYYY-MM-DD date portion from an ISO 8601 date string
+ * Used for query key invalidation when the DTO contains ISO format dates
+ *
+ * @param isoDateString - ISO 8601 date string (e.g., "2025-01-15T00:00:00.000Z") or YYYY-MM-DD
+ * @returns Date string in YYYY-MM-DD format (e.g., "2025-01-15")
+ *
+ * @example
+ * fromISOToDateString("2025-01-15T00:00:00.000Z") // "2025-01-15"
+ * fromISOToDateString("2025-01-15") // "2025-01-15"
+ */
+export function fromISOToDateString(isoDateString: string): string {
+  return isoDateString.split('T')[0]
+}

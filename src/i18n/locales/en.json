@@ -14,7 +14,9 @@
     "done": "Done",
     "noConnection": "No internet connection",
     "sessionExpired": "Session Expired",
-    "sessionExpiredMessage": "Please log in again"
+    "sessionExpiredMessage": "Please log in again",
+    "deleteConfirmTitle": "Delete Entry",
+    "deleteConfirmMessage": "Are you sure you want to delete this entry?"
   },
   "auth": {
     "login": "Login",
@@ -96,7 +98,7 @@
       "screenTitle": "Meals & Snacks",
       "meal": "Meal",
       "mealType": "Meal type (optional)",
-      "addMeal": "Add a photo of your meal/snack",
+      "addMeal": "Add a photo (optional)",
       "foodName": "Meal name",
       "foodNameRequired": "Meal name is required",
       "foodNameMaxLength": "Meal name cannot exceed 200 characters",

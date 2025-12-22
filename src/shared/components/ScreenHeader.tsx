@@ -59,13 +59,10 @@ export function ScreenHeader({ title, children }: ScreenHeaderProps) {
       >
         <ScrollContext.Provider value={{ scrollToPosition }}>
           <ScrollView ref={scrollViewRef} className="flex-1" keyboardShouldPersistTaps="handled">
-            <View className="flex-1 px-4 pb-8">{children}</View>
+            <View className="flex-1 px-4 pb-8 pt-4">{children}</View>
           </ScrollView>
         </ScrollContext.Provider>
       </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }
-
-// Keep JournalLayout as an alias for backward compatibility
-export { ScreenHeader as JournalLayout }

@@ -9,20 +9,21 @@
  */
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Frown, Meh, Smile } from 'lucide-react-native'
+import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
-import { useUpsertSleep } from '@features/journal/hooks/useJournal'
+import { useSleepEntries, useUpsertSleep } from '@features/journal/hooks/useJournal'
 import { sleepFormSchema, type SleepFormInput } from '@features/journal/schemas/journal.schema'
 import { Button } from '@shared/components/Button'
 import { Input } from '@shared/components/Input'
 import { Pressable } from '@shared/components/Pressable'
-import { JournalLayout } from '@shared/components/ScreenHeader'
+import { ScreenHeader } from '@shared/components/ScreenHeader'
 import type { SleepQuality } from '@shared/types/journal.types'
-import { getTodayUTC } from '@shared/utils/date'
+import { getTodayUTC, toISODateString } from '@shared/utils/date'
 import { colors } from '@theme/colors'
 
 const QUALITY_LEVELS = [
@@ -34,7 +35,13 @@ const QUALITY_LEVELS = [
 export default function SleepScreen() {
   const { t } = useTranslation()
   const router = useRouter()
+  const params = useLocalSearchParams<{ id?: string; date?: string }>()
   const upsertSleep = useUpsertSleep()
+
+  // If editing, fetch existing entry
+  const dateToUse = params.date || getTodayUTC()
+  const { data: sleepEntries } = useSleepEntries(dateToUse)
+  const existingEntry = sleepEntries?.find((e) => e.id === Number(params.id))
 
   const {
     control,
@@ -42,6 +49,7 @@ export default function SleepScreen() {
     formState: { errors, isValid },
     setValue,
     watch,
+    reset,
   } = useForm<SleepFormInput>({
     resolver: zodResolver(sleepFormSchema),
     mode: 'onChange',
@@ -50,11 +58,21 @@ export default function SleepScreen() {
     },
   })
 
+  // Populate form when editing
+  useEffect(() => {
+    if (existingEntry) {
+      reset({
+        hours: String(existingEntry.hours),
+        quality: existingEntry.quality as SleepQuality,
+      })
+    }
+  }, [existingEntry, reset])
+
   const selectedQuality = watch('quality') ?? 3
 
   const onSubmit = (data: SleepFormInput) => {
     const dto = {
-      date: getTodayUTC(),
+      date: toISODateString(dateToUse),
       hours: Number(data.hours),
       quality: data.quality as SleepQuality,
     }
@@ -67,7 +85,7 @@ export default function SleepScreen() {
   }
 
   return (
-    <JournalLayout title={t('journal.sleep.screenTitle')}>
+    <ScreenHeader title={t('journal.sleep.screenTitle')}>
       {/* Hours Input */}
       <View className="mb-8">
         <Controller
@@ -127,6 +145,6 @@ export default function SleepScreen() {
         disabled={!isValid || upsertSleep.isPending}
         loading={upsertSleep.isPending}
       />
-    </JournalLayout>
+    </ScreenHeader>
   )
 }

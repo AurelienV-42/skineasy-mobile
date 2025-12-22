@@ -10,30 +10,43 @@
  */
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import { SportTypeSelector } from '@features/journal/components/SportTypeSelector'
-import { useCreateSport, useSportTypes } from '@features/journal/hooks/useJournal'
+import {
+  useCreateSport,
+  useSportEntries,
+  useSportTypes,
+  useUpdateSport,
+} from '@features/journal/hooks/useJournal'
 import { sportFormSchema, type SportFormInput } from '@features/journal/schemas/journal.schema'
 import { enrichSportTypes } from '@features/journal/utils/sportMapping'
 import { Button } from '@shared/components/Button'
 import { Input } from '@shared/components/Input'
 import { Pressable } from '@shared/components/Pressable'
-import { JournalLayout } from '@shared/components/ScreenHeader'
+import { ScreenHeader } from '@shared/components/ScreenHeader'
 import type { SportIntensity } from '@shared/types/journal.types'
-import { getTodayUTC } from '@shared/utils/date'
-import { useMemo } from 'react'
+import { getTodayUTC, toISODateString } from '@shared/utils/date'
 
 const INTENSITY_LEVELS = [1, 2, 3, 4, 5] as const
 
 export default function SportScreen() {
   const { t } = useTranslation()
   const router = useRouter()
+  const params = useLocalSearchParams<{ id?: string; date?: string }>()
   const createSport = useCreateSport()
+  const updateSport = useUpdateSport()
   const { data: sportTypes } = useSportTypes()
+
+  // If editing, fetch existing entry
+  const dateToUse = params.date || getTodayUTC()
+  const { data: sportEntries } = useSportEntries(dateToUse)
+  const existingEntry = sportEntries?.find((e) => e.id === Number(params.id))
+  const isEditMode = !!params.id
 
   // Create a map of sport type names to backend IDs
   const sportTypeIdMap = useMemo(() => {
@@ -48,6 +61,7 @@ export default function SportScreen() {
     formState: { errors, isValid },
     setValue,
     watch,
+    reset,
   } = useForm<SportFormInput>({
     resolver: zodResolver(sportFormSchema),
     mode: 'onChange',
@@ -55,6 +69,18 @@ export default function SportScreen() {
       intensity: 3, // Default intensity to 3 (moderate)
     },
   })
+
+  // Populate form when editing
+  useEffect(() => {
+    if (existingEntry) {
+      reset({
+        type: existingEntry.sportType.name as SportFormInput['type'],
+        duration: String(existingEntry.duration),
+        intensity: existingEntry.intensity as SportIntensity,
+        note: existingEntry.note || '',
+      })
+    }
+  }, [existingEntry, reset])
 
   const selectedIntensity = watch('intensity') ?? 3
 
@@ -68,18 +94,31 @@ export default function SportScreen() {
     }
 
     const dto = {
-      date: getTodayUTC(),
+      date: toISODateString(dateToUse),
       sport_type_id: sportTypeId,
       duration: Number(data.duration),
       intensity: data.intensity as SportIntensity,
       note: data.note || null,
     }
 
-    createSport.mutate(dto, {
-      onSuccess: () => {
-        router.back()
-      },
-    })
+    if (isEditMode && existingEntry) {
+      // Update existing entry
+      updateSport.mutate(
+        { id: existingEntry.id, dto, date: dateToUse },
+        {
+          onSuccess: () => {
+            router.back()
+          },
+        }
+      )
+    } else {
+      // Create new entry
+      createSport.mutate(dto, {
+        onSuccess: () => {
+          router.back()
+        },
+      })
+    }
   }
 
   const getIntensityLabel = (level: number): string => {
@@ -94,7 +133,7 @@ export default function SportScreen() {
   }
 
   return (
-    <JournalLayout title={t('journal.sport.screenTitle')}>
+    <ScreenHeader title={t('journal.sport.screenTitle')}>
       {/* Sport Type Selector */}
       <View className="mb-6">
         <Controller
@@ -184,9 +223,9 @@ export default function SportScreen() {
       <Button
         title={t('common.save')}
         onPress={handleSubmit(onSubmit)}
-        disabled={!isValid || createSport.isPending}
-        loading={createSport.isPending}
+        disabled={!isValid || createSport.isPending || updateSport.isPending}
+        loading={createSport.isPending || updateSport.isPending}
       />
-    </JournalLayout>
+    </ScreenHeader>
   )
 }

@@ -11,20 +11,26 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as ImagePicker from 'expo-image-picker'
-import { useRouter } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Camera, Coffee, Cookie, ImageIcon, Moon, Sun, X } from 'lucide-react-native'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Alert, Image, Text, View } from 'react-native'
 
-import { useCreateMeal, useUploadMealImage } from '@features/journal/hooks/useJournal'
+import {
+  useCreateMeal,
+  useMealEntries,
+  useUpdateMeal,
+  useUploadMealImage,
+} from '@features/journal/hooks/useJournal'
 import { mealFormSchema, type MealFormInput } from '@features/journal/schemas/journal.schema'
 import { Button } from '@shared/components/Button'
 import { Input } from '@shared/components/Input'
 import { Pressable } from '@shared/components/Pressable'
-import { JournalLayout } from '@shared/components/ScreenHeader'
-import { getTodayUTC } from '@shared/utils/date'
+import { ScreenHeader } from '@shared/components/ScreenHeader'
+import { ENV } from '@shared/config/env'
+import { getTodayUTC, toISODateString } from '@shared/utils/date'
 import { colors } from '@theme/colors'
 
 const MEAL_TYPES = [
@@ -34,21 +40,67 @@ const MEAL_TYPES = [
   { id: 'snack', icon: Cookie },
 ] as const
 
+/**
+ * Build full image URL from relative path
+ */
+function getImageUrl(path: string | null): string | null {
+  if (!path) return null
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path
+  }
+  return `${ENV.API_URL}${path}`
+}
+
 export default function NutritionScreen() {
   const { t } = useTranslation()
   const router = useRouter()
+  const params = useLocalSearchParams<{ id?: string; date?: string }>()
   const uploadImage = useUploadMealImage()
   const createMeal = useCreateMeal()
-  const [imageUri, setImageUri] = useState<string | null>(null)
+  const updateMeal = useUpdateMeal()
+
+  // If editing, fetch existing entry
+  const dateToUse = params.date || getTodayUTC()
+  const { data: mealEntries } = useMealEntries(dateToUse)
+  const existingEntry = mealEntries?.find((e) => e.id === Number(params.id))
+  const isEditMode = !!params.id
+
+  // Track if user has changed the image from the original
+  const [localImageUri, setLocalImageUri] = useState<string | null>(null)
+  const [imageWasModified, setImageWasModified] = useState(false)
+
+  // Compute effective image URI: use local if modified, else use existing entry's image
+  const imageUri = imageWasModified
+    ? localImageUri
+    : existingEntry?.photo_url
+      ? getImageUrl(existingEntry.photo_url)
+      : null
+
+  const setImageUri = (uri: string | null) => {
+    setImageWasModified(true)
+    setLocalImageUri(uri)
+  }
 
   const {
     control,
     handleSubmit,
     formState: { errors, isValid },
+    reset,
   } = useForm<MealFormInput>({
     resolver: zodResolver(mealFormSchema),
     mode: 'onChange',
   })
+
+  // Populate form when editing
+  useEffect(() => {
+    if (existingEntry) {
+      reset({
+        food_name: existingEntry.food_name || '',
+        note: existingEntry.note || '',
+        meal_type: existingEntry.meal_type || undefined,
+      })
+    }
+  }, [existingEntry, reset])
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -94,35 +146,74 @@ export default function NutritionScreen() {
   }
 
   const onSubmit = async (data: MealFormInput) => {
-    if (!imageUri) return
-
     try {
-      // Upload image first (returns URL string)
-      const photoUrl = await uploadImage.mutateAsync(imageUri)
+      let photoUrl: string | null = existingEntry?.photo_url || null
 
-      // Create meal entry with uploaded image URL
+      // Only process image changes if user modified it
+      if (imageWasModified) {
+        if (localImageUri) {
+          // Upload new local image
+          photoUrl = await uploadImage.mutateAsync(localImageUri)
+        } else {
+          // Image was removed
+          photoUrl = null
+        }
+      }
+
       const dto = {
-        date: getTodayUTC(),
+        date: toISODateString(dateToUse),
         photo_url: photoUrl,
         food_name: data.food_name,
         note: data.note || null,
         meal_type: data.meal_type || null,
       }
 
-      createMeal.mutate(dto, {
-        onSuccess: () => {
-          router.back()
-        },
-      })
+      if (isEditMode && existingEntry) {
+        // Update existing entry
+        updateMeal.mutate(
+          { id: existingEntry.id, dto, date: dateToUse },
+          {
+            onSuccess: () => {
+              router.back()
+            },
+          }
+        )
+      } else {
+        // Create new entry
+        createMeal.mutate(dto, {
+          onSuccess: () => {
+            router.back()
+          },
+        })
+      }
     } catch {
       // Error is already handled by uploadImage mutation
     }
   }
 
-  const isLoading = uploadImage.isPending || createMeal.isPending
+  const isLoading = uploadImage.isPending || createMeal.isPending || updateMeal.isPending
 
   return (
-    <JournalLayout title={t('journal.nutrition.screenTitle')}>
+    <ScreenHeader title={t('journal.nutrition.screenTitle')}>
+      {/* Food Name Input */}
+      <View>
+        <Controller
+          control={control}
+          name="food_name"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              label={t('journal.nutrition.foodName')}
+              value={value || ''}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              maxLength={200}
+              error={errors.food_name?.message ? t(errors.food_name.message as string) : undefined}
+              autoFocus
+            />
+          )}
+        />
+      </View>
+
       {/* Image Picker */}
       <View className="mb-6">
         <Text className="text-sm font-medium text-text mb-3">{t('journal.nutrition.addMeal')}</Text>
@@ -170,24 +261,6 @@ export default function NutritionScreen() {
         )}
       </View>
 
-      {/* Food Name Input */}
-      <View className="mb-6">
-        <Controller
-          control={control}
-          name="food_name"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              label={t('journal.nutrition.foodName')}
-              value={value || ''}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              maxLength={200}
-              error={errors.food_name?.message ? t(errors.food_name.message as string) : undefined}
-            />
-          )}
-        />
-      </View>
-
       {/* Meal Type Selector */}
       <View className="mb-6">
         <Text className="text-sm font-medium text-text mb-3">
@@ -207,9 +280,7 @@ export default function NutritionScreen() {
                     onPress={() => onChange(isSelected ? null : mealType.id)}
                     haptic="light"
                     className={`flex-1 items-center justify-center py-3 rounded-xl border ${
-                      isSelected
-                        ? 'bg-secondary border-secondary'
-                        : 'bg-surface border-border'
+                      isSelected ? 'bg-secondary border-secondary' : 'bg-surface border-border'
                     }`}
                     accessibilityLabel={t(`dashboard.summary.mealType.${mealType.id}`)}
                   >
@@ -256,9 +327,9 @@ export default function NutritionScreen() {
       <Button
         title={t('common.save')}
         onPress={handleSubmit(onSubmit)}
-        disabled={!imageUri || !isValid || isLoading}
+        disabled={!isValid || isLoading}
         loading={isLoading}
       />
-    </JournalLayout>
+    </ScreenHeader>
   )
 }

@@ -14,17 +14,26 @@
  */
 
 import { useRouter } from 'expo-router'
-import { Activity, ChevronDown, Frown, Meh, Moon, Plus, Smile, Utensils } from 'lucide-react-native'
+import {
+  Activity,
+  ChevronDown,
+  Frown,
+  Meh,
+  Moon,
+  Plus,
+  Smile,
+  Trash2,
+  Utensils,
+} from 'lucide-react-native'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Image, LayoutAnimation, Text, View } from 'react-native'
+import { Alert, Image, LayoutAnimation, Text, View } from 'react-native'
 
 import { getSportTypeLabel } from '@features/journal/utils/sportMapping'
 import { Pressable } from '@shared/components/Pressable'
 import { ENV } from '@shared/config/env'
 import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
 import { isPast } from '@shared/utils/date'
-import { logger } from '@shared/utils/logger'
 import { colors } from '@theme/colors'
 
 /**
@@ -46,6 +55,12 @@ interface DailySummaryProps {
   sportEntries: SportEntry[]
   isLoading: boolean
   date: string
+  onDeleteSleep?: (id: number) => void
+  onDeleteMeal?: (id: number) => void
+  onDeleteSport?: (id: number) => void
+  onEditSleep?: (entry: SleepEntry) => void
+  onEditMeal?: (entry: MealEntry) => void
+  onEditSport?: (entry: SportEntry) => void
 }
 
 export function DailySummary({
@@ -54,6 +69,12 @@ export function DailySummary({
   sportEntries,
   isLoading,
   date,
+  onDeleteSleep,
+  onDeleteMeal,
+  onDeleteSport,
+  onEditSleep,
+  onEditMeal,
+  onEditSport,
 }: DailySummaryProps) {
   const { t } = useTranslation()
   const router = useRouter()
@@ -63,6 +84,21 @@ export function DailySummary({
   // Only allow logging entries for today and future dates (not past)
   const canLogEntries = !isPast(date)
   const isPastDate = isPast(date)
+
+  const confirmDelete = (type: 'sleep' | 'meal' | 'sport', id: number) => {
+    Alert.alert(t('common.deleteConfirmTitle'), t('common.deleteConfirmMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('common.delete'),
+        style: 'destructive',
+        onPress: () => {
+          if (type === 'sleep') onDeleteSleep?.(id)
+          else if (type === 'meal') onDeleteMeal?.(id)
+          else if (type === 'sport') onDeleteSport?.(id)
+        },
+      },
+    ])
+  }
 
   const toggleCard = (card: 'sleep' | 'nutrition' | 'sport') => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
@@ -144,7 +180,11 @@ export function DailySummary({
         {expandedCard === 'sleep' && (
           <View className="px-4 pb-4 border-t border-border pt-4">
             {sleepEntry ? (
-              <View className="flex-row items-center gap-4">
+              <Pressable
+                onPress={() => onEditSleep?.(sleepEntry)}
+                haptic="light"
+                className="flex-row items-center gap-4"
+              >
                 <View className="items-center">
                   <SleepQualityIcon size={40} color={colors.primary} strokeWidth={2} />
                   <Text className="text-xs text-textMuted mt-1">
@@ -155,7 +195,15 @@ export function DailySummary({
                   <Text className="text-2xl font-bold text-text">{sleepEntry.hours}h</Text>
                   <Text className="text-sm text-textMuted">{t('journal.sleep.hours')}</Text>
                 </View>
-              </View>
+                <Pressable
+                  onPress={() => confirmDelete('sleep', sleepEntry.id)}
+                  haptic="light"
+                  className="p-2"
+                  accessibilityLabel={t('common.delete')}
+                >
+                  <Trash2 size={20} color={colors.error} />
+                </Pressable>
+              </Pressable>
             ) : canLogEntries ? (
               <Pressable
                 onPress={() => router.push('/journal/sleep')}
@@ -223,47 +271,52 @@ export function DailySummary({
               <View className="gap-3">
                 {mealEntries.map((meal) => {
                   const imageUrl = getImageUrl(meal.photo_url)
-                  logger.debug('[DailySummary] Meal entry:', {
-                    id: meal.id,
-                    photo_url: meal.photo_url,
-                    imageUrl,
-                    meal_type: meal.meal_type,
-                  })
                   return (
-                  <View key={meal.id} className="flex-row gap-3">
-                    {imageUrl ? (
-                      <Image
-                        source={{ uri: imageUrl }}
-                        className="w-16 h-16 rounded-lg bg-border"
-                        resizeMode="cover"
-                      />
-                    ) : (
-                      <View className="w-16 h-16 rounded-lg bg-secondary/20 items-center justify-center">
-                        <Utensils size={24} color={colors.secondary} />
+                    <Pressable
+                      key={meal.id}
+                      onPress={() => onEditMeal?.(meal)}
+                      haptic="light"
+                      className="flex-row gap-3"
+                    >
+                      {imageUrl ? (
+                        <Image
+                          source={{ uri: imageUrl }}
+                          className="w-16 h-16 rounded-lg bg-border"
+                          resizeMode="cover"
+                        />
+                      ) : (
+                        <View className="w-16 h-16 rounded-lg bg-secondary/20 items-center justify-center">
+                          <Utensils size={24} color={colors.secondary} />
+                        </View>
+                      )}
+                      <View className="flex-1 justify-center">
+                        {meal.food_name && (
+                          <Text className="text-sm font-medium text-text">{meal.food_name}</Text>
+                        )}
+                        {meal.meal_type ? (
+                          <Text className="text-xs text-primary">
+                            {t(`dashboard.summary.mealType.${meal.meal_type.toLowerCase()}`)}
+                          </Text>
+                        ) : !meal.food_name ? (
+                          <Text className="text-sm font-medium text-text">
+                            {t('journal.nutrition.meal')}
+                          </Text>
+                        ) : null}
+                        {meal.note && (
+                          <Text className="text-sm text-textMuted mt-1" numberOfLines={2}>
+                            {meal.note}
+                          </Text>
+                        )}
                       </View>
-                    )}
-                    <View className="flex-1 justify-center">
-                      {meal.food_name && (
-                        <Text className="text-sm font-medium text-text">
-                          {meal.food_name}
-                        </Text>
-                      )}
-                      {meal.meal_type ? (
-                        <Text className="text-xs text-primary">
-                          {t(`dashboard.summary.mealType.${meal.meal_type.toLowerCase()}`)}
-                        </Text>
-                      ) : !meal.food_name ? (
-                        <Text className="text-sm font-medium text-text">
-                          {t('journal.nutrition.meal')}
-                        </Text>
-                      ) : null}
-                      {meal.note && (
-                        <Text className="text-sm text-textMuted mt-1" numberOfLines={2}>
-                          {meal.note}
-                        </Text>
-                      )}
-                    </View>
-                  </View>
+                      <Pressable
+                        onPress={() => confirmDelete('meal', meal.id)}
+                        haptic="light"
+                        className="p-2 self-center"
+                        accessibilityLabel={t('common.delete')}
+                      >
+                        <Trash2 size={18} color={colors.error} />
+                      </Pressable>
+                    </Pressable>
                   )
                 })}
                 {/* Add More Button - Only show for today */}
@@ -347,7 +400,12 @@ export function DailySummary({
             {sportCount > 0 && Array.isArray(sportEntries) ? (
               <View className="gap-3">
                 {sportEntries.map((sport) => (
-                  <View key={sport.id} className="gap-2">
+                  <Pressable
+                    key={sport.id}
+                    onPress={() => onEditSport?.(sport)}
+                    haptic="light"
+                    className="gap-2"
+                  >
                     <View className="flex-row items-center justify-between">
                       <View className="flex-row items-center gap-3">
                         <View className="w-8 h-8 bg-primary/10 rounded-full items-center justify-center">
@@ -362,16 +420,26 @@ export function DailySummary({
                           </Text>
                         </View>
                       </View>
-                      <Text className="text-sm font-medium text-text">
-                        {sport.duration} {t('journal.sport.minutes')}
-                      </Text>
+                      <View className="flex-row items-center gap-2">
+                        <Text className="text-sm font-medium text-text">
+                          {sport.duration} {t('journal.sport.minutes')}
+                        </Text>
+                        <Pressable
+                          onPress={() => confirmDelete('sport', sport.id)}
+                          haptic="light"
+                          className="p-2"
+                          accessibilityLabel={t('common.delete')}
+                        >
+                          <Trash2 size={18} color={colors.error} />
+                        </Pressable>
+                      </View>
                     </View>
                     {sport.note && (
                       <Text className="text-xs text-textMuted italic pl-11">
                         &ldquo;{sport.note}&rdquo;
                       </Text>
                     )}
-                  </View>
+                  </Pressable>
                 ))}
                 {/* Add More Button - Only show for today */}
                 {canLogEntries && (

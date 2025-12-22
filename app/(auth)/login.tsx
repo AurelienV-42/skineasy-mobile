@@ -29,7 +29,6 @@ export default function LoginScreen() {
   const scrollViewRef = useRef<ScrollView>(null)
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false)
 
-
   const {
     control,
     handleSubmit,

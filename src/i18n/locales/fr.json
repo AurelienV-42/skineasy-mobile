@@ -14,7 +14,9 @@
     "done": "Terminé",
     "noConnection": "Pas de connexion internet",
     "sessionExpired": "Session expirée",
-    "sessionExpiredMessage": "Veuillez vous reconnecter"
+    "sessionExpiredMessage": "Veuillez vous reconnecter",
+    "deleteConfirmTitle": "Supprimer l'entrée",
+    "deleteConfirmMessage": "Es-tu sûr(e) de vouloir supprimer cette entrée ?"
   },
   "auth": {
     "login": "Connexion",
@@ -96,7 +98,7 @@
       "screenTitle": "Repas & Snacks",
       "meal": "Repas",
       "mealType": "Type de repas (optionnel)",
-      "addMeal": "Ajouter une photo de ton repas/snack",
+      "addMeal": "Ajouter une photo (optionnel)",
       "foodName": "Nom du repas",
       "foodNameRequired": "Le nom du repas est requis",
       "foodNameMaxLength": "Le nom du repas ne peut pas dépasser 200 caractères",

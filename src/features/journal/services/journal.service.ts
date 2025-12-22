@@ -5,22 +5,22 @@
  * Based on BACKEND_API.md specification
  */
 
-import { api } from '@shared/services/api'
 import { ENV } from '@shared/config/env'
+import { api } from '@shared/services/api'
+import type { ApiResponse } from '@shared/types/api.types'
 import type {
-  SleepEntry,
-  SportEntry,
-  MealEntry,
+  CreateMealEntryDto,
   CreateSleepEntryDto,
   CreateSportEntryDto,
-  CreateMealEntryDto,
-  SleepUpsertResponse,
   ImageUploadResponse,
+  MealEntry,
+  SleepEntry,
+  SleepUpsertResponse,
+  SportEntry,
   SportTypeInfo,
 } from '@shared/types/journal.types'
-import type { ApiResponse } from '@shared/types/api.types'
-import { logger } from '@shared/utils/logger'
 import { imageUriToFormData } from '@shared/utils/image'
+import { logger } from '@shared/utils/logger'
 
 /**
  * Sleep Entry Service
@@ -95,7 +95,7 @@ export const sportService = {
    */
   async update(id: number, dto: Partial<CreateSportEntryDto>): Promise<SportEntry> {
     logger.info('[Journal API] Updating sport entry:', { id, dto })
-    const response = await api.patch<ApiResponse<SportEntry>>(`/api/v1/journal/sport/${id}`, dto)
+    const response = await api.put<ApiResponse<SportEntry>>(`/api/v1/journal/sport/${id}`, dto)
     return response.data
   },
 
@@ -136,17 +136,14 @@ export const mealService = {
     const formData = imageUriToFormData(imageUri, 'image')
 
     // Use fetch directly for FormData upload
-    const response = await fetch(
-      `${ENV.API_URL}/api/v1/journal/meal/upload`,
-      {
-        method: 'POST',
-        body: formData,
-        headers: {
-          // Don't set Content-Type - let browser set it with boundary
-          Authorization: `Bearer ${await import('@shared/utils/storage').then((m) => m.getToken())}`,
-        },
-      }
-    )
+    const response = await fetch(`${ENV.API_URL}/api/v1/journal/meal/upload`, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        // Don't set Content-Type - let browser set it with boundary
+        Authorization: `Bearer ${await import('@shared/utils/storage').then((m) => m.getToken())}`,
+      },
+    })
 
     if (!response.ok) {
       throw new Error(`Image upload failed: ${response.status}`)
@@ -174,7 +171,7 @@ export const mealService = {
    */
   async update(id: number, dto: Partial<CreateMealEntryDto>): Promise<MealEntry> {
     logger.info('[Journal API] Updating meal entry:', { id, dto })
-    const response = await api.patch<ApiResponse<MealEntry>>(`/api/v1/journal/meal/${id}`, dto)
+    const response = await api.put<ApiResponse<MealEntry>>(`/api/v1/journal/meal/${id}`, dto)
     return response.data
   },
 

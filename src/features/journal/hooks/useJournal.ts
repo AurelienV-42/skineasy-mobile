@@ -7,6 +7,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { journalService } from '@features/journal/services/journal.service'
 import { queryKeys } from '@shared/config/queryKeys'
+import { fromISOToDateString } from '@shared/utils/date'
 import { logger } from '@shared/utils/logger'
 import { haptic } from '@shared/utils/haptic'
 import Toast from 'react-native-toast-message'
@@ -44,9 +45,10 @@ export function useUpsertSleep() {
     onSuccess: (data, variables) => {
       logger.info('[useUpsertSleep] Success:', data)
 
-      // Invalidate queries for the affected date
-      queryClient.invalidateQueries({ queryKey: queryKeys.journalSleep(variables.date) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(variables.date) })
+      // Invalidate queries for the affected date (extract YYYY-MM-DD from ISO date)
+      const dateKey = fromISOToDateString(variables.date)
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalSleep(dateKey) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(dateKey) })
 
       // Show success feedback
       haptic.success()
@@ -168,6 +170,42 @@ export function useCreateSport() {
     onSuccess: (data, variables) => {
       logger.info('[useCreateSport] Success:', data)
 
+      // Invalidate queries for the affected date (extract YYYY-MM-DD from ISO date)
+      const dateKey = fromISOToDateString(variables.date)
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalSport(dateKey) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(dateKey) })
+
+      haptic.success()
+      Toast.show({
+        type: 'success',
+        text1: t('journal.sport.saveSuccess'),
+      })
+    },
+    onError: (error) => {
+      logger.error('[useCreateSport] Error:', error)
+      haptic.error()
+      Toast.show({
+        type: 'error',
+        text1: t('common.error'),
+        text2: t('journal.sport.saveError'),
+      })
+    },
+  })
+}
+
+/**
+ * Update sport entry
+ */
+export function useUpdateSport() {
+  const queryClient = useQueryClient()
+  const { t } = useTranslation()
+
+  return useMutation({
+    mutationFn: ({ id, dto }: { id: number; dto: Partial<CreateSportEntryDto>; date: string }) =>
+      journalService.sport.update(id, dto),
+    onSuccess: (data, variables) => {
+      logger.info('[useUpdateSport] Success:', data)
+
       // Invalidate queries for the affected date
       queryClient.invalidateQueries({ queryKey: queryKeys.journalSport(variables.date) })
       queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(variables.date) })
@@ -179,7 +217,7 @@ export function useCreateSport() {
       })
     },
     onError: (error) => {
-      logger.error('[useCreateSport] Error:', error)
+      logger.error('[useUpdateSport] Error:', error)
       haptic.error()
       Toast.show({
         type: 'error',
@@ -271,6 +309,42 @@ export function useCreateMeal() {
     onSuccess: (data, variables) => {
       logger.info('[useCreateMeal] Success:', data)
 
+      // Invalidate queries for the affected date (extract YYYY-MM-DD from ISO date)
+      const dateKey = fromISOToDateString(variables.date)
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalMeal(dateKey) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(dateKey) })
+
+      haptic.success()
+      Toast.show({
+        type: 'success',
+        text1: t('journal.nutrition.saveSuccess'),
+      })
+    },
+    onError: (error) => {
+      logger.error('[useCreateMeal] Error:', error)
+      haptic.error()
+      Toast.show({
+        type: 'error',
+        text1: t('common.error'),
+        text2: t('journal.nutrition.saveError'),
+      })
+    },
+  })
+}
+
+/**
+ * Update meal entry
+ */
+export function useUpdateMeal() {
+  const queryClient = useQueryClient()
+  const { t } = useTranslation()
+
+  return useMutation({
+    mutationFn: ({ id, dto }: { id: number; dto: Partial<CreateMealEntryDto>; date: string }) =>
+      journalService.meal.update(id, dto),
+    onSuccess: (data, variables) => {
+      logger.info('[useUpdateMeal] Success:', data)
+
       // Invalidate queries for the affected date
       queryClient.invalidateQueries({ queryKey: queryKeys.journalMeal(variables.date) })
       queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(variables.date) })
@@ -282,7 +356,7 @@ export function useCreateMeal() {
       })
     },
     onError: (error) => {
-      logger.error('[useCreateMeal] Error:', error)
+      logger.error('[useUpdateMeal] Error:', error)
       haptic.error()
       Toast.show({
         type: 'error',

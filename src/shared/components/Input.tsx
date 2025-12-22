@@ -115,6 +115,11 @@ export const Input = forwardRef<TextInput, InputProps>(
       outputRange: [16, 12],
     })
 
+    const labelLineHeight = labelAnimation.interpolate({
+      inputRange: [0, 1],
+      outputRange: [24, 16],
+    })
+
     const labelColor = isFocused ? colors.primary : error ? colors.error : colors.textMuted
 
     return (
@@ -148,6 +153,7 @@ export const Input = forwardRef<TextInput, InputProps>(
               <Animated.Text
                 style={{
                   fontSize: labelFontSize,
+                  lineHeight: labelLineHeight,
                   color: labelColor,
                   fontWeight: '500',
                 }}

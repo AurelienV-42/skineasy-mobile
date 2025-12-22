@@ -1,8 +1,8 @@
-import { View, Text } from 'react-native'
+import { Moon, Sun } from 'lucide-react-native'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Sun, Moon } from 'lucide-react-native'
 
 import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
@@ -57,7 +57,6 @@ export default function RoutineScreen() {
           <Text className="text-base font-medium text-text">
             {t('routine.step', { number: 1 })}: {t('routine.cleanse')}
           </Text>
-          <Text className="text-sm text-text-muted mt-2">{t('routine.productPlaceholder')}</Text>
         </View>
       </View>
     </SafeAreaView>

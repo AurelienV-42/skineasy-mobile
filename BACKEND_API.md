@@ -325,7 +325,7 @@ Authorization: Bearer <access_token>
 
 Update the authenticated user's profile.
 
-**Endpoint:** `PATCH /api/v1/user/profile`
+**Endpoint:** `PUT /api/v1/user/profile`
 
 **Request Headers:**
 
