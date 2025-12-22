@@ -16,8 +16,10 @@ export function useUpdateProfile() {
 
   return useMutation({
     mutationFn: async (data: EditProfileInput) => {
-      logger.info('[useUpdateProfile] Updating profile with:', data)
-      const response = await profileService.updateProfile(data)
+      // Remove email from the request (not editable via API)
+      const { email: _, ...updateData } = data
+      logger.info('[useUpdateProfile] Updating profile with:', updateData)
+      const response = await profileService.updateProfile(updateData)
       logger.info('[useUpdateProfile] Profile updated:', response.data)
       return response.data
     },
