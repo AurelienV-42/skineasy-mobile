@@ -23,12 +23,12 @@ export default function TabsLayout() {
         tabBarStyle: {
           backgroundColor: colors.surface,
           borderTopColor: colors.border,
-          paddingTop: 2
+          paddingTop: 2,
         },
         tabBarLabelStyle: {
           fontFamily: 'Roboto_500Medium',
           fontSize: 12,
-          paddingTop: 4
+          paddingTop: 4,
         },
       }}
     >

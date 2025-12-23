@@ -22,29 +22,16 @@ interface Step2AboutYouProps {
   isValid: boolean
 }
 
-export function Step2AboutYou({
-  onNext,
-  onBack,
-  control,
-  errors,
-  isValid,
-}: Step2AboutYouProps) {
+export function Step2AboutYou({ onNext, onBack, control, errors, isValid }: Step2AboutYouProps) {
   const { t } = useTranslation()
 
   return (
-    <KeyboardScrollView
-      contentContainerStyle={{ flexGrow: 1 }}
-      bottomOffset={100}
-    >
+    <KeyboardScrollView contentContainerStyle={{ flexGrow: 1 }} bottomOffset={100}>
       <View className="flex-1 px-6">
         {/* Step Title */}
         <View className="mb-8">
-          <Text className="text-2xl font-bold text-text mb-2">
-            {t('onboarding.step2.title')}
-          </Text>
-          <Text className="text-base text-textMuted">
-            {t('onboarding.step2.description')}
-          </Text>
+          <Text className="text-2xl font-bold text-text mb-2">{t('onboarding.step2.title')}</Text>
+          <Text className="text-base text-textMuted">{t('onboarding.step2.description')}</Text>
         </View>
 
         {/* Form Fields */}
@@ -71,9 +58,7 @@ export function Step2AboutYou({
             name="id_gender"
             render={({ field: { onChange, value } }) => (
               <View className="mb-6">
-                <Text className="text-sm font-medium text-textMuted mb-3">
-                  {t('auth.gender')}
-                </Text>
+                <Text className="text-sm font-medium text-textMuted mb-3">{t('auth.gender')}</Text>
                 <View className="flex-row gap-3">
                   {GENDER_OPTIONS.map(({ value: optionValue, labelKey }) => (
                     <Pressable
@@ -88,9 +73,7 @@ export function Step2AboutYou({
                     >
                       <Text
                         className={`text-sm ${
-                          value === optionValue
-                            ? 'text-primary font-medium'
-                            : 'text-textMuted'
+                          value === optionValue ? 'text-primary font-medium' : 'text-textMuted'
                         }`}
                       >
                         {t(labelKey)}
@@ -99,15 +82,11 @@ export function Step2AboutYou({
                   ))}
                 </View>
                 {errors.id_gender && (
-                  <Text className="text-xs text-error mt-1 ml-1">
-                    {t('auth.genderRequired')}
-                  </Text>
+                  <Text className="text-xs text-error mt-1 ml-1">{t('auth.genderRequired')}</Text>
                 )}
               </View>
             )}
           />
-
-          
         </View>
 
         {/* Navigation Buttons */}
@@ -118,12 +97,7 @@ export function Step2AboutYou({
             disabled={!isValid}
             haptic="medium"
           />
-          <Button
-            title={t('onboarding.back')}
-            variant="outline"
-            onPress={onBack}
-            haptic="light"
-          />
+          <Button title={t('onboarding.back')} variant="outline" onPress={onBack} haptic="light" />
         </View>
       </View>
     </KeyboardScrollView>

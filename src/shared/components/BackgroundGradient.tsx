@@ -1,7 +1,7 @@
 import { colors } from '@/theme/colors'
 import { LinearGradient } from 'expo-linear-gradient'
 import { StyleSheet } from 'react-native'
-  
+
 interface BackgroundGradientProps {
   children: React.ReactNode
 }

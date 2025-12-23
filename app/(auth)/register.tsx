@@ -90,8 +90,7 @@ export default function RegisterScreen() {
     register(data)
   }
 
-  const isStep1Valid =
-    getValues('firstname')?.length >= 2 && getValues('lastname')?.length >= 2
+  const isStep1Valid = getValues('firstname')?.length >= 2 && getValues('lastname')?.length >= 2
 
   const isStep2Valid = getValues('id_gender') >= 1 && getValues('id_gender') <= 3
 
@@ -111,8 +110,7 @@ export default function RegisterScreen() {
               key={index}
               className="flex-1 h-1 rounded-full"
               style={{
-                backgroundColor:
-                  index < currentStep ? colors.primary : colors.border,
+                backgroundColor: index < currentStep ? colors.primary : colors.border,
               }}
             />
           ))}
@@ -172,7 +170,6 @@ export default function RegisterScreen() {
           </Animated.View>
         )}
       </View>
-
     </SafeAreaView>
   )
 }

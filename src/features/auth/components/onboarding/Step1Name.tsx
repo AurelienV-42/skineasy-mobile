@@ -22,19 +22,12 @@ export function Step1Name({ onNext, control, errors, isValid }: Step1NameProps) 
   const lastnameRef = useRef<TextInput>(null)
 
   return (
-    <KeyboardScrollView
-      contentContainerStyle={{ flexGrow: 1 }}
-      bottomOffset={100}
-    >
+    <KeyboardScrollView contentContainerStyle={{ flexGrow: 1 }} bottomOffset={100}>
       <View className="flex-1 px-6">
         {/* Step Title */}
         <View className="mb-8">
-          <Text className="text-2xl font-bold text-text mb-2">
-            {t('onboarding.step1.title')}
-          </Text>
-          <Text className="text-base text-textMuted">
-            {t('onboarding.step1.description')}
-          </Text>
+          <Text className="text-2xl font-bold text-text mb-2">{t('onboarding.step1.title')}</Text>
+          <Text className="text-base text-textMuted">{t('onboarding.step1.description')}</Text>
         </View>
 
         {/* Form Fields */}
@@ -54,9 +47,7 @@ export function Step1Name({ onNext, control, errors, isValid }: Step1NameProps) 
                 onChangeText={onChange}
                 value={value}
                 error={
-                  errors.firstname
-                    ? t(errors.firstname.message as string, { min: 2 })
-                    : undefined
+                  errors.firstname ? t(errors.firstname.message as string, { min: 2 }) : undefined
                 }
               />
             )}
@@ -77,9 +68,7 @@ export function Step1Name({ onNext, control, errors, isValid }: Step1NameProps) 
                 onChangeText={onChange}
                 value={value}
                 error={
-                  errors.lastname
-                    ? t(errors.lastname.message as string, { min: 2 })
-                    : undefined
+                  errors.lastname ? t(errors.lastname.message as string, { min: 2 }) : undefined
                 }
               />
             )}

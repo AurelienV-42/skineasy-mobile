@@ -30,19 +30,12 @@ export function Step3Credentials({
   const confirmPasswordRef = useRef<TextInput>(null)
 
   return (
-    <KeyboardScrollView
-      contentContainerStyle={{ flexGrow: 1 }}
-      bottomOffset={100}
-    >
+    <KeyboardScrollView contentContainerStyle={{ flexGrow: 1 }} bottomOffset={100}>
       <View className="flex-1 px-6">
         {/* Step Title */}
         <View className="mb-8">
-          <Text className="text-2xl font-bold text-text mb-2">
-            {t('onboarding.step3.title')}
-          </Text>
-          <Text className="text-base text-textMuted">
-            {t('onboarding.step3.description')}
-          </Text>
+          <Text className="text-2xl font-bold text-text mb-2">{t('onboarding.step3.title')}</Text>
+          <Text className="text-base text-textMuted">{t('onboarding.step3.description')}</Text>
         </View>
 
         {/* Form Fields */}
@@ -62,9 +55,7 @@ export function Step3Credentials({
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                error={
-                  errors.email ? t(errors.email.message as string) : undefined
-                }
+                error={errors.email ? t(errors.email.message as string) : undefined}
               />
             )}
           />
@@ -86,9 +77,7 @@ export function Step3Credentials({
                 onChangeText={onChange}
                 value={value}
                 error={
-                  errors.password
-                    ? t(errors.password.message as string, { min: 6 })
-                    : undefined
+                  errors.password ? t(errors.password.message as string, { min: 6 }) : undefined
                 }
               />
             )}
