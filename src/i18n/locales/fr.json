@@ -33,6 +33,7 @@
     "register": "Créer un compte",
     "email": "Adresse email",
     "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
     "firstname": "Prénom",
     "lastname": "Nom",
     "gender": "Genre",
@@ -49,6 +50,23 @@
     "welcomeBack": "Bon retour",
     "signInToContinue": "Connecte-toi pour continuer ton parcours",
     "createAccountSubtitle": "Rejoins-nous pour ton parcours beauté"
+  },
+  "onboarding": {
+    "step1": {
+      "title": "Comment t'appelles-tu ?",
+      "description": "Faisons connaissance"
+    },
+    "step2": {
+      "title": "À propos de toi",
+      "description": "Aide-nous à personnaliser ton expérience"
+    },
+    "step3": {
+      "title": "Crée ton compte",
+      "description": "Sécurise ton parcours beauté"
+    },
+    "next": "Suivant",
+    "back": "Retour",
+    "createAccount": "Créer mon compte"
   },
   "dashboard": {
     "greeting": "Bonjour {{name}}",
@@ -214,6 +232,7 @@
     "required": "Ce champ est requis",
     "invalidEmail": "Adresse email invalide",
     "passwordMin": "Le mot de passe doit contenir au moins {{min}} caractères",
+    "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
     "firstnameMin": "Le prénom doit contenir au moins {{min}} caractères",
     "lastnameMin": "Le nom doit contenir au moins {{min}} caractères"
   }

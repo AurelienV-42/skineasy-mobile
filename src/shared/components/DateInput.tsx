@@ -6,7 +6,7 @@ import { useScrollContext } from '@shared/components/ScreenHeader'
 import { haptic } from '@shared/utils/haptic'
 import { colors } from '@theme/colors'
 
-interface DateInputProps extends Omit<TextInputProps, 'value' | 'onChangeText'> {
+interface DateInputProps extends Omit<TextInputProps, 'value' | 'onChangeText' | 'placeholder'> {
   label?: string
   error?: string
   /**

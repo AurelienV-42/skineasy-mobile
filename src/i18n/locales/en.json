@@ -33,6 +33,7 @@
     "register": "Create Account",
     "email": "Email address",
     "password": "Password",
+    "confirmPassword": "Confirm Password",
     "firstname": "First Name",
     "lastname": "Last Name",
     "gender": "Gender",
@@ -49,6 +50,23 @@
     "welcomeBack": "Welcome back",
     "signInToContinue": "Sign in to continue your journey",
     "createAccountSubtitle": "Join us for your skincare journey"
+  },
+  "onboarding": {
+    "step1": {
+      "title": "What's your name?",
+      "description": "Let's get to know you"
+    },
+    "step2": {
+      "title": "About you",
+      "description": "Help us personalize your experience"
+    },
+    "step3": {
+      "title": "Create your account",
+      "description": "Secure your skincare journey"
+    },
+    "next": "Next",
+    "back": "Back",
+    "createAccount": "Create Account"
   },
   "dashboard": {
     "greeting": "Hello {{name}}",
@@ -214,6 +232,7 @@
     "required": "This field is required",
     "invalidEmail": "Invalid email address",
     "passwordMin": "Password must be at least {{min}} characters",
+    "passwordsDoNotMatch": "Passwords do not match",
     "firstnameMin": "First name must be at least {{min}} characters",
     "lastnameMin": "Last name must be at least {{min}} characters"
   }

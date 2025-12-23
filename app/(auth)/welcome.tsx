@@ -1,20 +1,16 @@
-import { LinearGradient } from 'expo-linear-gradient'
 import { Link } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { Image, Linking, StyleSheet, Text, View } from 'react-native'
+import { Image, Linking, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { BackgroundGradient } from '@shared/components/BackgroundGradient'
 import { Button } from '@shared/components/Button'
 
 export default function WelcomeScreen() {
   const { t } = useTranslation()
 
   return (
-    <LinearGradient
-      colors={['#FFF9F5', '#FFEEE5', '#FFF9F5']}
-      locations={[0, 0.5, 1]}
-      style={styles.gradient}
-    >
+    <BackgroundGradient>
       <SafeAreaView className="flex-1 px-8">
         <View className="flex-1 justify-between">
           {/* Top Section - Logo & Tagline */}
@@ -68,12 +64,6 @@ export default function WelcomeScreen() {
           </View>
         </View>
       </SafeAreaView>
-    </LinearGradient>
+    </BackgroundGradient>
   )
 }
-
-const styles = StyleSheet.create({
-  gradient: {
-    flex: 1,
-  },
-})

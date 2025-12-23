@@ -7,7 +7,7 @@ import { useScrollContext } from '@shared/components/ScreenHeader'
 import { haptic } from '@shared/utils/haptic'
 import { colors } from '@theme/colors'
 
-interface InputProps extends TextInputProps {
+interface InputProps extends Omit<TextInputProps, 'placeholder'> {
   label?: string
   error?: string
   /**
@@ -186,6 +186,7 @@ export const Input = forwardRef<TextInput, InputProps>(
             secureTextEntry={secureTextEntry && !isPasswordVisible}
             value={value}
             {...props}
+            placeholder={undefined}
           />
 
           {/* Password Toggle */}
