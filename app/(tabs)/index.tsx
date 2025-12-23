@@ -1,7 +1,8 @@
 import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, Text, View } from 'react-native'
+import { ScrollView, Text } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { DailySummary } from '@features/dashboard/components/DailySummary'
@@ -15,6 +16,7 @@ import {
   useSportEntries,
 } from '@features/journal/hooks/useJournal'
 import { QuizBanner } from '@shared/components/QuizBanner'
+import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
 import { useUserStore } from '@shared/stores/user.store'
 import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
 import { toUTCDateString } from '@shared/utils/date'
@@ -24,6 +26,7 @@ export default function DashboardScreen() {
   const { t } = useTranslation()
   const router = useRouter()
   const user = useUserStore((state) => state.user)
+  const animStyles = useEntranceAnimation(4)
 
   // Selected date state
   const [selectedDate, setSelectedDate] = useState(new Date())
@@ -78,17 +81,20 @@ export default function DashboardScreen() {
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Greeting */}
-        <View className="px-4 pt-4 pb-2">
+        <Animated.View style={animStyles[0]} className="px-4 pt-4 pb-2">
           <Text className="text-2xl font-bold text-text mb-1">
             {t('dashboard.greeting', { name: user?.firstname || 'User' })}
           </Text>
           <Text className="text-sm text-textMuted">{t('dashboard.reminder')}</Text>
-        </View>
+        </Animated.View>
 
         {/* Date Navigation */}
-        <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
+        <Animated.View style={animStyles[1]}>
+          <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
+        </Animated.View>
+
         {/* Daily Summary - Expandable Cards */}
-        <View className="pt-2">
+        <Animated.View style={animStyles[2]} className="pt-2">
           <Text className="text-lg font-semibold text-text mb-4 px-4">
             {t('dashboard.summary.title')}
           </Text>
@@ -106,12 +112,12 @@ export default function DashboardScreen() {
             onEditMeal={handleEditMeal}
             onEditSport={handleEditSport}
           />
-        </View>
+        </Animated.View>
 
         {/* Quiz Banner */}
-        <View className="px-4 py-4">
+        <Animated.View style={animStyles[3]} className="px-4 py-4">
           <QuizBanner onPress={handleQuizPress} />
-        </View>
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   )

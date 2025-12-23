@@ -12,11 +12,13 @@ import {
 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { Alert, Linking, Text, View } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import * as Sentry from '@sentry/react-native'
 import { useDeleteAccount } from '@features/profile/hooks/useDeleteAccount'
 import { Pressable } from '@shared/components/Pressable'
+import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
 import { useAuthStore } from '@shared/stores/auth.store'
 import { useUserStore } from '@shared/stores/user.store'
 import { colors } from '@theme/colors'
@@ -28,6 +30,7 @@ export default function ProfileScreen() {
   const clearUser = useUserStore((state) => state.clearUser)
   const clearAuth = useAuthStore((state) => state.clearAuth)
   const { mutate: deleteAccount, isPending: isDeleting } = useDeleteAccount()
+  const animStyles = useEntranceAnimation(5)
 
   const currentLanguage =
     i18n.language === 'fr' ? t('profile.languageFrench') : t('profile.languageEnglish')
@@ -107,11 +110,13 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1 pt-4">
-        <Text className="text-2xl font-bold text-text mb-6 px-4">{t('profile.title')}</Text>
+        <Animated.Text style={animStyles[0]} className="text-2xl font-bold text-text mb-6 px-4">
+          {t('profile.title')}
+        </Animated.Text>
 
         {/* User Info */}
         {!!user && (
-          <View className="px-4 mb-8">
+          <Animated.View style={animStyles[1]} className="px-4 mb-8">
             <Text className="text-lg font-medium text-text">
               {user?.firstname} {user?.lastname}
             </Text>
@@ -121,11 +126,11 @@ export default function ProfileScreen() {
                 {t('profile.skinType')}: {user.skinType}
               </Text>
             )}
-          </View>
+          </Animated.View>
         )}
 
         {/* Menu Items */}
-        <View className="bg-surface mb-4">
+        <Animated.View style={animStyles[2]} className="bg-surface mb-4">
           <Pressable
             onPress={() => router.push('/profile/edit')}
             haptic="medium"
@@ -152,10 +157,10 @@ export default function ProfileScreen() {
               <ChevronRight size={20} color={colors.textMuted} />
             </View>
           </Pressable>
-        </View>
+        </Animated.View>
 
         {/* Legal Section */}
-        <View className="bg-surface mb-4">
+        <Animated.View style={animStyles[3]} className="bg-surface mb-4">
           <Pressable
             onPress={() => openUrl(t('profile.termsOfSaleUrl'))}
             haptic="medium"
@@ -191,10 +196,10 @@ export default function ProfileScreen() {
             </View>
             <ChevronRight size={20} color={colors.textMuted} />
           </Pressable>
-        </View>
+        </Animated.View>
 
         {/* Account Actions */}
-        <View className="bg-surface">
+        <Animated.View style={animStyles[4]} className="bg-surface">
           <Pressable
             onPress={handleLogout}
             haptic="heavy"
@@ -216,7 +221,7 @@ export default function ProfileScreen() {
               <Text className="text-base text-error">{t('profile.deleteAccount')}</Text>
             </View>
           </Pressable>
-        </View>
+        </Animated.View>
 
         {/* DEV Only - Sentry Test Button */}
         {__DEV__ && (

@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Image, Text, TextInput, View } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { useLogin } from '@features/auth/hooks/useLogin'
@@ -13,12 +14,14 @@ import { Button } from '@shared/components/Button'
 import { Input } from '@shared/components/Input'
 import { KeyboardScrollView } from '@shared/components/KeyboardScrollView'
 import { Pressable } from '@shared/components/Pressable'
+import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
 
 export default function LoginScreen() {
   const { t } = useTranslation()
   const { mutate: login, isPending } = useLogin()
   const passwordRef = useRef<TextInput>(null)
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false)
+  const animStyles = useEntranceAnimation(5)
 
   const {
     control,
@@ -45,22 +48,22 @@ export default function LoginScreen() {
           <View className="flex-1 px-8 justify-between" style={{ minHeight: '100%' }}>
             <View>
               {/* Logo Section - Minimal top */}
-              <View className="pt-8 pb-8 items-center">
+              <Animated.View style={animStyles[0]} className="pt-8 pb-8 items-center">
                 <Image
                   source={require('@assets/logo.png')}
                   className="w-40 h-40"
                   resizeMode="contain"
                 />
-              </View>
+              </Animated.View>
 
               {/* Welcome Text */}
-              <View className="mb-10">
+              <Animated.View style={animStyles[1]} className="mb-10">
                 <Text className="text-3xl font-bold text-text mb-2">{t('auth.welcomeBack')}</Text>
                 <Text className="text-base text-textMuted">{t('auth.signInToContinue')}</Text>
-              </View>
+              </Animated.View>
 
               {/* Form Section */}
-              <View>
+              <Animated.View style={animStyles[2]}>
                 <Controller
                   control={control}
                   name="email"
@@ -118,7 +121,9 @@ export default function LoginScreen() {
                     </Text>
                   </Pressable>
                 </Link>
+              </Animated.View>
 
+              <Animated.View style={animStyles[3]}>
                 <Button
                   title={t('auth.login')}
                   onPress={handleSubmit(onSubmit)}
@@ -141,11 +146,11 @@ export default function LoginScreen() {
                     }
                   />
                 )}
-              </View>
+              </Animated.View>
             </View>
 
             {/* Footer Section - Bottom */}
-            <View className="pb-10 items-center pt-4">
+            <Animated.View style={animStyles[4]} className="pb-10 items-center pt-4">
               <Link href="/(auth)/register" asChild>
                 <Pressable haptic="light">
                   <Text className="text-sm text-primary">
@@ -154,7 +159,7 @@ export default function LoginScreen() {
                   </Text>
                 </Pressable>
               </Link>
-            </View>
+            </Animated.View>
           </View>
         </KeyboardScrollView>
       </SafeAreaView>

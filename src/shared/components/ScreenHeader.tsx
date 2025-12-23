@@ -3,9 +3,11 @@ import { ChevronLeft } from 'lucide-react-native'
 import { createContext, ReactNode, useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Pressable } from '@shared/components/Pressable'
+import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
 import { colors } from '@theme/colors'
 
 interface ScreenHeaderProps {
@@ -29,6 +31,7 @@ export function ScreenHeader({ title, children }: ScreenHeaderProps) {
   const { t } = useTranslation()
   const router = useRouter()
   const scrollViewRef = useRef<ScrollView>(null)
+  const animStyles = useEntranceAnimation(2)
 
   const scrollToPosition = (y: number) => {
     scrollViewRef.current?.scrollTo({
@@ -40,7 +43,10 @@ export function ScreenHeader({ title, children }: ScreenHeaderProps) {
   return (
     <SafeAreaView className="flex-1 bg-background">
       {/* Custom Header */}
-      <View className="flex-row items-center justify-between px-4 pt-2 pb-4">
+      <Animated.View
+        style={animStyles[0]}
+        className="flex-row items-center justify-between px-4 pt-2 pb-4"
+      >
         <Pressable
           onPress={() => router.back()}
           accessibilityLabel={t('common.back')}
@@ -50,7 +56,7 @@ export function ScreenHeader({ title, children }: ScreenHeaderProps) {
         </Pressable>
         <Text className="text-3xl font-bold text-primary">{title}</Text>
         <View className="w-7" />
-      </View>
+      </Animated.View>
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -59,7 +65,9 @@ export function ScreenHeader({ title, children }: ScreenHeaderProps) {
       >
         <ScrollContext.Provider value={{ scrollToPosition }}>
           <ScrollView ref={scrollViewRef} className="flex-1" keyboardShouldPersistTaps="handled">
-            <View className="flex-1 px-4 pb-8 pt-4">{children}</View>
+            <Animated.View style={animStyles[1]} className="flex-1 px-4 pb-8 pt-4">
+              {children}
+            </Animated.View>
           </ScrollView>
         </ScrollContext.Provider>
       </KeyboardAvoidingView>

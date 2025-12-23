@@ -2,22 +2,27 @@ import { Moon, Sun } from 'lucide-react-native'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Pressable } from '@shared/components/Pressable'
+import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
 import { colors } from '@theme/colors'
 
 export default function RoutineScreen() {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState<'morning' | 'evening'>('morning')
+  const animStyles = useEntranceAnimation(3)
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1 px-4 pt-4">
-        <Text className="text-2xl font-bold text-text mb-6">{t('routine.title')}</Text>
+        <Animated.Text style={animStyles[0]} className="text-2xl font-bold text-text mb-6">
+          {t('routine.title')}
+        </Animated.Text>
 
         {/* Toggle */}
-        <View className="flex-row bg-surface rounded-md p-1 mb-6">
+        <Animated.View style={animStyles[1]} className="flex-row bg-surface rounded-md p-1 mb-6">
           <Pressable
             onPress={() => setActiveTab('morning')}
             haptic="medium"
@@ -50,14 +55,17 @@ export default function RoutineScreen() {
               {t('routine.evening')}
             </Text>
           </Pressable>
-        </View>
+        </Animated.View>
 
         {/* Placeholder - Products will be added in Phase 7 */}
-        <View className="bg-surface rounded-md p-4 border border-border">
+        <Animated.View
+          style={animStyles[2]}
+          className="bg-surface rounded-md p-4 border border-border"
+        >
           <Text className="text-base font-medium text-text">
             {t('routine.step', { number: 1 })}: {t('routine.cleanse')}
           </Text>
-        </View>
+        </Animated.View>
       </View>
     </SafeAreaView>
   )
