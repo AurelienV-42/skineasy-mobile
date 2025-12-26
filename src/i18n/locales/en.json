@@ -228,7 +228,11 @@
   "diagnosis": {
     "required": "Diagnosis Required",
     "requiredMessage": "Please complete the skin diagnosis to get your personalized routine.",
-    "start": "Start Diagnosis"
+    "start": "Start Diagnosis",
+    "exitConfirmTitle": "Exit Quiz?",
+    "exitConfirmMessage": "Your progress will be lost if you exit now. Are you sure?",
+    "exitConfirm": "Exit",
+    "completeSuccess": "Diagnosis completed!"
   },
   "validation": {
     "required": "This field is required",

@@ -228,7 +228,11 @@
   "diagnosis": {
     "required": "Diagnostic requis",
     "requiredMessage": "Complète le diagnostic de peau pour obtenir ta routine personnalisée.",
-    "start": "Commencer le diagnostic"
+    "start": "Commencer le diagnostic",
+    "exitConfirmTitle": "Quitter le quiz ?",
+    "exitConfirmMessage": "Ta progression sera perdue si tu quittes maintenant. Es-tu sûr(e) ?",
+    "exitConfirm": "Quitter",
+    "completeSuccess": "Diagnostic terminé !"
   },
   "validation": {
     "required": "Ce champ est requis",

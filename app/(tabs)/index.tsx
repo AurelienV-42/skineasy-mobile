@@ -20,7 +20,6 @@ import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
 import { useUserStore } from '@shared/stores/user.store'
 import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
 import { toUTCDateString } from '@shared/utils/date'
-import { logger } from '@shared/utils/logger'
 
 export default function DashboardScreen() {
   const { t } = useTranslation()
@@ -47,8 +46,7 @@ export default function DashboardScreen() {
   const isLoading = sleepLoading || mealLoading || sportLoading
 
   const handleQuizPress = () => {
-    // TODO: Navigate to typeform webview
-    logger.info('Quiz banner pressed')
+    router.push('/diagnosis/quiz')
   }
 
   // Delete handlers
