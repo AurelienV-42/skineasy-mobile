@@ -23,6 +23,8 @@
     "next": "Next",
     "done": "Done",
     "noConnection": "No internet connection",
+    "offline": "No internet connection",
+    "backOnline": "Back online",
     "sessionExpired": "Session Expired",
     "sessionExpiredMessage": "Please log in again",
     "deleteConfirmTitle": "Delete Entry",

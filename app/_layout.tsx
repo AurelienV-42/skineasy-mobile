@@ -15,8 +15,10 @@ import Toast from 'react-native-toast-message'
 
 import { useInitializeUser } from '@features/auth/hooks/useInitializeUser'
 import * as Sentry from '@sentry/react-native'
+import { OfflineBanner } from '@shared/components/OfflineBanner'
 import { queryClient } from '@shared/config/queryClient'
 import { initSentry } from '@shared/config/sentry'
+import { useNetworkStatus } from '@shared/hooks/useNetworkStatus'
 import { useAuthStore } from '@shared/stores/auth.store'
 import { logger } from '@shared/utils/logger'
 import '../src/global.css'
@@ -33,6 +35,9 @@ function RootLayoutContent() {
   const loadToken = useAuthStore((state) => state.loadToken)
   const isAuthLoading = useAuthStore((state) => state.isLoading)
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+
+  // Initialize network status listener
+  useNetworkStatus()
 
   const [fontsLoaded] = useFonts({
     Roboto_400Regular,
@@ -76,6 +81,7 @@ function RootLayoutContent() {
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
       </Stack>
+      <OfflineBanner />
       <Toast topOffset={insets.top + 8} />
     </>
   )
