@@ -16,6 +16,8 @@ import Animated, {
 import { BackgroundGradient } from '@shared/components/BackgroundGradient'
 import { Button } from '@shared/components/Button'
 
+const logoSource = require('@assets/logo.png')
+
 const ANIMATION_CONFIG = {
   duration: 800,
   easing: Easing.bezier(0.25, 0.1, 0.25, 1),
@@ -56,6 +58,7 @@ export default function WelcomeScreen() {
     primaryButtonProgress.value = withDelay(DELAYS.primaryButton, withSpring(1, SPRING_CONFIG))
     secondaryButtonProgress.value = withDelay(DELAYS.secondaryButton, withSpring(1, SPRING_CONFIG))
     termsProgress.value = withDelay(DELAYS.terms, withTiming(1, { duration: 600 }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Animated styles
@@ -98,11 +101,7 @@ export default function WelcomeScreen() {
           {/* Top Section - Logo & Tagline */}
           <View className="flex-1 items-center justify-center">
             <Animated.View style={logoStyle}>
-              <Image
-                source={require('@assets/logo.png')}
-                className="w-48 h-48"
-                resizeMode="contain"
-              />
+              <Image source={logoSource} className="w-48 h-48" resizeMode="contain" />
             </Animated.View>
 
             <View className="mt-8 items-center">

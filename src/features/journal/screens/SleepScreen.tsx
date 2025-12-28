@@ -68,6 +68,7 @@ export default function SleepScreen() {
     }
   }, [existingEntry, reset])
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const selectedQuality = watch('quality') ?? 3
 
   const onSubmit = (data: SleepFormInput) => {

@@ -52,7 +52,8 @@ export const Input = forwardRef<TextInput, InputProps>(
     const [isPasswordVisible, setIsPasswordVisible] = useState(false)
     const [isFocused, setIsFocused] = useState(false)
 
-    // Floating label animation
+    // Floating label animation (RN Animated API pattern - accessing .current is valid here)
+    // eslint-disable-next-line react-hooks/refs
     const labelAnimation = useRef(new Animated.Value(value ? 1 : 0)).current
 
     // Sync label animation when value changes (e.g., when editing existing data)
@@ -115,7 +116,8 @@ export const Input = forwardRef<TextInput, InputProps>(
       setIsPasswordVisible(!isPasswordVisible)
     }
 
-    // Label position interpolation
+    // Label position interpolation (RN Animated API - refs are valid here)
+    /* eslint-disable react-hooks/refs */
     const labelTop = labelAnimation.interpolate({
       inputRange: [0, 1],
       outputRange: [13, -8],

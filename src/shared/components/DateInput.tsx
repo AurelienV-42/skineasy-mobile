@@ -51,7 +51,7 @@ function toApiFormat(displayDate: string): string {
 /**
  * Formats input as DD-MM-YYYY while typing
  */
-function formatAsUserTypes(input: string, previousValue: string): string {
+function formatAsUserTypes(input: string): string {
   // Remove any non-digit characters
   const digits = input.replace(/\D/g, '')
 
@@ -143,7 +143,7 @@ export const DateInput = forwardRef<TextInput, DateInputProps>(
     }
 
     const handleChangeText = (text: string) => {
-      const formatted = formatAsUserTypes(text, displayValue)
+      const formatted = formatAsUserTypes(text)
       setDisplayValue(formatted)
 
       // Only call onChangeText with API format when we have a complete date
@@ -157,7 +157,8 @@ export const DateInput = forwardRef<TextInput, DateInputProps>(
       }
     }
 
-    // Label position interpolation
+    // Label position interpolation (RN Animated API - refs are valid here)
+    /* eslint-disable react-hooks/refs */
     const labelTop = labelAnimation.interpolate({
       inputRange: [0, 1],
       outputRange: [13, -8],
@@ -172,6 +173,7 @@ export const DateInput = forwardRef<TextInput, DateInputProps>(
       inputRange: [0, 1],
       outputRange: [24, 16],
     })
+    /* eslint-enable react-hooks/refs */
 
     const labelColor = isFocused ? colors.primary : error ? colors.error : colors.textMuted
 

@@ -16,6 +16,8 @@ import { KeyboardScrollView } from '@shared/components/KeyboardScrollView'
 import { Pressable } from '@shared/components/Pressable'
 import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
 
+const logoSource = require('@assets/logo.png')
+
 export default function LoginScreen() {
   const { t } = useTranslation()
   const { mutate: login, isPending } = useLogin()
@@ -49,11 +51,7 @@ export default function LoginScreen() {
             <View>
               {/* Logo Section - Minimal top */}
               <Animated.View style={animStyles[0]} className="pt-8 pb-8 items-center">
-                <Image
-                  source={require('@assets/logo.png')}
-                  className="w-40 h-40"
-                  resizeMode="contain"
-                />
+                <Image source={logoSource} className="w-40 h-40" resizeMode="contain" />
               </Animated.View>
 
               {/* Welcome Text */}

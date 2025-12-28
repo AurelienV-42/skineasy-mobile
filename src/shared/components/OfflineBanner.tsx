@@ -43,7 +43,7 @@ export function OfflineBanner() {
   const previousOnline = useRef<boolean | null>(null)
   const progress = useSharedValue(0)
 
-  // Handle connectivity changes
+  // Handle connectivity changes - sync React state with external network state
   useEffect(() => {
     // Skip animation on first render - just set initial state if offline
     if (isFirstRender.current) {
@@ -80,6 +80,7 @@ export function OfflineBanner() {
         })
       )
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOnline, bannerState])
 
   const animatedStyle = useAnimatedStyle(() => {

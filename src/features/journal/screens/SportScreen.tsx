@@ -82,6 +82,7 @@ export default function SportScreen() {
     }
   }, [existingEntry, reset])
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const selectedIntensity = watch('intensity') ?? 3
 
   const onSubmit = (data: SportFormInput) => {

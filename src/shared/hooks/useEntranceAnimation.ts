@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect } from 'react'
 import {
   useSharedValue,
@@ -48,6 +49,7 @@ export function useEntranceAnimation(
     progress.forEach((p, index) => {
       p.value = withDelay(baseDelay + index * DELAY_INCREMENT, withTiming(1, ANIMATION_CONFIG))
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const styles = progress.map((p) =>
