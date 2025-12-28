@@ -31,6 +31,25 @@ export default function RoutineWebPage() {
     }
   }, [i18n])
 
+  // Send height to parent iframe for proper resizing
+  useEffect(() => {
+    if (Platform.OS !== 'web' || typeof window === 'undefined') return
+
+    const sendHeight = () => {
+      const height = document.documentElement.scrollHeight
+      window.parent.postMessage({ type: 'resize', height }, '*')
+    }
+
+    // Send on load
+    sendHeight()
+
+    // Re-send when content changes
+    const observer = new ResizeObserver(sendHeight)
+    observer.observe(document.body)
+
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <View className="flex-1 bg-white">
       <RoutineResultsContent rspid={rspid} />
