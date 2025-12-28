@@ -1,17 +1,17 @@
-import { useEffect } from 'react'
 import { Link } from 'expo-router'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, Linking, Text, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import Animated, {
-  useSharedValue,
+  Easing,
+  interpolate,
   useAnimatedStyle,
-  withTiming,
+  useSharedValue,
   withDelay,
   withSpring,
-  interpolate,
-  Easing,
+  withTiming,
 } from 'react-native-reanimated'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { BackgroundGradient } from '@shared/components/BackgroundGradient'
 import { Button } from '@shared/components/Button'
@@ -101,7 +101,11 @@ export default function WelcomeScreen() {
           {/* Top Section - Logo & Tagline */}
           <View className="flex-1 items-center justify-center">
             <Animated.View style={logoStyle}>
-              <Image source={logoSource} className="w-48 h-48" resizeMode="contain" />
+              <Image
+                source={logoSource}
+                style={{ width: 192, height: 192 }}
+                resizeMode="contain"
+              />
             </Animated.View>
 
             <View className="mt-8 items-center">
@@ -121,14 +125,14 @@ export default function WelcomeScreen() {
           </View>
 
           {/* Bottom Section - CTAs */}
-          <View className="pb-10">
+          <View className="pb-10 gap-4 px-4">
             <Animated.View style={primaryButtonStyle}>
               <Link href="/(auth)/register" asChild>
                 <Button title={t('welcome.getStarted')} haptic="heavy" />
               </Link>
             </Animated.View>
 
-            <Animated.View style={secondaryButtonStyle} className="mt-4">
+            <Animated.View style={secondaryButtonStyle}>
               <Link href="/(auth)/login" asChild>
                 <Button title={t('welcome.signIn')} variant="outline" haptic="medium" />
               </Link>
@@ -137,7 +141,7 @@ export default function WelcomeScreen() {
             {/* Terms & Privacy */}
             <Animated.Text
               style={termsStyle}
-              className="text-xs text-textMuted text-center mt-6 px-4"
+              className="text-xs text-textMuted text-center"
             >
               {t('welcome.termsNoticeStart')}
               <Text
