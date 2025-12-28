@@ -23,7 +23,7 @@ export default function RoutineWebPage() {
   const rspid = useMemo(() => getRspidFromUrl(), [])
 
   return (
-    <View className="flex-1 bg-background">
+    <View className="flex-1 bg-white">
       <RoutineResultsContent rspid={rspid} />
     </View>
   )
