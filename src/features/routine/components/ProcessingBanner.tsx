@@ -82,7 +82,6 @@ export function ProcessingBanner({ onPress }: ProcessingBannerProps) {
       haptic="medium"
     >
       <Animated.View
-        // eslint-disable-next-line react-hooks/refs
         style={{
           transform: [{ scale: Animated.multiply(pulseAnim, pressScale) }],
         }}

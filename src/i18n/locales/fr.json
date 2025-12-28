@@ -207,7 +207,9 @@
     "resultsTitle": "Ma Routine",
     "shopProduct": "Acheter",
     "loadError": "Impossible de charger ta routine. Réessaie.",
-    "noProducts": "Aucun produit disponible"
+    "noProducts": "Aucun produit disponible",
+    "noRspidTitle": "Routine introuvable",
+    "noRspidMessage": "Aucun identifiant de routine n'a été fourni. Accède à cette page depuis le lien de fin de quiz."
   },
   "profile": {
     "title": "Profil",

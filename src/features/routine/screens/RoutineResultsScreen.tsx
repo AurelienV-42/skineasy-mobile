@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from 'expo-router'
-import { Clock, ExternalLink, ShoppingCart } from 'lucide-react-native'
+import { AlertCircle, Clock, ExternalLink, ShoppingCart } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, Image, Linking, Text, View } from 'react-native'
+import { ActivityIndicator, Image, Linking, ScrollView, Text, View } from 'react-native'
 import Animated, { FadeInDown } from 'react-native-reanimated'
 
 import { useRoutineByRspid } from '@features/routine/hooks/useRoutineByRspid'
@@ -63,11 +63,27 @@ function ProductCard({ product, index }: { product: RoutineProduct; index: numbe
   )
 }
 
+function NoRspidState() {
+  const { t } = useTranslation()
+
+  return (
+    <View className="flex-1 items-center justify-center px-4 py-20">
+      <View className="bg-error/10 rounded-full p-6 mb-6">
+        <AlertCircle size={48} color={colors.error} />
+      </View>
+      <Text className="text-xl font-bold text-text text-center mb-2">
+        {t('routine.noRspidTitle')}
+      </Text>
+      <Text className="text-base text-textMuted text-center">{t('routine.noRspidMessage')}</Text>
+    </View>
+  )
+}
+
 function ProcessingState() {
   const { t } = useTranslation()
 
   return (
-    <View className="flex-1 items-center justify-center px-4">
+    <View className="flex-1 items-center justify-center px-4 py-20">
       <View className="bg-primary/10 rounded-full p-6 mb-6">
         <Clock size={48} color={colors.primary} />
       </View>
@@ -80,52 +96,58 @@ function ProcessingState() {
   )
 }
 
-export default function RoutineResultsScreen() {
-  const { t } = useTranslation()
-  const { rspid } = useLocalSearchParams<{ rspid: string }>()
+interface RoutineResultsContentProps {
+  rspid: string | null
+}
 
-  const { data, isLoading, isError } = useRoutineByRspid(rspid || null)
+/**
+ * Shared routine results content - used by both mobile screen and web page
+ */
+export function RoutineResultsContent({ rspid }: RoutineResultsContentProps) {
+  const { t } = useTranslation()
+  const { data, isLoading, isError } = useRoutineByRspid(rspid)
 
   const isProcessing = data?.status === 'processing'
   const products = data?.products || []
 
+  // No rspid provided
+  if (!rspid) {
+    return <NoRspidState />
+  }
+
   // Loading state
   if (isLoading) {
     return (
-      <ScreenHeader title={t('routine.resultsTitle')}>
-        <View className="flex-1 items-center justify-center py-20">
-          <ActivityIndicator size="large" color={colors.primary} />
-        </View>
-      </ScreenHeader>
+      <View className="flex-1 items-center justify-center py-20">
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
     )
   }
 
   // Error state
   if (isError) {
     return (
-      <ScreenHeader title={t('routine.resultsTitle')}>
-        <View className="flex-1 items-center justify-center py-20">
-          <Text className="text-lg font-semibold text-text text-center mb-2">
-            {t('common.error')}
-          </Text>
-          <Text className="text-base text-textMuted text-center">{t('routine.loadError')}</Text>
-        </View>
-      </ScreenHeader>
+      <View className="flex-1 items-center justify-center py-20">
+        <Text className="text-lg font-semibold text-text text-center mb-2">
+          {t('common.error')}
+        </Text>
+        <Text className="text-base text-textMuted text-center">{t('routine.loadError')}</Text>
+      </View>
     )
   }
 
   // Processing state
   if (isProcessing) {
-    return (
-      <ScreenHeader title={t('routine.resultsTitle')}>
-        <ProcessingState />
-      </ScreenHeader>
-    )
+    return <ProcessingState />
   }
 
   // Ready state with products
   return (
-    <ScreenHeader title={t('routine.resultsTitle')}>
+    <ScrollView
+      className="flex-1"
+      contentContainerClassName="p-4"
+      showsVerticalScrollIndicator={false}
+    >
       {/* Title */}
       <Animated.View entering={FadeInDown.springify()} className="mb-6">
         <Text className="text-2xl font-bold text-text mb-2">{t('routine.readyTitle')}</Text>
@@ -143,6 +165,17 @@ export default function RoutineResultsScreen() {
           <Text className="text-textMuted">{t('routine.noProducts')}</Text>
         </View>
       )}
+    </ScrollView>
+  )
+}
+
+export default function RoutineResultsScreen() {
+  const { t } = useTranslation()
+  const { rspid } = useLocalSearchParams<{ rspid: string }>()
+
+  return (
+    <ScreenHeader title={t('routine.resultsTitle')}>
+      <RoutineResultsContent rspid={rspid || null} />
     </ScreenHeader>
   )
 }

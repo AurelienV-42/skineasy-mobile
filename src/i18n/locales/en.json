@@ -207,7 +207,9 @@
     "resultsTitle": "My Routine",
     "shopProduct": "Shop",
     "loadError": "Failed to load your routine. Please try again.",
-    "noProducts": "No products available"
+    "noProducts": "No products available",
+    "noRspidTitle": "Routine Not Found",
+    "noRspidMessage": "No routine ID was provided. Please access this page from your quiz completion link."
   },
   "profile": {
     "title": "Profile",
