@@ -81,6 +81,7 @@ function RootLayoutContent() {
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="diagnosis" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="routine" />
       </Stack>
       <OfflineBanner />
       <Toast topOffset={insets.top + 8} />

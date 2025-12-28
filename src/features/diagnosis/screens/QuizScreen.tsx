@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, Alert, Platform, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Toast from 'react-native-toast-message'
 import { WebView, WebViewNavigation } from 'react-native-webview'
 
 import { Pressable } from '@shared/components/Pressable'
@@ -18,6 +17,8 @@ import { logger } from '@shared/utils/logger'
 import { colors } from '@theme/colors'
 
 const TYPEFORM_BASE_URL = 'https://form.typeform.com/to/XOEB81yk'
+// Typeform redirects here after completion - app intercepts this URL to extract rspid
+const TYPEFORM_REDIRECT_PATTERN = 'skineasy.com/app/quiz-complete'
 
 export default function QuizScreen() {
   const { t } = useTranslation()
@@ -25,6 +26,7 @@ export default function QuizScreen() {
   const queryClient = useQueryClient()
   const user = useUserStore((state) => state.user)
   const setHasDiagnosis = useUserStore((state) => state.setHasDiagnosis)
+  const setRspid = useUserStore((state) => state.setRspid)
   const animStyles = useEntranceAnimation(2)
 
   const webViewRef = useRef<WebView>(null)
@@ -33,47 +35,54 @@ export default function QuizScreen() {
   // Build Typeform URL with hidden fields
   const typeformUrl = `${TYPEFORM_BASE_URL}?email=${encodeURIComponent(user?.email || '')}&firstname=${encodeURIComponent(user?.firstname || '')}&lastname=${encodeURIComponent(user?.lastname || '')}`
 
-  // Handle completion
-  const handleCompletion = useCallback(() => {
-    if (isCompleted) return
-    setIsCompleted(true)
-    haptic.success()
+  // Handle completion with rspid
+  const handleCompletionWithRspid = useCallback(
+    (rspid: string) => {
+      if (isCompleted) return
+      setIsCompleted(true)
+      haptic.success()
 
-    // Invalidate diagnosis queries to refresh data
-    queryClient.invalidateQueries({ queryKey: queryKeys.diagnosis })
+      logger.info('[QuizScreen] Quiz completed with rspid:', rspid)
 
-    // Update user store
-    setHasDiagnosis(true)
+      // Invalidate diagnosis queries to refresh data
+      queryClient.invalidateQueries({ queryKey: queryKeys.diagnosis })
 
-    // Show success toast
-    Toast.show({
-      type: 'success',
-      text1: t('diagnosis.completeSuccess'),
-    })
+      // Update user store with rspid (also sets routineStatus to 'processing')
+      setRspid(rspid)
+      setHasDiagnosis(true)
 
-    // Navigate back after short delay
-    setTimeout(() => {
+      // Show processing popup
+      Alert.alert(t('routine.processingTitle'), t('routine.processingMessage'), [
+        { text: t('common.ok') },
+      ])
+
+      // Navigate back
       router.back()
-    }, 1500)
-  }, [isCompleted, queryClient, router, setHasDiagnosis, t])
+    },
+    [isCompleted, queryClient, router, setHasDiagnosis, setRspid, t]
+  )
 
-  // Detect form completion via URL changes (Typeform shows ending screen)
+  // Detect form completion via URL changes (redirect to our custom page)
   const handleNavigationStateChange = useCallback(
     (navState: WebViewNavigation) => {
       const { url } = navState
       logger.info('[QuizScreen] Navigation:', url)
 
-      // Typeform ending screens contain these patterns in the URL
-      if (
-        url.includes('/thankyou') ||
-        url.includes('/thanks') ||
-        url.includes('submitted=true') ||
-        url.includes('/complete')
-      ) {
-        handleCompletion()
+      // Detect Typeform redirect with rspid
+      if (url.includes(TYPEFORM_REDIRECT_PATTERN)) {
+        try {
+          const urlObj = new URL(url)
+          const rspid = urlObj.searchParams.get('rspid')
+
+          if (rspid) {
+            handleCompletionWithRspid(rspid)
+          }
+        } catch (error) {
+          logger.error('[QuizScreen] Failed to parse redirect URL:', error)
+        }
       }
     },
-    [handleCompletion]
+    [handleCompletionWithRspid]
   )
 
   // Handle close button press with confirmation

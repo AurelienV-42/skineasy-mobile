@@ -28,7 +28,8 @@
     "sessionExpired": "Session expirée",
     "sessionExpiredMessage": "Veuillez vous reconnecter",
     "deleteConfirmTitle": "Supprimer l'entrée",
-    "deleteConfirmMessage": "Es-tu sûr(e) de vouloir supprimer cette entrée ?"
+    "deleteConfirmMessage": "Es-tu sûr(e) de vouloir supprimer cette entrée ?",
+    "ok": "OK"
   },
   "auth": {
     "login": "Connexion",
@@ -195,7 +196,18 @@
     "shopRoutine": "Commander ma Routine",
     "whyThisProduct": "Pourquoi ce produit ?",
     "step": "Étape {{number}}",
-    "cleanse": "Nettoyage"
+    "cleanse": "Nettoyage",
+    "processing": "Préparation de ta routine...",
+    "processingSubtitle": "On te prévient dès qu'elle est prête",
+    "processingTitle": "On s'en occupe !",
+    "processingMessage": "Nous analysons tes réponses pour créer ta routine personnalisée. On te prévient dès qu'elle est prête !",
+    "readyTitle": "Ta routine est prête !",
+    "readySubtitle": "Voici tes recommandations de produits personnalisées",
+    "viewRoutine": "Voir ma routine",
+    "resultsTitle": "Ma Routine",
+    "shopProduct": "Acheter",
+    "loadError": "Impossible de charger ta routine. Réessaie.",
+    "noProducts": "Aucun produit disponible"
   },
   "profile": {
     "title": "Profil",

@@ -17,4 +17,5 @@ export const queryKeys = {
 
   // Routine
   routine: ['routine'] as const,
+  routineByRspid: (rspid: string) => [...queryKeys.routine, 'rspid', rspid] as const,
 } as const

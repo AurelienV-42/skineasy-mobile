@@ -15,7 +15,7 @@ import {
   useSleepEntries,
   useSportEntries,
 } from '@features/journal/hooks/useJournal'
-import { QuizBanner } from '@shared/components/QuizBanner'
+import { RoutineBannerContainer } from '@features/routine/components/RoutineBannerContainer'
 import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
 import { useUserStore } from '@shared/stores/user.store'
 import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
@@ -44,10 +44,6 @@ export default function DashboardScreen() {
   const deleteSport = useDeleteSport()
 
   const isLoading = sleepLoading || mealLoading || sportLoading
-
-  const handleQuizPress = () => {
-    router.push('/diagnosis/quiz')
-  }
 
   // Delete handlers
   const handleDeleteSleep = (id: number) => {
@@ -112,9 +108,9 @@ export default function DashboardScreen() {
           />
         </Animated.View>
 
-        {/* Quiz Banner */}
+        {/* Routine Banner */}
         <Animated.View style={animStyles[3]} className="px-4 py-4">
-          <QuizBanner onPress={handleQuizPress} />
+          <RoutineBannerContainer />
         </Animated.View>
       </ScrollView>
     </SafeAreaView>
