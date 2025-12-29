@@ -1,181 +1,109 @@
-import { useLocalSearchParams } from 'expo-router'
-import { AlertCircle, Clock, ExternalLink, ShoppingCart } from 'lucide-react-native'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, Image, Linking, ScrollView, Text, View } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 import Animated, { FadeInDown } from 'react-native-reanimated'
 
-import { useRoutineByRspid } from '@features/routine/hooks/useRoutineByRspid'
-import { Pressable } from '@shared/components/Pressable'
+import { RoutineEmptyState } from '@features/routine/components/RoutineEmptyState'
+import { RoutineErrorState } from '@features/routine/components/RoutineErrorState'
+import { RoutineLoadingState } from '@features/routine/components/RoutineLoadingState'
+import { RoutineStepCard } from '@features/routine/components/RoutineStepCard'
+import { RoutineSummaryCard } from '@features/routine/components/RoutineSummaryCard'
+import { RoutineToggle } from '@features/routine/components/RoutineToggle'
+import { useRoutine } from '@features/routine/hooks/useRoutine'
+import { useTodayRoutine } from '@features/routine/hooks/useTodayRoutine'
+import type { TimeOfDay } from '@features/routine/types/routine.types'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
-import type { RoutineProduct } from '@shared/types/routine.types'
-import { haptic } from '@shared/utils/haptic'
-import { colors } from '@theme/colors'
-
-function ProductCard({ product, index }: { product: RoutineProduct; index: number }) {
-  const { t } = useTranslation()
-
-  const handleShopPress = () => {
-    if (product.purchaseUrl) {
-      haptic.medium()
-      Linking.openURL(product.purchaseUrl)
-    }
-  }
-
-  return (
-    <Animated.View
-      entering={FadeInDown.delay(index * 100).springify()}
-      className="bg-surface rounded-2xl p-4 mb-4 shadow-sm"
-    >
-      <View className="flex-row">
-        {/* Product Image */}
-        {product.imageUrl && (
-          <Image
-            source={{ uri: product.imageUrl }}
-            className="w-20 h-20 rounded-lg mr-4"
-            resizeMode="cover"
-          />
-        )}
-
-        {/* Product Info */}
-        <View className="flex-1">
-          <Text className="text-xs text-primary font-medium mb-1">{product.step}</Text>
-          <Text className="text-base font-bold text-text mb-1">{product.name}</Text>
-          <Text className="text-sm text-textMuted mb-2">{product.brand}</Text>
-          <Text className="text-base font-semibold text-primary">
-            {product.price.toFixed(2)} {product.currency === 'EUR' ? '€' : product.currency}
-          </Text>
-        </View>
-      </View>
-
-      {/* Shop Button */}
-      {product.purchaseUrl && (
-        <Pressable
-          onPress={handleShopPress}
-          haptic="medium"
-          className="mt-4 bg-primary rounded-xl py-3 flex-row items-center justify-center"
-        >
-          <ShoppingCart size={18} color={colors.surface} />
-          <Text className="text-white font-semibold ml-2">{t('routine.shopProduct')}</Text>
-          <ExternalLink size={14} color={colors.surface} className="ml-1" />
-        </Pressable>
-      )}
-    </Animated.View>
-  )
-}
-
-function NoRspidState() {
-  const { t } = useTranslation()
-
-  return (
-    <View className="flex-1 items-center justify-center px-4 py-20">
-      <View className="bg-error/10 rounded-full p-6 mb-6">
-        <AlertCircle size={48} color={colors.error} />
-      </View>
-      <Text className="text-xl font-bold text-text text-center mb-2">
-        {t('routine.noRspidTitle')}
-      </Text>
-      <Text className="text-base text-textMuted text-center">{t('routine.noRspidMessage')}</Text>
-    </View>
-  )
-}
-
-function ProcessingState() {
-  const { t } = useTranslation()
-
-  return (
-    <View className="flex-1 items-center justify-center px-4 py-20">
-      <View className="bg-primary/10 rounded-full p-6 mb-6">
-        <Clock size={48} color={colors.primary} />
-      </View>
-      <Text className="text-xl font-bold text-text text-center mb-2">
-        {t('routine.processingTitle')}
-      </Text>
-      <Text className="text-base text-textMuted text-center">{t('routine.processingMessage')}</Text>
-      <ActivityIndicator size="large" color={colors.primary} className="mt-8" />
-    </View>
-  )
-}
-
-interface RoutineResultsContentProps {
-  rspid: string | null
-}
 
 /**
- * Shared routine results content - used by both mobile screen and web page
+ * Main Routine Results Screen
+ *
+ * Displays the authenticated user's skincare routine with:
+ * - Morning/Evening toggle
+ * - Step-by-step product cards with instructions
+ * - Shop buttons for each product
  */
-export function RoutineResultsContent({ rspid }: RoutineResultsContentProps) {
+export default function RoutineResultsScreen() {
   const { t } = useTranslation()
-  const { data, isLoading, isError } = useRoutineByRspid(rspid)
+  const [selectedTime, setSelectedTime] = useState<TimeOfDay>('morning')
 
-  const isProcessing = data?.status === 'processing'
-  const products = data?.products || []
-
-  // No rspid provided
-  if (!rspid) {
-    return <NoRspidState />
-  }
+  const { data: routine, isLoading, isError } = useRoutine()
+  const todayRoutine = useTodayRoutine(routine)
 
   // Loading state
   if (isLoading) {
     return (
-      <View className="flex-1 items-center justify-center py-20">
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
+      <ScreenHeader title={t('routine.resultsTitle')}>
+        <RoutineLoadingState />
+      </ScreenHeader>
     )
   }
 
   // Error state
   if (isError) {
     return (
-      <View className="flex-1 items-center justify-center py-20">
-        <Text className="text-lg font-semibold text-text text-center mb-2">
-          {t('common.error')}
-        </Text>
-        <Text className="text-base text-textMuted text-center">{t('routine.loadError')}</Text>
-      </View>
+      <ScreenHeader title={t('routine.resultsTitle')}>
+        <RoutineErrorState />
+      </ScreenHeader>
     )
   }
 
-  // Processing state
-  if (isProcessing) {
-    return <ProcessingState />
+  // No routine found
+  if (!routine || !todayRoutine) {
+    return (
+      <ScreenHeader title={t('routine.resultsTitle')}>
+        <RoutineEmptyState />
+      </ScreenHeader>
+    )
   }
 
-  // Ready state with products
-  return (
-    <ScrollView
-      className="flex-1"
-      contentContainerClassName="p-4"
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Title */}
-      <Animated.View entering={FadeInDown.springify()} className="mb-6">
-        <Text className="text-2xl font-bold text-text mb-2">{t('routine.readyTitle')}</Text>
-        <Text className="text-base text-textMuted">{t('routine.readySubtitle')}</Text>
-      </Animated.View>
-
-      {/* Products */}
-      {products.map((product, index) => (
-        <ProductCard key={product.id} product={product} index={index} />
-      ))}
-
-      {/* Empty state */}
-      {products.length === 0 && (
-        <View className="items-center py-8">
-          <Text className="text-textMuted">{t('routine.noProducts')}</Text>
-        </View>
-      )}
-    </ScrollView>
-  )
-}
-
-export default function RoutineResultsScreen() {
-  const { t } = useTranslation()
-  const { rspid } = useLocalSearchParams<{ rspid: string }>()
+  const currentSteps =
+    selectedTime === 'morning' ? todayRoutine.morning.steps : todayRoutine.evening.steps
 
   return (
-    <ScreenHeader title={t('routine.resultsTitle')}>
-      <RoutineResultsContent rspid={rspid || null} />
+    <ScreenHeader title={t('routine.resultsTitle')} noScroll>
+      {/* Skin Profile Summary */}
+      <RoutineSummaryCard summary={routine.summary} analysis={routine.analysis} />
+
+      {/* Morning/Evening Toggle */}
+      <RoutineToggle
+        selected={selectedTime}
+        onSelect={setSelectedTime}
+        morningStepCount={todayRoutine.morning.steps.length}
+        eveningStepCount={todayRoutine.evening.steps.length}
+      />
+
+      {/* Scrollable Step Cards */}
+      <ScrollView
+        className="flex-1"
+        contentContainerClassName="pt-2 pb-4"
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Day Header */}
+        <Animated.View entering={FadeInDown.delay(100).springify()} className="mb-4">
+          <Text className="text-lg font-semibold text-text">{todayRoutine.dayName}</Text>
+          <Text className="text-sm text-textMuted">
+            {selectedTime === 'morning'
+              ? `~${todayRoutine.morning.estimatedMinutes} min`
+              : `~${todayRoutine.evening.estimatedMinutes} min`}
+          </Text>
+        </Animated.View>
+
+        {/* Step Cards */}
+        {currentSteps.map((stepWithProduct, index) => (
+          <RoutineStepCard
+            key={`${stepWithProduct.step.category}-${stepWithProduct.step.order}`}
+            stepWithProduct={stepWithProduct}
+            index={index}
+          />
+        ))}
+
+        {/* Empty state for current time */}
+        {currentSteps.length === 0 && (
+          <View className="items-center py-8">
+            <Text className="text-textMuted">{t('routine.noProducts')}</Text>
+          </View>
+        )}
+      </ScrollView>
     </ScreenHeader>
   )
 }

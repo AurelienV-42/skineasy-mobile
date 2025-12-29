@@ -27,9 +27,7 @@ export function RoutineBannerContainer() {
   }
 
   const handleViewRoutine = () => {
-    if (rspid) {
-      router.push({ pathname: '/routine/results', params: { rspid } })
-    }
+    router.push({ pathname: '/routine/results', params: { rspid } })
   }
 
   return (

@@ -209,7 +209,15 @@
     "loadError": "Impossible de charger ta routine. Réessaie.",
     "noProducts": "Aucun produit disponible",
     "noRspidTitle": "Routine introuvable",
-    "noRspidMessage": "Aucun identifiant de routine n'a été fourni. Accède à cette page depuis le lien de fin de quiz."
+    "noRspidMessage": "Aucun identifiant de routine n'a été fourni. Accède à cette page depuis le lien de fin de quiz.",
+    "noRoutineTitle": "Pas encore de routine",
+    "noRoutineMessage": "Complète le quiz peau pour obtenir ta routine personnalisée.",
+    "noProductForStep": "Aucun produit disponible pour cette étape",
+    "summary": {
+      "products": "{{count}} produits",
+      "dailyTime": "~{{minutes}} min/jour",
+      "pregnancySafe": "Grossesse OK"
+    }
   },
   "profile": {
     "title": "Profil",

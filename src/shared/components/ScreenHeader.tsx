@@ -13,6 +13,8 @@ import { colors } from '@theme/colors'
 interface ScreenHeaderProps {
   title: string
   children: ReactNode
+  /** When true, children are rendered without ScrollView wrapper (for screens with custom scroll) */
+  noScroll?: boolean
 }
 
 // Context to provide scroll functionality to child components
@@ -27,7 +29,7 @@ export const useScrollContext = () => {
   return context
 }
 
-export function ScreenHeader({ title, children }: ScreenHeaderProps) {
+export function ScreenHeader({ title, children, noScroll = false }: ScreenHeaderProps) {
   const { t } = useTranslation()
   const router = useRouter()
   const scrollViewRef = useRef<ScrollView>(null)
@@ -39,6 +41,12 @@ export function ScreenHeader({ title, children }: ScreenHeaderProps) {
       animated: true,
     })
   }
+
+  const content = (
+    <Animated.View style={animStyles[1]} className="flex-1 px-4 pb-8 pt-4">
+      {children}
+    </Animated.View>
+  )
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -64,11 +72,13 @@ export function ScreenHeader({ title, children }: ScreenHeaderProps) {
         keyboardVerticalOffset={0}
       >
         <ScrollContext.Provider value={{ scrollToPosition }}>
-          <ScrollView ref={scrollViewRef} className="flex-1" keyboardShouldPersistTaps="handled">
-            <Animated.View style={animStyles[1]} className="flex-1 px-4 pb-8 pt-4">
-              {children}
-            </Animated.View>
-          </ScrollView>
+          {noScroll ? (
+            content
+          ) : (
+            <ScrollView ref={scrollViewRef} className="flex-1" keyboardShouldPersistTaps="handled">
+              {content}
+            </ScrollView>
+          )}
         </ScrollContext.Provider>
       </KeyboardAvoidingView>
     </SafeAreaView>

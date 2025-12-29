@@ -10,7 +10,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Text, View } from 'react-native'
 
-import { RoutineResultsContent } from '@features/routine/screens/RoutineResultsScreen'
+import { RoutineWebContent } from '@features/routine/components/RoutineWebContent'
 
 // Toggle this to test iframe resize
 const __DEV_TEST_RESIZE__ = false
@@ -110,7 +110,7 @@ export default function RoutineWebPage() {
 
   return (
     <View nativeID="routine-content" className="bg-white">
-      <RoutineResultsContent rspid={rspid} />
+      <RoutineWebContent rspid={rspid} />
     </View>
   )
 }

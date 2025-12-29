@@ -101,11 +101,7 @@ export default function WelcomeScreen() {
           {/* Top Section - Logo & Tagline */}
           <View className="flex-1 items-center justify-center">
             <Animated.View style={logoStyle}>
-              <Image
-                source={logoSource}
-                style={{ width: 192, height: 192 }}
-                resizeMode="contain"
-              />
+              <Image source={logoSource} style={{ width: 192, height: 192 }} resizeMode="contain" />
             </Animated.View>
 
             <View className="mt-8 items-center">
@@ -139,10 +135,7 @@ export default function WelcomeScreen() {
             </Animated.View>
 
             {/* Terms & Privacy */}
-            <Animated.Text
-              style={termsStyle}
-              className="text-xs text-textMuted text-center"
-            >
+            <Animated.Text style={termsStyle} className="text-xs text-textMuted text-center">
               {t('welcome.termsNoticeStart')}
               <Text
                 className="text-xs text-primary underline"

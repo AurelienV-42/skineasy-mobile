@@ -51,7 +51,11 @@ export default function LoginScreen() {
             <View>
               {/* Logo Section - Minimal top */}
               <Animated.View style={animStyles[0]} className="pt-8 pb-8 items-center">
-                <Image source={logoSource} style={{ width: 160, height: 160 }} resizeMode="contain" />
+                <Image
+                  source={logoSource}
+                  style={{ width: 160, height: 160 }}
+                  resizeMode="contain"
+                />
               </Animated.View>
 
               {/* Welcome Text */}
