@@ -58,6 +58,9 @@ export interface ProductDto {
   type: string | null
   illustration: string | null
   illustrationUrl: string
+  feature: string | null
+  url: string | null
+  contenance: string | null
 }
 
 // ============================================================================

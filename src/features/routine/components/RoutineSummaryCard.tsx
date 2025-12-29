@@ -20,20 +20,6 @@ import { CATEGORY_LABELS } from '@features/routine/types/routine.types'
 import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
 
-interface StatItemProps {
-  icon: React.ReactNode
-  value: string
-}
-
-function StatItem({ icon, value }: StatItemProps) {
-  return (
-    <View className="flex-row items-center">
-      {icon}
-      <Text className="text-sm text-textMuted ml-1">{value}</Text>
-    </View>
-  )
-}
-
 interface ProductCarouselItemProps {
   category: string
   productName: string
@@ -90,6 +76,7 @@ export function RoutineSummaryCard({
     return Object.entries(productSelection.products)
       .flatMap(([category, products]) =>
         products.map((product) => ({
+          categoryKey: category,
           category: CATEGORY_LABELS[category as ProductCategory] || category,
           name: product.name,
           id: product.id,
@@ -166,7 +153,7 @@ export function RoutineSummaryCard({
               >
                 {allProducts.map((product) => (
                   <ProductCarouselItem
-                    key={product.id}
+                    key={`${product.categoryKey}-${product.id}`}
                     category={product.category}
                     productName={product.name}
                     imageUrl={product.imageUrl}
