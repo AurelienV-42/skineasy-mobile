@@ -216,7 +216,8 @@
     "summary": {
       "products": "{{count}} produits",
       "dailyTime": "~{{minutes}} min/jour",
-      "pregnancySafe": "Grossesse OK"
+      "pregnancySafe": "Grossesse OK",
+      "viewProducts": "Voir mes produits"
     }
   },
   "profile": {

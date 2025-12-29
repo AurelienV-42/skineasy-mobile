@@ -62,7 +62,11 @@ export default function RoutineResultsScreen() {
   return (
     <ScreenHeader edges={['top']} title={t('routine.resultsTitle')} noScroll>
       {/* Skin Profile Summary */}
-      <RoutineSummaryCard summary={routine.summary} analysis={routine.analysis} />
+      <RoutineSummaryCard
+        summary={routine.summary}
+        analysis={routine.analysis}
+        productSelection={routine.productSelection}
+      />
 
       {/* Morning/Evening Toggle */}
       <RoutineToggle
