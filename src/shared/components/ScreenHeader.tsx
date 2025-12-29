@@ -4,7 +4,7 @@ import { createContext, ReactNode, useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { Edge, SafeAreaView } from 'react-native-safe-area-context'
 
 import { Pressable } from '@shared/components/Pressable'
 import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
@@ -15,6 +15,7 @@ interface ScreenHeaderProps {
   children: ReactNode
   /** When true, children are rendered without ScrollView wrapper (for screens with custom scroll) */
   noScroll?: boolean
+  edges?: Edge[]
 }
 
 // Context to provide scroll functionality to child components
@@ -29,7 +30,12 @@ export const useScrollContext = () => {
   return context
 }
 
-export function ScreenHeader({ title, children, noScroll = false }: ScreenHeaderProps) {
+export function ScreenHeader({
+  title,
+  children,
+  noScroll = false,
+  edges = ['top', 'bottom'],
+}: ScreenHeaderProps) {
   const { t } = useTranslation()
   const router = useRouter()
   const scrollViewRef = useRef<ScrollView>(null)
@@ -49,7 +55,7 @@ export function ScreenHeader({ title, children, noScroll = false }: ScreenHeader
   )
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView edges={edges} className="flex-1 bg-background">
       {/* Custom Header */}
       <Animated.View
         style={animStyles[0]}

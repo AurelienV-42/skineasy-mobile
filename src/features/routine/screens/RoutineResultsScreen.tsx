@@ -60,7 +60,7 @@ export default function RoutineResultsScreen() {
     selectedTime === 'morning' ? todayRoutine.morning.steps : todayRoutine.evening.steps
 
   return (
-    <ScreenHeader title={t('routine.resultsTitle')} noScroll>
+    <ScreenHeader edges={['top']} title={t('routine.resultsTitle')} noScroll>
       {/* Skin Profile Summary */}
       <RoutineSummaryCard summary={routine.summary} analysis={routine.analysis} />
 
@@ -89,10 +89,10 @@ export default function RoutineResultsScreen() {
         </Animated.View>
 
         {/* Step Cards */}
-        {currentSteps.map((stepWithProduct, index) => (
+        {currentSteps.map((stepWithProducts, index) => (
           <RoutineStepCard
-            key={`${stepWithProduct.step.category}-${stepWithProduct.step.order}`}
-            stepWithProduct={stepWithProduct}
+            key={`${stepWithProducts.step.category}-${stepWithProducts.step.order}`}
+            stepWithProducts={stepWithProducts}
             index={index}
           />
         ))}

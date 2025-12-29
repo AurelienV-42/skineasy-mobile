@@ -91,7 +91,11 @@ export interface SkinAnalysisDto {
 // Product Selection Types
 // ============================================================================
 
-export type ProductSelectionProducts = Record<ProductCategory, ProductDto | null>
+/**
+ * Products are now arrays per category (0 to 3 products each)
+ * Empty categories will be empty arrays [], not null
+ */
+export type ProductSelectionProducts = Record<ProductCategory, ProductDto[]>
 
 export interface ProductSelectionDto {
   products: ProductSelectionProducts
@@ -173,11 +177,12 @@ export interface RoutineApiResponse {
 // ============================================================================
 
 /**
- * A step combined with its product for easy rendering
+ * A step combined with its products for easy rendering
+ * A step can have 0-3 products (e.g., multiple serums)
  */
-export interface RoutineStepWithProduct {
+export interface RoutineStepWithProducts {
   step: RoutineStepDto
-  product: ProductDto | null
+  products: ProductDto[]
 }
 
 /**
@@ -186,11 +191,11 @@ export interface RoutineStepWithProduct {
 export interface TodayRoutine {
   dayName: string
   morning: {
-    steps: RoutineStepWithProduct[]
+    steps: RoutineStepWithProducts[]
     estimatedMinutes: number
   }
   evening: {
-    steps: RoutineStepWithProduct[]
+    steps: RoutineStepWithProducts[]
     estimatedMinutes: number
   }
 }

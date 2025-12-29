@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import type {
   ProductSelectionProducts,
   RoutineDto,
-  RoutineStepWithProduct,
+  RoutineStepWithProducts,
   TodayRoutine,
 } from '@features/routine/types/routine.types'
 
@@ -19,14 +19,15 @@ function getTodayDayOfWeek(): number {
 
 /**
  * Get steps with their associated products
+ * Products are now arrays per category (can have 0-3 products)
  */
 function getStepsWithProducts(
   steps: { order: number; category: string; instructions: string; estimatedMinutes: number }[],
   products: ProductSelectionProducts
-): RoutineStepWithProduct[] {
+): RoutineStepWithProducts[] {
   return steps.map((step) => ({
-    step: step as RoutineStepWithProduct['step'],
-    product: products[step.category as keyof ProductSelectionProducts] || null,
+    step: step as RoutineStepWithProducts['step'],
+    products: products[step.category as keyof ProductSelectionProducts] || [],
   }))
 }
 
