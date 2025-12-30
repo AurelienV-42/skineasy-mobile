@@ -1,134 +1,76 @@
-# SkinEasy Mobile App - Development Specification
+# SkinEasy Mobile
 
-## Project Overview
+React Native (Expo) skincare app - iOS & Android
 
-**App Name:** SkinEasy
-**Tech Stack:** React Native (Expo Managed Workflow), TypeScript
-**Target OS:** iOS & Android
-**Approach:** Test-Driven Development (TDD)
+## Quick Reference
+
+| Utility | Location | Note |
+|---------|----------|------|
+| Pressable | `@shared/components/Pressable` | Always use instead of RN's |
+| Logger | `@shared/utils/logger` | Never use console.* |
+| Haptic | `@shared/utils/haptic` | See intensity rules below |
+| Date | `@shared/utils/date` | API uses ISO 8601 UTC |
+| ENV | `@shared/config/env` | Never use process.env at runtime |
+
+## Project-Specific Rules
+
+1. **i18n for ALL text** - Never hardcode strings, use `t('key')`
+2. **No barrel files** - Import from source directly, not index.ts re-exports
+3. **No backend errors in UI** - Use i18n keys, backend errors aren't translated
+4. **Date format** - API: `"2025-01-15T00:00:00.000Z"`, birthday only: `"YYYY-MM-DD"`
+
+### Haptic Intensity
+
+- **Heavy**: Save, submit, login, logout, delete
+- **Medium**: Navigation, context switches, toggles
+- **Light**: Reversible selections, back button
+- **Selection**: Input focus (automatic)
+- **Notification**: `haptic.success()` / `haptic.error()` for form results
 
 ---
 
-## Tech Stack & Dependencies
+## Tech Stack
 
-### Core Framework
-
-- **Expo SDK** (Managed Workflow)
-- **TypeScript** (strict mode)
-- **Expo Router** - File-based routing
-
-### State Management
-
-- **Zustand** - Multiple stores pattern:
-  - `useAuthStore` - Authentication state, tokens
-  - `useUserStore` - User profile, diagnosis status
-  - `useJournalStore` - Daily entries cache
-- **TanStack Query** - Server state, caching, background refetch
-  - Use `queryClient.invalidateQueries` pattern
-  - Global error boundary for API errors
-
-### Styling
-
-- **NativeWind** - Tailwind CSS for React Native
-- **Custom components** - No UI library, build from scratch
-
-### Forms & Validation
-
-- **React Hook Form** - Form state management
-- **Zod** - Schema validation (shared between forms and API responses)
-
-### Internationalization
-
-- **i18next** + **react-i18next** + **expo-localization**
-- Languages: FR (French), EN (English)
-- Default: Device locale
-
-### Testing
-
-- **Vitest** - Test runner
-- **React Native Testing Library** - Component testing
-- Unit tests only for V1
-
-### Build & Tooling
-
-- **Vite** - Build tool (for tests)
-- **ESLint** - Standard config
-- **Prettier** - Code formatting
-- **EAS Build** - Production builds
-
-### Additional Libraries
-
-- `expo-secure-store` - JWT storage
-- `expo-constants` - Environment config
-- `expo-image-picker` - Meal photos
-- `expo-localization` - Device locale
-- `expo-haptics` - Tactile feedback for user interactions
-- `react-native-webview` - Typeform integration
-- `react-native-web` - Web platform support
-- `react-native-svg` + `lucide-react-native` - Icons
-- `react-native-toast-message` - User feedback
-- `@expo-google-fonts/roboto` - Typography
-- `date-fns` - Date manipulation
+- **Framework**: Expo SDK (managed), TypeScript strict, Expo Router
+- **State**: Zustand (auth, user, journal stores) + TanStack Query
+- **Styling**: NativeWind (Tailwind)
+- **Forms**: React Hook Form + Zod
+- **i18n**: i18next + expo-localization (FR/EN)
+- **Testing**: Vitest + React Native Testing Library
 
 ---
 
 ## Project Structure
 
 ```
-app/                          # Expo Router - File-based routing
+app/                          # Expo Router
 ├── _layout.tsx               # Root layout (providers, fonts)
-├── index.tsx                 # Entry redirect based on auth
-├── (auth)/                   # Auth group (unauthenticated)
-│   ├── _layout.tsx
+├── index.tsx                 # Entry redirect
+├── (auth)/                   # Unauthenticated
 │   ├── login.tsx
 │   └── register.tsx
-└── (tabs)/                   # Main tabs (authenticated)
-    ├── _layout.tsx           # Tab navigator
-    ├── index.tsx             # Dashboard tab
-    ├── routine.tsx           # Routine tab
-    └── profile.tsx           # Profile tab
+└── (tabs)/                   # Authenticated
+    ├── index.tsx             # Dashboard
+    ├── routine.tsx
+    └── profile.tsx
 
 src/
-├── features/                 # Feature-specific code
+├── features/                 # Feature modules
 │   ├── auth/
-│   │   ├── hooks/
-│   │   ├── components/
-│   │   └── schemas/
 │   ├── journal/
-│   │   ├── hooks/
-│   │   ├── components/
-│   │   └── schemas/
 │   ├── routine/
-│   │   ├── hooks/
-│   │   ├── components/
-│   │   └── schemas/
 │   ├── diagnosis/
-│   │   ├── hooks/
-│   │   └── schemas/
 │   └── profile/
-│       ├── hooks/
-│       └── components/
-│
 ├── shared/
-│   ├── components/           # Reusable UI components
-│   ├── hooks/                # Shared hooks
-│   ├── services/             # API services
-│   ├── stores/               # Zustand stores
-│   ├── utils/                # Utilities
-│   ├── config/               # App configuration
-│   └── types/                # TypeScript types
-│
-├── i18n/
-│   ├── locales/
-│   │   ├── en.json
-│   │   └── fr.json
-│   └── index.ts
-│
+│   ├── components/
+│   ├── hooks/
+│   ├── services/
+│   ├── stores/
+│   ├── utils/
+│   ├── config/
+│   └── types/
+├── i18n/locales/
 └── theme/
-    ├── colors.ts
-    ├── spacing.ts
-    ├── typography.ts
-    └── index.ts
 ```
 
 ---
@@ -137,1048 +79,75 @@ src/
 
 ### Colors
 
+See `src/theme/colors.ts` for current values.
+
+### Spacing (4px grid)
+
 ```typescript
-// theme/colors.ts
-export const colors = {
-  // Primary
-  primary: '#55C4B8', // Soft teal/aqua - buttons, key accents
-  primaryDark: '#2C8F84', // Darker teal - links, pressed states
-
-  // Secondary
-  secondary: '#F7B6A8', // Warm peach-pink - highlights, badges
-
-  // Background
-  background: '#FFF9F5', // Off-white/cream - main background
-  surface: '#FFFFFF', // Pure white - cards, sections
-
-  // Text
-  text: '#333333', // Dark grey - primary body text
-  textMuted: '#6B7280', // Medium grey - captions, meta
-  textLight: '#9CA3AF', // Light grey - placeholders
-
-  // Semantic
-  error: '#EF4444',
-  success: '#10B981',
-  warning: '#F59E0B',
-
-  // Border
-  border: '#E5E7EB',
-  borderFocus: '#55C4B8',
-}
+xs: 4, sm: 8, md: 12, lg: 16, xl: 24, '2xl': 32, '3xl': 48
 ```
 
-### Spacing (4px base grid)
+### Radius
 
 ```typescript
-// theme/spacing.ts
-export const spacing = {
-  xs: 4,
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 24,
-  '2xl': 32,
-  '3xl': 48,
-}
-```
-
-### Border Radius
-
-```typescript
-// theme/spacing.ts
-export const radius = {
-  sm: 4,
-  md: 8,
-  lg: 16,
-  full: 9999,
-}
+sm: 4, md: 8, lg: 16, full: 9999
 ```
 
 ### Typography
 
-```typescript
-// theme/typography.ts
-// Using @expo-google-fonts/roboto
+Font: `@expo-google-fonts/roboto`
 
-export const typography = {
-  h1: {
-    fontFamily: 'Roboto_700Bold',
-    fontSize: 28,
-    lineHeight: 36,
-  },
-  h2: {
-    fontFamily: 'Roboto_700Bold',
-    fontSize: 24,
-    lineHeight: 32,
-  },
-  h3: {
-    fontFamily: 'Roboto_500Medium',
-    fontSize: 20,
-    lineHeight: 28,
-  },
-  body: {
-    fontFamily: 'Roboto_400Regular',
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  bodySmall: {
-    fontFamily: 'Roboto_400Regular',
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  caption: {
-    fontFamily: 'Roboto_400Regular',
-    fontSize: 12,
-    lineHeight: 16,
-  },
-  button: {
-    fontFamily: 'Roboto_500Medium',
-    fontSize: 16,
-    lineHeight: 24,
-  },
-}
-```
-
-### Shared Components
-
-#### Pressable
-
-**ALWAYS use the custom Pressable component** instead of React Native's built-in Pressable for all interactive elements.
-
-The custom Pressable provides consistent opacity feedback (0.6 when pressed) which is a standard mobile UX pattern.
-
-**Location**: `src/shared/components/Pressable.tsx`
-
-**Usage**:
-
-```typescript
-import { Pressable } from '@shared/components/Pressable'
-
-// Basic usage
-<Pressable onPress={handlePress}>
-  <Text>Tap me</Text>
-</Pressable>
-
-// With accessibility label
-<Pressable onPress={handlePress} accessibilityLabel="Close">
-  <X size={24} color={colors.text} />
-</Pressable>
-
-// With custom styles
-<Pressable
-  onPress={handlePress}
-  className="p-4 bg-primary rounded-lg"
->
-  <Text className="text-white">Button</Text>
-</Pressable>
-```
-
-**Features**:
-
-- Automatic opacity feedback (0.6 when pressed)
-- Supports all React Native PressableProps
-- Works with both function-based and object-based styles
-- Consistent UX across the entire app
-
-**Important**:
-
-- NEVER import Pressable from 'react-native'
-- ALWAYS import from '@shared/components/Pressable'
-- This ensures consistent press behavior across all interactive elements
+| Style | Weight | Size |
+|-------|--------|------|
+| h1 | 700 | 28 |
+| h2 | 700 | 24 |
+| h3 | 500 | 20 |
+| body | 400 | 16 |
+| bodySmall | 400 | 14 |
+| caption | 400 | 12 |
+| button | 500 | 16 |
 
 ---
 
-## Navigation Structure
+## Navigation
 
 ```
-RootNavigator
-├── AuthStack (when no token)
+Root
+├── AuthStack (no token)
 │   ├── LoginScreen
-│   ├── RegisterScreen
-│   └── ForgotPasswordScreen (WebBrowser to PrestaShop)
-│
-└── MainTabs (when token exists)
-    ├── DashboardStack
-    │   └── DashboardScreen ("Today")
-    │
-    ├── RoutineStack
-    │   └── RoutineScreen
-    │
-    └── ProfileStack
-        ├── ProfileScreen
-        └── DiagnosisWebViewScreen (fullscreen in stack)
+│   └── RegisterScreen
+└── MainTabs (has token)
+    ├── Dashboard
+    ├── Routine
+    └── Profile
+        └── DiagnosisWebView
 ```
 
 ---
 
-## API Layer
+## API Endpoints
 
-### Environment Configuration
-
-```typescript
-// app.config.ts
-export default {
-  expo: {
-    // ... other config
-    extra: {
-      apiUrl: process.env.API_URL ?? 'https://api-dev.skineasy.com',
-      typeformId: process.env.TYPEFORM_ID ?? 'YOUR_TYPEFORM_ID',
-      prestashopUrl: process.env.PRESTASHOP_URL ?? 'https://skineasy.com',
-    },
-  },
-}
-
-// shared/config/env.ts
-import Constants from 'expo-constants'
-
-export const ENV = {
-  API_URL: Constants.expoConfig?.extra?.apiUrl as string,
-  TYPEFORM_ID: Constants.expoConfig?.extra?.typeformId as string,
-  PRESTASHOP_URL: Constants.expoConfig?.extra?.prestashopUrl as string,
-}
 ```
-
-### API Client (Fetch-based)
-
-```typescript
-// shared/services/api.ts
-import { getToken, removeToken } from '../utils/storage'
-import { ENV } from '../config/env'
-
-interface ApiOptions extends RequestInit {
-  skipAuth?: boolean
-}
-
-export async function api<T>(endpoint: string, options: ApiOptions = {}): Promise<T> {
-  const { skipAuth = false, ...fetchOptions } = options
-
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-    ...options.headers,
-  }
-
-  if (!skipAuth) {
-    const token = await getToken()
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`
-    }
-  }
-
-  const response = await fetch(`${ENV.API_URL}${endpoint}`, {
-    ...fetchOptions,
-    headers,
-  })
-
-  if (response.status === 401) {
-    await removeToken()
-    // Trigger auth state reset
-    throw new Error('Unauthorized')
-  }
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}))
-    throw new Error(error.message || 'API Error')
-  }
-
-  return response.json()
-}
-```
-
-### Token Refresh Logic
-
-```typescript
-// In api.ts - add interceptor for 401 handling
-// When 401 received:
-// 1. Try refresh token if available
-// 2. If refresh fails, clear storage and redirect to login
-```
-
-### API Endpoints
-
-```typescript
-// Auth
 POST /auth/login          { email, password } -> { access_token, refresh_token, user }
 POST /auth/register       { firstname, lastname, email, password } -> { access_token, user }
 POST /auth/refresh        { refresh_token } -> { access_token }
 
-// User
-GET  /user/profile        -> { id, email, firstname, lastname, skinType? }
+GET  /user/profile        -> User
 
-// Diagnosis
-GET  /diagnosis/latest    -> { id, skinType, concerns, createdAt, routine }
-                          -> 404 if no diagnosis
+GET  /diagnosis/latest    -> Diagnosis (includes routine) | 404
 
-// Journal
 GET  /journal/entries?date=YYYY-MM-DD  -> JournalEntry[]
-POST /journal/entry       FormData | JSON -> JournalEntry
-
-// Routine (from diagnosis)
-GET  /diagnosis/latest    -> includes routine: { morning: Step[], evening: Step[] }
+POST /journal/entry       -> JournalEntry
 ```
 
-### Zod Schemas
+---
+
+## Import Aliases
 
 ```typescript
-// features/auth/schemas/auth.schema.ts
-import { z } from 'zod'
-
-export const loginSchema = z.object({
-  email: z.email('Invalid email'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-})
-
-export const registerSchema = z.object({
-  firstname: z.string().min(2, 'First name is required'),
-  lastname: z.string().min(2, 'Last name is required'),
-  email: z.email('Invalid email'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-})
-
-export type LoginInput = z.infer<typeof loginSchema>
-export type RegisterInput = z.infer<typeof registerSchema>
+@/*         -> src/*
+@features/* -> src/features/*
+@shared/*   -> src/shared/*
+@theme/*    -> src/theme/*
+@i18n/*     -> src/i18n/*
 ```
-
----
-
-## TanStack Query Configuration
-
-```typescript
-// shared/config/queryClient.ts
-import { QueryClient } from '@tanstack/react-query'
-import Toast from 'react-native-toast-message'
-
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 2,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
-    },
-    mutations: {
-      onError: (error) => {
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: error.message || 'Something went wrong',
-        })
-      },
-    },
-  },
-})
-```
-
-### Query Keys Convention
-
-```typescript
-// shared/config/queryKeys.ts
-export const queryKeys = {
-  user: ['user'] as const,
-  diagnosis: ['diagnosis'] as const,
-  journalEntries: (date: string) => ['journal', 'entries', date] as const,
-  routine: ['routine'] as const,
-}
-```
-
----
-
-## Zustand Stores
-
-### Auth Store
-
-```typescript
-// shared/stores/auth.store.ts
-import { create } from 'zustand'
-import * as SecureStore from 'expo-secure-store'
-
-interface AuthState {
-  token: string | null
-  isAuthenticated: boolean
-  isLoading: boolean
-  setToken: (token: string) => Promise<void>
-  clearToken: () => Promise<void>
-  loadToken: () => Promise<void>
-}
-
-export const useAuthStore = create<AuthState>((set) => ({
-  token: null,
-  isAuthenticated: false,
-  isLoading: true,
-
-  setToken: async (token) => {
-    await SecureStore.setItemAsync('access_token', token)
-    set({ token, isAuthenticated: true })
-  },
-
-  clearToken: async () => {
-    await SecureStore.deleteItemAsync('access_token')
-    set({ token: null, isAuthenticated: false })
-  },
-
-  loadToken: async () => {
-    const token = await SecureStore.getItemAsync('access_token')
-    set({
-      token,
-      isAuthenticated: !!token,
-      isLoading: false,
-    })
-  },
-}))
-```
-
-### User Store
-
-```typescript
-// shared/stores/user.store.ts
-import { create } from 'zustand'
-
-interface User {
-  id: string
-  email: string
-  firstname: string
-  lastname: string
-  skinType?: string
-}
-
-interface UserState {
-  user: User | null
-  hasDiagnosis: boolean
-  setUser: (user: User) => void
-  setHasDiagnosis: (value: boolean) => void
-  clearUser: () => void
-}
-
-export const useUserStore = create<UserState>((set) => ({
-  user: null,
-  hasDiagnosis: false,
-
-  setUser: (user) => set({ user }),
-  setHasDiagnosis: (value) => set({ hasDiagnosis: value }),
-  clearUser: () => set({ user: null, hasDiagnosis: false }),
-}))
-```
-
----
-
-## Typeform WebView Integration
-
-### Detection Method: Injected JavaScript + postMessage
-
-```typescript
-// features/diagnosis/screens/DiagnosisWebViewScreen.tsx
-const INJECTED_JAVASCRIPT = `
-  (function() {
-    // Listen for Typeform submission
-    window.addEventListener('message', function(event) {
-      if (event.data && event.data.type === 'form-submit') {
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-          type: 'TYPEFORM_SUBMIT',
-          responseId: event.data.responseId
-        }));
-      }
-    });
-
-    // Also check URL changes for fallback
-    const originalPushState = history.pushState;
-    history.pushState = function() {
-      originalPushState.apply(history, arguments);
-      if (window.location.href.includes('thank') || window.location.href.includes('success')) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-          type: 'TYPEFORM_COMPLETE'
-        }));
-      }
-    };
-  })();
-  true;
-`
-
-// WebView URL with hidden fields
-const typeformUrl = `https://form.typeform.com/to/${ENV.TYPEFORM_ID}?user_email=${encodeURIComponent(user.email)}`
-```
-
----
-
-## i18n Configuration
-
-```typescript
-// shared/config/i18n.ts
-import i18n from 'i18next'
-import { initReactI18next } from 'react-i18next'
-import * as Localization from 'expo-localization'
-import en from '../../i18n/locales/en.json'
-import fr from '../../i18n/locales/fr.json'
-
-i18n.use(initReactI18next).init({
-  resources: {
-    en: { translation: en },
-    fr: { translation: fr },
-  },
-  lng: Localization.locale.split('-')[0], // 'en' from 'en-US'
-  fallbackLng: 'en',
-  interpolation: {
-    escapeValue: false,
-  },
-})
-
-export default i18n
-```
-
-### Translation Structure
-
-```json
-// i18n/locales/en.json
-{
-  "common": {
-    "loading": "Loading...",
-    "error": "An error occurred",
-    "retry": "Retry",
-    "save": "Save",
-    "cancel": "Cancel"
-  },
-  "auth": {
-    "login": "Login",
-    "register": "Create Account",
-    "email": "Email",
-    "password": "Password",
-    "forgotPassword": "Forgot Password?",
-    "invalidCredentials": "Invalid credentials"
-  },
-  "dashboard": {
-    "greeting": "Hello {{name}}",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "tomorrow": "Tomorrow"
-  },
-  "journal": {
-    "sleep": {
-      "title": "Sleep",
-      "question": "How did you sleep?",
-      "hours": "Hours of sleep"
-    },
-    "nutrition": {
-      "title": "Nutrition",
-      "addMeal": "Add Meal",
-      "addNote": "Add a note to your meal"
-    },
-    "sport": {
-      "title": "Sport",
-      "addActivity": "Add Activity",
-      "duration": "Duration (min)"
-    }
-  },
-  "routine": {
-    "title": "My Routine",
-    "morning": "Morning",
-    "evening": "Evening",
-    "shopRoutine": "Shop my Routine",
-    "whyThisProduct": "Why this product?"
-  },
-  "profile": {
-    "title": "Profile",
-    "termsConditions": "Terms & Conditions",
-    "logout": "Log Out"
-  }
-}
-```
-
----
-
-## Image Handling
-
-### Compression Before Upload
-
-```typescript
-// shared/utils/image.ts
-import * as ImagePicker from 'expo-image-picker'
-import * as ImageManipulator from 'expo-image-manipulator'
-
-export async function pickAndCompressImage(): Promise<string | null> {
-  const result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    allowsEditing: true,
-    aspect: [4, 3],
-    quality: 0.8,
-  })
-
-  if (result.canceled) return null
-
-  // Compress image
-  const manipulated = await ImageManipulator.manipulateAsync(
-    result.assets[0].uri,
-    [{ resize: { width: 800 } }],
-    { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
-  )
-
-  return manipulated.uri
-}
-```
-
-### Local Caching for Product Images
-
-TanStack Query handles caching automatically with the configured `gcTime`. For persistent image caching, use `expo-image` or `react-native-fast-image`.
-
----
-
-## Error Handling
-
-### Global Error Boundary
-
-```typescript
-// App.tsx - wrap with QueryClientProvider
-// TanStack Query handles API errors globally via queryClient config
-
-// For component-level errors:
-import { ErrorBoundary } from 'react-error-boundary'
-
-function ErrorFallback({ error, resetErrorBoundary }) {
-  return (
-    <View className="flex-1 items-center justify-center p-4">
-      <Text className="text-error text-center mb-4">
-        Something went wrong
-      </Text>
-      <Button onPress={resetErrorBoundary} title="Try Again" />
-    </View>
-  )
-}
-```
-
-### Toast Configuration
-
-```typescript
-// App.tsx
-import Toast from 'react-native-toast-message'
-
-// At the end of App component, after NavigationContainer:
-<Toast />
-```
-
----
-
-## Testing Strategy
-
-### File Naming Convention
-
-- Test files: `ComponentName.test.tsx` or `hookName.test.ts`
-- Located in `__tests__/` folders within each feature
-
-### Test Structure
-
-```typescript
-// Example: features/auth/hooks/__tests__/useLogin.test.ts
-import { renderHook, waitFor } from '@testing-library/react-native'
-import { useLogin } from '../useLogin'
-
-describe('useLogin', () => {
-  it('should return success on valid credentials', async () => {
-    // Arrange
-    const { result } = renderHook(() => useLogin())
-
-    // Act
-    result.current.mutate({ email: 'test@test.com', password: 'password123' })
-
-    // Assert
-    await waitFor(() => {
-      expect(result.current.isSuccess).toBe(true)
-    })
-  })
-
-  it('should return error on invalid credentials', async () => {
-    // ...
-  })
-})
-```
-
-### Vitest Configuration
-
-```typescript
-// vitest.config.ts
-import { defineConfig } from 'vitest/config'
-
-export default defineConfig({
-  test: {
-    environment: 'jsdom',
-    globals: true,
-    setupFiles: ['./src/test/setup.ts'],
-  },
-})
-```
-
----
-
-## Code Quality & Linting
-
-### ESLint and Prettier
-
-The project is configured with ESLint and Prettier for code quality and formatting.
-
-#### Available Scripts
-
-```bash
-# Linting
-npm run lint              # Check for linting errors in src/ and app/
-npm run lint:fix          # Auto-fix linting errors
-
-# Formatting
-npm run format            # Format all TypeScript, JSON, and Markdown files
-npm run format:check      # Check formatting without making changes
-
-# Combined Check
-npm run check             # Run both lint and format:check (use before commits)
-```
-
-#### Pre-Commit Checklist
-
-**IMPORTANT:** Always run the following before committing changes:
-
-```bash
-npm run check
-```
-
-This ensures:
-
-- No ESLint errors in the codebase
-- All files are properly formatted with Prettier
-- Code follows project standards
-
-If `npm run check` fails:
-
-1. Run `npm run lint:fix` to auto-fix linting issues
-2. Run `npm run format` to auto-format files
-3. Manually fix any remaining errors
-4. Run `npm run check` again to verify
-
-#### ESLint Configuration
-
-- Configured for React, React Hooks, and TypeScript
-- Includes Prettier integration
-- Located in `eslint.config.js`
-- Custom rules for React Native Animated API (refs are allowed for animation values)
-
-#### Prettier Configuration
-
-- Formats: TypeScript, TSX, JSON, Markdown
-- Excludes: node_modules, .expo
-- Configuration in `.prettierrc` or `package.json`
-
----
-
-## Implementation Phases
-
-### Phase 1: Project Setup & Foundation
-
-1. Initialize Expo project with TypeScript
-2. Configure ESLint + Prettier
-3. Setup Vitest
-4. Configure NativeWind
-5. Setup theme (colors, spacing, typography)
-6. Setup i18n with FR/EN
-7. **TEST CHECKPOINT**
-
-### Phase 2: Core Infrastructure
-
-1. Setup environment config (expo-constants)
-2. Create API client with fetch
-3. Setup Zustand stores (auth, user)
-4. Setup TanStack Query
-5. Setup Toast notifications
-6. **TEST CHECKPOINT**
-
-### Phase 3: Navigation Shell
-
-1. Create RootNavigator
-2. Create AuthStack (empty screens)
-3. Create MainTabs (empty screens)
-4. Implement auth flow logic (token check)
-5. **TEST CHECKPOINT**
-
-### Phase 4: Authentication Feature
-
-1. Create shared Input component
-2. Create shared Button component
-3. Implement LoginScreen with form
-4. Implement RegisterScreen with form
-5. Implement auth API services
-6. Connect to Zustand + TanStack Query
-7. **TEST CHECKPOINT**
-
-### Phase 5: Diagnosis Feature
-
-1. Implement DiagnosisWebViewScreen
-2. Implement useDiagnosis hook
-3. Add diagnosis check on MainTabs mount
-4. Force redirect to diagnosis if 404
-5. **TEST CHECKPOINT**
-
-### Phase 6: Dashboard Feature (Journal)
-
-1. Create DatePicker component
-2. Create Card component
-3. Implement SleepCard
-4. Implement NutritionCard (with image picker)
-5. Implement SportCard
-6. Implement journal API services
-7. **TEST CHECKPOINT**
-
-### Phase 7: Routine Feature
-
-1. Create RoutineToggle (Morning/Evening)
-2. Create ProductCard component
-3. Implement RoutineScreen
-4. Implement "Shop my Routine" CTA
-5. **TEST CHECKPOINT**
-
-### Phase 8: Profile Feature
-
-1. Create Avatar component
-2. Implement ProfileScreen
-3. Add logout functionality
-4. Add "Retake Diagnosis" flow
-5. Add Terms & Conditions WebView
-6. **TEST CHECKPOINT**
-
-### Phase 9: Polish & Production
-
-1. Add loading states
-2. Add empty states
-3. Review error handling
-4. Test on iOS & Android
-5. Configure EAS Build
-6. **FINAL TEST**
-
----
-
-## Commands Reference
-
-```bash
-# Development
-npx expo start
-
-# Testing
-npm run test              # Run all tests
-npm run test:watch        # Watch mode
-npm run test:coverage     # Coverage report
-
-# Linting
-npm run lint              # ESLint check
-npm run lint:fix          # ESLint fix
-npm run format            # Prettier format
-
-# Build
-eas build --platform ios
-eas build --platform android
-```
-
----
-
-## Important Notes
-
-1. **TDD Approach:** Write tests FIRST, then implementation
-2. **Commit after each phase:** Keep commits atomic and meaningful
-3. **Ask to test:** After each phase, pause for manual testing
-4. **No over-engineering:** Only build what's specified in V1
-5. **Accessibility:** Add accessibilityLabel to interactive elements
-6. **Performance:** Use `React.memo` and `useCallback` where appropriate
-7. **Absolute Imports:** ALWAYS use absolute imports, never relative ones
-8. **Ask before committing:** Always confirm with user before creating git commits
-9. **i18n for all text:** NEVER hardcode text strings in components. Always use i18n translations via `t('key')`
-10. **No barrel index.ts files:** NEVER create index.ts files that only re-export from other files. Import directly from the source file instead (e.g., `import { Button } from '@shared/components/Button'` not `import { Button } from '@shared/components'`)
-11. **No backend error messages in UI:** NEVER display error messages from the backend API directly to users. Backend errors are not translated. Always use i18n translation keys for error messages (e.g., `t('auth.invalidCredentials')` instead of `error.message`)
-12. **DRY Principle (Don't Repeat Yourself):** When implementing multiple similar features or screens, ALWAYS create reusable layout components or shared utilities. Extract common patterns into shared components instead of duplicating code. Example: Multiple screens with the same header pattern should use a shared layout component (e.g., `ScreenHeader` for journal screens)
-13. **Haptic Feedback Guidelines:** Follow these intensity rules for consistent premium UX
-
-- **Heavy**: Data persistence (save, submit), authentication (login, register), irreversible actions (logout, delete account)
-- **Medium**: Navigation and context switches (journal cards, routine toggle, profile menu items, quiz banner)
-- **Light**: Reversible selections (mood picker, activity selector, back button, image picker, language switcher)
-- **Selection**: Text input focus states (automatic in Input component)
-- **Notification**: Form validation results - `haptic.success()` for successful submissions, `haptic.error()` for failures
-- **Disable haptic**: When buttons are disabled or loading
-- **Utility location**: `@shared/utils/haptic` - centralized service with DEV-only logging using `__DEV__` flag
-- **Platform support**: iOS and Android only, gracefully degrades on web
-
-14. **Logging Guidelines:** NEVER use console.log/console.warn/console.error directly. Always use the centralized logger utility
-
-- **Location**: `@shared/utils/logger` - centralized logging service
-- **Auto-disabled in production**: All logs are automatically disabled when `__DEV__` is false
-- **Timestamp included**: Each log includes a timestamp in HH:MM:SS.mmm format
-- **Log levels**:
-  - `logger.debug()` - Detailed debugging information, verbose data dumps
-  - `logger.info()` - General information, app flow tracking, state changes
-  - `logger.warn()` - Non-critical issues, deprecated API usage, fallback behaviors
-  - `logger.error()` - Errors and exceptions, API failures, validation errors
-- **Usage examples**:
-  - `logger.info('[Component] Action performed:', { data })`
-  - `logger.error('[API] Request failed:', error)`
-  - `logger.warn('[Feature] Deprecated method used')`
-- **Never use console directly**: Import and use logger instead of console for all logging needs
-
-15. **Date Format Convention:** ALWAYS use ISO 8601 UTC format for ALL dates sent to the backend API
-
-- **API Date Format**: `"2025-01-15T00:00:00.000Z"` (ISO 8601 UTC)
-- **Exception**: Only `birthday` field uses `"YYYY-MM-DD"` format
-- **Date utilities location**: `@shared/utils/date`
-- **Key functions**:
-  - `toISODateString(dateString)` - Convert YYYY-MM-DD to ISO format for API requests
-  - `fromISOToDateString(isoString)` - Extract YYYY-MM-DD from ISO format (for query keys)
-  - `getTodayUTC()` - Get today's date as YYYY-MM-DD (for internal use/query keys)
-- **Usage pattern**:
-
-  ```typescript
-  // In screens - dateToUse is YYYY-MM-DD for queries
-  const dateToUse = params.date || getTodayUTC()
-
-  // When sending to API - convert to ISO format
-  const dto = {
-    date: toISODateString(dateToUse), // "2025-01-15T00:00:00.000Z"
-    // ... other fields
-  }
-  ```
-
-- **Query invalidation**: Use YYYY-MM-DD format for query keys (matches how data is fetched)
-
-16. **Environment Variables:** NEVER use `process.env` directly in runtime code. Always use the `ENV` object from `@shared/config/env`
-
-- **Location**: `@shared/config/env` - centralized environment configuration
-- **Why**: `process.env` is undefined in React Native runtime. Expo reads environment variables at build time in `app.config.ts` and exposes them via `expo-constants`
-- **Usage**:
-
-  ```typescript
-  // CORRECT - Use ENV object
-  import { ENV } from '@shared/config/env'
-  const apiUrl = ENV.API_URL
-
-  // WRONG - process.env is undefined at runtime
-  const apiUrl = process.env.API_URL // undefined!
-  ```
-
-- **Available variables**: `ENV.API_URL`, `ENV.TYPEFORM_ID`, `ENV.PRESTASHOP_URL`, `ENV.IS_DEV`
-- **Note**: `process.env` is only valid in `app.config.ts` where Expo reads it at build time
-
----
-
-## Import Convention
-
-**ALWAYS use absolute imports.** Configure TypeScript paths in `tsconfig.json`:
-
-```json
-{
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "@features/*": ["src/features/*"],
-      "@shared/*": ["src/shared/*"],
-      "@navigation/*": ["src/navigation/*"],
-      "@theme/*": ["src/theme/*"],
-      "@i18n/*": ["src/i18n/*"]
-    }
-  }
-}
-```
-
-### Examples
-
-```typescript
-// CORRECT - Absolute imports
-import { Button } from '@shared/components/Button'
-import { useAuthStore } from '@shared/stores/auth.store'
-import { LoginScreen } from '@features/auth/screens/LoginScreen'
-import { colors } from '@theme/colors'
-import { api } from '@shared/services/api'
-
-// WRONG - Relative imports (NEVER use these)
-import { Button } from '../../../shared/components/Button'
-import { useAuthStore } from '../../stores/auth.store'
-```
-
----
-
-## MCP Tools Available
-
-### Context7 - Documentation Lookup
-
-Use the **context7** MCP server to retrieve up-to-date documentation and code examples for any library.
-
-**Available tools:**
-
-- `mcp__context-7__resolve-library-id` - Find the library ID for a package
-- `mcp__context-7__get-library-docs` - Get documentation for a library
-
-**Usage:** When implementing features, use Context7 to fetch the latest documentation for:
-
-- Expo packages (expo-image-picker, expo-secure-store, etc.)
-- TanStack Query
-- Zustand
-- React Navigation
-- NativeWind
-- React Hook Form
-- Zod
-- i18next
-- Any other dependency
-
-This ensures we use the correct, up-to-date APIs rather than outdated patterns.
-
----
-
-### iOS Simulator - Device Testing & Automation
-
-Use the **ios-simulator** MCP server to interact with the iOS Simulator for testing and screenshots.
-
-**Available tools:**
-
-- `mcp__ios-simulator__get_booted_sim_id` - Get the UDID of the currently booted simulator
-- `mcp__ios-simulator__open_simulator` - Open the iOS Simulator app
-- `mcp__ios-simulator__screenshot` - Take a screenshot of the simulator
-- `mcp__ios-simulator__record_video` - Start recording video of the simulator
-- `mcp__ios-simulator__stop_recording` - Stop video recording
-- `mcp__ios-simulator__install_app` - Install an app on the simulator
-- `mcp__ios-simulator__launch_app` - Launch an app on the simulator
-- `mcp__ios-simulator__ui_describe_all` - Get accessibility tree of all UI elements
-- `mcp__ios-simulator__ui_describe_point` - Describe UI element at a specific point
-- `mcp__ios-simulator__ui_view` - Get view hierarchy
-- `mcp__ios-simulator__ui_tap` - Tap at coordinates
-- `mcp__ios-simulator__ui_type` - Type text
-- `mcp__ios-simulator__ui_swipe` - Perform swipe gesture
-
-**Usage:** Use these tools to:
-
-- Take screenshots of the app for visual verification
-- Record videos for demos or bug reproduction
-- Automate UI interactions for testing
-- Inspect UI elements and accessibility
-
----
-
-### Playwright - Browser Automation
-
-Use the **playwright** MCP server for web browser automation and testing.
-
-**Available tools:**
-
-- `mcp__playwright__browser_navigate` - Navigate to a URL
-- `mcp__playwright__browser_navigate_back` - Go back in browser history
-- `mcp__playwright__browser_click` - Click on an element
-- `mcp__playwright__browser_type` - Type text into an input
-- `mcp__playwright__browser_fill_form` - Fill a form
-- `mcp__playwright__browser_take_screenshot` - Take a screenshot
-- `mcp__playwright__browser_snapshot` - Get page accessibility snapshot
-- `mcp__playwright__browser_evaluate` - Execute JavaScript in browser
-- `mcp__playwright__browser_console_messages` - Get console messages
-- `mcp__playwright__browser_network_requests` - Get network requests
-- `mcp__playwright__browser_tabs` - Manage browser tabs
-- `mcp__playwright__browser_close` - Close the browser
-- `mcp__playwright__browser_resize` - Resize browser window
-- `mcp__playwright__browser_handle_dialog` - Handle browser dialogs
-- `mcp__playwright__browser_file_upload` - Upload files
-- `mcp__playwright__browser_press_key` - Press keyboard key
-- `mcp__playwright__browser_hover` - Hover over element
-- `mcp__playwright__browser_drag` - Drag element
-- `mcp__playwright__browser_select_option` - Select dropdown option
-- `mcp__playwright__browser_wait_for` - Wait for element/condition
-- `mcp__playwright__browser_install` - Install browser
-- `mcp__playwright__browser_run_code` - Run Playwright code
-
-**Usage:** Use these tools to:
-
-- Test web-related features (WebView content, OAuth flows)
-- Automate browser interactions
-- Debug web content issues
-- Take screenshots of web pages
