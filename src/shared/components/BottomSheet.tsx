@@ -18,11 +18,11 @@ import {
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
   Easing,
-  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated'
+import { scheduleOnRN } from 'react-native-worklets'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -80,7 +80,7 @@ export function BottomSheet({
         translateY.value > sheetHeight * CLOSE_THRESHOLD || e.velocityY > VELOCITY_THRESHOLD
 
       if (shouldClose) {
-        runOnJS(onClose)()
+        scheduleOnRN(onClose)
       } else {
         translateY.value = withTiming(0, { duration: 150, easing: Easing.out(Easing.cubic) })
       }

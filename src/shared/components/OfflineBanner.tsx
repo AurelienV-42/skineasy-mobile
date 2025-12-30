@@ -7,8 +7,8 @@ import Animated, {
   withSpring,
   withDelay,
   interpolate,
-  runOnJS,
 } from 'react-native-reanimated'
+import { scheduleOnRN } from 'react-native-worklets'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Wifi, WifiOff } from 'lucide-react-native'
 
@@ -75,7 +75,7 @@ export function OfflineBanner() {
         1500,
         withSpring(0, SPRING_CONFIG, (finished) => {
           if (finished) {
-            runOnJS(setBannerState)('hidden')
+            scheduleOnRN(setBannerState, 'hidden')
           }
         })
       )
