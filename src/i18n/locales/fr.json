@@ -191,6 +191,10 @@
   },
   "routine": {
     "title": "Ma Routine",
+    "ordinal": {
+      "first": "Premier",
+      "second": "Second"
+    },
     "morning": "Matin",
     "evening": "Soir",
     "shopRoutine": "Commander ma Routine",

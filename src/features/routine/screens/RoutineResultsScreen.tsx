@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, Text, View } from 'react-native'
 import Animated, { FadeInDown } from 'react-native-reanimated'
@@ -28,6 +28,32 @@ export default function RoutineResultsScreen() {
 
   const { data: routine, isLoading, isError } = useRoutine()
   const todayRoutine = useTodayRoutine(routine)
+
+  // Compute category counts and occurrences for ordinal labels
+  // Must be called before early returns to satisfy Rules of Hooks
+  const stepsWithOrdinal = useMemo(() => {
+    if (!todayRoutine) return []
+
+    const currentSteps =
+      selectedTime === 'morning' ? todayRoutine.morning.steps : todayRoutine.evening.steps
+
+    const categoryCount = new Map<string, number>()
+    currentSteps.forEach((s) => {
+      categoryCount.set(s.step.category, (categoryCount.get(s.step.category) || 0) + 1)
+    })
+
+    const occurrenceTracker = new Map<string, number>()
+    return currentSteps.map((stepWithProducts) => {
+      const cat = stepWithProducts.step.category
+      const occurrence = (occurrenceTracker.get(cat) || 0) + 1
+      occurrenceTracker.set(cat, occurrence)
+      return {
+        stepWithProducts,
+        categoryOccurrence: occurrence,
+        totalCategoryCount: categoryCount.get(cat) || 1,
+      }
+    })
+  }, [todayRoutine, selectedTime])
 
   // Loading state
   if (isLoading) {
@@ -93,13 +119,17 @@ export default function RoutineResultsScreen() {
         </Animated.View>
 
         {/* Step Cards */}
-        {currentSteps.map((stepWithProducts, index) => (
-          <RoutineStepCard
-            key={`${stepWithProducts.step.category}-${stepWithProducts.step.order}`}
-            stepWithProducts={stepWithProducts}
-            index={index}
-          />
-        ))}
+        {stepsWithOrdinal.map(
+          ({ stepWithProducts, categoryOccurrence, totalCategoryCount }, index) => (
+            <RoutineStepCard
+              key={`${stepWithProducts.step.category}-${stepWithProducts.step.order}`}
+              stepWithProducts={stepWithProducts}
+              index={index}
+              categoryOccurrence={categoryOccurrence}
+              totalCategoryCount={totalCategoryCount}
+            />
+          )
+        )}
 
         {/* Empty state for current time */}
         {currentSteps.length === 0 && (

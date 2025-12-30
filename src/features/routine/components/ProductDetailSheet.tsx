@@ -57,9 +57,7 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
               {typeContent?.title || product.name}
             </Text>
             {typeContent?.subtitle && (
-              <Text className="text-sm text-textMuted mt-1">
-                {typeContent.subtitle}
-              </Text>
+              <Text className="text-sm text-textMuted mt-1">{typeContent.subtitle}</Text>
             )}
             {product.brand && <Text className="text-xs text-textLight mt-1">{product.brand}</Text>}
           </View>

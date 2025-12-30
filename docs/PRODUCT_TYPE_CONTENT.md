@@ -53,6 +53,20 @@ interface TypeContentDto {
 
 - Shows `application` text below product name in muted style
 - Tap product to open detail sheet
+- ChevronRight icon indicates product is clickable
+
+### Category Ordinal Labels
+
+When multiple steps share the same category (e.g., two "nettoyant" steps), they display ordinal prefixes:
+
+- "Premier nettoyant" (First cleanser)
+- "Second nettoyant" (Second cleanser)
+
+Logic computed in `RoutineResultsScreen.tsx` using `useMemo`:
+
+1. Count occurrences of each category
+2. Track which occurrence each step is (1st, 2nd)
+3. Pass `categoryOccurrence` and `totalCategoryCount` to `RoutineStepCard`
 
 ### Product Detail Sheet (ProductDetailSheet)
 
@@ -67,13 +81,14 @@ Full bottom sheet modal displaying:
 
 ## Files
 
-| File                                                     | Purpose                           |
-| -------------------------------------------------------- | --------------------------------- |
-| `src/features/routine/types/routine.types.ts`            | TypeContentDto + ProductDto types |
-| `src/features/routine/components/ProductDetailSheet.tsx` | Bottom sheet modal                |
-| `src/features/routine/components/RoutineStepCard.tsx`    | Inline display + tap handler      |
-| `src/i18n/locales/fr.json`                               | French translations               |
-| `src/i18n/locales/en.json`                               | English translations              |
+| File                                                     | Purpose                             |
+| -------------------------------------------------------- | ----------------------------------- |
+| `src/features/routine/types/routine.types.ts`            | TypeContentDto + ProductDto types   |
+| `src/features/routine/components/ProductDetailSheet.tsx` | Bottom sheet modal                  |
+| `src/features/routine/components/RoutineStepCard.tsx`    | Inline display + tap + chevron icon |
+| `src/features/routine/screens/RoutineResultsScreen.tsx`  | Ordinal category computation        |
+| `src/i18n/locales/fr.json`                               | French translations                 |
+| `src/i18n/locales/en.json`                               | English translations                |
 
 ## Dependencies
 
@@ -82,6 +97,8 @@ Full bottom sheet modal displaying:
 ## Translations
 
 ```
+routine.ordinal.first
+routine.ordinal.second
 routine.productDetail.howToUse
 routine.productDetail.frequency
 routine.productDetail.application

@@ -191,6 +191,10 @@
   },
   "routine": {
     "title": "My Routine",
+    "ordinal": {
+      "first": "First",
+      "second": "Second"
+    },
     "morning": "Morning",
     "evening": "Evening",
     "shopRoutine": "Shop my Routine",

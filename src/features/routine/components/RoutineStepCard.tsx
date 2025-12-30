@@ -1,4 +1,4 @@
-import { Lightbulb } from 'lucide-react-native'
+import { ChevronRight } from 'lucide-react-native'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, Text, View } from 'react-native'
@@ -23,7 +23,7 @@ function ProductItem({ product, isLast, onPress }: ProductItemProps) {
   return (
     <Pressable
       onPress={onPress}
-      className={`flex-row ${!isLast ? 'mb-3 pb-3 border-b border-border/50' : ''}`}
+      className={`flex-row items-center ${!isLast ? 'mb-3 pb-3 border-b border-border/50' : ''}`}
     >
       {product.illustrationUrl && (
         <Image
@@ -38,12 +38,9 @@ function ProductItem({ product, isLast, onPress }: ProductItemProps) {
           {product.name}
         </Text>
         {product.brand && <Text className="text-sm text-textMuted">{product.brand}</Text>}
-        {application && (
-          <Text className="text-xs text-textLight mt-1" numberOfLines={1}>
-            {application}
-          </Text>
-        )}
       </View>
+
+      <ChevronRight size={18} color={colors.textLight} />
     </Pressable>
   )
 }
@@ -51,14 +48,25 @@ function ProductItem({ product, isLast, onPress }: ProductItemProps) {
 interface RoutineStepCardProps {
   stepWithProducts: RoutineStepWithProducts
   index: number
+  categoryOccurrence: number
+  totalCategoryCount: number
 }
 
-export function RoutineStepCard({ stepWithProducts, index }: RoutineStepCardProps) {
+export function RoutineStepCard({
+  stepWithProducts,
+  index,
+  categoryOccurrence,
+  totalCategoryCount,
+}: RoutineStepCardProps) {
   const { t } = useTranslation()
   const { step, products } = stepWithProducts
   const [selectedProduct, setSelectedProduct] = useState<ProductDto | null>(null)
 
-  const categoryLabel = CATEGORY_LABELS[step.category] || step.category
+  const baseLabel = CATEGORY_LABELS[step.category] || step.category
+  const categoryLabel =
+    totalCategoryCount > 1
+      ? `${t(categoryOccurrence === 1 ? 'routine.ordinal.first' : 'routine.ordinal.second')} ${baseLabel.toLowerCase()}`
+      : baseLabel
   const hasProducts = products.length > 0
 
   const handleProductPress = (product: ProductDto) => {
@@ -102,14 +110,6 @@ export function RoutineStepCard({ stepWithProducts, index }: RoutineStepCardProp
                 />
               ))}
             </View>
-
-            {/* Instructions */}
-            {step.instructions && (
-              <View className="bg-primary/5 rounded-xl p-3 flex-row">
-                <Lightbulb size={18} color={colors.primary} className="mr-2 mt-0.5" />
-                <Text className="text-sm text-text flex-1 ml-2">{step.instructions}</Text>
-              </View>
-            )}
           </>
         ) : (
           <View className="py-4 items-center">

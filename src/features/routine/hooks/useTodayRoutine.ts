@@ -19,16 +19,32 @@ function getTodayDayOfWeek(): number {
 
 /**
  * Get steps with their associated products
- * Products are now arrays per category (can have 0-3 products)
+ * Products are distributed by occurrence when multiple steps share the same category
+ * (e.g., 1st nettoyant step gets 1st nettoyant product, 2nd step gets 2nd product)
  */
 function getStepsWithProducts(
   steps: { order: number; category: string; instructions: string; estimatedMinutes: number }[],
   products: ProductSelectionProducts
 ): RoutineStepWithProducts[] {
-  return steps.map((step) => ({
-    step: step as RoutineStepWithProducts['step'],
-    products: products[step.category as keyof ProductSelectionProducts] || [],
-  }))
+  const categoryOccurrence = new Map<string, number>()
+
+  return steps.map((step) => {
+    const cat = step.category as keyof ProductSelectionProducts
+    const occurrence = (categoryOccurrence.get(cat) || 0) + 1
+    categoryOccurrence.set(cat, occurrence)
+
+    const categoryProducts = products[cat] || []
+    // Distribute products: each step gets product at its occurrence index
+    const stepProducts =
+      categoryProducts.length > 1
+        ? [categoryProducts[occurrence - 1]].filter(Boolean)
+        : categoryProducts
+
+    return {
+      step: step as RoutineStepWithProducts['step'],
+      products: stepProducts,
+    }
+  })
 }
 
 /**
