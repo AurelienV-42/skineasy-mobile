@@ -40,7 +40,6 @@ src/features/routine/
 | ------------------ | -------------------------------------------- |
 | Single file        | All components in `RoutineResultsScreen.tsx` |
 | Limited types      | Only basic `RoutineProduct` type             |
-| Missing features   | No morning/evening toggle, no instructions   |
 | No `/routine/last` | Only uses `/routine/{rspid}` endpoint        |
 
 ---
@@ -81,7 +80,6 @@ src/features/routine/
 | Feature                | Description                       | Status  |
 | ---------------------- | --------------------------------- | ------- |
 | Morning/Evening Toggle | Switch between AM/PM routines     | 🔲 Todo |
-| Product Instructions   | Show how to apply each product    | 🔲 Todo |
 | Step Cards             | Display products in routine order | 🔲 Todo |
 | Shop Button            | Link to purchase each product     | 🔲 Todo |
 | Staggered Animations   | Smooth entrance animations        | 🔲 Todo |
@@ -136,7 +134,7 @@ src/features/routine/
 src/features/routine/
 ├── components/
 │   ├── RoutineToggle.tsx           # Morning/Evening toggle
-│   ├── RoutineStepCard.tsx         # Step with product + instructions
+│   ├── RoutineStepCard.tsx         # Step with product
 │   ├── RoutineSummaryCard.tsx      # Skin profile summary (Phase 5)
 │   ├── RoutineLoadingState.tsx     # Loading spinner
 │   ├── RoutineErrorState.tsx       # Error display
@@ -406,7 +404,6 @@ RoutineResultsScreen
         ├── StepHeader
         ├── ProductImage
         ├── ProductInfo
-        ├── Instructions
         └── ShopButton
 ```
 

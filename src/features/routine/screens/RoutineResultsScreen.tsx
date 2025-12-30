@@ -19,7 +19,7 @@ import { ScreenHeader } from '@shared/components/ScreenHeader'
  *
  * Displays the authenticated user's skincare routine with:
  * - Morning/Evening toggle
- * - Step-by-step product cards with instructions
+ * - Step-by-step product cards
  * - Shop buttons for each product
  */
 export default function RoutineResultsScreen() {

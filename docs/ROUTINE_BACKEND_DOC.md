@@ -139,25 +139,21 @@ None
               {
                 "order": 1,
                 "category": "nettoyant",
-                "instructions": "Appliquez sur peau humide, massez délicatement puis rincez.",
                 "estimatedMinutes": 1
               },
               {
                 "order": 2,
                 "category": "serum",
-                "instructions": "Appliquez quelques gouttes sur peau propre et tapotez.",
                 "estimatedMinutes": 1
               },
               {
                 "order": 3,
                 "category": "creme_jour",
-                "instructions": "Appliquez uniformément sur le visage et le cou.",
                 "estimatedMinutes": 1
               },
               {
                 "order": 4,
                 "category": "creme_solaire",
-                "instructions": "Appliquez généreusement 15 minutes avant exposition.",
                 "estimatedMinutes": 1
               }
             ],
@@ -168,13 +164,11 @@ None
               {
                 "order": 1,
                 "category": "nettoyant",
-                "instructions": "Appliquez sur peau humide, massez délicatement puis rincez.",
                 "estimatedMinutes": 1
               },
               {
                 "order": 2,
                 "category": "serum",
-                "instructions": "Appliquez quelques gouttes sur peau propre et tapotez.",
                 "estimatedMinutes": 1
               }
             ],
@@ -408,7 +402,6 @@ No routine found for this user.
 | ------------------ | ----------------- | ------------------------------------------------------------------------ |
 | `order`            | `number`          | Step order (1, 2, 3...)                                                  |
 | `category`         | `ProductCategory` | Product category - use to look up product in `productSelection.products` |
-| `instructions`     | `string`          | French application instructions                                          |
 | `estimatedMinutes` | `number`          | Estimated time for this step                                             |
 
 #### ProductUsageResponseDto
@@ -506,7 +499,6 @@ function renderRoutineSteps(routine: RoutineResponseDto, timeRoutine: TimeRoutin
       productImage: product?.illustrationUrl ?? '',
       productBrand: product?.brand ?? '',
       productPrice: product?.price ?? 0,
-      instructions: step.instructions,
       estimatedMinutes: step.estimatedMinutes,
     }
   })
@@ -597,7 +589,6 @@ interface ProductSelectionResponseDto {
 interface RoutineStepResponseDto {
   order: number
   category: ProductCategory
-  instructions: string
   estimatedMinutes: number
 }
 

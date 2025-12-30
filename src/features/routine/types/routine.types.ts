@@ -127,7 +127,6 @@ export interface ProductSelectionDto {
 export interface RoutineStepDto {
   order: number
   category: ProductCategory
-  instructions: string
   estimatedMinutes: number
 }
 

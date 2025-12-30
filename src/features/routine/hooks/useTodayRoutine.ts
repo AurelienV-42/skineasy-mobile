@@ -23,7 +23,7 @@ function getTodayDayOfWeek(): number {
  * (e.g., 1st nettoyant step gets 1st nettoyant product, 2nd step gets 2nd product)
  */
 function getStepsWithProducts(
-  steps: { order: number; category: string; instructions: string; estimatedMinutes: number }[],
+  steps: { order: number; category: string; estimatedMinutes: number }[],
   products: ProductSelectionProducts
 ): RoutineStepWithProducts[] {
   const categoryOccurrence = new Map<string, number>()
