@@ -2,107 +2,103 @@
  * Bottom Sheet Component
  *
  * A reusable bottom sheet modal that slides up from the bottom.
- * Used for action sheets, pickers, and other modal content.
+ * Supports drag-to-close gesture and dynamic height.
  */
 
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
-  Animated,
+  Dimensions,
+  KeyboardAvoidingView,
   Modal,
   Platform,
-  TouchableWithoutFeedback,
+  Pressable,
   View,
-  KeyboardAvoidingView,
-  Dimensions,
   type LayoutChangeEvent,
 } from 'react-native'
+import { Gesture, GestureDetector } from 'react-native-gesture-handler'
+import Animated, {
+  Easing,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
-const HANDLE_HEIGHT = 28 // py-3 (12*2) + handle height (4)
-const MAX_HEIGHT_RATIO = 0.9 // Max 90% of screen
+const HANDLE_HEIGHT = 28
+const MAX_HEIGHT_RATIO = 0.9
+const CLOSE_THRESHOLD = 0.25
+const VELOCITY_THRESHOLD = 500
 
 interface BottomSheetProps {
   visible: boolean
   onClose: () => void
   children: React.ReactNode
-  height?: number | 'auto' // Height in pixels or 'auto'
-  snapPoints?: number[] // Snap positions (0-1)
+  height?: number | 'auto'
+  contentHeight?: number
 }
 
 export function BottomSheet({
   visible,
   onClose,
   children,
-  height = SCREEN_HEIGHT * 0.6, // Default 60% of screen
+  height = SCREEN_HEIGHT * 0.6,
+  contentHeight: externalContentHeight,
 }: BottomSheetProps) {
   const insets = useSafeAreaInsets()
-  const slideAnim = useRef(new Animated.Value(0)).current
-  const backdropAnim = useRef(new Animated.Value(0)).current
-  const [contentHeight, setContentHeight] = useState(0)
+  const [measuredHeight, setMeasuredHeight] = useState(0)
 
   const isAutoHeight = height === 'auto'
   const maxHeight = SCREEN_HEIGHT * MAX_HEIGHT_RATIO
 
-  // Calculate sheet height: fixed, or auto-measured (capped at maxHeight)
+  const autoContentHeight = externalContentHeight ?? measuredHeight
   const sheetHeight = isAutoHeight
-    ? contentHeight > 0
-      ? Math.min(contentHeight + HANDLE_HEIGHT + insets.bottom, maxHeight)
-      : SCREEN_HEIGHT * 0.5 // Initial estimate before measurement
+    ? autoContentHeight > 0
+      ? Math.min(autoContentHeight + HANDLE_HEIGHT + insets.bottom, maxHeight)
+      : SCREEN_HEIGHT * 0.5
     : height
+
+  const translateY = useSharedValue(sheetHeight)
+
+  // Open animation
+  useEffect(() => {
+    if (visible) {
+      translateY.value = withTiming(0, { duration: 250, easing: Easing.out(Easing.cubic) })
+    } else {
+      translateY.value = sheetHeight
+    }
+  }, [visible, sheetHeight, translateY])
+
+  // Pan gesture for drag-to-close
+  const panGesture = Gesture.Pan()
+    .onUpdate((e) => {
+      translateY.value = Math.max(0, e.translationY)
+    })
+    .onEnd((e) => {
+      const shouldClose =
+        translateY.value > sheetHeight * CLOSE_THRESHOLD || e.velocityY > VELOCITY_THRESHOLD
+
+      if (shouldClose) {
+        runOnJS(onClose)()
+      } else {
+        translateY.value = withTiming(0, { duration: 150, easing: Easing.out(Easing.cubic) })
+      }
+    })
 
   const handleContentLayout = useCallback(
     (event: LayoutChangeEvent) => {
-      const { height: measuredHeight } = event.nativeEvent.layout
-      if (measuredHeight > 0 && measuredHeight !== contentHeight) {
-        setContentHeight(measuredHeight)
+      const { height: layoutHeight } = event.nativeEvent.layout
+      if (layoutHeight > 0 && layoutHeight !== measuredHeight) {
+        setMeasuredHeight(layoutHeight)
       }
     },
-    [contentHeight]
+    [measuredHeight]
   )
 
-  useEffect(() => {
-    if (visible) {
-      // Animate in
-      Animated.parallel([
-        Animated.spring(slideAnim, {
-          toValue: 1,
-          useNativeDriver: true,
-          tension: 65,
-          friction: 11,
-        }),
-        Animated.timing(backdropAnim, {
-          toValue: 1,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-      ]).start()
-    } else {
-      // Animate out
-      Animated.parallel([
-        Animated.timing(slideAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(backdropAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]).start()
-    }
-  }, [visible, slideAnim, backdropAnim])
-
-  const translateY = slideAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [sheetHeight, 0],
-  })
-
-  const backdropOpacity = backdropAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 0.5],
-  })
+  const sheetStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }],
+  }))
 
   return (
     <Modal
@@ -117,56 +113,44 @@ export function BottomSheet({
         style={{ flex: 1 }}
       >
         {/* Backdrop */}
-        <TouchableWithoutFeedback onPress={onClose}>
-          <Animated.View
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: '#000',
-              opacity: backdropOpacity,
-            }}
-          />
-        </TouchableWithoutFeedback>
+        <Pressable onPress={onClose} style={{ flex: 1 }}>
+          <View className="absolute inset-0 bg-black/50" />
+        </Pressable>
 
         {/* Sheet */}
-        <Animated.View
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: sheetHeight + insets.bottom,
-            transform: [{ translateY }],
-          }}
-        >
-          <View
-            className="bg-surface rounded-t-3xl flex-1"
-            style={{
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: -2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 8,
-              elevation: 5,
-            }}
+        <GestureDetector gesture={panGesture}>
+          <Animated.View
+            style={[
+              { position: 'absolute', bottom: 0, left: 0, right: 0, height: sheetHeight },
+              sheetStyle,
+            ]}
           >
-            {/* Handle */}
-            <View className="items-center py-3">
-              <View className="w-10 h-1 bg-border rounded-full" />
-            </View>
-
-            {/* Content */}
             <View
-              className={isAutoHeight ? '' : 'flex-1'}
-              style={{ paddingBottom: insets.bottom }}
-              onLayout={isAutoHeight ? handleContentLayout : undefined}
+              className="bg-surface rounded-t-3xl flex-1"
+              style={{
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: -2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 8,
+                elevation: 5,
+              }}
             >
-              {children}
+              {/* Handle */}
+              <View className="items-center py-3">
+                <View className="w-10 h-1 bg-border rounded-full" />
+              </View>
+
+              {/* Content */}
+              <View
+                className={isAutoHeight ? '' : 'flex-1'}
+                style={{ paddingBottom: insets.bottom }}
+                onLayout={isAutoHeight ? handleContentLayout : undefined}
+              >
+                {children}
+              </View>
             </View>
-          </View>
-        </Animated.View>
+          </Animated.View>
+        </GestureDetector>
       </KeyboardAvoidingView>
     </Modal>
   )

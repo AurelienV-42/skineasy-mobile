@@ -1,14 +1,20 @@
 import { ExternalLink } from 'lucide-react-native'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, Linking, ScrollView, Text, useWindowDimensions, View } from 'react-native'
-import RenderHtml from 'react-native-render-html'
+import RenderHtml, { type MixedStyleDeclaration } from 'react-native-render-html'
 
 import type { ProductDto } from '@features/routine/types/routine.types'
 import { BottomSheet } from '@shared/components/BottomSheet'
 import { Pressable } from '@shared/components/Pressable'
 import { haptic } from '@shared/utils/haptic'
 import { colors } from '@theme/colors'
+
+const HTML_BASE_STYLE: MixedStyleDeclaration = {
+  color: colors.text,
+  fontSize: 14,
+  lineHeight: 20,
+}
 
 interface ProductDetailSheetProps {
   product: ProductDto | null
@@ -19,12 +25,17 @@ interface ProductDetailSheetProps {
 export function ProductDetailSheet({ product, visible, onClose }: ProductDetailSheetProps) {
   const { t } = useTranslation()
   const { width } = useWindowDimensions()
+  const [scrollContentHeight, setScrollContentHeight] = useState(0)
 
   const handleBuyPress = useCallback(async () => {
     if (!product?.url) return
     haptic.heavy()
     await Linking.openURL(product.url)
   }, [product])
+
+  const handleContentSizeChange = useCallback((_w: number, h: number) => {
+    setScrollContentHeight(h)
+  }, [])
 
   if (!product) return null
 
@@ -36,8 +47,17 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
     typeContent?.irritationPotential && typeContent.irritationPotential.length > 0
 
   return (
-    <BottomSheet visible={visible} onClose={onClose} height="auto">
-      <ScrollView className="px-4" showsVerticalScrollIndicator={false}>
+    <BottomSheet
+      visible={visible}
+      onClose={onClose}
+      height="auto"
+      contentHeight={scrollContentHeight}
+    >
+      <ScrollView
+        className="px-4"
+        showsVerticalScrollIndicator={false}
+        onContentSizeChange={handleContentSizeChange}
+      >
         {/* Header: Image + Title */}
         <View className="flex-row mb-4">
           {product.illustrationUrl && (
@@ -91,7 +111,7 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
             <RenderHtml
               contentWidth={width - 32}
               source={{ html: typeContent.description }}
-              baseStyle={{ color: colors.text, fontSize: 14, lineHeight: 20 }}
+              baseStyle={HTML_BASE_STYLE}
             />
           </View>
         )}
@@ -106,7 +126,7 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
               <RenderHtml
                 contentWidth={width - 56}
                 source={{ html: typeContent.howToUse }}
-                baseStyle={{ color: colors.text, fontSize: 14, lineHeight: 20 }}
+                baseStyle={HTML_BASE_STYLE}
               />
             </View>
           </View>
