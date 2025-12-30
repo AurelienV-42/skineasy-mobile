@@ -131,7 +131,7 @@ export function SportTypeSelector({ value, onChange }: SportTypeSelectorProps) {
           setBottomSheetVisible(false)
           setSearchQuery('')
         }}
-        height={600}
+        scrollable
       >
         <View className="flex-1 px-4">
           {/* Title */}
@@ -161,6 +161,7 @@ export function SportTypeSelector({ value, onChange }: SportTypeSelectorProps) {
           <FlatList
             data={filteredSportTypes}
             keyExtractor={(item) => item.id}
+            nestedScrollEnabled
             renderItem={({ item }) => (
               <Pressable
                 onPress={() => handleSelect(item.id)}

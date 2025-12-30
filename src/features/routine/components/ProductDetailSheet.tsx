@@ -1,5 +1,5 @@
 import { ExternalLink } from 'lucide-react-native'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, Linking, ScrollView, Text, useWindowDimensions, View } from 'react-native'
 import RenderHtml, { type MixedStyleDeclaration } from 'react-native-render-html'
@@ -25,17 +25,12 @@ interface ProductDetailSheetProps {
 export function ProductDetailSheet({ product, visible, onClose }: ProductDetailSheetProps) {
   const { t } = useTranslation()
   const { width } = useWindowDimensions()
-  const [scrollContentHeight, setScrollContentHeight] = useState(0)
 
   const handleBuyPress = useCallback(async () => {
     if (!product?.url) return
     haptic.heavy()
     await Linking.openURL(product.url)
   }, [product])
-
-  const handleContentSizeChange = useCallback((_w: number, h: number) => {
-    setScrollContentHeight(h)
-  }, [])
 
   if (!product) return null
 
@@ -47,23 +42,14 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
     typeContent?.irritationPotential && typeContent.irritationPotential.length > 0
 
   return (
-    <BottomSheet
-      visible={visible}
-      onClose={onClose}
-      height="auto"
-      contentHeight={scrollContentHeight}
-    >
-      <ScrollView
-        className="px-4"
-        showsVerticalScrollIndicator={false}
-        onContentSizeChange={handleContentSizeChange}
-      >
+    <BottomSheet visible={visible} onClose={onClose} scrollable>
+      <ScrollView className="pt-8 px-4" showsVerticalScrollIndicator={false} nestedScrollEnabled>
         {/* Header: Image + Title */}
-        <View className="flex-row mb-4">
+        <View className="flex-row items-center mb-4">
           {product.illustrationUrl && (
             <Image
               source={{ uri: product.illustrationUrl }}
-              className="w-24 h-24 rounded-xl mr-4 bg-background"
+              className="p-2 rounded-md bg-white w-32 h-32 rounded-xl mr-4 bg-background"
               resizeMode="cover"
             />
           )}
@@ -88,7 +74,7 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
           <View className="flex-row mb-4">
             {typeContent?.application && (
               <View className="flex-1 bg-background rounded-xl p-3 mr-2">
-                <Text className="text-xs text-textMuted mb-1">
+                <Text className="text-xs text-secondary mb-1">
                   {t('routine.productDetail.application')}
                 </Text>
                 <Text className="text-sm font-medium text-text">{typeContent.application}</Text>
@@ -96,7 +82,7 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
             )}
             {typeContent?.frequency && (
               <View className="flex-1 bg-background rounded-xl p-3 ml-2">
-                <Text className="text-xs text-textMuted mb-1">
+                <Text className="text-xs text-secondary mb-1">
                   {t('routine.productDetail.frequency')}
                 </Text>
                 <Text className="text-sm font-medium text-text">{typeContent.frequency}</Text>
@@ -119,7 +105,7 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
         {/* How to Use */}
         {hasHowToUse && (
           <View className="mb-4">
-            <Text className="text-sm font-semibold text-text mb-2">
+            <Text className="text-sm font-semibold text-secondary mb-2">
               {t('routine.productDetail.howToUse')}
             </Text>
             <View className="bg-primary/5 rounded-xl p-3">

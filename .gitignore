@@ -44,3 +44,5 @@ yarn-error.*
 .env.local
 
 old_files
+SkinEasy.app
+build*

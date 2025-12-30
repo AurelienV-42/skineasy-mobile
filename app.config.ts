@@ -3,7 +3,7 @@ import { ConfigContext, ExpoConfig } from 'expo/config'
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: 'Skin Easy',
-  slug: 'skineasy-mobile',
+  slug: 'skineasy',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
@@ -15,8 +15,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     backgroundColor: '#FFF9F5',
   },
   ios: {
-    supportsTablet: true,
+    supportsTablet: false,
     bundleIdentifier: 'com.skineasy.app',
+    config: {
+      usesNonExemptEncryption: false,
+    },
   },
   android: {
     adaptiveIcon: {
