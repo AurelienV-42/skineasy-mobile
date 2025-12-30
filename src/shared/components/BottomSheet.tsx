@@ -5,7 +5,7 @@
  * Used for action sheets, pickers, and other modal content.
  */
 
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
   Animated,
   Modal,
@@ -14,10 +14,13 @@ import {
   View,
   KeyboardAvoidingView,
   Dimensions,
+  type LayoutChangeEvent,
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
+const HANDLE_HEIGHT = 28 // py-3 (12*2) + handle height (4)
+const MAX_HEIGHT_RATIO = 0.9 // Max 90% of screen
 
 interface BottomSheetProps {
   visible: boolean
@@ -36,8 +39,27 @@ export function BottomSheet({
   const insets = useSafeAreaInsets()
   const slideAnim = useRef(new Animated.Value(0)).current
   const backdropAnim = useRef(new Animated.Value(0)).current
+  const [contentHeight, setContentHeight] = useState(0)
 
-  const sheetHeight = typeof height === 'number' ? height : SCREEN_HEIGHT * 0.8
+  const isAutoHeight = height === 'auto'
+  const maxHeight = SCREEN_HEIGHT * MAX_HEIGHT_RATIO
+
+  // Calculate sheet height: fixed, or auto-measured (capped at maxHeight)
+  const sheetHeight = isAutoHeight
+    ? contentHeight > 0
+      ? Math.min(contentHeight + HANDLE_HEIGHT + insets.bottom, maxHeight)
+      : SCREEN_HEIGHT * 0.5 // Initial estimate before measurement
+    : height
+
+  const handleContentLayout = useCallback(
+    (event: LayoutChangeEvent) => {
+      const { height: measuredHeight } = event.nativeEvent.layout
+      if (measuredHeight > 0 && measuredHeight !== contentHeight) {
+        setContentHeight(measuredHeight)
+      }
+    },
+    [contentHeight]
+  )
 
   useEffect(() => {
     if (visible) {
@@ -136,7 +158,11 @@ export function BottomSheet({
             </View>
 
             {/* Content */}
-            <View className="flex-1" style={{ paddingBottom: insets.bottom }}>
+            <View
+              className={isAutoHeight ? '' : 'flex-1'}
+              style={{ paddingBottom: insets.bottom }}
+              onLayout={isAutoHeight ? handleContentLayout : undefined}
+            >
               {children}
             </View>
           </View>

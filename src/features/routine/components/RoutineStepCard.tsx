@@ -18,8 +18,6 @@ interface ProductItemProps {
 }
 
 function ProductItem({ product, isLast, onPress }: ProductItemProps) {
-  const application = product.typeContent?.application
-
   return (
     <Pressable
       onPress={onPress}

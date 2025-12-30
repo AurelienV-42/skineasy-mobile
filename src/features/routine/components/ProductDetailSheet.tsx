@@ -36,8 +36,8 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
     typeContent?.irritationPotential && typeContent.irritationPotential.length > 0
 
   return (
-    <BottomSheet visible={visible} onClose={onClose} height={600}>
-      <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
+    <BottomSheet visible={visible} onClose={onClose} height="auto">
+      <ScrollView className="px-4" showsVerticalScrollIndicator={false}>
         {/* Header: Image + Title */}
         <View className="flex-row mb-4">
           {product.illustrationUrl && (
