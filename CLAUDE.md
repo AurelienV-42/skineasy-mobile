@@ -4,13 +4,13 @@ React Native (Expo) skincare app - iOS & Android
 
 ## Quick Reference
 
-| Utility | Location | Note |
-|---------|----------|------|
-| Pressable | `@shared/components/Pressable` | Always use instead of RN's |
-| Logger | `@shared/utils/logger` | Never use console.* |
-| Haptic | `@shared/utils/haptic` | See intensity rules below |
-| Date | `@shared/utils/date` | API uses ISO 8601 UTC |
-| ENV | `@shared/config/env` | Never use process.env at runtime |
+| Utility   | Location                       | Note                             |
+| --------- | ------------------------------ | -------------------------------- |
+| Pressable | `@shared/components/Pressable` | Always use instead of RN's       |
+| Logger    | `@shared/utils/logger`         | Never use console.\*             |
+| Haptic    | `@shared/utils/haptic`         | See intensity rules below        |
+| Date      | `@shared/utils/date`           | API uses ISO 8601 UTC            |
+| ENV       | `@shared/config/env`           | Never use process.env at runtime |
 
 ## Project-Specific Rules
 
@@ -97,15 +97,15 @@ sm: 4, md: 8, lg: 16, full: 9999
 
 Font: `@expo-google-fonts/roboto`
 
-| Style | Weight | Size |
-|-------|--------|------|
-| h1 | 700 | 28 |
-| h2 | 700 | 24 |
-| h3 | 500 | 20 |
-| body | 400 | 16 |
-| bodySmall | 400 | 14 |
-| caption | 400 | 12 |
-| button | 500 | 16 |
+| Style     | Weight | Size |
+| --------- | ------ | ---- |
+| h1        | 700    | 28   |
+| h2        | 700    | 24   |
+| h3        | 500    | 20   |
+| body      | 400    | 16   |
+| bodySmall | 400    | 14   |
+| caption   | 400    | 12   |
+| button    | 500    | 16   |
 
 ---
 

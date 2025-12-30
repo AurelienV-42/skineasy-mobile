@@ -36,12 +36,12 @@ src/features/routine/
 
 ### Current Limitations
 
-| Issue | Description |
-|-------|-------------|
-| Single file | All components in `RoutineResultsScreen.tsx` |
-| Limited types | Only basic `RoutineProduct` type |
-| Missing features | No morning/evening toggle, no instructions |
-| No `/routine/last` | Only uses `/routine/{rspid}` endpoint |
+| Issue              | Description                                  |
+| ------------------ | -------------------------------------------- |
+| Single file        | All components in `RoutineResultsScreen.tsx` |
+| Limited types      | Only basic `RoutineProduct` type             |
+| Missing features   | No morning/evening toggle, no instructions   |
+| No `/routine/last` | Only uses `/routine/{rspid}` endpoint        |
 
 ---
 
@@ -78,13 +78,13 @@ src/features/routine/
 
 ### 2.2 MVP Features
 
-| Feature | Description | Status |
-|---------|-------------|--------|
-| Morning/Evening Toggle | Switch between AM/PM routines | 🔲 Todo |
-| Product Instructions | Show how to apply each product | 🔲 Todo |
-| Step Cards | Display products in routine order | 🔲 Todo |
-| Shop Button | Link to purchase each product | 🔲 Todo |
-| Staggered Animations | Smooth entrance animations | 🔲 Todo |
+| Feature                | Description                       | Status  |
+| ---------------------- | --------------------------------- | ------- |
+| Morning/Evening Toggle | Switch between AM/PM routines     | 🔲 Todo |
+| Product Instructions   | Show how to apply each product    | 🔲 Todo |
+| Step Cards             | Display products in routine order | 🔲 Todo |
+| Shop Button            | Link to purchase each product     | 🔲 Todo |
+| Staggered Animations   | Smooth entrance animations        | 🔲 Todo |
 
 ### 2.3 Excluded from MVP (Future)
 
@@ -98,37 +98,37 @@ src/features/routine/
 
 #### Phase 1: Types & Data Layer
 
-| Step | File | Description |
-|------|------|-------------|
-| 1 | `src/features/routine/types/routine.types.ts` | Create full API types from backend doc |
-| 2 | `src/features/routine/services/routine.service.ts` | Add `getLastRoutine()` function |
-| 3 | `src/features/routine/hooks/useRoutine.ts` | Hook for `/routine/last` endpoint |
-| 4 | `src/features/routine/hooks/useTodayRoutine.ts` | Helper to get today's schedule |
+| Step | File                                               | Description                            |
+| ---- | -------------------------------------------------- | -------------------------------------- |
+| 1    | `src/features/routine/types/routine.types.ts`      | Create full API types from backend doc |
+| 2    | `src/features/routine/services/routine.service.ts` | Add `getLastRoutine()` function        |
+| 3    | `src/features/routine/hooks/useRoutine.ts`         | Hook for `/routine/last` endpoint      |
+| 4    | `src/features/routine/hooks/useTodayRoutine.ts`    | Helper to get today's schedule         |
 
 #### Phase 2: Extract Components (DRY Refactor)
 
-| Step | File | Description |
-|------|------|-------------|
-| 5 | `src/features/routine/components/RoutineLoadingState.tsx` | Loading spinner component |
-| 6 | `src/features/routine/components/RoutineErrorState.tsx` | Error display component |
-| 7 | `src/features/routine/components/RoutineEmptyState.tsx` | No routine state |
+| Step | File                                                      | Description               |
+| ---- | --------------------------------------------------------- | ------------------------- |
+| 5    | `src/features/routine/components/RoutineLoadingState.tsx` | Loading spinner component |
+| 6    | `src/features/routine/components/RoutineErrorState.tsx`   | Error display component   |
+| 7    | `src/features/routine/components/RoutineEmptyState.tsx`   | No routine state          |
 
 #### Phase 3: New Components
 
-| Step | File | Description |
-|------|------|-------------|
-| 8 | `src/features/routine/components/RoutineToggle.tsx` | Morning/Evening toggle |
-| 9 | `src/features/routine/components/RoutineStepCard.tsx` | Step card with product |
-| 10 | `src/features/routine/screens/RoutineResultsScreen.tsx` | Refactor as orchestrator |
+| Step | File                                                    | Description              |
+| ---- | ------------------------------------------------------- | ------------------------ |
+| 8    | `src/features/routine/components/RoutineToggle.tsx`     | Morning/Evening toggle   |
+| 9    | `src/features/routine/components/RoutineStepCard.tsx`   | Step card with product   |
+| 10   | `src/features/routine/screens/RoutineResultsScreen.tsx` | Refactor as orchestrator |
 
 #### Phase 4: Polish
 
-| Step | Task | Description |
-|------|------|-------------|
-| 11 | i18n | Add EN/FR translations |
-| 12 | Animations | Staggered FadeInDown entrance |
-| 13 | Haptics | Light haptic on toggle |
-| 14 | Testing | Test iOS/Android/Web |
+| Step | Task       | Description                   |
+| ---- | ---------- | ----------------------------- |
+| 11   | i18n       | Add EN/FR translations        |
+| 12   | Animations | Staggered FadeInDown entrance |
+| 13   | Haptics    | Light haptic on toggle        |
+| 14   | Testing    | Test iOS/Android/Web          |
 
 ### 2.5 New File Structure (After MVP)
 
@@ -178,11 +178,11 @@ Display user's skin analysis at the top of the routine screen.
 └─────────────────────────────────────┘
 ```
 
-| Task | Description | Status |
-|------|-------------|--------|
+| Task                            | Description                  | Status  |
+| ------------------------------- | ---------------------------- | ------- |
 | Create `RoutineSummaryCard.tsx` | Skin type + concerns + stats | ✅ Done |
-| Add skin type icons | Droplets icon for skin type | ✅ Done |
-| Display health restrictions | Pregnancy-safe badge | ✅ Done |
+| Add skin type icons             | Droplets icon for skin type  | ✅ Done |
+| Display health restrictions     | Pregnancy-safe badge         | ✅ Done |
 
 ### 3.2 Phase 6: Weekly Schedule View
 
@@ -197,11 +197,11 @@ Allow users to see their routine for any day of the week.
 └─────────────────────────────────────┘
 ```
 
-| Task | Description |
-|------|-------------|
-| Create `WeekDaySelector.tsx` | Day picker component |
-| Update `useTodayRoutine.ts` | Accept day parameter |
-| Show day-specific products | Some products only used certain days |
+| Task                         | Description                          |
+| ---------------------------- | ------------------------------------ |
+| Create `WeekDaySelector.tsx` | Day picker component                 |
+| Update `useTodayRoutine.ts`  | Accept day parameter                 |
+| Show day-specific products   | Some products only used certain days |
 
 ### 3.3 Phase 7: Product Details & "Why This Product?"
 
@@ -209,12 +209,12 @@ Allow users to see their routine for any day of the week.
 
 Explain why each product was selected for the user.
 
-| Task | Description |
-|------|-------------|
+| Task                            | Description                    |
+| ------------------------------- | ------------------------------ |
 | Create `ProductDetailModal.tsx` | Bottom sheet with full details |
-| Add "Why this?" section | Explain selection criteria |
-| Show ingredients | Display key active ingredients |
-| Add alternatives | Suggest similar products |
+| Add "Why this?" section         | Explain selection criteria     |
+| Show ingredients                | Display key active ingredients |
+| Add alternatives                | Suggest similar products       |
 
 ### 3.4 Phase 8: Shopping Experience
 
@@ -222,13 +222,13 @@ Explain why each product was selected for the user.
 
 Improve the shopping flow and conversion.
 
-| Task | Description |
-|------|-------------|
-| Create `ShopAllButton.tsx` | "Buy entire routine" CTA |
-| Add cart functionality | Select multiple products |
-| Show total price | Sum of selected products |
-| Multiple retailers | Amazon, Sephora, pharmacy links |
-| Stock awareness | Show availability status |
+| Task                       | Description                     |
+| -------------------------- | ------------------------------- |
+| Create `ShopAllButton.tsx` | "Buy entire routine" CTA        |
+| Add cart functionality     | Select multiple products        |
+| Show total price           | Sum of selected products        |
+| Multiple retailers         | Amazon, Sephora, pharmacy links |
+| Stock awareness            | Show availability status        |
 
 ### 3.5 Phase 9: Advanced Personalization (from PHP)
 
@@ -239,56 +239,60 @@ Features from the original PHP implementation:
 #### 9.1 Lifestyle Factors
 
 The PHP system tracked:
+
 - Sleep quality
 - Stress levels
 - Smoking status
 - Exercise frequency
 - Alcohol consumption
 
-| Task | Description |
-|------|-------------|
-| Add lifestyle questions to quiz | Capture lifestyle data |
-| Adjust product selection | Factor lifestyle into recommendations |
-| Show lifestyle tips | Personalized advice based on habits |
+| Task                            | Description                           |
+| ------------------------------- | ------------------------------------- |
+| Add lifestyle questions to quiz | Capture lifestyle data                |
+| Adjust product selection        | Factor lifestyle into recommendations |
+| Show lifestyle tips             | Personalized advice based on habits   |
 
 #### 9.2 Budget Tiers
 
 The PHP system had 4 budget tiers:
+
 - Budget: < 20€ per product
 - Mid-range: 15-30€
 - Standard: up to 40€
 - Luxury: > 40€
 
-| Task | Description |
-|------|-------------|
+| Task                          | Description               |
+| ----------------------------- | ------------------------- |
 | Add budget preference to quiz | Capture budget preference |
-| Filter products by budget | Respect price limits |
-| Show budget alternatives | "Save money" suggestions |
+| Filter products by budget     | Respect price limits      |
+| Show budget alternatives      | "Save money" suggestions  |
 
 #### 9.3 Ethical Preferences
 
 The PHP system filtered by:
+
 - Bio (Organic)
 - Cruelty-free
 - Vegan
 
-| Task | Description |
-|------|-------------|
-| Add ethical preferences to quiz | Capture values |
-| Filter products by ethics | Only show matching products |
-| Display ethics badges | Show certifications on products |
+| Task                            | Description                     |
+| ------------------------------- | ------------------------------- |
+| Add ethical preferences to quiz | Capture values                  |
+| Filter products by ethics       | Only show matching products     |
+| Display ethics badges           | Show certifications on products |
 
 #### 9.4 Allergy Management
 
 The PHP system tracked:
+
 - Brand allergies
 - Ingredient allergies
 
-| Task | Description |
-|------|-------------|
-| Add allergy input to profile | Let users specify allergies |
+| Task                         | Description                  |
+| ---------------------------- | ---------------------------- |
+| Add allergy input to profile | Let users specify allergies  |
 | Filter products by allergies | Exclude problematic products |
-| Show allergy warnings | Alert on potential issues |
+| Show allergy warnings        | Alert on potential issues    |
 
 ### 3.6 Phase 10: Supplementary Content (from PHP)
 
@@ -298,32 +302,33 @@ The PHP implementation included educational content:
 
 #### 10.1 FAQ Cards ("Fiches Complémentaires")
 
-| Content Type | Description |
-|--------------|-------------|
-| Hormone guides | Impact of hormonal fluctuations |
-| Body care guides | Acne, keratosis pilaris, hyperpigmentation |
-| Lifestyle guides | Effects of stress, sleep, smoking |
-| Contraception impacts | How birth control affects skin |
+| Content Type          | Description                                |
+| --------------------- | ------------------------------------------ |
+| Hormone guides        | Impact of hormonal fluctuations            |
+| Body care guides      | Acne, keratosis pilaris, hyperpigmentation |
+| Lifestyle guides      | Effects of stress, sleep, smoking          |
+| Contraception impacts | How birth control affects skin             |
 
-| Task | Description |
-|------|-------------|
-| Create `RoutineFAQSection.tsx` | Collapsible FAQ cards |
-| Add content CMS | Manage educational content |
-| Personalize FAQ | Show relevant cards based on profile |
+| Task                           | Description                          |
+| ------------------------------ | ------------------------------------ |
+| Create `RoutineFAQSection.tsx` | Collapsible FAQ cards                |
+| Add content CMS                | Manage educational content           |
+| Personalize FAQ                | Show relevant cards based on profile |
 
 #### 10.2 Body Care Routines
 
 The PHP system also recommended:
+
 - Body lotions
 - Hand creams
 - Lip care
 - Hair care
 
-| Task | Description |
-|------|-------------|
-| Extend quiz for body concerns | Capture body skin issues |
-| Create body routine section | Separate from face routine |
-| Add body product database | Lotions, scrubs, etc. |
+| Task                          | Description                |
+| ----------------------------- | -------------------------- |
+| Extend quiz for body concerns | Capture body skin issues   |
+| Create body routine section   | Separate from face routine |
+| Add body product database     | Lotions, scrubs, etc.      |
 
 ### 3.7 Phase 11: Advanced Features
 
@@ -331,28 +336,28 @@ The PHP system also recommended:
 
 #### 11.1 Routine Tracking
 
-| Task | Description |
-|------|-------------|
-| Morning/evening check-off | Mark steps as done |
-| Streak tracking | Gamification |
-| Progress photos | Before/after comparison |
-| Skin diary integration | Link with journal feature |
+| Task                      | Description               |
+| ------------------------- | ------------------------- |
+| Morning/evening check-off | Mark steps as done        |
+| Streak tracking           | Gamification              |
+| Progress photos           | Before/after comparison   |
+| Skin diary integration    | Link with journal feature |
 
 #### 11.2 Product Lifecycle
 
-| Task | Description |
-|------|-------------|
-| Product expiry tracking | Alert when products expire |
-| Repurchase reminders | Notify when running low |
-| Usage analytics | Track application frequency |
+| Task                    | Description                 |
+| ----------------------- | --------------------------- |
+| Product expiry tracking | Alert when products expire  |
+| Repurchase reminders    | Notify when running low     |
+| Usage analytics         | Track application frequency |
 
 #### 11.3 Social Features
 
-| Task | Description |
-|------|-------------|
-| Share routine | Generate shareable image |
+| Task            | Description               |
+| --------------- | ------------------------- |
+| Share routine   | Generate shareable image  |
 | Routine reviews | User feedback on products |
-| Community tips | User-submitted advice |
+| Community tips  | User-submitted advice     |
 
 ---
 
@@ -375,17 +380,17 @@ The PHP system also recommended:
 
 ### 4.2 Endpoints
 
-| Endpoint | Auth | Usage |
-|----------|------|-------|
-| `GET /routine/last` | Yes | Main app (authenticated user) |
-| `GET /routine/{rspid}` | No | Web embed (iframe on website) |
+| Endpoint               | Auth | Usage                         |
+| ---------------------- | ---- | ----------------------------- |
+| `GET /routine/last`    | Yes  | Main app (authenticated user) |
+| `GET /routine/{rspid}` | No   | Web embed (iframe on website) |
 
 ### 4.3 State Management
 
-| Store | Data |
-|-------|------|
+| Store          | Data                     |
+| -------------- | ------------------------ |
 | `useUserStore` | `rspid`, `routineStatus` |
-| TanStack Query | Routine data cache |
+| TanStack Query | Routine data cache       |
 
 ### 4.4 Component Hierarchy
 
@@ -416,42 +421,42 @@ See `docs/ROUTINE_BACKEND_DOC.md` for full API documentation.
 ```typescript
 // Skin Types (6 types from PHP)
 type SkinType =
-  | 'tres_seche'           // Très Sèche
-  | 'seche'                // Sèche
-  | 'normale'              // Normale
+  | 'tres_seche' // Très Sèche
+  | 'seche' // Sèche
+  | 'normale' // Normale
   | 'mixte_normale_grasse' // Mixte Normale-Grasse
-  | 'mixte_seche_grasse'   // Mixte Sèche-Grasse
-  | 'grasse'               // Grasse
-  | 'tres_grasse'          // Très Grasse
-  | 'generique'            // Générique
+  | 'mixte_seche_grasse' // Mixte Sèche-Grasse
+  | 'grasse' // Grasse
+  | 'tres_grasse' // Très Grasse
+  | 'generique' // Générique
 
 // Skin States (7 states from PHP)
 type SkinStateType =
-  | 'sensible'       // Sensitive
-  | 'tres_sensible'  // Very Sensitive
-  | 'mature'         // Mature/Aging
-  | 'atopique'       // Atopic/Eczema
-  | 'deshydratee'    // Dehydrated
-  | 'acneique'       // Acne-prone
+  | 'sensible' // Sensitive
+  | 'tres_sensible' // Very Sensitive
+  | 'mature' // Mature/Aging
+  | 'atopique' // Atopic/Eczema
+  | 'deshydratee' // Dehydrated
+  | 'acneique' // Acne-prone
   | 'acne_hormonale' // Hormonal Acne
 
 // Product Categories (15 categories)
 type ProductCategory =
-  | 'demaquillant'   // Makeup Remover
-  | 'nettoyant'      // Cleanser
-  | 'tonique'        // Toner
-  | 'exfoliant'      // Exfoliant
-  | 'serum'          // Serum
-  | 'contour_yeux'   // Eye Contour
-  | 'creme_jour'     // Day Cream
-  | 'creme_nuit'     // Night Cream
-  | 'creme_solaire'  // Sunscreen
-  | 'masque'         // Mask
-  | 'huile'          // Face Oil
-  | 'brume'          // Mist
-  | 'baume'          // Balm
-  | 'gadgets'        // Beauty Tech
-  | 'complements'    // Supplements
+  | 'demaquillant' // Makeup Remover
+  | 'nettoyant' // Cleanser
+  | 'tonique' // Toner
+  | 'exfoliant' // Exfoliant
+  | 'serum' // Serum
+  | 'contour_yeux' // Eye Contour
+  | 'creme_jour' // Day Cream
+  | 'creme_nuit' // Night Cream
+  | 'creme_solaire' // Sunscreen
+  | 'masque' // Mask
+  | 'huile' // Face Oil
+  | 'brume' // Mist
+  | 'baume' // Balm
+  | 'gadgets' // Beauty Tech
+  | 'complements' // Supplements
 ```
 
 ### 5.2 Routine Response Structure
@@ -492,10 +497,10 @@ interface RoutineResponseDto {
 
 ## Changelog
 
-| Date | Version | Changes |
-|------|---------|---------|
-| 2025-12-29 | 0.2.0 | Phase 5 completed: Skin Profile Summary |
-| 2025-12-29 | 0.1.0 | Initial documentation created |
+| Date       | Version | Changes                                 |
+| ---------- | ------- | --------------------------------------- |
+| 2025-12-29 | 0.2.0   | Phase 5 completed: Skin Profile Summary |
+| 2025-12-29 | 0.1.0   | Initial documentation created           |
 
 ---
 

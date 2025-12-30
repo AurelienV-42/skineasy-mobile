@@ -33,10 +33,10 @@ This ensures users can find routines they created before account linking.
 
 ### Headers
 
-| Header          | Type   | Required | Description                    |
-|-----------------|--------|----------|--------------------------------|
-| `Authorization` | string | Yes      | Bearer token from login        |
-| `Content-Type`  | string | No       | Not required for GET requests  |
+| Header          | Type   | Required | Description                   |
+| --------------- | ------ | -------- | ----------------------------- |
+| `Authorization` | string | Yes      | Bearer token from login       |
+| `Content-Type`  | string | No       | Not required for GET requests |
 
 ### Query Parameters
 
@@ -80,7 +80,7 @@ None
         "nettoyant": {
           "id": 42,
           "name": "Gel Moussant Doux",
-          "price": 18.50,
+          "price": 18.5,
           "brand": "La Roche-Posay",
           "type": "Nettoyant",
           "illustration": "1726942218.png",
@@ -89,7 +89,7 @@ None
         "serum": {
           "id": 156,
           "name": "Sérum Hydratant Intensif",
-          "price": 32.00,
+          "price": 32.0,
           "brand": "The Ordinary",
           "type": "Sérum",
           "illustration": "1726942300.png",
@@ -98,7 +98,7 @@ None
         "creme_jour": {
           "id": 89,
           "name": "Crème Hydratante Légère",
-          "price": 24.00,
+          "price": 24.0,
           "brand": "La Roche-Posay",
           "type": "Hydratant",
           "illustration": "1726942350.png",
@@ -107,7 +107,7 @@ None
         "creme_solaire": {
           "id": 203,
           "name": "Fluide Solaire SPF50",
-          "price": 16.00,
+          "price": 16.0,
           "brand": "La Roche-Posay",
           "type": "Protection solaire",
           "illustration": "1726942400.png",
@@ -125,7 +125,7 @@ None
         "gadgets": null,
         "complements": null
       },
-      "totalPrice": 90.50,
+      "totalPrice": 90.5,
       "productCount": 4,
       "brandCohesionApplied": true
     },
@@ -215,7 +215,7 @@ None
       "primaryConcerns": ["Peau sensible", "Peau déshydratée"],
       "hasRestrictions": true,
       "totalProducts": 4,
-      "totalPrice": 90.50,
+      "totalPrice": 90.5,
       "averageDailyMinutes": 6,
       "brandCohesionApplied": true
     }
@@ -253,39 +253,39 @@ No routine found for this user.
 
 ### RoutineResponseDto
 
-| Field              | Type                        | Nullable | Description                                        |
-|--------------------|-----------------------------| -------- |----------------------------------------------------|
-| `id`               | `string`                    | No       | Unique routine ID (e.g., `api_m5x8k2_abc123`)      |
-| `email`            | `string`                    | No       | User's email address                               |
-| `customerId`       | `number`                    | Yes      | PrestaShop customer ID (if linked)                 |
-| `createdAt`        | `string` (ISO 8601)         | No       | Routine creation timestamp                         |
-| `analysis`         | `SkinAnalysisResponseDto`   | No       | Skin analysis results                              |
-| `productSelection` | `ProductSelectionResponseDto` | No     | Selected products for the routine                  |
-| `routinePlan`      | `RoutinePlanResponseDto`    | No       | Weekly schedule and usage plan                     |
-| `summary`          | `RoutineSummaryResponseDto` | No       | Quick summary of the routine                       |
+| Field              | Type                          | Nullable | Description                                   |
+| ------------------ | ----------------------------- | -------- | --------------------------------------------- |
+| `id`               | `string`                      | No       | Unique routine ID (e.g., `api_m5x8k2_abc123`) |
+| `email`            | `string`                      | No       | User's email address                          |
+| `customerId`       | `number`                      | Yes      | PrestaShop customer ID (if linked)            |
+| `createdAt`        | `string` (ISO 8601)           | No       | Routine creation timestamp                    |
+| `analysis`         | `SkinAnalysisResponseDto`     | No       | Skin analysis results                         |
+| `productSelection` | `ProductSelectionResponseDto` | No       | Selected products for the routine             |
+| `routinePlan`      | `RoutinePlanResponseDto`      | No       | Weekly schedule and usage plan                |
+| `summary`          | `RoutineSummaryResponseDto`   | No       | Quick summary of the routine                  |
 
 ---
 
 ### SkinAnalysisResponseDto
 
-| Field              | Type                          | Description                              |
-|--------------------|-------------------------------|------------------------------------------|
-| `skinType`         | `SkinTypeResponseDto`         | Primary skin type analysis               |
-| `skinStates`       | `SkinStateResponseDto`        | Detected skin conditions                 |
-| `healthConditions` | `HealthConditionsResponseDto` | Health factors affecting product choice  |
+| Field              | Type                          | Description                             |
+| ------------------ | ----------------------------- | --------------------------------------- |
+| `skinType`         | `SkinTypeResponseDto`         | Primary skin type analysis              |
+| `skinStates`       | `SkinStateResponseDto`        | Detected skin conditions                |
+| `healthConditions` | `HealthConditionsResponseDto` | Health factors affecting product choice |
 
 #### SkinTypeResponseDto
 
-| Field        | Type     | Description                                    |
-|--------------|----------|------------------------------------------------|
-| `primaryType`| `SkinType` | Skin type identifier (see enum below)        |
-| `label`      | `string` | French display label                           |
-| `confidence` | `number` | Confidence score (0-100)                       |
+| Field         | Type       | Description                           |
+| ------------- | ---------- | ------------------------------------- |
+| `primaryType` | `SkinType` | Skin type identifier (see enum below) |
+| `label`       | `string`   | French display label                  |
+| `confidence`  | `number`   | Confidence score (0-100)              |
 
 **SkinType Enum Values:**
 
 | Value                  | Label (FR)           |
-|------------------------|----------------------|
+| ---------------------- | -------------------- |
 | `tres_seche`           | Très Sèche           |
 | `seche`                | Sèche                |
 | `normale`              | Normale              |
@@ -297,27 +297,27 @@ No routine found for this user.
 
 #### SkinStateResponseDto
 
-| Field    | Type              | Description                              |
-|----------|-------------------|------------------------------------------|
-| `states` | `SkinStateType[]` | Array of detected skin states            |
-| `labels` | `string[]`        | French labels for display                |
+| Field    | Type              | Description                   |
+| -------- | ----------------- | ----------------------------- |
+| `states` | `SkinStateType[]` | Array of detected skin states |
+| `labels` | `string[]`        | French labels for display     |
 
 **SkinStateType Enum Values:**
 
-| Value           | Label (FR)       | Description                     |
-|-----------------|------------------|---------------------------------|
-| `sensible`      | Sensible         | Reactive skin                   |
-| `tres_sensible` | Très Sensible    | Highly reactive skin            |
-| `mature`        | Mature           | Aging skin with wrinkles        |
-| `atopique`      | Atopique         | Eczema-prone skin               |
-| `deshydratee`   | Déshydratée      | Lacking water (not oil)         |
-| `acneique`      | Acnéique         | Acne-prone skin                 |
-| `acne_hormonale`| Acné Hormonale   | Hormonal acne                   |
+| Value            | Label (FR)     | Description              |
+| ---------------- | -------------- | ------------------------ |
+| `sensible`       | Sensible       | Reactive skin            |
+| `tres_sensible`  | Très Sensible  | Highly reactive skin     |
+| `mature`         | Mature         | Aging skin with wrinkles |
+| `atopique`       | Atopique       | Eczema-prone skin        |
+| `deshydratee`    | Déshydratée    | Lacking water (not oil)  |
+| `acneique`       | Acnéique       | Acne-prone skin          |
+| `acne_hormonale` | Acné Hormonale | Hormonal acne            |
 
 #### HealthConditionsResponseDto
 
 | Field             | Type       | Description                              |
-|-------------------|------------|------------------------------------------|
+| ----------------- | ---------- | ---------------------------------------- |
 | `conditions`      | `string[]` | Detected health conditions               |
 | `hasRestrictions` | `boolean`  | Whether product restrictions apply       |
 | `isPregnancySafe` | `boolean`  | Whether routine is safe during pregnancy |
@@ -326,113 +326,113 @@ No routine found for this user.
 
 ### ProductSelectionResponseDto
 
-| Field                | Type                                          | Description                                    |
-|----------------------|-----------------------------------------------|------------------------------------------------|
-| `products`           | `Record<ProductCategory, ProductResponseDto \| null>` | Products by category (null if not selected) |
-| `totalPrice`         | `number`                                      | Total price in EUR                             |
-| `productCount`       | `number`                                      | Number of selected products                    |
-| `brandCohesionApplied` | `boolean`                                   | Whether brand cohesion was applied (50%+ same brand) |
+| Field                  | Type                                                  | Description                                          |
+| ---------------------- | ----------------------------------------------------- | ---------------------------------------------------- |
+| `products`             | `Record<ProductCategory, ProductResponseDto \| null>` | Products by category (null if not selected)          |
+| `totalPrice`           | `number`                                              | Total price in EUR                                   |
+| `productCount`         | `number`                                              | Number of selected products                          |
+| `brandCohesionApplied` | `boolean`                                             | Whether brand cohesion was applied (50%+ same brand) |
 
 #### ProductResponseDto
 
-| Field            | Type            | Description                              |
-|------------------|-----------------|------------------------------------------|
-| `id`             | `number`        | Product ID in database                   |
-| `name`           | `string`        | Product name                             |
-| `price`          | `number`        | Price in EUR                             |
-| `brand`          | `string \| null`| Brand name                               |
-| `type`           | `string \| null`| Product type (e.g., "Nettoyant")         |
-| `illustration`   | `string \| null`| Image filename                           |
-| `illustrationUrl`| `string`        | Full image URL                           |
+| Field             | Type             | Description                      |
+| ----------------- | ---------------- | -------------------------------- |
+| `id`              | `number`         | Product ID in database           |
+| `name`            | `string`         | Product name                     |
+| `price`           | `number`         | Price in EUR                     |
+| `brand`           | `string \| null` | Brand name                       |
+| `type`            | `string \| null` | Product type (e.g., "Nettoyant") |
+| `illustration`    | `string \| null` | Image filename                   |
+| `illustrationUrl` | `string`         | Full image URL                   |
 
 **ProductCategory Enum Values:**
 
-| Value          | Label (FR)         | Routine Step | Essential |
-|----------------|--------------------|--------------|-----------|
-| `demaquillant` | Démaquillant       | evening      | No        |
-| `nettoyant`    | Nettoyant          | both         | **Yes**   |
-| `tonique`      | Tonique            | both         | No        |
-| `exfoliant`    | Exfoliant          | weekly       | No        |
-| `serum`        | Sérum              | both         | No        |
-| `contour_yeux` | Contour des yeux   | both         | No        |
-| `creme_jour`   | Crème de jour      | morning      | **Yes**   |
-| `creme_nuit`   | Crème de nuit      | evening      | No        |
-| `creme_solaire`| Protection solaire | morning      | **Yes**   |
-| `masque`       | Masque             | weekly       | No        |
-| `huile`        | Huile visage       | evening      | No        |
-| `brume`        | Brume              | both         | No        |
-| `baume`        | Baume              | evening      | No        |
-| `gadgets`      | Accessoires        | weekly       | No        |
-| `complements`  | Compléments        | both         | No        |
+| Value           | Label (FR)         | Routine Step | Essential |
+| --------------- | ------------------ | ------------ | --------- |
+| `demaquillant`  | Démaquillant       | evening      | No        |
+| `nettoyant`     | Nettoyant          | both         | **Yes**   |
+| `tonique`       | Tonique            | both         | No        |
+| `exfoliant`     | Exfoliant          | weekly       | No        |
+| `serum`         | Sérum              | both         | No        |
+| `contour_yeux`  | Contour des yeux   | both         | No        |
+| `creme_jour`    | Crème de jour      | morning      | **Yes**   |
+| `creme_nuit`    | Crème de nuit      | evening      | No        |
+| `creme_solaire` | Protection solaire | morning      | **Yes**   |
+| `masque`        | Masque             | weekly       | No        |
+| `huile`         | Huile visage       | evening      | No        |
+| `brume`         | Brume              | both         | No        |
+| `baume`         | Baume              | evening      | No        |
+| `gadgets`       | Accessoires        | weekly       | No        |
+| `complements`   | Compléments        | both         | No        |
 
 ---
 
 ### RoutinePlanResponseDto
 
-| Field           | Type                        | Description                    |
-|-----------------|-----------------------------|--------------------------------|
-| `weeklySchedule`| `DailyRoutineResponseDto[]` | 7 days of routine schedules    |
-| `productUsage`  | `ProductUsageResponseDto[]` | How often each product is used |
+| Field            | Type                        | Description                    |
+| ---------------- | --------------------------- | ------------------------------ |
+| `weeklySchedule` | `DailyRoutineResponseDto[]` | 7 days of routine schedules    |
+| `productUsage`   | `ProductUsageResponseDto[]` | How often each product is used |
 
 #### DailyRoutineResponseDto
 
-| Field       | Type                     | Description                      |
-|-------------|--------------------------|----------------------------------|
-| `dayOfWeek` | `number`                 | 0 = Monday, 6 = Sunday           |
-| `dayName`   | `string`                 | French day name                  |
-| `morning`   | `TimeRoutineResponseDto` | Morning routine steps            |
-| `evening`   | `TimeRoutineResponseDto` | Evening routine steps            |
+| Field       | Type                     | Description            |
+| ----------- | ------------------------ | ---------------------- |
+| `dayOfWeek` | `number`                 | 0 = Monday, 6 = Sunday |
+| `dayName`   | `string`                 | French day name        |
+| `morning`   | `TimeRoutineResponseDto` | Morning routine steps  |
+| `evening`   | `TimeRoutineResponseDto` | Evening routine steps  |
 
 **dayName Values:**
 
-| dayOfWeek | dayName   |
-|-----------|-----------|
-| 0         | Lundi     |
-| 1         | Mardi     |
-| 2         | Mercredi  |
-| 3         | Jeudi     |
-| 4         | Vendredi  |
-| 5         | Samedi    |
-| 6         | Dimanche  |
+| dayOfWeek | dayName  |
+| --------- | -------- |
+| 0         | Lundi    |
+| 1         | Mardi    |
+| 2         | Mercredi |
+| 3         | Jeudi    |
+| 4         | Vendredi |
+| 5         | Samedi   |
+| 6         | Dimanche |
 
 #### TimeRoutineResponseDto
 
-| Field              | Type                       | Description                    |
-|--------------------|----------------------------|--------------------------------|
-| `steps`            | `RoutineStepResponseDto[]` | Ordered list of steps          |
-| `estimatedMinutes` | `number`                   | Total estimated time           |
+| Field              | Type                       | Description           |
+| ------------------ | -------------------------- | --------------------- |
+| `steps`            | `RoutineStepResponseDto[]` | Ordered list of steps |
+| `estimatedMinutes` | `number`                   | Total estimated time  |
 
 #### RoutineStepResponseDto
 
-| Field              | Type             | Description                                         |
-|--------------------|------------------|-----------------------------------------------------|
-| `order`            | `number`         | Step order (1, 2, 3...)                             |
-| `category`         | `ProductCategory`| Product category - use to look up product in `productSelection.products` |
-| `instructions`     | `string`         | French application instructions                     |
-| `estimatedMinutes` | `number`         | Estimated time for this step                        |
+| Field              | Type              | Description                                                              |
+| ------------------ | ----------------- | ------------------------------------------------------------------------ |
+| `order`            | `number`          | Step order (1, 2, 3...)                                                  |
+| `category`         | `ProductCategory` | Product category - use to look up product in `productSelection.products` |
+| `instructions`     | `string`          | French application instructions                                          |
+| `estimatedMinutes` | `number`          | Estimated time for this step                                             |
 
 #### ProductUsageResponseDto
 
-| Field           | Type             | Description                                  |
-|-----------------|------------------|----------------------------------------------|
-| `category`      | `ProductCategory`| Product category reference                   |
-| `timesPerWeek`  | `number`         | Total uses per week                          |
-| `usedInMorning` | `boolean`        | Whether used in morning routine              |
-| `usedInEvening` | `boolean`        | Whether used in evening routine              |
+| Field           | Type              | Description                     |
+| --------------- | ----------------- | ------------------------------- |
+| `category`      | `ProductCategory` | Product category reference      |
+| `timesPerWeek`  | `number`          | Total uses per week             |
+| `usedInMorning` | `boolean`         | Whether used in morning routine |
+| `usedInEvening` | `boolean`         | Whether used in evening routine |
 
 ---
 
 ### RoutineSummaryResponseDto
 
-| Field                | Type       | Description                              |
-|----------------------|------------|------------------------------------------|
-| `skinTypeLabel`      | `string`   | Skin type in French                      |
-| `primaryConcerns`    | `string[]` | Main skin concerns (French labels)       |
-| `hasRestrictions`    | `boolean`  | Whether health restrictions apply        |
-| `totalProducts`      | `number`   | Number of products in routine            |
-| `totalPrice`         | `number`   | Total price in EUR                       |
-| `averageDailyMinutes`| `number`   | Average routine time per day             |
-| `brandCohesionApplied` | `boolean`| Whether 50%+ products are same brand     |
+| Field                  | Type       | Description                          |
+| ---------------------- | ---------- | ------------------------------------ |
+| `skinTypeLabel`        | `string`   | Skin type in French                  |
+| `primaryConcerns`      | `string[]` | Main skin concerns (French labels)   |
+| `hasRestrictions`      | `boolean`  | Whether health restrictions apply    |
+| `totalProducts`        | `number`   | Number of products in routine        |
+| `totalPrice`           | `number`   | Total price in EUR                   |
+| `averageDailyMinutes`  | `number`   | Average routine time per day         |
+| `brandCohesionApplied` | `boolean`  | Whether 50%+ products are same brand |
 
 ---
 
@@ -442,30 +442,30 @@ No routine found for this user.
 
 ```typescript
 interface RoutineResponse {
-  data: RoutineResponseDto;
+  data: RoutineResponseDto
 }
 
 async function fetchLastRoutine(accessToken: string): Promise<RoutineResponseDto | null> {
   try {
     const response = await fetch('/api/v1/routine/last', {
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
-    });
+    })
 
     if (response.status === 404) {
-      return null; // No routine exists
+      return null // No routine exists
     }
 
     if (!response.ok) {
-      throw new Error('Failed to fetch routine');
+      throw new Error('Failed to fetch routine')
     }
 
-    const { data } = await response.json() as RoutineResponse;
-    return data;
+    const { data } = (await response.json()) as RoutineResponse
+    return data
   } catch (error) {
-    console.error('Error fetching routine:', error);
-    throw error;
+    console.error('Error fetching routine:', error)
+    throw error
   }
 }
 ```
@@ -474,13 +474,11 @@ async function fetchLastRoutine(accessToken: string): Promise<RoutineResponseDto
 
 ```typescript
 function getTodayRoutine(routine: RoutineResponseDto) {
-  const today = new Date().getDay();
+  const today = new Date().getDay()
   // Convert JS day (0=Sunday) to our format (0=Monday)
-  const dayOfWeek = today === 0 ? 6 : today - 1;
+  const dayOfWeek = today === 0 ? 6 : today - 1
 
-  return routine.routinePlan.weeklySchedule.find(
-    day => day.dayOfWeek === dayOfWeek
-  );
+  return routine.routinePlan.weeklySchedule.find((day) => day.dayOfWeek === dayOfWeek)
 }
 ```
 
@@ -491,19 +489,16 @@ function getProductForStep(
   routine: RoutineResponseDto,
   step: RoutineStepResponseDto
 ): ProductResponseDto | null {
-  return routine.productSelection.products[step.category] ?? null;
+  return routine.productSelection.products[step.category] ?? null
 }
 ```
 
 ### 4. Displaying Morning/Evening Routine
 
 ```typescript
-function renderRoutineSteps(
-  routine: RoutineResponseDto,
-  timeRoutine: TimeRoutineResponseDto
-) {
-  return timeRoutine.steps.map(step => {
-    const product = getProductForStep(routine, step);
+function renderRoutineSteps(routine: RoutineResponseDto, timeRoutine: TimeRoutineResponseDto) {
+  return timeRoutine.steps.map((step) => {
+    const product = getProductForStep(routine, step)
 
     return {
       order: step.order,
@@ -513,8 +508,8 @@ function renderRoutineSteps(
       productPrice: product?.price ?? 0,
       instructions: step.instructions,
       estimatedMinutes: step.estimatedMinutes,
-    };
-  });
+    }
+  })
 }
 ```
 
@@ -531,7 +526,7 @@ type SkinType =
   | 'mixte_seche_grasse'
   | 'grasse'
   | 'tres_grasse'
-  | 'generique';
+  | 'generique'
 
 type SkinStateType =
   | 'sensible'
@@ -540,7 +535,7 @@ type SkinStateType =
   | 'atopique'
   | 'deshydratee'
   | 'acneique'
-  | 'acne_hormonale';
+  | 'acne_hormonale'
 
 type ProductCategory =
   | 'demaquillant'
@@ -557,98 +552,98 @@ type ProductCategory =
   | 'brume'
   | 'baume'
   | 'gadgets'
-  | 'complements';
+  | 'complements'
 
 interface ProductResponseDto {
-  id: number;
-  name: string;
-  price: number;
-  brand: string | null;
-  type: string | null;
-  illustration: string | null;
-  illustrationUrl: string;
+  id: number
+  name: string
+  price: number
+  brand: string | null
+  type: string | null
+  illustration: string | null
+  illustrationUrl: string
 }
 
 interface SkinTypeResponseDto {
-  primaryType: SkinType;
-  label: string;
-  confidence: number;
+  primaryType: SkinType
+  label: string
+  confidence: number
 }
 
 interface SkinStateResponseDto {
-  states: SkinStateType[];
-  labels: string[];
+  states: SkinStateType[]
+  labels: string[]
 }
 
 interface HealthConditionsResponseDto {
-  conditions: string[];
-  hasRestrictions: boolean;
-  isPregnancySafe: boolean;
+  conditions: string[]
+  hasRestrictions: boolean
+  isPregnancySafe: boolean
 }
 
 interface SkinAnalysisResponseDto {
-  skinType: SkinTypeResponseDto;
-  skinStates: SkinStateResponseDto;
-  healthConditions: HealthConditionsResponseDto;
+  skinType: SkinTypeResponseDto
+  skinStates: SkinStateResponseDto
+  healthConditions: HealthConditionsResponseDto
 }
 
 interface ProductSelectionResponseDto {
-  products: Record<ProductCategory, ProductResponseDto | null>;
-  totalPrice: number;
-  productCount: number;
-  brandCohesionApplied: boolean;
+  products: Record<ProductCategory, ProductResponseDto | null>
+  totalPrice: number
+  productCount: number
+  brandCohesionApplied: boolean
 }
 
 interface RoutineStepResponseDto {
-  order: number;
-  category: ProductCategory;
-  instructions: string;
-  estimatedMinutes: number;
+  order: number
+  category: ProductCategory
+  instructions: string
+  estimatedMinutes: number
 }
 
 interface TimeRoutineResponseDto {
-  steps: RoutineStepResponseDto[];
-  estimatedMinutes: number;
+  steps: RoutineStepResponseDto[]
+  estimatedMinutes: number
 }
 
 interface DailyRoutineResponseDto {
-  dayOfWeek: number;
-  dayName: string;
-  morning: TimeRoutineResponseDto;
-  evening: TimeRoutineResponseDto;
+  dayOfWeek: number
+  dayName: string
+  morning: TimeRoutineResponseDto
+  evening: TimeRoutineResponseDto
 }
 
 interface ProductUsageResponseDto {
-  category: ProductCategory;
-  timesPerWeek: number;
-  usedInMorning: boolean;
-  usedInEvening: boolean;
+  category: ProductCategory
+  timesPerWeek: number
+  usedInMorning: boolean
+  usedInEvening: boolean
 }
 
 interface RoutinePlanResponseDto {
-  weeklySchedule: DailyRoutineResponseDto[];
-  productUsage: ProductUsageResponseDto[];
+  weeklySchedule: DailyRoutineResponseDto[]
+  productUsage: ProductUsageResponseDto[]
 }
 
 interface RoutineSummaryResponseDto {
-  skinTypeLabel: string;
-  primaryConcerns: string[];
-  hasRestrictions: boolean;
-  totalProducts: number;
-  totalPrice: number;
-  averageDailyMinutes: number;
-  brandCohesionApplied: boolean;
+  skinTypeLabel: string
+  primaryConcerns: string[]
+  hasRestrictions: boolean
+  totalProducts: number
+  totalPrice: number
+  averageDailyMinutes: number
+  brandCohesionApplied: boolean
 }
 
 interface RoutineResponseDto {
-  id: string;
-  email: string;
-  customerId?: number;
-  createdAt: string;
-  analysis: SkinAnalysisResponseDto;
-  productSelection: ProductSelectionResponseDto;
-  routinePlan: RoutinePlanResponseDto;
-  summary: RoutineSummaryResponseDto;
+  id: string
+  email: string
+  customerId?: number
+  createdAt: string
+  analysis: SkinAnalysisResponseDto
+  productSelection: ProductSelectionResponseDto
+  routinePlan: RoutinePlanResponseDto
+  summary: RoutineSummaryResponseDto
 }
 ```
 
@@ -663,6 +658,7 @@ GET http://localhost:3000/api/v1/routine/last
 ```
 
 **Headers:**
+
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
@@ -674,38 +670,38 @@ See full response structure above.
 ### Test Script
 
 ```javascript
-pm.test("Status code is 200", function () {
-    pm.response.to.have.status(200);
-});
+pm.test('Status code is 200', function () {
+  pm.response.to.have.status(200)
+})
 
-pm.test("Response has data object", function () {
-    const jsonData = pm.response.json();
-    pm.expect(jsonData).to.have.property('data');
-});
+pm.test('Response has data object', function () {
+  const jsonData = pm.response.json()
+  pm.expect(jsonData).to.have.property('data')
+})
 
-pm.test("Routine has required fields", function () {
-    const routine = pm.response.json().data;
-    pm.expect(routine).to.have.property('id');
-    pm.expect(routine).to.have.property('email');
-    pm.expect(routine).to.have.property('createdAt');
-    pm.expect(routine).to.have.property('analysis');
-    pm.expect(routine).to.have.property('productSelection');
-    pm.expect(routine).to.have.property('routinePlan');
-    pm.expect(routine).to.have.property('summary');
-});
+pm.test('Routine has required fields', function () {
+  const routine = pm.response.json().data
+  pm.expect(routine).to.have.property('id')
+  pm.expect(routine).to.have.property('email')
+  pm.expect(routine).to.have.property('createdAt')
+  pm.expect(routine).to.have.property('analysis')
+  pm.expect(routine).to.have.property('productSelection')
+  pm.expect(routine).to.have.property('routinePlan')
+  pm.expect(routine).to.have.property('summary')
+})
 
-pm.test("createdAt is valid ISO date", function () {
-    const routine = pm.response.json().data;
-    const date = new Date(routine.createdAt);
-    pm.expect(date.toISOString()).to.equal(routine.createdAt);
-});
+pm.test('createdAt is valid ISO date', function () {
+  const routine = pm.response.json().data
+  const date = new Date(routine.createdAt)
+  pm.expect(date.toISOString()).to.equal(routine.createdAt)
+})
 
-pm.test("Products structure is correct", function () {
-    const products = pm.response.json().data.productSelection.products;
-    pm.expect(products).to.have.property('nettoyant');
-    pm.expect(products).to.have.property('serum');
-    pm.expect(products).to.have.property('creme_jour');
-});
+pm.test('Products structure is correct', function () {
+  const products = pm.response.json().data.productSelection.products
+  pm.expect(products).to.have.property('nettoyant')
+  pm.expect(products).to.have.property('serum')
+  pm.expect(products).to.have.property('creme_jour')
+})
 ```
 
 ---

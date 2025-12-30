@@ -77,7 +77,7 @@ export default function DashboardScreen() {
         {/* Greeting */}
         <Animated.View style={animStyles[0]} className="px-4 pt-4 pb-2">
           <Text className="text-2xl font-bold text-text mb-1">
-            {t('dashboard.greeting', { name: user?.firstname || 'User' })}
+            {t('dashboard.greeting', { name: user?.firstname || '' })}
           </Text>
           <Text className="text-sm text-textMuted">{t('dashboard.reminder')}</Text>
         </Animated.View>
