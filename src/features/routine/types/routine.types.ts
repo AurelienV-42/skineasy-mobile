@@ -50,6 +50,18 @@ export type TimeOfDay = 'morning' | 'evening'
 // Product Types
 // ============================================================================
 
+export interface TypeContentDto {
+  title: string
+  subtitle: string
+  description: string
+  howToUse: string
+  application: string
+  frequency: string
+  badge: string
+  keyIngredient: string
+  irritationPotential: string
+}
+
 export interface ProductDto {
   id: number
   name: string
@@ -61,6 +73,7 @@ export interface ProductDto {
   feature: string | null
   url: string | null
   contenance: string | null
+  typeContent: TypeContentDto | null
 }
 
 // ============================================================================

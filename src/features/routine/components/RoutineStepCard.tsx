@@ -1,24 +1,30 @@
 import { Lightbulb } from 'lucide-react-native'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, Text, View } from 'react-native'
 import Animated, { FadeInDown } from 'react-native-reanimated'
 
+import { ProductDetailSheet } from '@features/routine/components/ProductDetailSheet'
 import type { ProductDto, RoutineStepWithProducts } from '@features/routine/types/routine.types'
 import { CATEGORY_LABELS } from '@features/routine/types/routine.types'
+import { Pressable } from '@shared/components/Pressable'
+import { haptic } from '@shared/utils/haptic'
 import { colors } from '@theme/colors'
 
 interface ProductItemProps {
   product: ProductDto
   isLast: boolean
+  onPress: () => void
 }
 
-/**
- * Individual product display within a step
- */
-function ProductItem({ product, isLast }: ProductItemProps) {
+function ProductItem({ product, isLast, onPress }: ProductItemProps) {
+  const application = product.typeContent?.application
+
   return (
-    <View className={`flex-row ${!isLast ? 'mb-3 pb-3 border-b border-border/50' : ''}`}>
-      {/* Product Image */}
+    <Pressable
+      onPress={onPress}
+      className={`flex-row ${!isLast ? 'mb-3 pb-3 border-b border-border/50' : ''}`}
+    >
       {product.illustrationUrl && (
         <Image
           source={{ uri: product.illustrationUrl }}
@@ -27,14 +33,18 @@ function ProductItem({ product, isLast }: ProductItemProps) {
         />
       )}
 
-      {/* Product Details */}
       <View className="flex-1 justify-center">
         <Text className="text-base font-bold text-text mb-1" numberOfLines={2}>
           {product.name}
         </Text>
         {product.brand && <Text className="text-sm text-textMuted">{product.brand}</Text>}
+        {application && (
+          <Text className="text-xs text-textLight mt-1" numberOfLines={1}>
+            {application}
+          </Text>
+        )}
       </View>
-    </View>
+    </Pressable>
   )
 }
 
@@ -46,55 +56,73 @@ interface RoutineStepCardProps {
 export function RoutineStepCard({ stepWithProducts, index }: RoutineStepCardProps) {
   const { t } = useTranslation()
   const { step, products } = stepWithProducts
+  const [selectedProduct, setSelectedProduct] = useState<ProductDto | null>(null)
 
   const categoryLabel = CATEGORY_LABELS[step.category] || step.category
   const hasProducts = products.length > 0
 
+  const handleProductPress = (product: ProductDto) => {
+    haptic.light()
+    setSelectedProduct(product)
+  }
+
+  const handleCloseSheet = () => {
+    setSelectedProduct(null)
+  }
+
   return (
-    <Animated.View
-      entering={FadeInDown.delay(index * 100).springify()}
-      className="bg-surface rounded-2xl p-4 mb-4 border border-border"
-    >
-      {/* Step Header */}
-      <View className="flex-row items-center mb-3">
-        <View className="bg-primary w-7 h-7 rounded-full items-center justify-center mr-3">
-          <Text className="text-white font-bold text-sm">{step.order}</Text>
-        </View>
-        <Text className="text-base font-semibold text-text">{categoryLabel}</Text>
-        {products.length > 1 && (
-          <View className="ml-2 px-2 py-0.5 rounded-full bg-primary/10">
-            <Text className="text-xs font-semibold text-primary">{products.length}</Text>
+    <>
+      <Animated.View
+        entering={FadeInDown.delay(index * 100).springify()}
+        className="bg-surface rounded-2xl p-4 mb-4 border border-border"
+      >
+        {/* Step Header */}
+        <View className="flex-row items-center mb-3">
+          <View className="bg-primary w-7 h-7 rounded-full items-center justify-center mr-3">
+            <Text className="text-white font-bold text-sm">{step.order}</Text>
           </View>
-        )}
-      </View>
-
-      {/* Products */}
-      {hasProducts ? (
-        <>
-          <View className="mb-3">
-            {products.map((product, productIndex) => (
-              <ProductItem
-                key={product.id}
-                product={product}
-                isLast={productIndex === products.length - 1}
-              />
-            ))}
-          </View>
-
-          {/* Instructions */}
-          {step.instructions && (
-            <View className="bg-primary/5 rounded-xl p-3 flex-row">
-              <Lightbulb size={18} color={colors.primary} className="mr-2 mt-0.5" />
-              <Text className="text-sm text-text flex-1 ml-2">{step.instructions}</Text>
+          <Text className="text-base font-semibold text-text">{categoryLabel}</Text>
+          {products.length > 1 && (
+            <View className="ml-2 px-2 py-0.5 rounded-full bg-primary/10">
+              <Text className="text-xs font-semibold text-primary">{products.length}</Text>
             </View>
           )}
-        </>
-      ) : (
-        /* No products found for this step */
-        <View className="py-4 items-center">
-          <Text className="text-textMuted text-sm">{t('routine.noProductForStep')}</Text>
         </View>
-      )}
-    </Animated.View>
+
+        {/* Products */}
+        {hasProducts ? (
+          <>
+            <View className="mb-3">
+              {products.map((product, productIndex) => (
+                <ProductItem
+                  key={product.id}
+                  product={product}
+                  isLast={productIndex === products.length - 1}
+                  onPress={() => handleProductPress(product)}
+                />
+              ))}
+            </View>
+
+            {/* Instructions */}
+            {step.instructions && (
+              <View className="bg-primary/5 rounded-xl p-3 flex-row">
+                <Lightbulb size={18} color={colors.primary} className="mr-2 mt-0.5" />
+                <Text className="text-sm text-text flex-1 ml-2">{step.instructions}</Text>
+              </View>
+            )}
+          </>
+        ) : (
+          <View className="py-4 items-center">
+            <Text className="text-textMuted text-sm">{t('routine.noProductForStep')}</Text>
+          </View>
+        )}
+      </Animated.View>
+
+      <ProductDetailSheet
+        product={selectedProduct}
+        visible={selectedProduct !== null}
+        onClose={handleCloseSheet}
+      />
+    </>
   )
 }

@@ -217,7 +217,15 @@
       "products": "{{count}} products",
       "dailyTime": "~{{minutes}} min/day",
       "pregnancySafe": "Pregnancy safe",
-      "viewProducts": "View my products"
+      "viewProducts": "View all my products"
+    },
+    "productDetail": {
+      "howToUse": "How to use",
+      "frequency": "Frequency",
+      "application": "Application",
+      "keyIngredient": "Key ingredient",
+      "irritation": "Irritation potential",
+      "buy": "Buy"
     }
   },
   "profile": {
