@@ -49,7 +49,7 @@ class ApiClient {
       logger.info('[API] Response status:', response.status)
 
       // Log response body in DEV mode
-      if (__DEV__ && response.ok) {
+      if (response.ok) {
         const clonedResponse = response.clone()
         clonedResponse
           .json()

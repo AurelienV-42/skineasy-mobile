@@ -100,9 +100,7 @@ export function getSportTypeLabel(sportType: string, t: TFunction): string {
 
   // Missing config - log warning and use fallback
   if (!config) {
-    if (__DEV__) {
-      logger.warn(`[SportMapping] Missing config for sport type: "${sportType}"`)
-    }
+    logger.warn(`[SportMapping] Missing config for sport type: "${sportType}"`)
     return capitalizeFirst(sportType)
   }
 
@@ -110,9 +108,7 @@ export function getSportTypeLabel(sportType: string, t: TFunction): string {
 
   // Check if translation exists (i18next returns key if missing)
   if (translation === config.i18nKey) {
-    if (__DEV__) {
-      logger.warn(`[SportMapping] Missing translation for key: "${config.i18nKey}"`)
-    }
+    logger.warn(`[SportMapping] Missing translation for key: "${config.i18nKey}"`)
     return capitalizeFirst(sportType)
   }
 
@@ -129,9 +125,7 @@ export function getSportTypeIcon(sportType: string): string {
   const config = SPORT_TYPE_CONFIG[sportType]
 
   if (!config) {
-    if (__DEV__) {
-      logger.warn(`[SportMapping] Missing icon config for sport type: "${sportType}"`)
-    }
+    logger.warn(`[SportMapping] Missing icon config for sport type: "${sportType}"`)
     return 'circle' // Default icon
   }
 
@@ -189,7 +183,7 @@ export function validateSportMappings(sportTypes: string[], t: TFunction): Valid
   const valid = missingConfig.length === 0 && missingTranslations.length === 0
 
   // Log errors in DEV mode
-  if (__DEV__ && !valid) {
+  if (!valid) {
     logger.group('[SportMapping] Validation Failed')
 
     if (missingConfig.length > 0) {

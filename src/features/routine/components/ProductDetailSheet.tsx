@@ -90,18 +90,6 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
             )}
           </View>
         )}
-
-        {/* Description */}
-        {hasDescription && (
-          <View className="mb-4">
-            <RenderHtml
-              contentWidth={width - 32}
-              source={{ html: typeContent.description }}
-              baseStyle={HTML_BASE_STYLE}
-            />
-          </View>
-        )}
-
         {/* How to Use */}
         {hasHowToUse && (
           <View className="mb-4">

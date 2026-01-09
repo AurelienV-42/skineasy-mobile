@@ -42,9 +42,7 @@ export const impact = (level: ImpactLevel): void => {
     }
   } catch (error) {
     // Fail silently - haptic feedback is non-critical
-    if (__DEV__) {
-      logger.warn('[Haptic] Impact failed:', error)
-    }
+    logger.warn('[Haptic] Impact failed:', error)
   }
 }
 
@@ -59,9 +57,7 @@ export const selection = (): void => {
   try {
     Haptics.selectionAsync()
   } catch (error) {
-    if (__DEV__) {
-      logger.warn('[Haptic] Selection failed:', error)
-    }
+    logger.warn('[Haptic] Selection failed:', error)
   }
 }
 
@@ -88,9 +84,7 @@ export const notification = (type: NotificationType): void => {
         break
     }
   } catch (error) {
-    if (__DEV__) {
-      logger.warn('[Haptic] Notification failed:', error)
-    }
+    logger.warn('[Haptic] Notification failed:', error)
   }
 }
 

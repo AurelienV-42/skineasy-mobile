@@ -10,9 +10,7 @@ const SENTRY_DSN = Constants.expoConfig?.extra?.sentryDsn as string | undefined
  */
 export function initSentry() {
   if (!SENTRY_DSN) {
-    if (__DEV__) {
-      logger.warn('[Sentry] SENTRY_DSN not found - error tracking disabled')
-    }
+    logger.warn('[Sentry] SENTRY_DSN not found - error tracking disabled')
     return
   }
 
@@ -25,7 +23,5 @@ export function initSentry() {
     enabled: !__DEV__,
   })
 
-  if (__DEV__) {
-    logger.info('[Sentry] Initialized successfully')
-  }
+  logger.info('[Sentry] Initialized successfully')
 }
