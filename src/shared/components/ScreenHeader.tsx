@@ -16,6 +16,8 @@ interface ScreenHeaderProps {
   /** When true, children are rendered without ScrollView wrapper (for screens with custom scroll) */
   noScroll?: boolean
   edges?: Edge[]
+  /** When false, hides the back button (default: true) */
+  canGoBack?: boolean
 }
 
 // Context to provide scroll functionality to child components
@@ -35,6 +37,7 @@ export function ScreenHeader({
   children,
   noScroll = false,
   edges = ['top', 'bottom'],
+  canGoBack = true,
 }: ScreenHeaderProps) {
   const { t } = useTranslation()
   const router = useRouter()
@@ -49,25 +52,29 @@ export function ScreenHeader({
   }
 
   const content = (
-    <Animated.View style={animStyles[1]} className="flex-1 px-4 pb-8 pt-4">
+    <Animated.View style={animStyles[1]} className="flex-1 px-4 pt-4">
       {children}
     </Animated.View>
   )
 
   return (
-    <SafeAreaView edges={edges} className="flex-1 bg-background">
+    <SafeAreaView edges={edges} className="flex-1">
       {/* Custom Header */}
       <Animated.View
         style={animStyles[0]}
         className="flex-row items-center justify-between px-4 pt-2 pb-4"
       >
-        <Pressable
-          onPress={() => router.back()}
-          accessibilityLabel={t('common.back')}
-          haptic="light"
-        >
-          <ChevronLeft size={28} color={colors.text} />
-        </Pressable>
+        {canGoBack ? (
+          <Pressable
+            onPress={() => router.back()}
+            accessibilityLabel={t('common.back')}
+            haptic="light"
+          >
+            <ChevronLeft size={28} color={colors.text} />
+          </Pressable>
+        ) : (
+          <View className="w-7" />
+        )}
         <Text className="text-3xl font-bold text-primary">{title}</Text>
         <View className="w-7" />
       </Animated.View>

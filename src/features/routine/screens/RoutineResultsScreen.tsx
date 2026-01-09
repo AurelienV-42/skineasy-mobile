@@ -86,7 +86,7 @@ export default function RoutineResultsScreen() {
     selectedTime === 'morning' ? todayRoutine.morning.steps : todayRoutine.evening.steps
 
   return (
-    <ScreenHeader edges={['top']} title={t('routine.resultsTitle')} noScroll>
+    <ScreenHeader edges={['top']} title={t('routine.resultsTitle')} noScroll canGoBack={false}>
       {/* Skin Profile Summary */}
       <RoutineSummaryCard
         summary={routine.summary}
