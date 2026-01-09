@@ -31,6 +31,7 @@ import { Alert, Image, LayoutAnimation, Text, View } from 'react-native'
 
 import { getSportTypeLabel } from '@features/journal/utils/sportMapping'
 import { Pressable } from '@shared/components/Pressable'
+import { appConfig } from '@shared/config/appConfig'
 import { ENV } from '@shared/config/env'
 import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
 import { isPast } from '@shared/utils/date'
@@ -81,9 +82,9 @@ export function DailySummary({
 
   const [expandedCard, setExpandedCard] = useState<'sleep' | 'nutrition' | 'sport' | null>(null)
 
-  // Only allow logging entries for today and future dates (not past)
-  const canLogEntries = !isPast(date)
-  const isPastDate = isPast(date)
+  // Only allow logging entries for today and future dates (not past), unless allowPastEdits is enabled
+  const canLogEntries = !isPast(date) || appConfig.features.allowPastEdits
+  const isPastDate = isPast(date) && !appConfig.features.allowPastEdits
 
   const confirmDelete = (type: 'sleep' | 'meal' | 'sport', id: number) => {
     Alert.alert(t('common.deleteConfirmTitle'), t('common.deleteConfirmMessage'), [
