@@ -1,5 +1,13 @@
 import { create } from 'zustand'
-import { getToken, setToken, setRefreshToken, clearAllTokens } from '@shared/utils/storage'
+
+import { useUserStore } from '@shared/stores/user.store'
+import {
+  getToken,
+  getRefreshToken,
+  setToken,
+  setRefreshToken,
+  clearAllTokens,
+} from '@shared/utils/storage'
 import { logger } from '@shared/utils/logger'
 
 interface AuthState {
@@ -28,8 +36,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       await setRefreshToken(refreshToken)
       logger.info('[authStore] setTokens - Refresh token saved')
 
-      // Verify it was saved correctly
-      const { getRefreshToken } = await import('@shared/utils/storage')
       const savedRefreshToken = await getRefreshToken()
       logger.info('[authStore] setTokens - Verification:', {
         wasSaved: !!savedRefreshToken,
@@ -44,16 +50,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   clearAuth: async () => {
     await clearAllTokens()
     set({ token: null, isAuthenticated: false })
-    // Clear user data when logging out
-    const { useUserStore } = await import('@shared/stores/user.store')
     useUserStore.getState().clearUser()
   },
 
   handleSessionExpiry: async () => {
     await clearAllTokens()
     set({ token: null, isAuthenticated: false })
-    // Clear user data when session expires
-    const { useUserStore } = await import('@shared/stores/user.store')
     useUserStore.getState().clearUser()
   },
 

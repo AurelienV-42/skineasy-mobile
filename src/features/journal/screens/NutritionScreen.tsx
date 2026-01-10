@@ -29,8 +29,8 @@ import { Button } from '@shared/components/Button'
 import { Input } from '@shared/components/Input'
 import { Pressable } from '@shared/components/Pressable'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
-import { ENV } from '@shared/config/env'
 import { getTodayUTC, toISODateString } from '@shared/utils/date'
+import { getImageUrl } from '@shared/utils/image'
 import { colors } from '@theme/colors'
 
 const MEAL_TYPES = [
@@ -39,17 +39,6 @@ const MEAL_TYPES = [
   { id: 'dinner', icon: Moon },
   { id: 'snack', icon: Cookie },
 ] as const
-
-/**
- * Build full image URL from relative path
- */
-function getImageUrl(path: string | null): string | null {
-  if (!path) return null
-  if (path.startsWith('http://') || path.startsWith('https://')) {
-    return path
-  }
-  return `${ENV.API_URL}${path}`
-}
 
 export default function NutritionScreen() {
   const { t } = useTranslation()
