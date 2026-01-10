@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/react-native'
 import { ENV } from '@shared/config/env'
+import { useNetworkStore } from '@shared/stores/network.store'
 import type { RefreshTokenResponse } from '@shared/types/api.types'
 import { logger } from '@shared/utils/logger'
 import { getRefreshToken, getToken, setToken } from '@shared/utils/storage'
@@ -55,6 +56,7 @@ class ApiClient {
 
       // Log response body in DEV mode
       if (response.ok) {
+        useNetworkStore.getState().setBackendReachable(true)
         const clonedResponse = response.clone()
         clonedResponse
           .json()
@@ -64,9 +66,12 @@ class ApiClient {
           .catch(() => {
             // Ignore parse errors for logging
           })
+      } else if (response.status >= 500) {
+        useNetworkStore.getState().setBackendReachable(false)
       }
     } catch (error) {
       logger.error('[API] Fetch error:', error)
+      useNetworkStore.getState().setBackendReachable(false)
       // Log network errors to Sentry
       Sentry.captureException(error, {
         contexts: {
@@ -321,12 +326,17 @@ class ApiClient {
       }
 
       if (!response.ok) {
+        if (response.status >= 500) {
+          useNetworkStore.getState().setBackendReachable(false)
+        }
         throw await this.handleError(response)
       }
 
+      useNetworkStore.getState().setBackendReachable(true)
       return response.json()
     } catch (error) {
       logger.error('[API] FormData error:', error)
+      useNetworkStore.getState().setBackendReachable(false)
       Sentry.captureException(error, {
         contexts: {
           api: { url, method: 'POST', endpoint },

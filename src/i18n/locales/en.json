@@ -25,6 +25,8 @@
     "noConnection": "No internet connection",
     "offline": "No internet connection",
     "backOnline": "Back online",
+    "serverUnavailable": "Cannot connect to server",
+    "serverRestored": "Connection restored",
     "sessionExpired": "Session Expired",
     "sessionExpiredMessage": "Please log in again",
     "deleteConfirmTitle": "Delete Entry",
