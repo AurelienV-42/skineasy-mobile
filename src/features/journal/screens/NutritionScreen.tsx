@@ -10,7 +10,6 @@
  */
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as ImagePicker from 'expo-image-picker'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Camera, Coffee, Cookie, ImageIcon, Moon, Sun, X } from 'lucide-react-native'
 import { useEffect, useState } from 'react'
@@ -30,7 +29,7 @@ import { Input } from '@shared/components/Input'
 import { Pressable } from '@shared/components/Pressable'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
 import { getTodayUTC, toISODateString } from '@shared/utils/date'
-import { getImageUrl } from '@shared/utils/image'
+import { getImageUrl, pickImageFromGallery, takePhoto } from '@shared/utils/image'
 import { colors } from '@theme/colors'
 
 const MEAL_TYPES = [
@@ -91,43 +90,18 @@ export default function NutritionScreen() {
     }
   }, [existingEntry, reset])
 
-  const pickImage = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
-
-    if (permissionResult.granted === false) {
+  const handlePickImage = async () => {
+    const uri = await pickImageFromGallery(() => {
       Alert.alert(t('common.error'), t('journal.nutrition.galleryPermissionRequired'))
-      return
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 0.8,
     })
-
-    if (!result.canceled) {
-      setImageUri(result.assets[0].uri)
-    }
+    if (uri) setImageUri(uri)
   }
 
-  const takePhoto = async () => {
-    const permissionResult = await ImagePicker.requestCameraPermissionsAsync()
-
-    if (permissionResult.granted === false) {
+  const handleTakePhoto = async () => {
+    const uri = await takePhoto(() => {
       Alert.alert(t('common.error'), t('journal.nutrition.cameraPermissionRequired'))
-      return
-    }
-
-    const result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 0.8,
     })
-
-    if (!result.canceled) {
-      setImageUri(result.assets[0].uri)
-    }
+    if (uri) setImageUri(uri)
   }
 
   const removeImage = () => {
@@ -226,7 +200,7 @@ export default function NutritionScreen() {
         ) : (
           <View className="flex-row gap-3">
             <Pressable
-              onPress={takePhoto}
+              onPress={handleTakePhoto}
               className="flex-1 bg-surface border-2 border-dashed border-border rounded-xl py-8 items-center justify-center"
               accessibilityLabel={t('journal.nutrition.takePhoto')}
               haptic="light"
@@ -238,7 +212,7 @@ export default function NutritionScreen() {
             </Pressable>
 
             <Pressable
-              onPress={pickImage}
+              onPress={handlePickImage}
               className="flex-1 bg-surface border-2 border-dashed border-border rounded-xl py-8 items-center justify-center"
               accessibilityLabel={t('journal.nutrition.gallery')}
               haptic="light"

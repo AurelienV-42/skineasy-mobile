@@ -14,6 +14,8 @@ import * as ImageManipulator from 'expo-image-manipulator'
 import { ENV } from '@shared/config/env'
 import { logger } from '@shared/utils/logger'
 
+type PermissionDeniedHandler = () => void
+
 /**
  * Image compression settings
  */
@@ -27,28 +29,30 @@ const IMAGE_COMPRESSION = {
 /**
  * Pick an image from the device's gallery
  *
+ * @param onPermissionDenied - Optional callback when permission is denied
  * @returns Promise<string | null> - URI of the selected image, or null if canceled
  */
-export async function pickImageFromGallery(): Promise<string | null> {
+export async function pickImageFromGallery(
+  onPermissionDenied?: PermissionDeniedHandler
+): Promise<string | null> {
   try {
     logger.info('[Image] Requesting gallery permissions')
 
-    // Request permissions
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
 
     if (status !== 'granted') {
       logger.warn('[Image] Gallery permission denied')
+      onPermissionDenied?.()
       return null
     }
 
     logger.info('[Image] Launching image picker')
 
-    // Launch image picker
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1, // Get full quality, we'll compress manually
+      quality: 1,
     })
 
     if (result.canceled) {
@@ -69,17 +73,20 @@ export async function pickImageFromGallery(): Promise<string | null> {
 /**
  * Take a photo using the device's camera
  *
+ * @param onPermissionDenied - Optional callback when permission is denied
  * @returns Promise<string | null> - URI of the captured photo, or null if canceled
  */
-export async function takePhoto(): Promise<string | null> {
+export async function takePhoto(
+  onPermissionDenied?: PermissionDeniedHandler
+): Promise<string | null> {
   try {
     logger.info('[Image] Requesting camera permissions')
 
-    // Request permissions
     const { status } = await ImagePicker.requestCameraPermissionsAsync()
 
     if (status !== 'granted') {
       logger.warn('[Image] Camera permission denied')
+      onPermissionDenied?.()
       return null
     }
 
