@@ -58,7 +58,7 @@ export default function RoutineResultsScreen() {
   // Loading state
   if (isLoading) {
     return (
-      <ScreenHeader title={t('routine.resultsTitle')}>
+      <ScreenHeader canGoBack={false} title={t('routine.resultsTitle')}>
         <RoutineLoadingState />
       </ScreenHeader>
     )
@@ -67,7 +67,7 @@ export default function RoutineResultsScreen() {
   // Error state
   if (isError) {
     return (
-      <ScreenHeader title={t('routine.resultsTitle')}>
+      <ScreenHeader canGoBack={false} title={t('routine.resultsTitle')}>
         <RoutineErrorState />
       </ScreenHeader>
     )
@@ -76,7 +76,7 @@ export default function RoutineResultsScreen() {
   // No routine found
   if (!routine || !todayRoutine) {
     return (
-      <ScreenHeader title={t('routine.resultsTitle')}>
+      <ScreenHeader canGoBack={false} title={t('routine.resultsTitle')}>
         <RoutineEmptyState />
       </ScreenHeader>
     )
