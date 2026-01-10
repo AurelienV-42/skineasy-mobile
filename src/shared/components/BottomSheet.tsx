@@ -8,7 +8,6 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet'
 import { useEffect, useRef } from 'react'
 import { Dimensions } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { colors } from '../../theme/colors'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -29,7 +28,6 @@ export function BottomSheet({
   scrollable = false,
 }: BottomSheetProps) {
   const sheet = useRef<TrueSheet>(null)
-  const insets = useSafeAreaInsets()
 
   useEffect(() => {
     if (visible) {

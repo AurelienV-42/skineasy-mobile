@@ -35,7 +35,6 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
   if (!product) return null
 
   const { typeContent } = product
-  const hasDescription = typeContent?.description && typeContent.description.length > 0
   const hasHowToUse = typeContent?.howToUse && typeContent.howToUse.length > 0
   const hasKeyIngredient = typeContent?.keyIngredient && typeContent.keyIngredient.length > 0
   const hasIrritation =

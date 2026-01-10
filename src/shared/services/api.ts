@@ -10,6 +10,11 @@ interface ApiOptions extends Omit<RequestInit, 'body'> {
   body?: unknown
 }
 
+interface FormDataOptions {
+  onProgress?: (progress: number) => void
+  timeout?: number
+}
+
 class ApiClient {
   private isRefreshing = false
   private refreshPromise: Promise<string | null> | null = null
@@ -261,6 +266,134 @@ class ApiClient {
 
   delete<T>(endpoint: string, options?: ApiOptions): Promise<T> {
     return this.request<T>(endpoint, { ...options, method: 'DELETE' })
+  }
+
+  async postFormData<T>(
+    endpoint: string,
+    formData: FormData,
+    options: FormDataOptions = {}
+  ): Promise<T> {
+    const { onProgress, timeout = 60000 } = options
+    const url = `${ENV.API_URL}${endpoint}`
+
+    const token = await getToken()
+    const headers: Record<string, string> = {}
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+
+    logger.info('[API] FormData request:', { url, method: 'POST' })
+
+    const makeRequest = async (authToken?: string): Promise<Response> => {
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`
+      }
+
+      if (onProgress && typeof XMLHttpRequest !== 'undefined') {
+        return this.fetchWithProgress(url, formData, headers, timeout, onProgress)
+      }
+
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), timeout)
+
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers,
+        signal: controller.signal,
+      })
+
+      clearTimeout(timeoutId)
+      return response
+    }
+
+    try {
+      let response = await makeRequest()
+
+      if (response.status === 401) {
+        const newToken = await this.refreshAccessToken()
+        if (newToken) {
+          response = await makeRequest(newToken)
+        } else {
+          await this.handleSessionExpired()
+          throw new Error('Session expired')
+        }
+      }
+
+      if (!response.ok) {
+        throw await this.handleError(response)
+      }
+
+      return response.json()
+    } catch (error) {
+      logger.error('[API] FormData error:', error)
+      Sentry.captureException(error, {
+        contexts: {
+          api: { url, method: 'POST', endpoint },
+        },
+      })
+      throw error
+    }
+  }
+
+  private fetchWithProgress(
+    url: string,
+    formData: FormData,
+    headers: Record<string, string>,
+    timeout: number,
+    onProgress: (progress: number) => void
+  ): Promise<Response> {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest()
+      const timeoutId = setTimeout(() => {
+        xhr.abort()
+        reject(new Error('Request timeout'))
+      }, timeout)
+
+      xhr.upload.addEventListener('progress', (event) => {
+        if (event.lengthComputable) {
+          onProgress(Math.round((event.loaded / event.total) * 100))
+        }
+      })
+
+      xhr.addEventListener('load', () => {
+        clearTimeout(timeoutId)
+        resolve(
+          new Response(xhr.response, {
+            status: xhr.status,
+            statusText: xhr.statusText,
+            headers: this.parseXhrHeaders(xhr.getAllResponseHeaders()),
+          })
+        )
+      })
+
+      xhr.addEventListener('error', () => {
+        clearTimeout(timeoutId)
+        reject(new Error('Network error'))
+      })
+
+      xhr.addEventListener('abort', () => {
+        clearTimeout(timeoutId)
+        reject(new Error('Request aborted'))
+      })
+
+      xhr.open('POST', url)
+      Object.entries(headers).forEach(([key, value]) => {
+        xhr.setRequestHeader(key, value)
+      })
+      xhr.send(formData)
+    })
+  }
+
+  private parseXhrHeaders(headerStr: string): Headers {
+    const headers = new Headers()
+    headerStr.split('\r\n').forEach((line) => {
+      const parts = line.split(': ')
+      if (parts.length === 2) {
+        headers.append(parts[0], parts[1])
+      }
+    })
+    return headers
   }
 }
 

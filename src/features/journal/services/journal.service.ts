@@ -5,7 +5,6 @@
  * Based on BACKEND_API.md specification
  */
 
-import { ENV } from '@shared/config/env'
 import { api } from '@shared/services/api'
 import type { ApiResponse } from '@shared/types/api.types'
 import type {
@@ -128,30 +127,22 @@ export const mealService = {
   /**
    * Upload a meal image
    * @param imageUri - Local URI of the compressed image
+   * @param onProgress - Optional callback for upload progress (0-100)
    * @returns URL of the uploaded image
    */
-  async uploadImage(imageUri: string): Promise<string> {
+  async uploadImage(imageUri: string, onProgress?: (progress: number) => void): Promise<string> {
     logger.info('[Journal API] Uploading meal image')
 
     const formData = imageUriToFormData(imageUri, 'image')
 
-    // Use fetch directly for FormData upload
-    const response = await fetch(`${ENV.API_URL}/api/v1/journal/meal/upload`, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        // Don't set Content-Type - let browser set it with boundary
-        Authorization: `Bearer ${await import('@shared/utils/storage').then((m) => m.getToken())}`,
-      },
-    })
+    const response = await api.postFormData<ApiResponse<ImageUploadResponse>>(
+      '/api/v1/journal/meal/upload',
+      formData,
+      { onProgress }
+    )
 
-    if (!response.ok) {
-      throw new Error(`Image upload failed: ${response.status}`)
-    }
-
-    const data: ApiResponse<ImageUploadResponse> = await response.json()
-    logger.info('[Journal API] Image uploaded successfully:', data.data.url)
-    return data.data.url
+    logger.info('[Journal API] Image uploaded successfully:', response.data.url)
+    return response.data.url
   },
 
   /**
