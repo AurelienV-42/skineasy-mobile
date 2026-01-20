@@ -9,6 +9,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { colors } from '@theme/colors'
 
+export const SPRING_CONFIG = { damping: 60, stiffness: 300 }
+
 type TabConfig = {
   name: string
   href: string
@@ -65,7 +67,7 @@ function TabBarContent({ containerWidth }: TabBarContentProps): React.ReactEleme
 
   const handleFocusChange = (index: number, isFocused: boolean): void => {
     if (isFocused) {
-      activeIndex.value = withSpring(index, { damping: 36, stiffness: 200 })
+      activeIndex.value = withSpring(index, SPRING_CONFIG)
     }
   }
 
