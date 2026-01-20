@@ -28,9 +28,9 @@ module.exports = {
         },
       },
       fontFamily: {
-        normal: ['Roboto_400Regular'],
-        medium: ['Roboto_500Medium'],
-        bold: ['Roboto_700Bold'],
+        normal: ['ChocolatesRegular'],
+        medium: ['ChocolatesMedium'],
+        bold: ['ChocolatesBold'],
       },
       spacing: {
         xs: '4px',

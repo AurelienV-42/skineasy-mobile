@@ -1,9 +1,4 @@
-import {
-  Roboto_400Regular,
-  Roboto_500Medium,
-  Roboto_700Bold,
-  useFonts,
-} from '@expo-google-fonts/roboto'
+import { useFonts } from 'expo-font'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
@@ -40,9 +35,9 @@ function RootLayoutContent() {
   useNetworkStatus()
 
   const [fontsLoaded] = useFonts({
-    Roboto_400Regular,
-    Roboto_500Medium,
-    Roboto_700Bold,
+    ChocolatesRegular: require('../assets/fonts/ChocolatesRegular.otf'),
+    ChocolatesMedium: require('../assets/fonts/ChocolatesMedium.otf'),
+    ChocolatesBold: require('../assets/fonts/ChocolatesBold.otf'),
   })
 
   // Initialize user data from /me endpoint

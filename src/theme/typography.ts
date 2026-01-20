@@ -1,36 +1,36 @@
 export const typography = {
   h1: {
-    fontFamily: 'Roboto_700Bold',
+    fontFamily: 'ChocolatesBold',
     fontSize: 28,
     lineHeight: 36,
   },
   h2: {
-    fontFamily: 'Roboto_700Bold',
+    fontFamily: 'ChocolatesBold',
     fontSize: 24,
     lineHeight: 32,
   },
   h3: {
-    fontFamily: 'Roboto_500Medium',
+    fontFamily: 'ChocolatesMedium',
     fontSize: 20,
     lineHeight: 28,
   },
   body: {
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: 'ChocolatesRegular',
     fontSize: 16,
     lineHeight: 24,
   },
   bodySmall: {
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: 'ChocolatesRegular',
     fontSize: 14,
     lineHeight: 20,
   },
   caption: {
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: 'ChocolatesRegular',
     fontSize: 12,
     lineHeight: 16,
   },
   button: {
-    fontFamily: 'Roboto_500Medium',
+    fontFamily: 'ChocolatesMedium',
     fontSize: 16,
     lineHeight: 24,
   },
