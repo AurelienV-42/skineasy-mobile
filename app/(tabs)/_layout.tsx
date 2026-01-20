@@ -1,58 +1,28 @@
-import { Redirect, Tabs } from 'expo-router'
-import { Home, Sparkles, User } from 'lucide-react-native'
-import { useTranslation } from 'react-i18next'
+import { Redirect } from 'expo-router'
+import { TabList, TabSlot, Tabs, TabTrigger } from 'expo-router/ui'
+import { View } from 'react-native'
 
+import { FloatingTabBar } from '@shared/components/FloatingTabBar'
 import { useAuthStore } from '@shared/stores/auth.store'
-import { colors } from '@theme/colors'
 
-export default function TabsLayout() {
-  const { t } = useTranslation()
+export default function TabsLayout(): React.ReactElement | null {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 
-  // Redirect to auth if not authenticated
   if (!isAuthenticated) {
     return <Redirect href="/(auth)/login" />
   }
 
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textMuted,
-        tabBarStyle: {
-          backgroundColor: colors.surface,
-          borderTopColor: colors.border,
-          paddingTop: 2,
-        },
-        tabBarLabelStyle: {
-          fontFamily: 'Roboto_500Medium',
-          fontSize: 12,
-          paddingTop: 4,
-        },
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          tabBarLabel: t('dashboard.today'),
-          tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
-        }}
-      />
-      <Tabs.Screen
-        name="routine"
-        options={{
-          tabBarLabel: t('routine.title'),
-          tabBarIcon: ({ color, size }) => <Sparkles color={color} size={size} />,
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          tabBarLabel: t('profile.title'),
-          tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
-        }}
-      />
-    </Tabs>
+    <View className="flex-1">
+      <Tabs>
+        <TabSlot />
+        <TabList style={{ display: 'none' }}>
+          <TabTrigger name="index" href="/" />
+          <TabTrigger name="routine" href="/routine" />
+          <TabTrigger name="profile" href="/profile" />
+        </TabList>
+        <FloatingTabBar />
+      </Tabs>
+    </View>
   )
 }
