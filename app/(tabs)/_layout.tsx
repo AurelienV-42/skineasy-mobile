@@ -7,6 +7,7 @@ import {
   TabsSlotRenderOptions,
   TabTrigger,
 } from 'expo-router/ui'
+import { useEffect } from 'react'
 import { StyleSheet, useWindowDimensions, View } from 'react-native'
 import Animated, {
   SharedValue,
@@ -17,7 +18,6 @@ import Animated, {
 
 import { FloatingTabBar, SPRING_CONFIG } from '@shared/components/FloatingTabBar'
 import { useAuthStore } from '@shared/stores/auth.store'
-
 
 export default function TabsLayout(): React.ReactElement | null {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
@@ -36,14 +36,11 @@ export default function TabsLayout(): React.ReactElement | null {
       return null
     }
 
-    if (isFocused && activeIndex.value !== index) {
-      activeIndex.value = withSpring(index, SPRING_CONFIG)
-    }
-
     return (
       <AnimatedScreen
         key={descriptor.route.key}
         index={index}
+        isFocused={isFocused}
         activeIndex={activeIndex}
         width={width}
       >
@@ -69,6 +66,7 @@ export default function TabsLayout(): React.ReactElement | null {
 
 type AnimatedScreenProps = {
   index: number
+  isFocused: boolean
   activeIndex: SharedValue<number>
   width: number
   children: React.ReactNode
@@ -76,10 +74,17 @@ type AnimatedScreenProps = {
 
 function AnimatedScreen({
   index,
+  isFocused,
   activeIndex,
   width,
   children,
 }: AnimatedScreenProps): React.ReactElement {
+  useEffect(() => {
+    if (isFocused) {
+      activeIndex.value = withSpring(index, SPRING_CONFIG)
+    }
+  }, [isFocused, index, activeIndex])
+
   const animatedStyle = useAnimatedStyle(() => {
     const offset = (index - activeIndex.value) * width
     return {

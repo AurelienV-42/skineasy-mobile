@@ -1,7 +1,7 @@
 import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect'
 import { useTabTrigger } from 'expo-router/ui'
 import { Home, Sparkles, User } from 'lucide-react-native'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LayoutChangeEvent, Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
@@ -89,12 +89,12 @@ function TabBarContent({ containerWidth }: TabBarContentProps): React.ReactEleme
 export function FloatingTabBar(): React.ReactElement {
   const insets = useSafeAreaInsets()
   const isGlassAvailable = isLiquidGlassAvailable()
-  const containerWidth = useSharedValue(0)
+  const [containerWidth, setContainerWidth] = useState(0)
 
   const bottomPosition = Math.max(insets.bottom, 16)
 
   const handleLayout = (event: LayoutChangeEvent): void => {
-    containerWidth.value = event.nativeEvent.layout.width
+    setContainerWidth(event.nativeEvent.layout.width)
   }
 
   if (isGlassAvailable) {
@@ -104,7 +104,7 @@ export function FloatingTabBar(): React.ReactElement {
         glassEffectStyle="regular"
         onLayout={handleLayout}
       >
-        {containerWidth.value > 0 && <TabBarContent containerWidth={containerWidth.value} />}
+        {containerWidth > 0 && <TabBarContent containerWidth={containerWidth} />}
       </GlassView>
     )
   }
@@ -114,7 +114,7 @@ export function FloatingTabBar(): React.ReactElement {
       style={[styles.container, styles.fallback, { bottom: bottomPosition }]}
       onLayout={handleLayout}
     >
-      {containerWidth.value > 0 && <TabBarContent containerWidth={containerWidth.value} />}
+      {containerWidth > 0 && <TabBarContent containerWidth={containerWidth} />}
     </View>
   )
 }
