@@ -132,8 +132,7 @@ export default function LoginScreen() {
                     onPress={() =>
                       login({
                         email: 'aurelien1@gmail.com',
-                        password:
-                          '123456',
+                        password: '123456',
                       })
                     }
                   />

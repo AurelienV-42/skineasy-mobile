@@ -1,10 +1,11 @@
 import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, Text } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { Avatar } from '@shared/components/Avatar'
 import { DailySummary } from '@features/dashboard/components/DailySummary'
 import { DateNavigation } from '@features/dashboard/components/DateNavigation'
 import {
@@ -74,12 +75,24 @@ export default function DashboardScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        {/* Greeting */}
-        <Animated.View style={animStyles[0]} className="px-4 pt-4 pb-2">
-          <Text className="text-2xl font-bold text-text mb-1">
-            {t('dashboard.greeting', { name: user?.firstname || '' })}
-          </Text>
-          <Text className="text-sm text-textMuted">{t('dashboard.reminder')}</Text>
+        {/* Greeting + Avatar */}
+        <Animated.View
+          style={animStyles[0]}
+          className="px-4 pt-4 pb-2 flex-row justify-between items-start"
+        >
+          <View>
+            <Text className="text-2xl font-bold text-text mb-1">
+              {t('dashboard.greeting', { name: user?.firstname || '' })}
+            </Text>
+            <Text className="text-sm text-textMuted">{t('dashboard.reminder')}</Text>
+          </View>
+          <Avatar
+            firstname={user?.firstname}
+            lastname={user?.lastname}
+            email={user?.email}
+            size={32}
+            onPress={() => router.push('/profile')}
+          />
         </Animated.View>
 
         {/* Date Navigation */}

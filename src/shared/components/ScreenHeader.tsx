@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router'
-import { ChevronLeft } from 'lucide-react-native'
+import { ArrowLeft } from 'lucide-react-native'
 import { createContext, ReactNode, useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native'
@@ -58,7 +58,7 @@ export function ScreenHeader({
   )
 
   return (
-    <SafeAreaView edges={edges} className="flex-1">
+    <SafeAreaView edges={edges} className="flex-1 bg-background">
       {/* Custom Header */}
       <Animated.View
         style={animStyles[0]}
@@ -70,7 +70,7 @@ export function ScreenHeader({
             accessibilityLabel={t('common.back')}
             haptic="light"
           >
-            <ChevronLeft size={28} color={colors.text} />
+            <ArrowLeft size={28} color={colors.text} />
           </Pressable>
         ) : (
           <View className="w-7" />

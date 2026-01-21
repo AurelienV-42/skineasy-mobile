@@ -1,5 +1,5 @@
-import { useFonts } from 'expo-font'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
@@ -8,6 +8,7 @@ import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
 
+import assets from '@assets'
 import { useInitializeUser } from '@features/auth/hooks/useInitializeUser'
 import * as Sentry from '@sentry/react-native'
 import { OfflineBanner } from '@shared/components/OfflineBanner'
@@ -16,7 +17,6 @@ import { initSentry } from '@shared/config/sentry'
 import { useNetworkStatus } from '@shared/hooks/useNetworkStatus'
 import { useAuthStore } from '@shared/stores/auth.store'
 import { logger } from '@shared/utils/logger'
-import assets from '@assets'
 import '../src/global.css'
 import '../src/i18n'
 
@@ -81,6 +81,7 @@ function RootLayoutContent() {
       >
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="profile" />
         <Stack.Screen name="diagnosis" options={{ presentation: 'modal' }} />
         <Stack.Screen name="routine" />
       </Stack>

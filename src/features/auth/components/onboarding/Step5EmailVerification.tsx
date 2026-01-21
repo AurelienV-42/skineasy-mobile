@@ -42,7 +42,7 @@ export function Step5EmailVerification({ email }: Step5EmailVerificationProps): 
         <View className="flex-1 px-6 justify-center items-center">
           {/* Icon Container */}
           <GlassContainer style={{ padding: 16, marginBottom: 16 }}>
-            <MailWarning size={46} color={colors.surface} strokeWidth={3} />
+            <MailWarning size={46} color={colors.surface} strokeWidth={2} />
           </GlassContainer>
 
           {/* Title & Subtitle */}

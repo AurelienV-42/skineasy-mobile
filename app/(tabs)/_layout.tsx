@@ -56,7 +56,6 @@ export default function TabsLayout(): React.ReactElement | null {
         <TabList style={{ display: 'none' }}>
           <TabTrigger name="index" href="/" />
           <TabTrigger name="routine" href="/routine" />
-          <TabTrigger name="profile" href="/profile" />
         </TabList>
         <FloatingTabBar />
       </Tabs>

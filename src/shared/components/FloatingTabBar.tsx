@@ -1,6 +1,6 @@
 import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect'
 import { useTabTrigger } from 'expo-router/ui'
-import { Home, Sparkles, User } from 'lucide-react-native'
+import { Home, Sparkles } from 'lucide-react-native'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LayoutChangeEvent, Pressable, StyleSheet, Text, View } from 'react-native'
@@ -21,7 +21,6 @@ type TabConfig = {
 const TABS: TabConfig[] = [
   { name: 'index', href: '/', labelKey: 'dashboard.today', icon: Home },
   { name: 'routine', href: '/routine', labelKey: 'routine.title', icon: Sparkles },
-  { name: 'profile', href: '/profile', labelKey: 'profile.title', icon: User },
 ]
 
 const TAB_COUNT = TABS.length
