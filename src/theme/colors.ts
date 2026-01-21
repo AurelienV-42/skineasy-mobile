@@ -21,7 +21,7 @@ export const colors = {
   warning: '#F59E0B',
 
   // Border
-  border: '#E5E7EB',
+  border: '#F4E9E0',
   borderFocus: '#55C4B8',
 } as const
 
