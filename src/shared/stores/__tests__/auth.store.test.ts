@@ -7,6 +7,7 @@ vi.mock('@shared/utils/storage', () => ({
   setToken: vi.fn(),
   removeToken: vi.fn(),
   setRefreshToken: vi.fn(),
+  getRefreshToken: vi.fn(),
   clearAllTokens: vi.fn(),
 }))
 

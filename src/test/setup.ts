@@ -27,9 +27,6 @@ vi.mock('expo-localization', () => ({
   getLocales: vi.fn(() => [{ languageCode: 'en', regionCode: 'US' }]),
 }))
 
-// Global test utilities
-declare global {
-  var __TEST__: boolean
-}
-
-globalThis.__TEST__ = true
+// Global test utilities - __DEV__ is already declared by React Native types
+Object.defineProperty(global, '__TEST__', { value: true, writable: true })
+Object.defineProperty(global, '__DEV__', { value: true, writable: true })
