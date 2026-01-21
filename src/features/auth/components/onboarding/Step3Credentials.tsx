@@ -118,13 +118,6 @@ export function Step3Credentials({
             loading={isLoading}
             haptic="heavy"
           />
-          <Button
-            title={t('onboarding.back')}
-            variant="outline"
-            onPress={onBack}
-            haptic="light"
-            disabled={isLoading}
-          />
         </View>
       </View>
     </KeyboardScrollView>

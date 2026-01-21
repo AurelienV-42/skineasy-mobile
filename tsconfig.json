@@ -10,7 +10,8 @@
       "@navigation/*": ["src/navigation/*"],
       "@theme/*": ["src/theme/*"],
       "@i18n/*": ["src/i18n/*"],
-      "@assets/*": ["assets/*"]
+      "@assets/*": ["assets/*"],
+      "@assets": ["assets/index.ts"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "nativewind-env.d.ts"],

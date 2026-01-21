@@ -14,6 +14,7 @@ module.exports = function (api) {
             '@navigation': './src/navigation',
             '@theme': './src/theme',
             '@i18n': './src/i18n',
+            '@assets': './assets',
           },
         },
       ],

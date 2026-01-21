@@ -16,6 +16,7 @@ import { initSentry } from '@shared/config/sentry'
 import { useNetworkStatus } from '@shared/hooks/useNetworkStatus'
 import { useAuthStore } from '@shared/stores/auth.store'
 import { logger } from '@shared/utils/logger'
+import assets from '@assets'
 import '../src/global.css'
 import '../src/i18n'
 
@@ -35,9 +36,9 @@ function RootLayoutContent() {
   useNetworkStatus()
 
   const [fontsLoaded] = useFonts({
-    ChocolatesRegular: require('../assets/fonts/ChocolatesRegular.otf'),
-    ChocolatesMedium: require('../assets/fonts/ChocolatesMedium.otf'),
-    ChocolatesBold: require('../assets/fonts/ChocolatesBold.otf'),
+    ChocolatesRegular: assets.ChocolatesRegular,
+    ChocolatesMedium: assets.ChocolatesMedium,
+    ChocolatesBold: assets.ChocolatesBold,
   })
 
   // Initialize user data from /me endpoint

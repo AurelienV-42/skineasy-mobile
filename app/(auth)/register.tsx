@@ -18,8 +18,7 @@ import { Image, View } from 'react-native'
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Pressable } from '../../src/shared/components/Pressable'
-
-const bubbleHeaderSource = require('@assets/background/bubbleHeader.png')
+import assets from '@assets'
 
 const TOTAL_STEPS = 3
 
@@ -109,7 +108,7 @@ export default function RegisterScreen() {
     <View className="flex-1 bg-background">
       {/* Bubble Header */}
       <Image
-        source={bubbleHeaderSource}
+        source={assets.bubbleHeader}
         className="absolute top-0 left-0 right-0 w-full"
         resizeMode="contain"
       />

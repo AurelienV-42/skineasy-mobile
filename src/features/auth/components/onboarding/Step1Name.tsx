@@ -83,12 +83,6 @@ export function Step1Name({ onNext, control, errors, isValid }: Step1NameProps) 
             disabled={!isValid}
             haptic="medium"
           />
-          <Button
-            title={t('onboarding.back')}
-            variant="outline"
-            onPress={() => router.back()}
-            haptic="light"
-          />
         </View>
       </View>
     </KeyboardScrollView>

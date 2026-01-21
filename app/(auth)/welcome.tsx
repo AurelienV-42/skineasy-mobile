@@ -1,3 +1,6 @@
+import assets from '@assets'
+import { Button } from '@shared/components/Button'
+import { colors } from '@theme/colors'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Link } from 'expo-router'
 import { useEffect } from 'react'
@@ -13,12 +16,6 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
-
-import { Button } from '@shared/components/Button'
-import { colors } from '@theme/colors'
-
-const logoSource = require('@assets/logo.png')
-const backgroundSource = require('@assets/background/bubbleBackground.png')
 
 const ANIMATION_CONFIG = {
   duration: 800,
@@ -87,11 +84,15 @@ export default function WelcomeScreen() {
       />
 
       {/* Background image on top of gradient */}
-      <Image source={backgroundSource} style={StyleSheet.absoluteFill} resizeMode="cover" />
+      <Image
+        source={assets.bubbleBackground}
+        style={{ ...StyleSheet.absoluteFillObject, width: '100%', height: '100%' }}
+        resizeMode="cover"
+      />
 
       {/* Logo - absolute center */}
       <Animated.View style={logoStyle} className="absolute inset-0 items-center justify-center">
-        <Image source={logoSource} style={{ width: 200, height: 200 }} resizeMode="contain" />
+        <Image source={assets.logo} style={{ width: 200, height: 200 }} resizeMode="contain" />
       </Animated.View>
 
       {/* Bottom Section - CTAs */}

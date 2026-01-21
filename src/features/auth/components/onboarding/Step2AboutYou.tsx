@@ -97,7 +97,6 @@ export function Step2AboutYou({ onNext, onBack, control, errors, isValid }: Step
             disabled={!isValid}
             haptic="medium"
           />
-          <Button title={t('onboarding.back')} variant="outline" onPress={onBack} haptic="light" />
         </View>
       </View>
     </KeyboardScrollView>
