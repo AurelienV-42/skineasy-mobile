@@ -78,6 +78,10 @@
     "step4": {
       "title": "Crée ton compte"
     },
+    "step5": {
+      "title": "Vérifie ta boite mail !",
+      "subtitle": "Clique sur le lien qui t'as été envoyé sur {{email}} pour finaliser ton inscription."
+    },
     "next": "Suivant",
     "back": "Retour",
     "createAccount": "Créer mon compte"

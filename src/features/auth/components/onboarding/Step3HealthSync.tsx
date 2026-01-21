@@ -54,25 +54,25 @@ export function Step3HealthSync({
         <View className="flex-1 px-6 justify-between pt-8">
           {/* App Icons */}
           <View>
-          <View className="items-start mb-8">
-            <View className="justify-center flex-row gap-8 pt-8">
-              <Image
-                source={assets.appleHealth}
-                className="w-24 h-24 rounded-2xl"
-                resizeMode="cover"
-              />
-              <View className="absolute -bottom-4 w-12 h-12 rounded-full bg-primary items-center justify-center z-10">
-                <Link color={colors.surface} size={20} />
+            <View className="items-start mb-8">
+              <View className="justify-center flex-row gap-8 pt-8">
+                <Image
+                  source={assets.appleHealth}
+                  className="w-24 h-24 rounded-2xl"
+                  resizeMode="cover"
+                />
+                <View className="absolute -bottom-4 w-12 h-12 rounded-full bg-primary items-center justify-center z-10">
+                  <Link color={colors.surface} size={20} />
+                </View>
+                <Image
+                  source={assets.skineasyLogo}
+                  className="w-24 h-24 rounded-2xl -ml-4"
+                  resizeMode="cover"
+                />
               </View>
-              <Image
-                source={assets.skineasyLogo}
-                className="w-24 h-24 rounded-2xl -ml-4"
-                resizeMode="cover"
-              />
             </View>
-          </View>
 
-          {/* Title & Subtitle */}
+            {/* Title & Subtitle */}
             <Text className="text-3xl font-bold text-cream mb-3">
               {t('onboarding.step3.title')}
             </Text>

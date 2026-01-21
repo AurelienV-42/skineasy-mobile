@@ -59,7 +59,9 @@ export default function LoginScreen() {
 
               {/* Welcome Text */}
               <Animated.View style={animStyles[1]} className="mb-10">
-                <Text className="text-3xl font-bold text-brownDark mb-2">{t('auth.welcomeBack')}</Text>
+                <Text className="text-3xl font-bold text-brownDark mb-2">
+                  {t('auth.welcomeBack')}
+                </Text>
                 <Text className="text-base text-textMuted">{t('auth.signInToContinue')}</Text>
               </Animated.View>
 

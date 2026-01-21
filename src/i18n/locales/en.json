@@ -77,6 +77,10 @@
     "step4": {
       "title": "Create your account"
     },
+    "step5": {
+      "title": "Check your inbox!",
+      "subtitle": "Click on the link sent to {{email}} to complete your registration."
+    },
     "next": "Next",
     "back": "Back",
     "createAccount": "Create Account"

@@ -32,7 +32,9 @@ export function Step4Credentials({
       <View className="flex-1 px-6">
         {/* Step Title */}
         <View className="mb-8 pt-20">
-          <Text className="text-3xl font-bold text-brownDark mb-2">{t('onboarding.step4.title')}</Text>
+          <Text className="text-3xl font-bold text-brownDark mb-2">
+            {t('onboarding.step4.title')}
+          </Text>
         </View>
 
         {/* Form Fields */}
@@ -131,7 +133,6 @@ export function Step4Credentials({
             loading={isLoading}
             haptic="heavy"
           />
-         
         </View>
       </View>
     </KeyboardScrollView>

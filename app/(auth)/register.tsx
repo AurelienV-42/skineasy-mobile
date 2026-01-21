@@ -2,6 +2,7 @@ import { Step1Name } from '@features/auth/components/onboarding/Step1Name'
 import { Step2AboutYou } from '@features/auth/components/onboarding/Step2AboutYou'
 import { Step3HealthSync } from '@features/auth/components/onboarding/Step3HealthSync'
 import { Step4Credentials } from '@features/auth/components/onboarding/Step4Credentials'
+import { Step5EmailVerification } from '@features/auth/components/onboarding/Step5EmailVerification'
 import { useRegister } from '@features/auth/hooks/useRegister'
 import {
   RegisterInput,
@@ -21,7 +22,7 @@ import { View } from 'react-native'
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-const TOTAL_STEPS = 4
+const TOTAL_STEPS = 5
 
 export default function RegisterScreen() {
   const router = useRouter()
@@ -94,7 +95,11 @@ export default function RegisterScreen() {
   }
 
   const onSubmit = (data: RegisterInput) => {
-    register(data)
+    register(data, {
+      onSuccess: () => {
+        setCurrentStep(5)
+      },
+    })
   }
 
   const isStep1Valid = getValues('firstname')?.length >= 2 && getValues('lastname')?.length >= 2
@@ -117,6 +122,20 @@ export default function RegisterScreen() {
         className="flex-1"
       >
         <Step3HealthSync onNext={handleNext} onSkip={handleNext} onBack={handleBack} />
+      </Animated.View>
+    )
+  }
+
+  // Step 5 has its own full-screen background (handles SafeAreaView internally)
+  if (currentStep === 5) {
+    return (
+      <Animated.View
+        key="step5"
+        entering={FadeInRight.duration(300)}
+        exiting={FadeOutLeft.duration(300)}
+        className="flex-1"
+      >
+        <Step5EmailVerification email={getValues('email')} />
       </Animated.View>
     )
   }
