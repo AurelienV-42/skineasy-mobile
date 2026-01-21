@@ -63,6 +63,18 @@
       "title": "About you"
     },
     "step3": {
+      "title": "Sync your data automatically!",
+      "subtitle": "Connect Skin Easy with your health app for complete tracking, effortlessly.",
+      "benefit1Title": "Time saver",
+      "benefit1Desc": "No manual entry, it's automatic.",
+      "benefit2Title": "Accurate data",
+      "benefit2Desc": "From the first use",
+      "benefit3Title": "Privacy",
+      "benefit3Desc": "Your data stays private and secure",
+      "connect": "Connect",
+      "skip": "Skip"
+    },
+    "step4": {
       "title": "Create your account"
     },
     "next": "Next",

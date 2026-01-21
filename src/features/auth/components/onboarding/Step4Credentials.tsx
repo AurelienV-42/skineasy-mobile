@@ -8,7 +8,7 @@ import { Button } from '@shared/components/Button'
 import { Input } from '@shared/components/Input'
 import { KeyboardScrollView } from '@shared/components/KeyboardScrollView'
 
-interface Step3CredentialsProps {
+interface Step4CredentialsProps {
   onNext: () => void
   control: Control<RegisterInput>
   errors: FieldErrors<RegisterInput>
@@ -16,13 +16,13 @@ interface Step3CredentialsProps {
   isLoading: boolean
 }
 
-export function Step3Credentials({
+export function Step4Credentials({
   onNext,
   control,
   errors,
   isValid,
   isLoading,
-}: Step3CredentialsProps) {
+}: Step4CredentialsProps) {
   const { t } = useTranslation()
   const passwordRef = useRef<TextInput>(null)
   const confirmPasswordRef = useRef<TextInput>(null)
@@ -32,7 +32,7 @@ export function Step3Credentials({
       <View className="flex-1 px-6">
         {/* Step Title */}
         <View className="mb-8 pt-20">
-          <Text className="text-3xl font-bold text-text mb-2">{t('onboarding.step3.title')}</Text>
+          <Text className="text-3xl font-bold text-text mb-2">{t('onboarding.step4.title')}</Text>
         </View>
 
         {/* Form Fields */}

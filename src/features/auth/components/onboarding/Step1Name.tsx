@@ -1,4 +1,3 @@
-import { useRouter } from 'expo-router'
 import { useRef } from 'react'
 import { Control, Controller, FieldErrors } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -18,7 +17,6 @@ interface Step1NameProps {
 
 export function Step1Name({ onNext, control, errors, isValid }: Step1NameProps) {
   const { t } = useTranslation()
-  const router = useRouter()
   const lastnameRef = useRef<TextInput>(null)
 
   return (

@@ -1,7 +1,7 @@
-import assets from '@assets'
 import { Step1Name } from '@features/auth/components/onboarding/Step1Name'
 import { Step2AboutYou } from '@features/auth/components/onboarding/Step2AboutYou'
-import { Step3Credentials } from '@features/auth/components/onboarding/Step3Credentials'
+import { Step3HealthSync } from '@features/auth/components/onboarding/Step3HealthSync'
+import { Step4Credentials } from '@features/auth/components/onboarding/Step4Credentials'
 import { useRegister } from '@features/auth/hooks/useRegister'
 import {
   RegisterInput,
@@ -10,17 +10,18 @@ import {
   step2Schema,
 } from '@features/auth/schemas/auth.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Background } from '@shared/components/Background'
+import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
 import { useRouter } from 'expo-router'
 import { ArrowLeft } from 'lucide-react-native'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Image, View } from 'react-native'
+import { View } from 'react-native'
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Pressable } from '../../src/shared/components/Pressable'
 
-const TOTAL_STEPS = 3
+const TOTAL_STEPS = 4
 
 export default function RegisterScreen() {
   const router = useRouter()
@@ -100,23 +101,30 @@ export default function RegisterScreen() {
 
   const isStep2Valid = getValues('id_gender') >= 1 && getValues('id_gender') <= 3
 
-  const isStep3Valid =
+  const isStep4Valid =
     getValues('email')?.length > 0 &&
     getValues('password')?.length >= 6 &&
     getValues('confirmPassword')?.length >= 6 &&
     getValues('password') === getValues('confirmPassword')
 
-  return (
-    <View className="flex-1 bg-background">
-      {/* Bubble Header */}
-      <Image
-        source={assets.bubbleHeader}
-        className="absolute top-0 left-0 right-0 w-full"
-        resizeMode="contain"
-      />
+  // Step 3 has its own full-screen background (handles SafeAreaView internally)
+  if (currentStep === 3) {
+    return (
+      <Animated.View
+        key="step3"
+        entering={FadeInRight.duration(300)}
+        exiting={FadeOutLeft.duration(300)}
+        className="flex-1"
+      >
+        <Step3HealthSync onNext={handleNext} onSkip={handleNext} onBack={handleBack} />
+      </Animated.View>
+    )
+  }
 
+  return (
+    <Background variant="topBubble">
       <SafeAreaView className="flex-1">
-        {/* Progress Bar */}
+        {/* Back Button */}
         <View className="px-6 pt-4 pb-2">
           <Pressable
             onPress={handleBack}
@@ -162,24 +170,24 @@ export default function RegisterScreen() {
             </Animated.View>
           )}
 
-          {currentStep === 3 && (
+          {currentStep === 4 && (
             <Animated.View
-              key="step3"
+              key="step4"
               entering={FadeInRight.duration(300)}
               exiting={FadeOutLeft.duration(300)}
               className="flex-1"
             >
-              <Step3Credentials
+              <Step4Credentials
                 onNext={handleSubmit(onSubmit)}
                 control={control}
                 errors={errors}
-                isValid={isStep3Valid}
+                isValid={isStep4Valid}
                 isLoading={isPending}
               />
             </Animated.View>
           )}
         </View>
       </SafeAreaView>
-    </View>
+    </Background>
   )
 }

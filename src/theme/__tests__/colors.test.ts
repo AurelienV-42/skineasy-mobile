@@ -3,11 +3,11 @@ import { colors } from '@theme/colors'
 
 describe('colors', () => {
   it('should have primary color defined', () => {
-    expect(colors.primary).toBe('#F7B6A8')
+    expect(colors.primary).toBe('#7D604E')
   })
 
   it('should have background color defined', () => {
-    expect(colors.background).toBe('#FFF9F5')
+    expect(colors.background).toBe('#F4E9E0')
   })
 
   it('should have all required color keys', () => {
@@ -23,6 +23,10 @@ describe('colors', () => {
       'success',
       'warning',
       'border',
+      'cream',
+      'creamMuted',
+      'brownDark',
+      'brownLight',
     ]
 
     requiredKeys.forEach((key) => {

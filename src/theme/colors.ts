@@ -1,28 +1,34 @@
 export const colors = {
   // Primary
   primary: '#7D604E',
-  primaryDark: '#E84C40',
+  primaryDark: '#2E2319',
 
   // Secondary
-  secondary: '#E84C40',
+  secondary: '#E84C3F',
 
   // Background
   background: '#F4E9E0',
   surface: '#FFF9F5',
 
   // Text
-  text: '#333333',
-  textMuted: '#6B7280',
-  textLight: '#9CA3AF',
+  text: '#6B5544',
+  textMuted: '#9A8A7A',
+  textLight: '#C4B5A8',
 
   // Semantic
-  error: '#EF4444',
-  success: '#10B981',
-  warning: '#F59E0B',
+  error: '#E84C3F',
+  success: '#17B26A',
+  warning: '#FF977E',
 
   // Border
-  border: '#F4E9E0',
-  borderFocus: '#55C4B8',
+  border: '#E0C9B8',
+  borderFocus: '#17B26A',
+
+  // Brown gradient background
+  cream: '#F4E9E0',
+  creamMuted: '#E0C9B8',
+  brownDark: '#2E2319',
+  brownLight: '#7D604E',
 } as const
 
 export type ColorKey = keyof typeof colors

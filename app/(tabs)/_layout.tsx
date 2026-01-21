@@ -81,6 +81,7 @@ function AnimatedScreen({
 }: AnimatedScreenProps): React.ReactElement {
   useEffect(() => {
     if (isFocused) {
+      // eslint-disable-next-line react-hooks/immutability
       activeIndex.value = withSpring(index, SPRING_CONFIG)
     }
   }, [isFocused, index, activeIndex])

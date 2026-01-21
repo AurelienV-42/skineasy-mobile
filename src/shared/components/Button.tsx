@@ -23,9 +23,9 @@ const variantStyles = {
     text: 'text-white',
   },
   secondary: {
-    container: 'bg-secondary',
-    containerPressed: 'bg-secondary',
-    text: 'text-text',
+    container: 'bg-surface border border-creamMuted',
+    containerPressed: 'bg-surface border border-creamMuted opacity-80',
+    text: 'text-primary',
   },
   outline: {
     container: 'bg-transparent border border-primary',

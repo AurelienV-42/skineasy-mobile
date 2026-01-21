@@ -1,11 +1,10 @@
 import assets from '@assets'
+import { Background } from '@shared/components/Background'
 import { Button } from '@shared/components/Button'
-import { colors } from '@theme/colors'
-import { LinearGradient } from 'expo-linear-gradient'
 import { Link } from 'expo-router'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Image, StyleSheet, View } from 'react-native'
+import { Image, View } from 'react-native'
 import Animated, {
   Easing,
   interpolate,
@@ -75,21 +74,7 @@ export default function WelcomeScreen() {
   }))
 
   return (
-    <View className="flex-1">
-      {/* Gradient background */}
-      <LinearGradient
-        colors={['#F4E9E000', colors.background]}
-        locations={[0, 1]}
-        style={StyleSheet.absoluteFill}
-      />
-
-      {/* Background image on top of gradient */}
-      <Image
-        source={assets.bubbleBackground}
-        style={{ ...StyleSheet.absoluteFillObject, width: '100%', height: '100%' }}
-        resizeMode="cover"
-      />
-
+    <Background variant="fullBubble">
       {/* Logo - absolute center */}
       <Animated.View style={logoStyle} className="absolute inset-0 items-center justify-center">
         <Image source={assets.logo} style={{ width: 200, height: 200 }} resizeMode="contain" />
@@ -115,6 +100,6 @@ export default function WelcomeScreen() {
           </Animated.View>
         </View>
       </SafeAreaView>
-    </View>
+    </Background>
   )
 }

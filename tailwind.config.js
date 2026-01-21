@@ -26,6 +26,14 @@ module.exports = {
           DEFAULT: colors.border,
           focus: colors.borderFocus,
         },
+        cream: {
+          DEFAULT: colors.cream,
+          muted: colors.creamMuted,
+        },
+        brown: {
+          dark: colors.brownDark,
+          light: colors.brownLight,
+        },
       },
       fontFamily: {
         normal: ['ChocolatesRegular'],
