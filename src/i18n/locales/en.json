@@ -53,16 +53,13 @@
   },
   "onboarding": {
     "step1": {
-      "title": "What's your name?",
-      "description": "Let's get to know you"
+      "title": "What's your name?"
     },
     "step2": {
-      "title": "About you",
-      "description": "Help us personalize your experience"
+      "title": "About you"
     },
     "step3": {
-      "title": "Create your account",
-      "description": "Secure your skincare journey"
+      "title": "Create your account"
     },
     "next": "Next",
     "back": "Back",

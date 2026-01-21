@@ -10,7 +10,6 @@ import { KeyboardScrollView } from '@shared/components/KeyboardScrollView'
 
 interface Step3CredentialsProps {
   onNext: () => void
-  onBack: () => void
   control: Control<RegisterInput>
   errors: FieldErrors<RegisterInput>
   isValid: boolean
@@ -19,7 +18,6 @@ interface Step3CredentialsProps {
 
 export function Step3Credentials({
   onNext,
-  onBack,
   control,
   errors,
   isValid,
@@ -33,9 +31,8 @@ export function Step3Credentials({
     <KeyboardScrollView contentContainerStyle={{ flexGrow: 1 }} bottomOffset={100}>
       <View className="flex-1 px-6">
         {/* Step Title */}
-        <View className="mb-8">
-          <Text className="text-2xl font-bold text-text mb-2">{t('onboarding.step3.title')}</Text>
-          <Text className="text-base text-textMuted">{t('onboarding.step3.description')}</Text>
+        <View className="mb-8 pt-20">
+          <Text className="text-3xl font-bold text-text mb-2">{t('onboarding.step3.title')}</Text>
         </View>
 
         {/* Form Fields */}

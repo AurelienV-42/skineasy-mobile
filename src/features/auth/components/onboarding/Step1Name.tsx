@@ -25,9 +25,8 @@ export function Step1Name({ onNext, control, errors, isValid }: Step1NameProps) 
     <KeyboardScrollView contentContainerStyle={{ flexGrow: 1 }} bottomOffset={100}>
       <View className="flex-1 px-6">
         {/* Step Title */}
-        <View className="mb-8">
-          <Text className="text-2xl font-bold text-text mb-2">{t('onboarding.step1.title')}</Text>
-          <Text className="text-base text-textMuted">{t('onboarding.step1.description')}</Text>
+        <View className="mb-8 pt-20">
+          <Text className="text-3xl font-bold text-text mb-2">{t('onboarding.step1.title')}</Text>
         </View>
 
         {/* Form Fields */}

@@ -53,16 +53,13 @@
   },
   "onboarding": {
     "step1": {
-      "title": "Comment t'appelles-tu ?",
-      "description": "Faisons connaissance"
+      "title": "Comment t'appelles-tu ?"
     },
     "step2": {
-      "title": "À propos de toi",
-      "description": "Aide-nous à personnaliser ton expérience"
+      "title": "À propos de toi"
     },
     "step3": {
-      "title": "Crée ton compte",
-      "description": "Sécurise ton parcours beauté"
+      "title": "Crée ton compte"
     },
     "next": "Suivant",
     "back": "Retour",

@@ -16,22 +16,20 @@ const GENDER_OPTIONS = [
 
 interface Step2AboutYouProps {
   onNext: () => void
-  onBack: () => void
   control: Control<RegisterInput>
   errors: FieldErrors<RegisterInput>
   isValid: boolean
 }
 
-export function Step2AboutYou({ onNext, onBack, control, errors, isValid }: Step2AboutYouProps) {
+export function Step2AboutYou({ onNext, control, errors, isValid }: Step2AboutYouProps) {
   const { t } = useTranslation()
 
   return (
     <KeyboardScrollView contentContainerStyle={{ flexGrow: 1 }} bottomOffset={100}>
       <View className="flex-1 px-6">
         {/* Step Title */}
-        <View className="mb-8">
-          <Text className="text-2xl font-bold text-text mb-2">{t('onboarding.step2.title')}</Text>
-          <Text className="text-base text-textMuted">{t('onboarding.step2.description')}</Text>
+        <View className="mb-8 pt-20">
+          <Text className="text-3xl font-bold text-text mb-2">{t('onboarding.step2.title')}</Text>
         </View>
 
         {/* Form Fields */}

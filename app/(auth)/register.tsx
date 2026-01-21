@@ -1,3 +1,4 @@
+import assets from '@assets'
 import { Step1Name } from '@features/auth/components/onboarding/Step1Name'
 import { Step2AboutYou } from '@features/auth/components/onboarding/Step2AboutYou'
 import { Step3Credentials } from '@features/auth/components/onboarding/Step3Credentials'
@@ -18,7 +19,6 @@ import { Image, View } from 'react-native'
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Pressable } from '../../src/shared/components/Pressable'
-import assets from '@assets'
 
 const TOTAL_STEPS = 3
 
@@ -87,6 +87,8 @@ export default function RegisterScreen() {
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep((prev) => prev - 1)
+    } else {
+      router.back()
     }
   }
 
@@ -117,7 +119,7 @@ export default function RegisterScreen() {
         {/* Progress Bar */}
         <View className="px-6 pt-4 pb-2">
           <Pressable
-            onPress={() => router.back()}
+            onPress={handleBack}
             haptic="light"
             className="w-10 h-10 rounded-full"
             accessibilityLabel="Go back"
@@ -153,7 +155,6 @@ export default function RegisterScreen() {
             >
               <Step2AboutYou
                 onNext={handleNext}
-                onBack={handleBack}
                 control={control}
                 errors={errors}
                 isValid={isStep2Valid}
@@ -170,7 +171,6 @@ export default function RegisterScreen() {
             >
               <Step3Credentials
                 onNext={handleSubmit(onSubmit)}
-                onBack={handleBack}
                 control={control}
                 errors={errors}
                 isValid={isStep3Valid}
