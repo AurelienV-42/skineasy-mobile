@@ -3,14 +3,13 @@ import { Link } from 'expo-router'
 import { useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { Image, Text, TextInput, View } from 'react-native'
+import { Text, TextInput, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import assets from '@assets'
 import { useLogin } from '@features/auth/hooks/useLogin'
 import { LoginInput, loginSchema } from '@features/auth/schemas/auth.schema'
-import { BackgroundGradient } from '@shared/components/BackgroundGradient'
+import { Background } from '@shared/components/Background'
 import { Button } from '@shared/components/Button'
 import { Input } from '@shared/components/Input'
 import { KeyboardScrollView } from '@shared/components/KeyboardScrollView'
@@ -22,7 +21,7 @@ export default function LoginScreen() {
   const { mutate: login, isPending } = useLogin()
   const passwordRef = useRef<TextInput>(null)
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false)
-  const animStyles = useEntranceAnimation(5)
+  const animStyles = useEntranceAnimation(4)
 
   const {
     control,
@@ -43,30 +42,20 @@ export default function LoginScreen() {
   }
 
   return (
-    <BackgroundGradient>
-      <SafeAreaView className="flex-1">
+    <Background variant="topBubble">
+      <SafeAreaView className="flex-1 pt-20">
         <KeyboardScrollView contentContainerStyle={{ flexGrow: 1 }} bottomOffset={180}>
           <View className="flex-1 px-8 justify-between" style={{ minHeight: '100%' }}>
             <View>
-              {/* Logo Section - Minimal top */}
-              <Animated.View style={animStyles[0]} className="pt-8 pb-8 items-center">
-                <Image
-                  source={assets.logo}
-                  style={{ width: 160, height: 160 }}
-                  resizeMode="contain"
-                />
-              </Animated.View>
-
               {/* Welcome Text */}
-              <Animated.View style={animStyles[1]} className="mb-10">
+              <Animated.View style={animStyles[0]} className="pt-20 mb-10">
                 <Text className="text-3xl font-bold text-brownDark mb-2">
                   {t('auth.welcomeBack')}
                 </Text>
-                <Text className="text-base text-textMuted">{t('auth.signInToContinue')}</Text>
               </Animated.View>
 
               {/* Form Section */}
-              <Animated.View style={animStyles[2]}>
+              <Animated.View style={animStyles[1]}>
                 <Controller
                   control={control}
                   name="email"
@@ -126,7 +115,7 @@ export default function LoginScreen() {
                 </Link>
               </Animated.View>
 
-              <Animated.View style={animStyles[3]}>
+              <Animated.View style={animStyles[2]}>
                 <Button
                   title={t('auth.login')}
                   onPress={handleSubmit(onSubmit)}
@@ -142,9 +131,9 @@ export default function LoginScreen() {
                     haptic="medium"
                     onPress={() =>
                       login({
-                        email: 'aurelienvpro@gmail.com',
+                        email: 'aurelien1@gmail.com',
                         password:
-                          'Localhost is not in the list of supported domains for this site key.',
+                          '123456',
                       })
                     }
                   />
@@ -153,7 +142,7 @@ export default function LoginScreen() {
             </View>
 
             {/* Footer Section - Bottom */}
-            <Animated.View style={animStyles[4]} className="pb-10 items-center pt-4">
+            <Animated.View style={animStyles[3]} className="pb-10 items-center pt-4">
               <Link href="/(auth)/register" asChild>
                 <Pressable haptic="light">
                   <Text className="text-sm text-primary">
@@ -166,6 +155,6 @@ export default function LoginScreen() {
           </View>
         </KeyboardScrollView>
       </SafeAreaView>
-    </BackgroundGradient>
+    </Background>
   )
 }
