@@ -24,7 +24,7 @@ export function Step1Name({ onNext, control, errors, isValid }: Step1NameProps) 
       <View className="flex-1 px-6">
         {/* Step Title */}
         <View className="mb-8 pt-20">
-          <Text className="text-3xl font-bold text-text mb-2">{t('onboarding.step1.title')}</Text>
+          <Text className="text-3xl font-bold text-brownDark mb-2">{t('onboarding.step1.title')}</Text>
         </View>
 
         {/* Form Fields */}

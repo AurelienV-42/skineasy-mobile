@@ -30,7 +30,7 @@ export function Step2AboutYou({ onNext, control, errors, isValid }: Step2AboutYo
       <View className="flex-1 px-6">
         {/* Step Title */}
         <View className="mb-8 pt-20">
-          <Text className="text-3xl font-bold text-text mb-2">{t('onboarding.step2.title')}</Text>
+          <Text className="text-3xl font-bold text-brownDark mb-2">{t('onboarding.step2.title')}</Text>
         </View>
 
         {/* Form Fields */}

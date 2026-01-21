@@ -51,8 +51,9 @@ export function Step3HealthSync({
           </Pressable>
         </View>
 
-        <View className="flex-1 px-6">
+        <View className="flex-1 px-6 justify-between pt-8">
           {/* App Icons */}
+          <View>
           <View className="items-start mb-8">
             <View className="justify-center flex-row gap-8 pt-8">
               <Image
@@ -72,7 +73,6 @@ export function Step3HealthSync({
           </View>
 
           {/* Title & Subtitle */}
-          <View className="mb-8">
             <Text className="text-3xl font-bold text-cream mb-3">
               {t('onboarding.step3.title')}
             </Text>
@@ -80,11 +80,11 @@ export function Step3HealthSync({
           </View>
 
           {/* Benefits */}
-          <View className="gap-3 flex-1">
+          <View className="gap-4">
             {BENEFITS.map(({ titleKey, descKey }) => (
               <GlassContainer key={titleKey} style={{ padding: 16 }}>
-                <Text className="text-base font-semibold text-primary mb-1">{t(titleKey)}</Text>
-                <Text className="text-sm text-textMuted">{t(descKey)}</Text>
+                <Text className="text-base font-semibold text-white mb-1">{t(titleKey)}</Text>
+                <Text className="text-sm text-white">{t(descKey)}</Text>
               </GlassContainer>
             ))}
           </View>

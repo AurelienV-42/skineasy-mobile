@@ -7,6 +7,7 @@ import { Image, Text, TextInput, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import assets from '@assets'
 import { useLogin } from '@features/auth/hooks/useLogin'
 import { LoginInput, loginSchema } from '@features/auth/schemas/auth.schema'
 import { BackgroundGradient } from '@shared/components/BackgroundGradient'
@@ -15,7 +16,6 @@ import { Input } from '@shared/components/Input'
 import { KeyboardScrollView } from '@shared/components/KeyboardScrollView'
 import { Pressable } from '@shared/components/Pressable'
 import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
-import assets from '@assets'
 
 export default function LoginScreen() {
   const { t } = useTranslation()
@@ -59,7 +59,7 @@ export default function LoginScreen() {
 
               {/* Welcome Text */}
               <Animated.View style={animStyles[1]} className="mb-10">
-                <Text className="text-3xl font-bold text-text mb-2">{t('auth.welcomeBack')}</Text>
+                <Text className="text-3xl font-bold text-brownDark mb-2">{t('auth.welcomeBack')}</Text>
                 <Text className="text-base text-textMuted">{t('auth.signInToContinue')}</Text>
               </Animated.View>
 

@@ -144,7 +144,7 @@ export const Input = forwardRef<TextInput, InputProps>(
               : error
                 ? 'border-2 border-error'
                 : 'border border-border'
-          } bg-surface rounded-[20px] ${className || ''}`}
+          } bg-surface rounded-xl ${className || ''}`}
           style={{
             height: multiline ? multilineHeight : 24 + 40, // Icon Size + padding vertical
             shadowColor: isFocused ? colors.primary : '#000',

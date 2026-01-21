@@ -32,7 +32,7 @@ export function Step4Credentials({
       <View className="flex-1 px-6">
         {/* Step Title */}
         <View className="mb-8 pt-20">
-          <Text className="text-3xl font-bold text-text mb-2">{t('onboarding.step4.title')}</Text>
+          <Text className="text-3xl font-bold text-brownDark mb-2">{t('onboarding.step4.title')}</Text>
         </View>
 
         {/* Form Fields */}
@@ -108,6 +108,22 @@ export function Step4Credentials({
 
         {/* Navigation Buttons */}
         <View className="pb-8 gap-3">
+          <Text className="text-base text-textMuted text-brown-light">
+            {t('auth.termsNoticeStart')}
+            <Text
+              className="text-brown-dark underline"
+              onPress={() => Linking.openURL(t('profile.termsOfUseUrl'))}
+            >
+              {t('auth.termsOfUse')}
+            </Text>
+            {t('auth.termsNoticeAnd')}
+            <Text
+              className="text-brown-dark underline"
+              onPress={() => Linking.openURL(t('profile.privacyPolicyUrl'))}
+            >
+              {t('auth.privacyPolicy')}
+            </Text>
+          </Text>
           <Button
             title={t('onboarding.createAccount')}
             onPress={onNext}
@@ -115,23 +131,7 @@ export function Step4Credentials({
             loading={isLoading}
             haptic="heavy"
           />
-          {/* Terms & Privacy */}
-          <Text className="text-xs text-textMuted text-center">
-            {t('auth.termsNoticeStart')}
-            <Text
-              className="text-xs text-primary underline"
-              onPress={() => Linking.openURL(t('profile.termsOfUseUrl'))}
-            >
-              {t('auth.termsOfUse')}
-            </Text>
-            {t('auth.termsNoticeAnd')}
-            <Text
-              className="text-xs text-primary underline"
-              onPress={() => Linking.openURL(t('profile.privacyPolicyUrl'))}
-            >
-              {t('auth.privacyPolicy')}
-            </Text>
-          </Text>
+         
         </View>
       </View>
     </KeyboardScrollView>

@@ -53,6 +53,7 @@ module.exports = {
         sm: '4px',
         md: '8px',
         lg: '16px',
+        xl: '20px',
         full: '9999px',
       },
     },

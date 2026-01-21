@@ -81,7 +81,7 @@ export default function WelcomeScreen() {
       </Animated.View>
 
       {/* Bottom Section - CTAs */}
-      <SafeAreaView className="flex-1 justify-end px-8 pb-2">
+      <SafeAreaView className="flex-1 justify-end px-4 pb-2">
         <View className="gap-4 px-4">
           <Animated.Text style={taglineStyle} className="text-2xl font-bold text-text text-center">
             {t('welcome.tagline')}

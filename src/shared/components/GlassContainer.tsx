@@ -11,7 +11,7 @@ export function GlassContainer({ children, style }: GlassContainerProps): React.
 
   if (isGlassAvailable) {
     return (
-      <GlassView style={[styles.container, style]} glassEffectStyle="regular">
+      <GlassView style={[styles.container, style]} glassEffectStyle="clear">
         {children}
       </GlassView>
     )
