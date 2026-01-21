@@ -1,9 +1,12 @@
+import { useRouter } from 'expo-router'
 import { MailWarning } from 'lucide-react-native'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { AppState, Linking, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Background } from '@shared/components/Background'
+import { Button } from '@shared/components/Button'
 import { GlassContainer } from '@shared/components/GlassContainer'
 import { colors } from '@theme/colors'
 
@@ -13,6 +16,25 @@ interface Step5EmailVerificationProps {
 
 export function Step5EmailVerification({ email }: Step5EmailVerificationProps): React.ReactElement {
   const { t } = useTranslation()
+  const router = useRouter()
+  const [hasLeftApp, setHasLeftApp] = useState(false)
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'background') {
+        setHasLeftApp(true)
+      }
+    })
+    return () => subscription.remove()
+  }, [])
+
+  const handleOpenEmail = (): void => {
+    Linking.openURL('mailto:')
+  }
+
+  const handleValidated = (): void => {
+    router.replace('/(auth)/login')
+  }
 
   return (
     <Background variant="brownGradient">
@@ -30,6 +52,24 @@ export function Step5EmailVerification({ email }: Step5EmailVerificationProps): 
           <Text className="text-base font-medium text-cream text-center">
             {t('onboarding.step5.subtitle', { email })}
           </Text>
+        </View>
+
+        {/* Buttons */}
+        <View className="px-6 pb-8 gap-3">
+          <Button
+            title={t('onboarding.step5.openEmail')}
+            variant="secondary"
+            onPress={handleOpenEmail}
+            haptic="medium"
+          />
+          {hasLeftApp && (
+            <Button
+              title={t('onboarding.step5.validated')}
+              variant="primary"
+              onPress={handleValidated}
+              haptic="heavy"
+            />
+          )}
         </View>
       </SafeAreaView>
     </Background>

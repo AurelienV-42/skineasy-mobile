@@ -79,7 +79,9 @@
     },
     "step5": {
       "title": "Check your inbox!",
-      "subtitle": "Click on the link sent to {{email}} to complete your registration."
+      "subtitle": "Click on the link sent to {{email}} to complete your registration.",
+      "openEmail": "Open my Email App",
+      "validated": "My email has been validated"
     },
     "next": "Next",
     "back": "Back",

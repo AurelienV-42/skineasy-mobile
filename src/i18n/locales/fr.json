@@ -80,7 +80,9 @@
     },
     "step5": {
       "title": "Vérifie ta boite mail !",
-      "subtitle": "Clique sur le lien qui t'as été envoyé sur {{email}} pour finaliser ton inscription."
+      "subtitle": "Clique sur le lien qui t'as été envoyé sur {{email}} pour finaliser ton inscription.",
+      "openEmail": "Ouvrir mon app Email",
+      "validated": "Mon email a été validé"
     },
     "next": "Suivant",
     "back": "Retour",
