@@ -1,7 +1,8 @@
+import { LinearGradient } from 'expo-linear-gradient'
 import { Link } from 'expo-router'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Image, Linking, Text, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 import Animated, {
   Easing,
   interpolate,
@@ -13,10 +14,11 @@ import Animated, {
 } from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { BackgroundGradient } from '@shared/components/BackgroundGradient'
 import { Button } from '@shared/components/Button'
+import { colors } from '@theme/colors'
 
 const logoSource = require('@assets/logo.png')
+const backgroundSource = require('@assets/background/bubbleBackground.png')
 
 const ANIMATION_CONFIG = {
   duration: 800,
@@ -29,39 +31,29 @@ const SPRING_CONFIG = {
   mass: 1,
 }
 
-// Stagger delays for sequential entrance
 const DELAYS = {
   logo: 0,
-  title: 200,
-  subtitle: 400,
-  primaryButton: 600,
-  secondaryButton: 750,
-  terms: 900,
+  tagline: 200,
+  primaryButton: 400,
+  secondaryButton: 550,
 }
 
 export default function WelcomeScreen() {
   const { t } = useTranslation()
 
-  // Animation progress values
   const logoProgress = useSharedValue(0)
-  const titleProgress = useSharedValue(0)
-  const subtitleProgress = useSharedValue(0)
+  const taglineProgress = useSharedValue(0)
   const primaryButtonProgress = useSharedValue(0)
   const secondaryButtonProgress = useSharedValue(0)
-  const termsProgress = useSharedValue(0)
 
   useEffect(() => {
-    // Trigger staggered animations
     logoProgress.value = withDelay(DELAYS.logo, withSpring(1, SPRING_CONFIG))
-    titleProgress.value = withDelay(DELAYS.title, withTiming(1, ANIMATION_CONFIG))
-    subtitleProgress.value = withDelay(DELAYS.subtitle, withTiming(1, ANIMATION_CONFIG))
+    taglineProgress.value = withDelay(DELAYS.tagline, withTiming(1, ANIMATION_CONFIG))
     primaryButtonProgress.value = withDelay(DELAYS.primaryButton, withSpring(1, SPRING_CONFIG))
     secondaryButtonProgress.value = withDelay(DELAYS.secondaryButton, withSpring(1, SPRING_CONFIG))
-    termsProgress.value = withDelay(DELAYS.terms, withTiming(1, { duration: 600 }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Animated styles
   const logoStyle = useAnimatedStyle(() => ({
     opacity: logoProgress.value,
     transform: [
@@ -70,14 +62,9 @@ export default function WelcomeScreen() {
     ],
   }))
 
-  const titleStyle = useAnimatedStyle(() => ({
-    opacity: titleProgress.value,
-    transform: [{ translateY: interpolate(titleProgress.value, [0, 1], [20, 0]) }],
-  }))
-
-  const subtitleStyle = useAnimatedStyle(() => ({
-    opacity: subtitleProgress.value,
-    transform: [{ translateY: interpolate(subtitleProgress.value, [0, 1], [15, 0]) }],
+  const taglineStyle = useAnimatedStyle(() => ({
+    opacity: taglineProgress.value,
+    transform: [{ translateY: interpolate(taglineProgress.value, [0, 1], [20, 0]) }],
   }))
 
   const primaryButtonStyle = useAnimatedStyle(() => ({
@@ -90,70 +77,43 @@ export default function WelcomeScreen() {
     transform: [{ translateY: interpolate(secondaryButtonProgress.value, [0, 1], [25, 0]) }],
   }))
 
-  const termsStyle = useAnimatedStyle(() => ({
-    opacity: termsProgress.value,
-  }))
-
   return (
-    <BackgroundGradient>
-      <SafeAreaView className="flex-1 px-8">
-        <View className="flex-1 justify-between">
-          {/* Top Section - Logo & Tagline */}
-          <View className="flex-1 items-center justify-center">
-            <Animated.View style={logoStyle}>
-              <Image source={logoSource} style={{ width: 192, height: 192 }} resizeMode="contain" />
-            </Animated.View>
+    <View className="flex-1">
+      {/* Gradient background */}
+      <LinearGradient
+        colors={['#F4E9E000', colors.background]}
+        locations={[0, 1]}
+        style={StyleSheet.absoluteFill}
+      />
 
-            <View className="mt-8 items-center">
-              <Animated.Text
-                style={titleStyle}
-                className="text-3xl font-bold text-text text-center"
-              >
-                {t('welcome.title')}
-              </Animated.Text>
-              <Animated.Text
-                style={subtitleStyle}
-                className="text-base text-textMuted text-center mt-3 px-4"
-              >
-                {t('welcome.subtitle')}
-              </Animated.Text>
-            </View>
-          </View>
+      {/* Background image on top of gradient */}
+      <Image source={backgroundSource} style={StyleSheet.absoluteFill} resizeMode="cover" />
 
-          {/* Bottom Section - CTAs */}
-          <View className="pb-10 gap-4 px-4">
-            <Animated.View style={primaryButtonStyle}>
-              <Link href="/(auth)/register" asChild>
-                <Button title={t('welcome.getStarted')} haptic="heavy" />
-              </Link>
-            </Animated.View>
+      {/* Logo - absolute center */}
+      <Animated.View style={logoStyle} className="absolute inset-0 items-center justify-center">
+        <Image source={logoSource} style={{ width: 200, height: 200 }} resizeMode="contain" />
+      </Animated.View>
 
-            <Animated.View style={secondaryButtonStyle}>
-              <Link href="/(auth)/login" asChild>
-                <Button title={t('welcome.signIn')} variant="outline" haptic="medium" />
-              </Link>
-            </Animated.View>
+      {/* Bottom Section - CTAs */}
+      <SafeAreaView className="flex-1 justify-end px-8 pb-2">
+        <View className="gap-4 px-4">
+          <Animated.Text style={taglineStyle} className="text-2xl font-bold text-text text-center">
+            {t('welcome.tagline')}
+          </Animated.Text>
 
-            {/* Terms & Privacy */}
-            <Animated.Text style={termsStyle} className="text-xs text-textMuted text-center">
-              {t('welcome.termsNoticeStart')}
-              <Text
-                className="text-xs text-primary underline"
-                onPress={() => Linking.openURL(t('profile.termsOfUseUrl'))}
-              >
-                {t('welcome.termsOfUse')}
-              </Text>
-              {t('welcome.termsNoticeAnd')}
-              <Text
-                className="text-xs text-primary underline"
-                onPress={() => Linking.openURL(t('profile.privacyPolicyUrl'))}
-              >
-                {t('welcome.privacyPolicy')}
-              </Text>
-            </Animated.Text>
-          </View>
+          <Animated.View style={primaryButtonStyle}>
+            <Link href="/(auth)/register" asChild>
+              <Button title={t('welcome.getStarted')} haptic="heavy" />
+            </Link>
+          </Animated.View>
+
+          <Animated.View style={secondaryButtonStyle}>
+            <Link href="/(auth)/login" asChild>
+              <Button title={t('welcome.signIn')} variant="outline" haptic="medium" />
+            </Link>
+          </Animated.View>
         </View>
       </SafeAreaView>
-    </BackgroundGradient>
+    </View>
   )
 }

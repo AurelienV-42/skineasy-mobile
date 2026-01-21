@@ -144,7 +144,7 @@ export const Input = forwardRef<TextInput, InputProps>(
               : error
                 ? 'border-2 border-error'
                 : 'border border-border'
-          } bg-surface rounded-xl ${className || ''}`}
+          } bg-surface rounded-3xl ${className || ''}`}
           style={{
             height: multiline ? multilineHeight : 56,
             shadowColor: isFocused ? colors.primary : '#000',

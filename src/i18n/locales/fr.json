@@ -1,13 +1,8 @@
 {
   "welcome": {
-    "title": "Ta peau mérite des soins personnalisés",
-    "subtitle": "Découvre ta routine idéale grâce à notre diagnostic personnalisé",
+    "tagline": "UNE PEAU, UNE HISTOIRE",
     "getStarted": "Commencer",
-    "signIn": "J'ai déjà un compte",
-    "termsNoticeStart": "En continuant, tu acceptes nos ",
-    "termsOfUse": "Conditions d'utilisation",
-    "termsNoticeAnd": " et notre ",
-    "privacyPolicy": "Politique de confidentialité"
+    "signIn": "Vous avez déjà un compte ? Me connecter"
   },
   "common": {
     "loading": "Chargement...",

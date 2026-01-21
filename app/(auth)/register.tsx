@@ -1,10 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { View } from 'react-native'
-import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
-import { SafeAreaView } from 'react-native-safe-area-context'
-
 import { Step1Name } from '@features/auth/components/onboarding/Step1Name'
 import { Step2AboutYou } from '@features/auth/components/onboarding/Step2AboutYou'
 import { Step3Credentials } from '@features/auth/components/onboarding/Step3Credentials'
@@ -15,11 +8,23 @@ import {
   step1Schema,
   step2Schema,
 } from '@features/auth/schemas/auth.schema'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { colors } from '@theme/colors'
+import { useRouter } from 'expo-router'
+import { ArrowLeft } from 'lucide-react-native'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { Image, View } from 'react-native'
+import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { Pressable } from '../../src/shared/components/Pressable'
+
+const bubbleHeaderSource = require('@assets/background/bubbleHeader.png')
 
 const TOTAL_STEPS = 3
 
 export default function RegisterScreen() {
+  const router = useRouter()
   const { mutate: register, isPending } = useRegister()
   const [currentStep, setCurrentStep] = useState(1)
 
@@ -101,75 +106,81 @@ export default function RegisterScreen() {
     getValues('password') === getValues('confirmPassword')
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      {/* Progress Bar */}
-      <View className="px-6 pt-4 pb-2">
-        <View className="flex-row gap-2">
-          {Array.from({ length: TOTAL_STEPS }).map((_, index) => (
-            <View
-              key={index}
-              className="flex-1 h-1 rounded-full"
-              style={{
-                backgroundColor: index < currentStep ? colors.primary : colors.border,
-              }}
-            />
-          ))}
+    <View className="flex-1 bg-background">
+      {/* Bubble Header */}
+      <Image
+        source={bubbleHeaderSource}
+        className="absolute top-0 left-0 right-0 w-full"
+        resizeMode="contain"
+      />
+
+      <SafeAreaView className="flex-1">
+        {/* Progress Bar */}
+        <View className="px-6 pt-4 pb-2">
+          <Pressable
+            onPress={() => router.back()}
+            haptic="light"
+            className="w-10 h-10 rounded-full"
+            accessibilityLabel="Go back"
+          >
+            <ArrowLeft size={20} color={colors.text} />
+          </Pressable>
         </View>
-      </View>
 
-      {/* Step Content */}
-      <View className="flex-1">
-        {currentStep === 1 && (
-          <Animated.View
-            key="step1"
-            entering={FadeInRight.duration(300)}
-            exiting={FadeOutLeft.duration(300)}
-            className="flex-1"
-          >
-            <Step1Name
-              onNext={handleNext}
-              control={control}
-              errors={errors}
-              isValid={isStep1Valid}
-            />
-          </Animated.View>
-        )}
+        {/* Step Content */}
+        <View className="flex-1">
+          {currentStep === 1 && (
+            <Animated.View
+              key="step1"
+              entering={FadeInRight.duration(300)}
+              exiting={FadeOutLeft.duration(300)}
+              className="flex-1"
+            >
+              <Step1Name
+                onNext={handleNext}
+                control={control}
+                errors={errors}
+                isValid={isStep1Valid}
+              />
+            </Animated.View>
+          )}
 
-        {currentStep === 2 && (
-          <Animated.View
-            key="step2"
-            entering={FadeInRight.duration(300)}
-            exiting={FadeOutLeft.duration(300)}
-            className="flex-1"
-          >
-            <Step2AboutYou
-              onNext={handleNext}
-              onBack={handleBack}
-              control={control}
-              errors={errors}
-              isValid={isStep2Valid}
-            />
-          </Animated.View>
-        )}
+          {currentStep === 2 && (
+            <Animated.View
+              key="step2"
+              entering={FadeInRight.duration(300)}
+              exiting={FadeOutLeft.duration(300)}
+              className="flex-1"
+            >
+              <Step2AboutYou
+                onNext={handleNext}
+                onBack={handleBack}
+                control={control}
+                errors={errors}
+                isValid={isStep2Valid}
+              />
+            </Animated.View>
+          )}
 
-        {currentStep === 3 && (
-          <Animated.View
-            key="step3"
-            entering={FadeInRight.duration(300)}
-            exiting={FadeOutLeft.duration(300)}
-            className="flex-1"
-          >
-            <Step3Credentials
-              onNext={handleSubmit(onSubmit)}
-              onBack={handleBack}
-              control={control}
-              errors={errors}
-              isValid={isStep3Valid}
-              isLoading={isPending}
-            />
-          </Animated.View>
-        )}
-      </View>
-    </SafeAreaView>
+          {currentStep === 3 && (
+            <Animated.View
+              key="step3"
+              entering={FadeInRight.duration(300)}
+              exiting={FadeOutLeft.duration(300)}
+              className="flex-1"
+            >
+              <Step3Credentials
+                onNext={handleSubmit(onSubmit)}
+                onBack={handleBack}
+                control={control}
+                errors={errors}
+                isValid={isStep3Valid}
+                isLoading={isPending}
+              />
+            </Animated.View>
+          )}
+        </View>
+      </SafeAreaView>
+    </View>
   )
 }

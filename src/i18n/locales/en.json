@@ -1,13 +1,8 @@
 {
   "welcome": {
-    "title": "Your skin deserves personalized care",
-    "subtitle": "Discover your ideal skincare routine with our personalized diagnosis",
+    "tagline": "ONE SKIN, ONE STORY",
     "getStarted": "Get Started",
-    "signIn": "I already have an account",
-    "termsNoticeStart": "By continuing, you agree to our ",
-    "termsOfUse": "Terms of Use",
-    "termsNoticeAnd": " and ",
-    "privacyPolicy": "Privacy Policy"
+    "signIn": "Already have an account? Sign In"
   },
   "common": {
     "loading": "Loading...",
