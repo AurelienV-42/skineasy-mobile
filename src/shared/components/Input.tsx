@@ -120,7 +120,7 @@ export const Input = forwardRef<TextInput, InputProps>(
     /* eslint-disable react-hooks/refs */
     const labelTop = labelAnimation.interpolate({
       inputRange: [0, 1],
-      outputRange: [13, -8],
+      outputRange: [18, -8],
     })
 
     const labelFontSize = labelAnimation.interpolate({
@@ -144,9 +144,9 @@ export const Input = forwardRef<TextInput, InputProps>(
               : error
                 ? 'border-2 border-error'
                 : 'border border-border'
-          } bg-surface rounded-3xl ${className || ''}`}
+          } bg-surface rounded-[20px] ${className || ''}`}
           style={{
-            height: multiline ? multilineHeight : 56,
+            height: multiline ? multilineHeight : 24 + 40, // Icon Size + padding vertical
             shadowColor: isFocused ? colors.primary : '#000',
             shadowOffset: { width: 0, height: isFocused ? 4 : 2 },
             shadowOpacity: isFocused ? 0.15 : 0.05,
@@ -158,7 +158,7 @@ export const Input = forwardRef<TextInput, InputProps>(
           {label && (
             <Animated.View
               pointerEvents="none"
-              className="absolute left-4 bg-surface px-1 rounded-full"
+              className="absolute left-5 bg-surface px-1 rounded-full"
               style={{
                 top: labelTop,
               }}

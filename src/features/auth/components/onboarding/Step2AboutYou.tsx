@@ -1,3 +1,4 @@
+import { User, UserRound, Users } from 'lucide-react-native'
 import { Control, Controller, FieldErrors } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -6,12 +7,12 @@ import { RegisterInput } from '@features/auth/schemas/auth.schema'
 import { Button } from '@shared/components/Button'
 import { DateInput } from '@shared/components/DateInput'
 import { KeyboardScrollView } from '@shared/components/KeyboardScrollView'
-import { Pressable } from '@shared/components/Pressable'
+import { SelectableCard } from '@shared/components/SelectableCard'
 
 const GENDER_OPTIONS = [
-  { value: 1, labelKey: 'auth.genderMr' },
-  { value: 2, labelKey: 'auth.genderMrs' },
-  { value: 3, labelKey: 'auth.genderOther' },
+  { value: 1, labelKey: 'auth.genderMr', icon: User },
+  { value: 2, labelKey: 'auth.genderMrs', icon: UserRound },
+  { value: 3, labelKey: 'auth.genderOther', icon: Users },
 ] as const
 
 interface Step2AboutYouProps {
@@ -57,26 +58,15 @@ export function Step2AboutYou({ onNext, control, errors, isValid }: Step2AboutYo
             render={({ field: { onChange, value } }) => (
               <View className="mb-6">
                 <Text className="text-sm font-medium text-textMuted mb-3">{t('auth.gender')}</Text>
-                <View className="flex-row gap-3">
-                  {GENDER_OPTIONS.map(({ value: optionValue, labelKey }) => (
-                    <Pressable
+                <View className="gap-3">
+                  {GENDER_OPTIONS.map(({ value: optionValue, labelKey, icon }) => (
+                    <SelectableCard
                       key={optionValue}
+                      selected={value === optionValue}
                       onPress={() => onChange(optionValue)}
-                      haptic="light"
-                      className={`flex-1 items-center justify-center py-3 rounded-xl border-2 ${
-                        value === optionValue
-                          ? 'border-primary bg-primary/10'
-                          : 'border-border bg-surface'
-                      }`}
-                    >
-                      <Text
-                        className={`text-sm ${
-                          value === optionValue ? 'text-primary font-medium' : 'text-textMuted'
-                        }`}
-                      >
-                        {t(labelKey)}
-                      </Text>
-                    </Pressable>
+                      label={t(labelKey)}
+                      icon={icon}
+                    />
                   ))}
                 </View>
                 {errors.id_gender && (

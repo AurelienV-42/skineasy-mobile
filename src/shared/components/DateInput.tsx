@@ -186,9 +186,9 @@ export const DateInput = forwardRef<TextInput, DateInputProps>(
               : error
                 ? 'border-2 border-error'
                 : 'border border-border'
-          } bg-surface rounded-xl ${className || ''}`}
+          } bg-surface rounded-[20px] ${className || ''}`}
           style={{
-            height: 56,
+            height: 24 + 40, // Icon Size + padding vertical
             shadowColor: isFocused ? colors.primary : '#000',
             shadowOffset: { width: 0, height: isFocused ? 4 : 2 },
             shadowOpacity: isFocused ? 0.15 : 0.05,
@@ -200,7 +200,7 @@ export const DateInput = forwardRef<TextInput, DateInputProps>(
           {label && (
             <Animated.View
               pointerEvents="none"
-              className="absolute left-4 bg-surface px-1 rounded-full"
+              className="absolute left-5 bg-surface px-1 rounded-full"
               style={{
                 top: labelTop,
               }}

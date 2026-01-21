@@ -49,7 +49,12 @@
     "registerSuccess": "Compte créé avec succès",
     "welcomeBack": "Bon retour",
     "signInToContinue": "Connecte-toi pour continuer ton parcours",
-    "createAccountSubtitle": "Rejoins-nous pour ton parcours beauté"
+    "createAccountSubtitle": "Rejoins-nous pour ton parcours beauté",
+    "signIn": "J'ai déjà un compte",
+    "termsNoticeStart": "En continuant, tu acceptes nos ",
+    "termsOfUse": "Conditions d'utilisation",
+    "termsNoticeAnd": " et notre ",
+    "privacyPolicy": "Politique de confidentialité"
   },
   "onboarding": {
     "step1": {

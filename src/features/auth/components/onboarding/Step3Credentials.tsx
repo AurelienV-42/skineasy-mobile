@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { Control, Controller, FieldErrors } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { Text, TextInput, View } from 'react-native'
+import { Linking, Text, TextInput, View } from 'react-native'
 
 import { RegisterInput } from '@features/auth/schemas/auth.schema'
 import { Button } from '@shared/components/Button'
@@ -115,6 +115,23 @@ export function Step3Credentials({
             loading={isLoading}
             haptic="heavy"
           />
+          {/* Terms & Privacy */}
+          <Text className="text-xs text-textMuted text-center">
+            {t('auth.termsNoticeStart')}
+            <Text
+              className="text-xs text-primary underline"
+              onPress={() => Linking.openURL(t('profile.termsOfUseUrl'))}
+            >
+              {t('auth.termsOfUse')}
+            </Text>
+            {t('auth.termsNoticeAnd')}
+            <Text
+              className="text-xs text-primary underline"
+              onPress={() => Linking.openURL(t('profile.privacyPolicyUrl'))}
+            >
+              {t('auth.privacyPolicy')}
+            </Text>
+          </Text>
         </View>
       </View>
     </KeyboardScrollView>

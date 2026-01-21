@@ -49,7 +49,11 @@
     "registerSuccess": "Account created successfully",
     "welcomeBack": "Welcome back",
     "signInToContinue": "Sign in to continue your journey",
-    "createAccountSubtitle": "Join us for your skincare journey"
+    "createAccountSubtitle": "Join us for your skincare journey",
+    "termsNoticeStart": "By continuing, you agree to our ",
+    "termsOfUse": "Terms of Use",
+    "termsNoticeAnd": " and ",
+    "privacyPolicy": "Privacy Policy"
   },
   "onboarding": {
     "step1": {
