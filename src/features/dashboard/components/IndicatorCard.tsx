@@ -15,6 +15,7 @@ import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
 
 type IndicatorStatus = 'empty' | 'partial' | 'complete'
+type IndicatorLayout = 'grid' | 'list'
 
 interface IndicatorCardProps {
   icon: LucideIcon
@@ -23,6 +24,7 @@ interface IndicatorCardProps {
   onPress?: () => void
   disabled?: boolean
   status: IndicatorStatus
+  layout?: IndicatorLayout
 }
 
 const STATUS_COLORS: Record<IndicatorStatus, string> = {
@@ -66,11 +68,12 @@ export function IndicatorCard({
   onPress,
   disabled = false,
   status,
+  layout = 'list',
 }: IndicatorCardProps): React.ReactElement {
   const { t } = useTranslation()
   const isEmpty = status === 'empty'
 
-  const content = (
+  const gridContent = (
     <Card padding="sm" className="gap-5">
       {/* Top row: Icon + Label + Status Dot */}
       <View className="flex-row justify-between items-center pr-1">
@@ -97,6 +100,27 @@ export function IndicatorCard({
       </View>
     </Card>
   )
+
+  const listContent = (
+    <Card padding="sm" className="flex-row items-center justify-between">
+      {/* Left: Dot + Icon + Label */}
+      <View className="flex-row items-center gap-2">
+        <StatusDot status={status} />
+        <Icon size={20} color={colors.brownDark} />
+        <Text className="font-semibold text-brown-dark">{label}</Text>
+      </View>
+
+      {/* Right: Value + Chevron */}
+      <View className="flex-row items-center gap-2">
+        <Text className={`text-base font-bold ${isEmpty ? 'text-text-muted' : 'text-text'}`}>
+          {isEmpty ? t('dashboard.indicators.enterData') : value}
+        </Text>
+        <ChevronRight size={20} color={colors.textMuted} />
+      </View>
+    </Card>
+  )
+
+  const content = layout === 'grid' ? gridContent : listContent
 
   if (onPress && !disabled) {
     return (

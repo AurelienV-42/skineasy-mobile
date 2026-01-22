@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Dimensions, View } from 'react-native'
 
 import { IndicatorCard } from '@features/dashboard/components/IndicatorCard'
+import { appConfig } from '@shared/config/appConfig'
 import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
 
 type IndicatorStatus = 'empty' | 'partial' | 'complete'
@@ -26,6 +27,7 @@ export function IndicatorsList({
   sportEntries,
   date,
 }: IndicatorsListProps): React.ReactElement {
+  const layout = appConfig.ui.indicatorLayout
   const { t } = useTranslation()
   const router = useRouter()
 
@@ -65,44 +67,77 @@ export function IndicatorsList({
       ? t('dashboard.indicators.mealsEntered', { count: mealCount })
       : mealValue
 
+  if (layout === 'grid') {
+    return (
+      <View className="px-4 gap-2">
+        {/* Top row: Sleep + Nutrition */}
+        <View className="flex-row gap-2">
+          <View style={{ width: CARD_WIDTH }}>
+            <IndicatorCard
+              icon={Moon}
+              label={t('dashboard.indicators.sleep')}
+              value={sleepValue}
+              onPress={() => navigateToJournal('sleep')}
+              status={sleepStatus}
+              layout="grid"
+            />
+          </View>
+          <View style={{ width: CARD_WIDTH }}>
+            <IndicatorCard
+              icon={Utensils}
+              label={t('dashboard.indicators.nutrition')}
+              value={nutritionValue}
+              onPress={() => navigateToJournal('nutrition')}
+              status={nutritionStatus}
+              layout="grid"
+            />
+          </View>
+        </View>
+
+        {/* Bottom row: Sport (half width) */}
+        <View className="flex-row gap-2">
+          <View style={{ width: CARD_WIDTH }}>
+            <IndicatorCard
+              icon={Dumbbell}
+              label={t('dashboard.indicators.sport')}
+              value={sportValue}
+              onPress={() => navigateToJournal('sport')}
+              status={sportStatus}
+              layout="grid"
+            />
+          </View>
+          <View style={{ width: CARD_WIDTH }} />
+        </View>
+      </View>
+    )
+  }
+
   return (
     <View className="px-4 gap-2">
-      {/* Top row: Sleep + Nutrition */}
-      <View className="flex-row gap-2">
-        <View style={{ width: CARD_WIDTH }}>
-          <IndicatorCard
-            icon={Moon}
-            label={t('dashboard.indicators.sleep')}
-            value={sleepValue}
-            onPress={() => navigateToJournal('sleep')}
-            status={sleepStatus}
-          />
-        </View>
-        <View style={{ width: CARD_WIDTH }}>
-          <IndicatorCard
-            icon={Utensils}
-            label={t('dashboard.indicators.nutrition')}
-            value={nutritionValue}
-            onPress={() => navigateToJournal('nutrition')}
-            status={nutritionStatus}
-          />
-        </View>
-      </View>
-
-      {/* Bottom row: Sport (half width) */}
-      <View className="flex-row gap-2">
-        <View style={{ width: CARD_WIDTH }}>
-          <IndicatorCard
-            icon={Dumbbell}
-            label={t('dashboard.indicators.sport')}
-            value={sportValue}
-            onPress={() => navigateToJournal('sport')}
-            status={sportStatus}
-          />
-        </View>
-        {/* Empty spacer for equal width */}
-        <View style={{ width: CARD_WIDTH }} />
-      </View>
+      <IndicatorCard
+        icon={Moon}
+        label={t('dashboard.indicators.sleep')}
+        value={sleepValue}
+        onPress={() => navigateToJournal('sleep')}
+        status={sleepStatus}
+        layout="list"
+      />
+      <IndicatorCard
+        icon={Utensils}
+        label={t('dashboard.indicators.nutrition')}
+        value={nutritionValue}
+        onPress={() => navigateToJournal('nutrition')}
+        status={nutritionStatus}
+        layout="list"
+      />
+      <IndicatorCard
+        icon={Dumbbell}
+        label={t('dashboard.indicators.sport')}
+        value={sportValue}
+        onPress={() => navigateToJournal('sport')}
+        status={sportStatus}
+        layout="list"
+      />
     </View>
   )
 }
