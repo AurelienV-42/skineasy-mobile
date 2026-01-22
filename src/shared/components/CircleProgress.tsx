@@ -1,10 +1,15 @@
-import Svg, { Circle } from 'react-native-svg'
+import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg'
+
+type GradientColors = {
+  start: string
+  end: string
+}
 
 type CircleProgressProps = {
   size: number
   strokeWidth: number
   progress: number // 0-100
-  color: string
+  color: string | GradientColors
   backgroundColor?: string
   mode?: 'full' | 'semi'
 }
@@ -33,8 +38,19 @@ export function CircleProgress({
   const svgHeight = isSemi ? size / 2 + strokeWidth / 2 : size
   const rotation = isSemi ? 180 : -90
 
+  const isGradient = typeof color === 'object'
+  const strokeColor = isGradient ? 'url(#progress-gradient)' : color
+
   return (
     <Svg width={size} height={svgHeight}>
+      {isGradient && (
+        <Defs>
+          <LinearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <Stop offset="0%" stopColor={color.start} />
+            <Stop offset="100%" stopColor={color.end} />
+          </LinearGradient>
+        </Defs>
+      )}
       {/* Background arc */}
       <Circle
         cx={cx}
@@ -53,7 +69,7 @@ export function CircleProgress({
         cx={cx}
         cy={cy}
         r={radius}
-        stroke={color}
+        stroke={strokeColor}
         strokeWidth={strokeWidth}
         fill="none"
         strokeDasharray={isSemi ? `${arcLength} ${circumference}` : circumference}

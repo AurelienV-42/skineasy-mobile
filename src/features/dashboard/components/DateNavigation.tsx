@@ -39,7 +39,8 @@ export function DateNavigation({
     if (isToday(selectedDate)) return t('dashboard.today')
     if (isYesterday(selectedDate)) return t('dashboard.yesterday')
     if (isTomorrow(selectedDate)) return t('dashboard.tomorrow')
-    return format(selectedDate, 'EEEE', { locale: isFrench ? fr : undefined })
+    const dayName = format(selectedDate, 'EEEE', { locale: isFrench ? fr : undefined })
+    return dayName.charAt(0).toUpperCase() + dayName.slice(1)
   }
 
   const dayNumber = format(selectedDate, 'd')

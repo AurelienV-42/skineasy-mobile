@@ -1,72 +1,65 @@
-import { addDays, isSameDay, startOfWeek } from 'date-fns'
+import { format, isSameDay, subDays } from 'date-fns'
+import { enUS, fr } from 'date-fns/locale'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
+import { DayProgressCircle } from '@features/dashboard/components/DayProgressCircle'
 import { Pressable } from '@shared/components/Pressable'
-import { colors } from '@theme/colors'
+
+type DayScore = {
+  date: Date
+  score: number // 0-100
+}
+
+// Example scores for demo
+const today = new Date()
+const EXAMPLE_SCORES: DayScore[] = [
+  { date: subDays(today, 6), score: 100 },
+  { date: subDays(today, 5), score: 100 },
+  { date: subDays(today, 4), score: 60 },
+  { date: subDays(today, 3), score: 75 },
+  { date: subDays(today, 2), score: 30 },
+  { date: subDays(today, 1), score: 100 },
+  { date: today, score: 40 },
+]
 
 interface DayProgressDotsProps {
-  selectedDate: Date
   onDateSelect?: (date: Date) => void
+  scores?: DayScore[]
 }
 
 export function DayProgressDots({
-  selectedDate,
   onDateSelect,
+  scores = EXAMPLE_SCORES,
 }: DayProgressDotsProps): React.ReactElement {
   const { i18n } = useTranslation()
-  const isFrench = i18n.language === 'fr'
+  const locale = i18n.language === 'fr' ? fr : enUS
+  const currentDay = new Date()
 
-  // Get start of week (Monday for FR, Sunday for EN)
-  const weekStart = startOfWeek(selectedDate, { weekStartsOn: isFrench ? 1 : 0 })
+  // Generate 7 days ending with today (6 days ago to today)
+  const weekDays = Array.from({ length: 7 }, (_, i) => subDays(currentDay, 6 - i))
 
-  // Generate 7 days of the week
-  const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
-
-  // Day labels (Monday-first for FR, Sunday-first for EN)
-  const dayLabels = isFrench
-    ? ['L', 'M', 'M', 'J', 'V', 'S', 'D']
-    : ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-
-  const today = new Date()
+  const getScoreForDate = (date: Date): number => {
+    const found = scores.find((s) => isSameDay(s.date, date))
+    return found?.score ?? 0
+  }
 
   return (
-    <View className="flex-row justify-around px-4 py-3">
+    <View className="flex-row justify-between px-4 py-2">
       {weekDays.map((date, index) => {
-        const isSelected = isSameDay(date, selectedDate)
-        const isToday = isSameDay(date, today)
-        const isPast = date < today && !isToday
+        const isToday = isSameDay(date, currentDay)
+        const dayLabel = format(date, 'EEEEE', { locale })
+        const score = getScoreForDate(date)
 
         return (
           <Pressable
             key={index}
             onPress={() => onDateSelect?.(date)}
             haptic="light"
-            className="items-center gap-1 min-w-8"
+            className="items-center gap-1"
           >
-            <Text
-              className={`text-xs font-medium ${
-                isSelected ? 'text-text font-bold' : isToday ? 'text-primary' : 'text-text-muted'
-              }`}
-            >
-              {dayLabels[index]}
-            </Text>
-            <View className="flex-row gap-0.5">
-              {/* Placeholder dots - would show actual data in future */}
-              <View
-                className="w-1.5 h-1.5 rounded-full"
-                style={{
-                  backgroundColor: isPast || isToday ? colors.primary : `${colors.text}20`,
-                }}
-              />
-              <View
-                className="w-1.5 h-1.5 rounded-full"
-                style={{
-                  backgroundColor: isPast ? `${colors.primary}60` : `${colors.text}20`,
-                }}
-              />
-            </View>
-            {isSelected && <View className="w-1 h-1 rounded-full bg-primary mt-0.5" />}
+            <DayProgressCircle score={score} isToday={isToday} />
+            <Text className="text-xs font-medium text-text-muted">{dayLabel.toUpperCase()}</Text>
           </Pressable>
         )
       })}

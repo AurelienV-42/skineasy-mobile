@@ -44,7 +44,7 @@ export default function DashboardScreen(): React.ReactElement {
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="gap-6 pb-24">
           {/* Top bar: Date Navigation + Avatar */}
-          <Animated.View
+          <View className="gap-2"><Animated.View
             style={animStyles[0]}
             className="px-4 flex-row justify-between items-center"
           >
@@ -60,9 +60,9 @@ export default function DashboardScreen(): React.ReactElement {
 
           {/* Day Progress Dots */}
           <Animated.View style={animStyles[1]}>
-            <DayProgressDots selectedDate={selectedDate} onDateSelect={setSelectedDate} />
+            <DayProgressDots onDateSelect={setSelectedDate} />
           </Animated.View>
-
+</View>
           {/* Score Container */}
           <Animated.View style={animStyles[2]}>
             <ScoreContainer score={40} />
