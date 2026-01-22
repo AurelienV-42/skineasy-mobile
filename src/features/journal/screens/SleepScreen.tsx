@@ -14,9 +14,9 @@ import { Frown, Meh, Moon, Smile } from 'lucide-react-native'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { Alert, Text, View } from 'react-native'
 
-import { useSleepEntries, useUpsertSleep } from '@features/journal/hooks/useJournal'
+import { useDeleteSleep, useSleepEntries, useUpsertSleep } from '@features/journal/hooks/useJournal'
 import { sleepFormSchema, type SleepFormInput } from '@features/journal/schemas/journal.schema'
 import { Button } from '@shared/components/Button'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
@@ -38,11 +38,15 @@ export default function SleepScreen() {
   const router = useRouter()
   const params = useLocalSearchParams<{ id?: string; date?: string }>()
   const upsertSleep = useUpsertSleep()
+  const deleteSleep = useDeleteSleep()
 
-  // If editing, fetch existing entry
+  // Fetch today's entry (or specific date if provided)
   const dateToUse = params.date || getTodayUTC()
   const { data: sleepEntries } = useSleepEntries(dateToUse)
-  const existingEntry = sleepEntries?.find((e) => e.id === Number(params.id))
+  // Use specific id if editing, otherwise get first entry for today
+  const existingEntry = params.id
+    ? sleepEntries?.find((e) => e.id === Number(params.id))
+    : sleepEntries?.[0]
 
   const {
     handleSubmit,
@@ -92,6 +96,24 @@ export default function SleepScreen() {
     })
   }
 
+  const handleDelete = (): void => {
+    if (!existingEntry) return
+
+    Alert.alert(t('common.deleteConfirmTitle'), t('common.deleteConfirmMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('common.delete'),
+        style: 'destructive',
+        onPress: () => {
+          deleteSleep.mutate(
+            { id: existingEntry.id, date: dateToUse },
+            { onSuccess: () => router.back() }
+          )
+        },
+      },
+    ])
+  }
+
   return (
     <ScreenHeader title={t('journal.sleep.screenTitle')} icon={Moon}>
       {/* Sleep Duration Picker */}
@@ -130,6 +152,18 @@ export default function SleepScreen() {
         disabled={!isValid || upsertSleep.isPending}
         loading={upsertSleep.isPending}
       />
+
+      {/* Delete Button (only when editing) */}
+      {existingEntry && (
+        <Button
+          title={t('common.delete')}
+          variant="outline"
+          onPress={handleDelete}
+          disabled={deleteSleep.isPending}
+          loading={deleteSleep.isPending}
+          className="mt-4"
+        />
+      )}
     </ScreenHeader>
   )
 }

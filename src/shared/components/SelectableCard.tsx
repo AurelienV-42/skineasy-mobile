@@ -57,8 +57,7 @@ export function SelectableCard({
 }
 
 const styles = StyleSheet.create({
-  base: {
-  },
+  base: {},
   horizontal: {
     paddingVertical: 20,
     paddingHorizontal: 20,

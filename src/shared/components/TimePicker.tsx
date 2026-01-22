@@ -70,9 +70,7 @@ export function TimePicker({ value, onChange, label, title }: TimePickerProps): 
 
       {/* Trigger */}
       <Pressable onPress={handleOpen} haptic="light">
-        <GlassContainer
-          style={{ paddingVertical: 16, paddingHorizontal: 16 }}
-        >
+        <GlassContainer style={{ paddingVertical: 16, paddingHorizontal: 16 }}>
           <Text className="text-4xl font-bold text-brown-dark text-center">
             {formatDuration(value)}
           </Text>
