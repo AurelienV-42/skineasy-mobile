@@ -10,8 +10,8 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { Frown, Meh, Smile } from 'lucide-react-native'
-import { useEffect } from 'react'
+import { Frown, Meh, Moon, Smile } from 'lucide-react-native'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -25,6 +25,7 @@ import { ScreenHeader } from '@shared/components/ScreenHeader'
 import type { SleepQuality } from '@shared/types/journal.types'
 import { getTodayUTC, toISODateString } from '@shared/utils/date'
 import { colors } from '@theme/colors'
+import { DateNavigation } from '../../dashboard/components/DateNavigation'
 
 const QUALITY_LEVELS = [
   { value: 1 as SleepQuality, icon: Frown, labelKey: 'journal.sleep.quality.bad' },
@@ -42,6 +43,8 @@ export default function SleepScreen() {
   const dateToUse = params.date || getTodayUTC()
   const { data: sleepEntries } = useSleepEntries(dateToUse)
   const existingEntry = sleepEntries?.find((e) => e.id === Number(params.id))
+
+  const [selectedDate, setSelectedDate] = useState(new Date())
 
   const {
     control,
@@ -86,9 +89,13 @@ export default function SleepScreen() {
   }
 
   return (
-    <ScreenHeader title={t('journal.sleep.screenTitle')}>
+    <ScreenHeader title={t('journal.sleep.screenTitle')} icon={Moon}>
+      <View className="items-center mb-4">
+        <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
+      </View>
+
       {/* Hours Input */}
-      <View className="mb-8">
+      <View className="">
         <Controller
           control={control}
           name="hours"
@@ -107,7 +114,7 @@ export default function SleepScreen() {
 
       {/* Quality Selector */}
       <View className="mb-8">
-        <Text className="text-sm font-medium text-text mb-3">{t('journal.sleep.question')}</Text>
+        <Text className="font-medium text-text mb-3">{t('journal.sleep.question')}</Text>
         <View className="flex-row gap-3">
           {QUALITY_LEVELS.map(({ value, icon: Icon, labelKey }) => (
             <Pressable

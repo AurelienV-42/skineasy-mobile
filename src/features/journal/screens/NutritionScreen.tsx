@@ -11,7 +11,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { Camera, Coffee, Cookie, ImageIcon, Moon, Sun, X } from 'lucide-react-native'
+import { Camera, Coffee, Cookie, ImageIcon, Moon, Sun, Utensils, X } from 'lucide-react-native'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -157,7 +157,7 @@ export default function NutritionScreen() {
   const isLoading = uploadImage.isPending || createMeal.isPending || updateMeal.isPending
 
   return (
-    <ScreenHeader title={t('journal.nutrition.screenTitle')}>
+    <ScreenHeader title={t('journal.nutrition.screenTitle')} icon={Utensils} className="pt-2">
       {/* Food Name Input */}
       <View>
         <Controller

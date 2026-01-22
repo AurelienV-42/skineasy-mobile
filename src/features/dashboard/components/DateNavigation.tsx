@@ -18,11 +18,13 @@ import { colors } from '@theme/colors'
 interface DateNavigationProps {
   selectedDate: Date
   onDateChange: (date: Date) => void
+  className?: string
 }
 
 export function DateNavigation({
   selectedDate,
   onDateChange,
+  className,
 }: DateNavigationProps): React.ReactElement {
   const { t, i18n } = useTranslation()
   const isFrench = i18n.language === 'fr'
@@ -47,7 +49,7 @@ export function DateNavigation({
   const monthName = format(selectedDate, 'MMMM', { locale: isFrench ? fr : undefined })
 
   return (
-    <View className="flex-row items-center justify-between py-2">
+    <View className={`flex-row items-center justify-between ${className}`}>
       {/* Previous Day */}
       <Pressable
         onPress={handlePrevDay}

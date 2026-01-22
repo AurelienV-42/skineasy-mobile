@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router'
-import { ArrowLeft } from 'lucide-react-native'
+import { ArrowLeft, type LucideIcon } from 'lucide-react-native'
 import { createContext, ReactNode, useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native'
@@ -18,6 +18,9 @@ interface ScreenHeaderProps {
   edges?: Edge[]
   /** When false, hides the back button (default: true) */
   canGoBack?: boolean
+  /** Icon to display next to the title */
+  icon?: LucideIcon
+  className?: string
 }
 
 // Context to provide scroll functionality to child components
@@ -38,6 +41,8 @@ export function ScreenHeader({
   noScroll = false,
   edges = ['top', 'bottom'],
   canGoBack = true,
+  icon: Icon,
+  className = '',
 }: ScreenHeaderProps) {
   const { t } = useTranslation()
   const router = useRouter()
@@ -52,7 +57,7 @@ export function ScreenHeader({
   }
 
   const content = (
-    <Animated.View style={animStyles[1]} className="flex-1 px-4 pt-4">
+    <Animated.View style={animStyles[1]} className={`flex-1 px-4 ${className}`}>
       {children}
     </Animated.View>
   )
@@ -75,7 +80,10 @@ export function ScreenHeader({
         ) : (
           <View className="w-7" />
         )}
-        <Text className="text-3xl font-bold text-primary">{title}</Text>
+        <View className="flex-row items-center gap-2">
+          {Icon && <Icon size={24} color={colors.brownDark} />}
+          <Text className="text-xl font-bold text-brown-dark">{title}</Text>
+        </View>
         <View className="w-7" />
       </Animated.View>
 

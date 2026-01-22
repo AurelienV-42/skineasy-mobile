@@ -173,8 +173,8 @@
       "deleteError": "Failed to delete sleep entry"
     },
     "nutrition": {
-      "title": "Meals & Snacks",
-      "screenTitle": "Meals & Snacks",
+      "title": "Nutrition",
+      "screenTitle": "Nutrition",
       "meal": "Meal",
       "mealType": "Meal type (optional)",
       "addMeal": "Add a photo (optional)",

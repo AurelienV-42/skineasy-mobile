@@ -11,6 +11,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocalSearchParams, useRouter } from 'expo-router'
+import { Dumbbell } from 'lucide-react-native'
 import { useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -134,7 +135,7 @@ export default function SportScreen() {
   }
 
   return (
-    <ScreenHeader title={t('journal.sport.screenTitle')}>
+    <ScreenHeader title={t('journal.sport.screenTitle')} icon={Dumbbell}>
       {/* Sport Type Selector */}
       <View className="mb-6">
         <Controller

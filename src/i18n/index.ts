@@ -14,14 +14,14 @@ const resources = {
 // Get device language code (e.g., 'en' from 'en-US')
 const getDeviceLanguage = (): string => {
   const locales = Localization.getLocales()
-  const languageCode = locales[0]?.languageCode ?? 'en'
+  const languageCode = locales[0]?.languageCode ?? 'fr'
   return languageCode
 }
 
 i18n.use(initReactI18next).init({
   resources,
   lng: getDeviceLanguage(),
-  fallbackLng: 'en',
+  fallbackLng: 'fr',
   interpolation: {
     escapeValue: false,
   },
