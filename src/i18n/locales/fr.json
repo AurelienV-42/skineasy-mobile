@@ -99,6 +99,11 @@
       "title": "Quiz : Routine personnalisée",
       "subtitle": "Découvre ta routine idéale"
     },
+    "routine": {
+      "title": "Ta routine est prête !",
+      "description": "Nous t'avons concocter une routine personnalisée en fonction de toutes les réponses aux questions que tu nous as donné.",
+      "discover": "Découvrir ma routine"
+    },
     "summary": {
       "title": "Récapitulatif quotidien",
       "notLogged": "Pas encore enregistré",
@@ -229,7 +234,7 @@
     }
   },
   "routine": {
-    "title": "Ma Routine",
+    "title": "Routine",
     "ordinal": {
       "first": "Premier",
       "second": "Second"

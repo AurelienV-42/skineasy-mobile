@@ -10,6 +10,7 @@ import { DateNavigation } from '@features/dashboard/components/DateNavigation'
 import { DayProgressDots } from '@features/dashboard/components/DayProgressDots'
 import { IndicatorsList } from '@features/dashboard/components/IndicatorsList'
 import { RecipeOfTheDay } from '@features/dashboard/components/RecipeOfTheDay'
+import { RoutineBannerContainer } from '@features/dashboard/components/RoutineBanner'
 import { ScoreContainer } from '@features/dashboard/components/ScoreContainer'
 import { SectionHeader } from '@features/dashboard/components/SectionHeader'
 import {
@@ -42,7 +43,7 @@ export default function DashboardScreen(): React.ReactElement {
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        <View className="gap-6 pb-24">
+        <View className="gap-6 pb-32">
           {/* Top bar: Date Navigation + Avatar */}
           <View className="gap-2">
             <Animated.View
@@ -81,15 +82,15 @@ export default function DashboardScreen(): React.ReactElement {
             />
           </Animated.View>
 
+          {/* Routine Banner */}
+          <Animated.View style={animStyles[4]}>
+            <RoutineBannerContainer onPress={() => router.push('/routine')} />
+          </Animated.View>
+
           {/* Recipe of the Day */}
           <Animated.View style={animStyles[5]}>
             <RecipeOfTheDay />
           </Animated.View>
-
-          {/* Routine Banner */}
-          {/* <Animated.View style={animStyles[4]} className="px-4">
-            <RoutineBannerContainer />
-          </Animated.View> */}
         </View>
       </ScrollView>
     </SafeAreaView>

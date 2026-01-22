@@ -16,6 +16,10 @@ interface ButtonProps extends Omit<PressableProps, 'children'> {
    */
   haptic?: HapticLevel
   /**
+   * Icon component to render before the title
+   */
+  iconLeft?: LucideIcon
+  /**
    * Icon component to render after the title
    */
   iconRight?: LucideIcon
@@ -50,6 +54,7 @@ export function Button({
   disabled,
   className,
   haptic = 'heavy', // Default to heavy for buttons (save/submit actions)
+  iconLeft: IconLeft,
   iconRight: IconRight,
   fitContent = false,
   ...props
@@ -77,7 +82,8 @@ export function Button({
       {loading ? (
         <ActivityIndicator color={variant === 'primary' ? colors.surface : colors.primary} />
       ) : (
-        <View className="flex-row items-center gap-1">
+        <View className="flex-row items-center gap-2">
+          {IconLeft && <IconLeft size={20} color={iconColor} strokeWidth={2} />}
           <Text className={`text-base font-semibold ${styles.text}`}>{title}</Text>
           {IconRight && <IconRight size={18} color={iconColor} strokeWidth={2.5} />}
         </View>

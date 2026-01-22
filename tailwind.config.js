@@ -38,6 +38,7 @@ module.exports = {
       fontFamily: {
         normal: ['ChocolatesRegular'],
         medium: ['ChocolatesMedium'],
+        semibold: ['ChocolatesSemibold'],
         bold: ['ChocolatesBold'],
       },
       fontSize: {
