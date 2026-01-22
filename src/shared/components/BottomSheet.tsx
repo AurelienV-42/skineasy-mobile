@@ -8,7 +8,6 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet'
 import { useEffect, useRef } from 'react'
 import { Dimensions } from 'react-native'
-import { colors } from '../../theme/colors'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -44,10 +43,11 @@ export function BottomSheet({
     <TrueSheet
       ref={sheet}
       detents={detents}
-      backgroundColor={colors.background}
       onDidDismiss={onClose}
       grabber
+      // backgroundColor={'transparent'}
       scrollable={scrollable}
+      style={{ paddingTop: 20 }}
     >
       {children}
     </TrueSheet>

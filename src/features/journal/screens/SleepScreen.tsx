@@ -2,7 +2,7 @@
  * Sleep Screen
  *
  * Allows users to log sleep data with:
- * - Hours of sleep (decimal input)
+ * - Hours of sleep (time picker)
  * - Sleep quality (1-5 scale: 1=Bad, 3=Neutral, 5=Good)
  *
  * Connected to real backend API with validation
@@ -11,27 +11,28 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Frown, Meh, Moon, Smile } from 'lucide-react-native'
-import { useEffect, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import { useSleepEntries, useUpsertSleep } from '@features/journal/hooks/useJournal'
 import { sleepFormSchema, type SleepFormInput } from '@features/journal/schemas/journal.schema'
 import { Button } from '@shared/components/Button'
-import { Input } from '@shared/components/Input'
 import { Pressable } from '@shared/components/Pressable'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
+import { TimePicker } from '@shared/components/TimePicker'
 import type { SleepQuality } from '@shared/types/journal.types'
 import { getTodayUTC, toISODateString } from '@shared/utils/date'
 import { colors } from '@theme/colors'
-import { DateNavigation } from '../../dashboard/components/DateNavigation'
 
 const QUALITY_LEVELS = [
   { value: 1 as SleepQuality, icon: Frown, labelKey: 'journal.sleep.quality.bad' },
   { value: 3 as SleepQuality, icon: Meh, labelKey: 'journal.sleep.quality.neutral' },
   { value: 5 as SleepQuality, icon: Smile, labelKey: 'journal.sleep.quality.good' },
 ]
+
+const DEFAULT_MINUTES = 480 // 8 hours
 
 export default function SleepScreen() {
   const { t } = useTranslation()
@@ -44,12 +45,9 @@ export default function SleepScreen() {
   const { data: sleepEntries } = useSleepEntries(dateToUse)
   const existingEntry = sleepEntries?.find((e) => e.id === Number(params.id))
 
-  const [selectedDate, setSelectedDate] = useState(new Date())
-
   const {
-    control,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
     setValue,
     watch,
     reset,
@@ -57,27 +55,34 @@ export default function SleepScreen() {
     resolver: zodResolver(sleepFormSchema),
     mode: 'onChange',
     defaultValues: {
-      quality: 3, // Default to Neutral
+      minutes: DEFAULT_MINUTES,
+      quality: 3,
     },
   })
 
   // Populate form when editing
   useEffect(() => {
     if (existingEntry) {
+      // Convert decimal hours to minutes
+      const minutes = Math.round(existingEntry.hours * 60)
       reset({
-        hours: String(existingEntry.hours),
+        minutes,
         quality: existingEntry.quality as SleepQuality,
       })
     }
   }, [existingEntry, reset])
 
   // eslint-disable-next-line react-hooks/incompatible-library
+  const selectedMinutes = watch('minutes') ?? DEFAULT_MINUTES
   const selectedQuality = watch('quality') ?? 3
 
   const onSubmit = (data: SleepFormInput) => {
+    // Convert minutes to decimal hours for API
+    const hours = data.minutes / 60
+
     const dto = {
       date: toISODateString(dateToUse),
-      hours: Number(data.hours),
+      hours,
       quality: data.quality as SleepQuality,
     }
 
@@ -90,25 +95,13 @@ export default function SleepScreen() {
 
   return (
     <ScreenHeader title={t('journal.sleep.screenTitle')} icon={Moon}>
-      <View className="items-center mb-4">
-        <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
-      </View>
-
-      {/* Hours Input */}
-      <View className="">
-        <Controller
-          control={control}
-          name="hours"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              label={t('journal.sleep.hours')}
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              keyboardType="decimal-pad"
-              error={errors.hours?.message ? t(errors.hours.message as string) : undefined}
-            />
-          )}
+      {/* Sleep Duration Picker */}
+      <View className="mb-8">
+        <TimePicker
+          value={selectedMinutes}
+          onChange={(val) => setValue('minutes', val, { shouldValidate: true })}
+          label={t('journal.sleep.hours')}
+          title={t('journal.sleep.pickerTitle')}
         />
       </View>
 

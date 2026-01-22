@@ -158,7 +158,8 @@
       "title": "Sleep",
       "screenTitle": "Sleep",
       "question": "How did you sleep?",
-      "hours": "Hours of sleep",
+      "hours": "Sleep time",
+      "pickerTitle": "Enter your sleep time",
       "quality": {
         "bad": "Bad",
         "neutral": "Neutral",

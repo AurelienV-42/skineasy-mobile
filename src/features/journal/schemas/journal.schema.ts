@@ -79,9 +79,7 @@ export type MealEntryInput = z.infer<typeof mealEntrySchema>
  */
 
 export const sleepFormSchema = z.object({
-  hours: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0 && Number(val) <= 24, {
-    message: 'journal.sleep.hoursInvalid',
-  }),
+  minutes: z.number().min(0).max(840), // 0-14 hours in minutes
   quality: sleepQualitySchema,
 })
 

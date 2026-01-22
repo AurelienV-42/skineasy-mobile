@@ -159,7 +159,8 @@
       "title": "Sommeil",
       "screenTitle": "Sommeil",
       "question": "Comment as-tu dormi ?",
-      "hours": "Heures de sommeil",
+      "hours": "Temps de sommeil",
+      "pickerTitle": "Entre ton temps de sommeil",
       "quality": {
         "bad": "Mal",
         "neutral": "Neutre",
