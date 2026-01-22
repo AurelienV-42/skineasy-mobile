@@ -121,8 +121,8 @@ export function FloatingTabBar(): React.ReactElement {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    left: 24,
-    right: 24,
+    left: '15%',
+    right: '15%',
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 8,
