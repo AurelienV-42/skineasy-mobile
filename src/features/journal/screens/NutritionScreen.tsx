@@ -11,7 +11,18 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { Camera, Coffee, Cookie, ImageIcon, Moon, Sun, Utensils, X } from 'lucide-react-native'
+import {
+  Camera,
+  Clock,
+  Coffee,
+  Cookie,
+  ImageIcon,
+  MessageSquare,
+  Moon,
+  Sun,
+  Utensils,
+  X,
+} from 'lucide-react-native'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -28,6 +39,7 @@ import { Button } from '@shared/components/Button'
 import { Input } from '@shared/components/Input'
 import { Pressable } from '@shared/components/Pressable'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
+import { SectionHeader } from '@shared/components/SectionHeader'
 import { getTodayUTC, toISODateString } from '@shared/utils/date'
 import { getImageUrl, pickImageFromGallery, takePhoto } from '@shared/utils/image'
 import { colors } from '@theme/colors'
@@ -160,7 +172,7 @@ export default function NutritionScreen() {
     <ScreenHeader
       title={t('journal.nutrition.screenTitle')}
       icon={Utensils}
-      childrenClassName="pt-2"
+      childrenClassName="pt-2 gap-6"
     >
       {/* Food Name Input */}
       <View>
@@ -182,8 +194,12 @@ export default function NutritionScreen() {
       </View>
 
       {/* Image Picker */}
-      <View className="mb-6">
-        <Text className="text-sm font-medium text-text mb-3">{t('journal.nutrition.addMeal')}</Text>
+      <View>
+        <SectionHeader
+          icon={ImageIcon}
+          title={t('journal.nutrition.addMeal')}
+          className="px-0 mb-3"
+        />
 
         {imageUri ? (
           <View className="relative">
@@ -229,10 +245,8 @@ export default function NutritionScreen() {
       </View>
 
       {/* Meal Type Selector */}
-      <View className="mb-6">
-        <Text className="text-sm font-medium text-text mb-3">
-          {t('journal.nutrition.mealType')}
-        </Text>
+      <View>
+        <SectionHeader icon={Clock} title={t('journal.nutrition.mealType')} className="px-0 mb-3" />
         <Controller
           control={control}
           name="meal_type"
@@ -272,13 +286,17 @@ export default function NutritionScreen() {
       </View>
 
       {/* Note Input */}
-      <View className="mb-6">
+      <View>
+        <SectionHeader
+          icon={MessageSquare}
+          title={t('journal.nutrition.addNote')}
+          className="px-0 mb-3"
+        />
         <Controller
           control={control}
           name="note"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
-              label={t('journal.nutrition.addNote')}
               value={value || ''}
               onChangeText={onChange}
               onBlur={onBlur}

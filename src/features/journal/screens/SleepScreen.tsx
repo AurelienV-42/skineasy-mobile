@@ -14,12 +14,13 @@ import { Frown, Meh, Moon, Smile } from 'lucide-react-native'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { Alert, Text, View } from 'react-native'
+import { Alert, View } from 'react-native'
 
 import { useDeleteSleep, useSleepEntries, useUpsertSleep } from '@features/journal/hooks/useJournal'
 import { sleepFormSchema, type SleepFormInput } from '@features/journal/schemas/journal.schema'
 import { Button } from '@shared/components/Button'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
+import { SectionHeader } from '@shared/components/SectionHeader'
 import { SelectableCard } from '@shared/components/SelectableCard'
 import { TimePicker } from '@shared/components/TimePicker'
 import type { SleepQuality } from '@shared/types/journal.types'
@@ -115,9 +116,9 @@ export default function SleepScreen() {
   }
 
   return (
-    <ScreenHeader title={t('journal.sleep.screenTitle')} icon={Moon}>
+    <ScreenHeader title={t('journal.sleep.screenTitle')} icon={Moon} childrenClassName='gap-6'>
       {/* Sleep Duration Picker */}
-      <View className="mb-8">
+      <View>
         <TimePicker
           value={selectedMinutes}
           onChange={(val) => setValue('minutes', val, { shouldValidate: true })}
@@ -127,8 +128,8 @@ export default function SleepScreen() {
       </View>
 
       {/* Quality Selector */}
-      <View className="mb-8">
-        <Text className="font-medium text-text mb-3">{t('journal.sleep.question')}</Text>
+      <View>
+        <SectionHeader icon={Smile} title={t('journal.sleep.question')} className="px-0 mb-3" />
         <View className="flex-row gap-3">
           {QUALITY_LEVELS.map(({ value, icon, labelKey }) => (
             <View key={value} className="flex-1">
@@ -146,6 +147,7 @@ export default function SleepScreen() {
       </View>
 
       {/* Save Button */}
+      <View>
       <Button
         title={t('common.save')}
         onPress={handleSubmit(onSubmit)}
@@ -163,7 +165,7 @@ export default function SleepScreen() {
           loading={deleteSleep.isPending}
           className="mt-4"
         />
-      )}
+      )}</View>
     </ScreenHeader>
   )
 }

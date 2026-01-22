@@ -38,6 +38,7 @@ function RootLayoutContent() {
   const [fontsLoaded] = useFonts({
     ChocolatesRegular: assets.ChocolatesRegular,
     ChocolatesMedium: assets.ChocolatesMedium,
+    ChocolatesSemibold: assets.ChocolatesSemibold,
     ChocolatesBold: assets.ChocolatesBold,
   })
 

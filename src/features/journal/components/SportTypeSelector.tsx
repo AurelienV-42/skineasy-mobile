@@ -77,9 +77,6 @@ export function SportTypeSelector({ value, onChange }: SportTypeSelectorProps) {
 
   return (
     <View>
-      {/* Label */}
-      <Text className="text-sm font-medium text-text mb-2">{t('journal.sport.addActivity')}</Text>
-
       {/* Selected Value Display */}
       {value && (
         <View className="mb-4">

@@ -15,6 +15,8 @@ import { Button } from '@shared/components/Button'
 import { GlassContainer } from '@shared/components/GlassContainer'
 import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
+import { Hourglass } from 'lucide-react-native'
+import { SectionHeader } from '@shared/components/SectionHeader'
 
 interface TimePickerProps {
   value: number // minutes
@@ -66,7 +68,7 @@ export function TimePicker({ value, onChange, label, title }: TimePickerProps): 
 
   return (
     <View>
-      {label && <Text className="text-sm font-medium text-text mb-2">{label}</Text>}
+      {label && <SectionHeader icon={Hourglass} title={label} className="px-0 mb-3" />}
 
       {/* Trigger */}
       <Pressable onPress={handleOpen} haptic="light">

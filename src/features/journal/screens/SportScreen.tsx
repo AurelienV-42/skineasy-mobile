@@ -11,7 +11,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { Dumbbell } from 'lucide-react-native'
+import { Dumbbell, Flame, MessageSquare, PersonStanding, Timer } from 'lucide-react-native'
 import { useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -27,9 +27,11 @@ import {
 import { sportFormSchema, type SportFormInput } from '@features/journal/schemas/journal.schema'
 import { enrichSportTypes } from '@features/journal/utils/sportMapping'
 import { Button } from '@shared/components/Button'
+import { Card } from '@shared/components/Card'
 import { Input } from '@shared/components/Input'
 import { Pressable } from '@shared/components/Pressable'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
+import { SectionHeader } from '@shared/components/SectionHeader'
 import type { SportIntensity } from '@shared/types/journal.types'
 import { getTodayUTC, toISODateString } from '@shared/utils/date'
 
@@ -135,9 +137,14 @@ export default function SportScreen() {
   }
 
   return (
-    <ScreenHeader title={t('journal.sport.screenTitle')} icon={Dumbbell}>
+    <ScreenHeader title={t('journal.sport.screenTitle')} icon={Dumbbell} childrenClassName='gap-6'>
       {/* Sport Type Selector */}
-      <View className="mb-6">
+      <View>
+        <SectionHeader
+          icon={PersonStanding}
+          title={t('journal.sport.addActivity')}
+          className="px-0 mb-3"
+        />
         <Controller
           control={control}
           name="type"
@@ -147,14 +154,17 @@ export default function SportScreen() {
         />
       </View>
 
-      {/* Duration Input */}
-      <View className="mb-6">
+      <View>
+        <SectionHeader
+          icon={Timer}
+          title={`${t('journal.sport.duration')} (${t('journal.sport.minutes')})`}
+          className="px-0 mb-3"
+        />
         <Controller
           control={control}
           name="duration"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
-              label={`${t('journal.sport.duration')} (${t('journal.sport.minutes')})`}
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
@@ -162,14 +172,15 @@ export default function SportScreen() {
               error={errors.duration?.message ? t(errors.duration.message as string) : undefined}
             />
           )}
-        />
-      </View>
+        /></View>
 
       {/* Intensity Selector */}
-      <View className="mb-6">
-        <Text className="text-sm font-medium text-text mb-3">
-          {t('journal.sport.intensity.label')}
-        </Text>
+      <View>
+        <SectionHeader
+          icon={Flame}
+          title={t('journal.sport.intensity.label')}
+          className="px-0 mb-3"
+        />
 
         <View className="flex-row justify-between gap-2">
           {INTENSITY_LEVELS.map((level) => (
@@ -177,21 +188,23 @@ export default function SportScreen() {
               key={level}
               onPress={() => setValue('intensity', level)}
               haptic="light"
-              className={`flex-1 items-center justify-center py-3 rounded-lg border ${
-                selectedIntensity === level
-                  ? 'bg-primary border-primary'
-                  : 'bg-surface border-border'
-              }`}
+              className="flex-1"
               accessibilityLabel={`${t('journal.sport.intensity.label')} ${level}`}
               accessibilityRole="button"
             >
-              <Text
-                className={`text-2xl font-bold ${
-                  selectedIntensity === level ? 'text-white' : 'text-text'
-                }`}
+              <Card
+                isPressed={selectedIntensity === level}
+                padding="sm"
+                className="items-center justify-center"
               >
-                {level}
-              </Text>
+                <Text
+                  className={`text-2xl font-bold ${
+                    selectedIntensity === level ? 'text-white' : 'text-text'
+                  }`}
+                >
+                  {level}
+                </Text>
+              </Card>
             </Pressable>
           ))}
         </View>
@@ -203,13 +216,13 @@ export default function SportScreen() {
       </View>
 
       {/* Note Input */}
-      <View className="mb-2">
+      <View>
+        <SectionHeader icon={MessageSquare} title={t('journal.sport.note')} className="px-0 mb-3" />
         <Controller
           control={control}
           name="note"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
-              label={t('journal.sport.note')}
               value={value || ''}
               onChangeText={onChange}
               onBlur={onBlur}

@@ -10,6 +10,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 
+import { Card } from '@shared/components/Card'
 import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
 
@@ -70,7 +71,7 @@ export function IndicatorCard({
   const isEmpty = status === 'empty'
 
   const content = (
-    <View className="p-3.5 gap-5 bg-surface rounded-xl shadow-sm">
+    <Card padding="sm" className="gap-5">
       {/* Top row: Icon + Label + Status Dot */}
       <View className="flex-row justify-between items-center pr-1">
         <View className="flex-row items-center gap-1.5">
@@ -94,7 +95,7 @@ export function IndicatorCard({
           </>
         )}
       </View>
-    </View>
+    </Card>
   )
 
   if (onPress && !disabled) {

@@ -2,11 +2,12 @@ import { ChevronRight } from 'lucide-react-native'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, Text, View } from 'react-native'
-import Animated, { FadeInDown } from 'react-native-reanimated'
+import { FadeInDown } from 'react-native-reanimated'
 
 import { ProductDetailSheet } from '@features/routine/components/ProductDetailSheet'
 import type { ProductDto, RoutineStepWithProducts } from '@features/routine/types/routine.types'
 import { CATEGORY_LABELS } from '@features/routine/types/routine.types'
+import { Card } from '@shared/components/Card'
 import { Pressable } from '@shared/components/Pressable'
 import { haptic } from '@shared/utils/haptic'
 import { colors } from '@theme/colors'
@@ -78,9 +79,11 @@ export function RoutineStepCard({
 
   return (
     <>
-      <Animated.View
+      <Card
+        animated
         entering={FadeInDown.delay(index * 100).springify()}
-        className="bg-surface rounded-2xl p-4 mb-4 border border-border"
+        padding="md"
+        className="mb-4"
       >
         {/* Step Header */}
         <View className="flex-row items-center mb-3">
@@ -114,7 +117,7 @@ export function RoutineStepCard({
             <Text className="text-textMuted text-sm">{t('routine.noProductForStep')}</Text>
           </View>
         )}
-      </Animated.View>
+      </Card>
 
       <ProductDetailSheet
         product={selectedProduct}

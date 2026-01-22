@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import type { TimeOfDay } from '@features/routine/types/routine.types'
+import { Card } from '@shared/components/Card'
 import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
 
@@ -28,21 +29,23 @@ function ToggleButton({
     <Pressable
       onPress={() => onSelect(time)}
       haptic="light"
-      className={`flex-1 flex-row items-center justify-center py-3 px-4 rounded-xl border ${
-        isSelected ? 'bg-primary border-primary' : 'bg-surface border-border'
-      }`}
+      className="flex-1"
       accessibilityLabel={label}
       accessibilityState={{ selected: isSelected }}
     >
-      <Icon size={20} color={isSelected ? colors.surface : colors.text} />
-      <Text className={`ml-2 font-medium ${isSelected ? 'text-white' : 'text-text'}`}>{label}</Text>
-      <View
-        className={`ml-2 px-2 py-0.5 rounded-full ${isSelected ? 'bg-white/20' : 'bg-gray-100'}`}
-      >
-        <Text className={`text-xs font-semibold ${isSelected ? 'text-white' : 'text-gray-700'}`}>
-          {stepCount}
+      <Card isPressed={isSelected} padding="sm" className="flex-row items-center justify-center">
+        <Icon size={20} color={isSelected ? colors.surface : colors.text} />
+        <Text className={`ml-2 font-medium ${isSelected ? 'text-white' : 'text-text'}`}>
+          {label}
         </Text>
-      </View>
+        <View
+          className={`ml-2 px-2 py-0.5 rounded-full ${isSelected ? 'bg-white/20' : 'bg-gray-100'}`}
+        >
+          <Text className={`text-xs font-semibold ${isSelected ? 'text-white' : 'text-gray-700'}`}>
+            {stepCount}
+          </Text>
+        </View>
+      </Card>
     </Pressable>
   )
 }

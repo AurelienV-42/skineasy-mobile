@@ -12,7 +12,7 @@ import { IndicatorsList } from '@features/dashboard/components/IndicatorsList'
 import { RecipeOfTheDay } from '@features/dashboard/components/RecipeOfTheDay'
 import { RoutineBannerContainer } from '@features/dashboard/components/RoutineBanner'
 import { ScoreContainer } from '@features/dashboard/components/ScoreContainer'
-import { SectionHeader } from '@features/dashboard/components/SectionHeader'
+import { SectionHeader } from '@shared/components/SectionHeader'
 import {
   useMealEntries,
   useSleepEntries,

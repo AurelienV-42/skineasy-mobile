@@ -2,7 +2,7 @@ import { ChevronRight, UtensilsCrossed } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { ImageBackground, Text, View } from 'react-native'
 
-import { SectionHeader } from '@features/dashboard/components/SectionHeader'
+import { SectionHeader } from '@shared/components/SectionHeader'
 import { Button } from '@shared/components/Button'
 
 // Placeholder recipe data
