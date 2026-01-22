@@ -193,7 +193,9 @@
       "saveError": "Échec de l'enregistrement du repas",
       "deleteSuccess": "Repas supprimé",
       "deleteError": "Échec de la suppression du repas",
-      "uploadError": "Échec du téléchargement de l'image"
+      "uploadError": "Échec du téléchargement de l'image",
+      "listTitle": "Alimentation",
+      "empty": "Entre tes données"
     },
     "sport": {
       "title": "Exercice physique",

@@ -39,7 +39,7 @@ export function IndicatorsList({
       : '-'
 
   const mealCount = mealEntries.length
-  const mealValue = mealCount > 0 ? `${mealCount}/5` : '-'
+  const mealValue = mealCount > 0 ? `${mealCount}/4` : '-'
 
   const totalSportMinutes = sportEntries.reduce((acc, entry) => acc + (entry.duration || 0), 0)
   const sportValue = totalSportMinutes > 0 ? `${totalSportMinutes} min` : '-'

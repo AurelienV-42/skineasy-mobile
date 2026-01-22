@@ -30,6 +30,7 @@ import { Alert, Image, Text, View } from 'react-native'
 
 import {
   useCreateMeal,
+  useDeleteMeal,
   useMealEntries,
   useUpdateMeal,
   useUploadMealImage,
@@ -54,10 +55,11 @@ const MEAL_TYPES = [
 export default function NutritionScreen() {
   const { t } = useTranslation()
   const router = useRouter()
-  const params = useLocalSearchParams<{ id?: string; date?: string }>()
+  const params = useLocalSearchParams<{ id?: string; date?: string; mealType?: string }>()
   const uploadImage = useUploadMealImage()
   const createMeal = useCreateMeal()
   const updateMeal = useUpdateMeal()
+  const deleteMeal = useDeleteMeal()
 
   // If editing, fetch existing entry
   const dateToUse = params.date || getTodayUTC()
@@ -91,7 +93,7 @@ export default function NutritionScreen() {
     mode: 'onChange',
   })
 
-  // Populate form when editing
+  // Populate form when editing or with pre-selected meal type
   useEffect(() => {
     if (existingEntry) {
       reset({
@@ -99,8 +101,14 @@ export default function NutritionScreen() {
         note: existingEntry.note || '',
         meal_type: existingEntry.meal_type || undefined,
       })
+    } else if (params.mealType) {
+      reset({
+        food_name: '',
+        note: '',
+        meal_type: params.mealType as 'breakfast' | 'lunch' | 'dinner' | 'snack',
+      })
     }
-  }, [existingEntry, reset])
+  }, [existingEntry, params.mealType, reset])
 
   const handlePickImage = async () => {
     const uri = await pickImageFromGallery(() => {
@@ -167,6 +175,24 @@ export default function NutritionScreen() {
   }
 
   const isLoading = uploadImage.isPending || createMeal.isPending || updateMeal.isPending
+
+  const handleDelete = (): void => {
+    if (!existingEntry) return
+
+    Alert.alert(t('common.deleteConfirmTitle'), t('common.deleteConfirmMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('common.delete'),
+        style: 'destructive',
+        onPress: () => {
+          deleteMeal.mutate(
+            { id: existingEntry.id, date: dateToUse },
+            { onSuccess: () => router.back() }
+          )
+        },
+      },
+    ])
+  }
 
   return (
     <ScreenHeader
@@ -309,12 +335,26 @@ export default function NutritionScreen() {
       </View>
 
       {/* Save Button */}
-      <Button
-        title={t('common.save')}
-        onPress={handleSubmit(onSubmit)}
-        disabled={!isValid || isLoading}
-        loading={isLoading}
-      />
+      <View>
+        <Button
+          title={t('common.save')}
+          onPress={handleSubmit(onSubmit)}
+          disabled={!isValid || isLoading}
+          loading={isLoading}
+        />
+
+        {/* Delete Button (only when editing) */}
+        {existingEntry && (
+          <Button
+            title={t('common.delete')}
+            variant="outline"
+            onPress={handleDelete}
+            disabled={deleteMeal.isPending}
+            loading={deleteMeal.isPending}
+            className="mt-4"
+          />
+        )}
+      </View>
     </ScreenHeader>
   )
 }

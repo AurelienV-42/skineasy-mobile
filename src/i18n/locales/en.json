@@ -192,7 +192,9 @@
       "saveError": "Failed to save meal",
       "deleteSuccess": "Meal deleted",
       "deleteError": "Failed to delete meal",
-      "uploadError": "Failed to upload image"
+      "uploadError": "Failed to upload image",
+      "listTitle": "Nutrition",
+      "empty": "Enter your data"
     },
     "sport": {
       "title": "Physical Exercise",
