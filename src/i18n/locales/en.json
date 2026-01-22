@@ -129,7 +129,10 @@
       "cycle": "Cycle",
       "excellent": "Excellent",
       "neutral": "Neutral",
-      "lutealPhase": "Luteal phase"
+      "lutealPhase": "Luteal phase",
+      "enterData": "Enter your data",
+      "mealsEntered_one": "{{count}} meal entered",
+      "mealsEntered_other": "{{count}} meals entered"
     },
     "score": {
       "label": "Score"

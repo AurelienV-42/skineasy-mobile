@@ -6,6 +6,8 @@ import { Dimensions, View } from 'react-native'
 import { IndicatorCard } from '@features/dashboard/components/IndicatorCard'
 import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
 
+type IndicatorStatus = 'empty' | 'partial' | 'complete'
+
 const SCREEN_WIDTH = Dimensions.get('window').width
 const HORIZONTAL_PADDING = 16
 const GAP = 8
@@ -29,7 +31,6 @@ export function IndicatorsList({
 
   // Calculate values from entries
   const sleepHours = sleepEntries.length > 0 ? sleepEntries[0].hours : 0
-  const sleepQuality = sleepEntries.length > 0 ? sleepEntries[0].quality : 0
   const sleepValue =
     sleepHours > 0
       ? `${Math.floor(sleepHours)}h${Math.round((sleepHours % 1) * 60)
@@ -52,6 +53,18 @@ export function IndicatorsList({
     router.push({ pathname: paths[type], params: { date } })
   }
 
+  // Compute status for each card
+  const sleepStatus: IndicatorStatus = sleepEntries.length > 0 ? 'complete' : 'empty'
+  const nutritionStatus: IndicatorStatus =
+    mealCount >= 3 ? 'complete' : mealCount > 0 ? 'partial' : 'empty'
+  const sportStatus: IndicatorStatus = sportEntries.length > 0 ? 'complete' : 'empty'
+
+  // Display value for nutrition partial state
+  const nutritionValue =
+    nutritionStatus === 'partial'
+      ? t('dashboard.indicators.mealsEntered', { count: mealCount })
+      : mealValue
+
   return (
     <View className="px-4 gap-2">
       {/* Top row: Sleep + Nutrition */}
@@ -61,19 +74,17 @@ export function IndicatorsList({
             icon={Moon}
             label={t('dashboard.indicators.sleep')}
             value={sleepValue}
-            visualType="segments"
-            visualData={sleepQuality > 0 ? [sleepQuality * 20, 100 - sleepQuality * 20] : [0, 100]}
             onPress={() => navigateToJournal('sleep')}
+            status={sleepStatus}
           />
         </View>
         <View style={{ width: CARD_WIDTH }}>
           <IndicatorCard
             icon={Utensils}
             label={t('dashboard.indicators.nutrition')}
-            value={mealValue}
-            visualType="stars"
-            visualData={mealCount}
+            value={nutritionValue}
             onPress={() => navigateToJournal('nutrition')}
+            status={nutritionStatus}
           />
         </View>
       </View>
@@ -85,9 +96,8 @@ export function IndicatorsList({
             icon={Dumbbell}
             label={t('dashboard.indicators.sport')}
             value={sportValue}
-            visualType="progress"
-            visualData={Math.min((totalSportMinutes / 30) * 100, 100)}
             onPress={() => navigateToJournal('sport')}
+            status={sportStatus}
           />
         </View>
         {/* Empty spacer for equal width */}

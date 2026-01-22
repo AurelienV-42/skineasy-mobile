@@ -1,53 +1,98 @@
-import type { LucideIcon } from 'lucide-react-native'
+import { ChevronRight, type LucideIcon } from 'lucide-react-native'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated'
 
 import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
 
-type VisualType = 'bars' | 'progress' | 'stars' | 'segments'
+type IndicatorStatus = 'empty' | 'partial' | 'complete'
 
 interface IndicatorCardProps {
   icon: LucideIcon
   label: string
   value: string
-  visualType: VisualType
-  visualData?: number[] | number
   onPress?: () => void
   disabled?: boolean
+  status: IndicatorStatus
+}
+
+const STATUS_COLORS: Record<IndicatorStatus, string> = {
+  empty: colors.textMuted,
+  partial: colors.warning,
+  complete: colors.success,
+}
+
+function StatusDot({ status }: { status: IndicatorStatus }): React.ReactElement {
+  const scale = useSharedValue(1)
+
+  useEffect(() => {
+    if (status === 'empty' || status === 'partial') {
+      scale.value = withRepeat(
+        withSequence(withTiming(1.3, { duration: 800 }), withTiming(1, { duration: 800 })),
+        -1
+      )
+    } else {
+      scale.value = 1
+    }
+  }, [status, scale])
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }))
+
+  return (
+    <Animated.View
+      style={[
+        { width: 8, height: 8, borderRadius: 4, backgroundColor: STATUS_COLORS[status] },
+        animatedStyle,
+      ]}
+    />
+  )
 }
 
 export function IndicatorCard({
   icon: Icon,
   label,
   value,
-  visualType,
-  visualData,
   onPress,
   disabled = false,
+  status,
 }: IndicatorCardProps): React.ReactElement {
+  const { t } = useTranslation()
+  const isEmpty = status === 'empty'
+
   const content = (
-    <View className="p-3 gap-4 bg-surface rounded-xl shadow-sm">
-      {/* Top row: Icon + Label + Dots */}
-      <View className="flex-row justify-between items-center">
+    <View className="p-3.5 gap-5 bg-surface rounded-xl shadow-sm">
+      {/* Top row: Icon + Label + Status Dot */}
+      <View className="flex-row justify-between items-center pr-1">
         <View className="flex-row items-center gap-1.5">
           <Icon size={20} color={colors.brownDark} />
-          <Text className="text-sm font-semibold text-brown-dark">{label}</Text>
+          <Text className="font-semibold text-brown-dark">{label}</Text>
         </View>
-        <View className="flex-row items-center gap-0.5">
-          {[0, 1, 2, 3, 4].map((i) => (
-            <View
-              key={i}
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ backgroundColor: i < 3 ? colors.primary : colors.border }}
-            />
-          ))}
-        </View>
+        <StatusDot status={status} />
       </View>
 
-      {/* Bottom row: Value + Visual */}
+      {/* Bottom row: Value or Empty state */}
       <View className="flex-row justify-between items-end">
-        <Text className="text-lg font-bold text-text">{value}</Text>
-        <View className="flex-1 items-end ml-2">{renderVisual(visualType, visualData)}</View>
+        {isEmpty ? (
+          <>
+            <Text className="text-base text-text-muted">{t('dashboard.indicators.enterData')}</Text>
+            <ChevronRight size={20} color={colors.textMuted} />
+          </>
+        ) : (
+          <>
+            <View className="flex-1" />
+            <Text className="text-2xl font-bold text-text">{value}</Text>
+          </>
+        )}
       </View>
     </View>
   )
@@ -61,86 +106,4 @@ export function IndicatorCard({
   }
 
   return content
-}
-
-function renderVisual(type: VisualType, data?: number[] | number): React.ReactElement {
-  switch (type) {
-    case 'bars':
-      return <BarChart data={data as number[] | undefined} />
-    case 'progress':
-      return <ProgressBar value={data as number | undefined} />
-    case 'stars':
-      return <StarRating value={data as number | undefined} />
-    case 'segments':
-      return <SegmentBar data={data as number[] | undefined} />
-    default:
-      return <View />
-  }
-}
-
-function BarChart({ data = [1, 2, 3, 4, 5] }: { data?: number[] }): React.ReactElement {
-  const maxHeight = 40
-  const maxValue = Math.max(...data, 1)
-
-  return (
-    <View className="flex-row items-end gap-1" style={{ height: maxHeight }}>
-      {data.map((val, i) => (
-        <View
-          key={i}
-          className="w-2 rounded"
-          style={{
-            height: (val / maxValue) * maxHeight,
-            backgroundColor: i === data.length - 1 ? colors.primary : `${colors.text}20`,
-          }}
-        />
-      ))}
-    </View>
-  )
-}
-
-function ProgressBar({ value = 0 }: { value?: number }): React.ReactElement {
-  const percentage = Math.min(Math.max(value, 0), 100)
-
-  return (
-    <View className="w-20">
-      <View className="h-2 bg-text/10 rounded overflow-hidden">
-        <View className="h-full bg-primary rounded" style={{ width: `${percentage}%` }} />
-      </View>
-    </View>
-  )
-}
-
-function StarRating({ value = 0 }: { value?: number }): React.ReactElement {
-  const stars = Math.min(Math.max(Math.round(value), 0), 5)
-
-  return (
-    <View className="flex-row gap-0.5">
-      {[0, 1, 2, 3, 4].map((i) => (
-        <View
-          key={i}
-          className="w-3 h-3 rounded-sm"
-          style={{ backgroundColor: i < stars ? colors.warning : `${colors.text}20` }}
-        />
-      ))}
-    </View>
-  )
-}
-
-function SegmentBar({ data = [30, 20, 30, 20] }: { data?: number[] }): React.ReactElement {
-  const segmentColors = [colors.error, colors.primary, `${colors.text}40`, `${colors.text}20`]
-
-  return (
-    <View className="flex-row h-2 rounded overflow-hidden w-20">
-      {data.map((width, i) => (
-        <View
-          key={i}
-          className="h-full"
-          style={{
-            flex: width,
-            backgroundColor: segmentColors[i % segmentColors.length],
-          }}
-        />
-      ))}
-    </View>
-  )
 }
