@@ -19,7 +19,12 @@ import { ArrowLeft } from 'lucide-react-native'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { View } from 'react-native'
-import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
+import Animated, {
+  FadeInLeft,
+  FadeInRight,
+  FadeOutLeft,
+  FadeOutRight,
+} from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const TOTAL_STEPS = 5
@@ -28,6 +33,7 @@ export default function RegisterScreen() {
   const router = useRouter()
   const { mutate: register, isPending } = useRegister()
   const [currentStep, setCurrentStep] = useState(1)
+  const [direction, setDirection] = useState<'forward' | 'back'>('forward')
 
   const {
     control,
@@ -82,17 +88,24 @@ export default function RegisterScreen() {
   const handleNext = async () => {
     const isValid = await validateStep(currentStep)
     if (isValid && currentStep < TOTAL_STEPS) {
+      setDirection('forward')
       setCurrentStep((prev) => prev + 1)
     }
   }
 
   const handleBack = () => {
     if (currentStep > 1) {
+      setDirection('back')
       setCurrentStep((prev) => prev - 1)
     } else {
       router.back()
     }
   }
+
+  const enteringAnim =
+    direction === 'forward' ? FadeInRight.duration(300) : FadeInLeft.duration(300)
+  const exitingAnim =
+    direction === 'forward' ? FadeOutLeft.duration(300) : FadeOutRight.duration(300)
 
   const onSubmit = (data: RegisterInput) => {
     register(data, {
@@ -115,12 +128,7 @@ export default function RegisterScreen() {
   // Step 3 has its own full-screen background (handles SafeAreaView internally)
   if (currentStep === 3) {
     return (
-      <Animated.View
-        key="step3"
-        entering={FadeInRight.duration(300)}
-        exiting={FadeOutLeft.duration(300)}
-        className="flex-1"
-      >
+      <Animated.View key="step3" entering={enteringAnim} exiting={exitingAnim} className="flex-1">
         <Step3HealthSync onNext={handleNext} onSkip={handleNext} onBack={handleBack} />
       </Animated.View>
     )
@@ -129,12 +137,7 @@ export default function RegisterScreen() {
   // Step 5 has its own full-screen background (handles SafeAreaView internally)
   if (currentStep === 5) {
     return (
-      <Animated.View
-        key="step5"
-        entering={FadeInRight.duration(300)}
-        exiting={FadeOutLeft.duration(300)}
-        className="flex-1"
-      >
+      <Animated.View key="step5" entering={enteringAnim} exiting={exitingAnim} className="flex-1">
         <Step5EmailVerification email={getValues('email')} />
       </Animated.View>
     )
@@ -160,8 +163,8 @@ export default function RegisterScreen() {
           {currentStep === 1 && (
             <Animated.View
               key="step1"
-              entering={FadeInRight.duration(300)}
-              exiting={FadeOutLeft.duration(300)}
+              entering={enteringAnim}
+              exiting={exitingAnim}
               className="flex-1"
             >
               <Step1Name
@@ -176,8 +179,8 @@ export default function RegisterScreen() {
           {currentStep === 2 && (
             <Animated.View
               key="step2"
-              entering={FadeInRight.duration(300)}
-              exiting={FadeOutLeft.duration(300)}
+              entering={enteringAnim}
+              exiting={exitingAnim}
               className="flex-1"
             >
               <Step2AboutYou
@@ -192,8 +195,8 @@ export default function RegisterScreen() {
           {currentStep === 4 && (
             <Animated.View
               key="step4"
-              entering={FadeInRight.duration(300)}
-              exiting={FadeOutLeft.duration(300)}
+              entering={enteringAnim}
+              exiting={exitingAnim}
               className="flex-1"
             >
               <Step4Credentials
