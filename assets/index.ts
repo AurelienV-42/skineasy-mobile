@@ -4,6 +4,7 @@ const assets = {
   ChocolatesBold: require('./fonts/ChocolatesBold.otf'),
   ChocolatesMedium: require('./fonts/ChocolatesMedium.otf'),
   ChocolatesRegular: require('./fonts/ChocolatesRegular.otf'),
+  scoreSkin: require('./home/scoreSkin.png'),
   logo: require('./logo.png'),
   appleHealth: require('./onboarding/appleHealth.png'),
   skineasyLogo: require('./onboarding/skineasyLogo.png'),

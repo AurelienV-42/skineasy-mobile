@@ -10,14 +10,14 @@ interface SectionHeaderProps {
 
 export function SectionHeader({ icon: Icon, title }: SectionHeaderProps): React.ReactElement {
   return (
-    <View className="flex-row items-center gap-2 px-4 mb-3">
+    <View className="flex-row items-center gap-2 px-4 mb-5">
       <View
         className="p-2 rounded-md items-center justify-center border border-brown-dark/20"
         style={{ backgroundColor: colors.brownDark + '10' }}
       >
         <Icon size={16} color={colors.primary} strokeWidth={2.5} />
       </View>
-      <Text className="text-base font-semibold" style={{ color: colors.text }}>
+      <Text className="text-base text-brown-dark font-semibold" style={{ color: colors.text }}>
         {title}
       </Text>
     </View>

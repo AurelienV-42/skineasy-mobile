@@ -28,15 +28,15 @@ export function RecipeOfTheDay(): React.ReactElement {
       <View className="px-4">
         <ImageBackground
           source={{ uri: PLACEHOLDER_RECIPE.imageUrl }}
-          className="h-56 rounded-xl overflow-hidden justify-end"
+          className="h-48 rounded-xl overflow-hidden"
           imageStyle={{ borderRadius: 20 }}
           resizeMode="cover"
         >
           {/* Dark overlay gradient */}
-          <View className="absolute inset-0 bg-black/35 rounded-xl" />
+          <View className="absolute inset-0 bg-black/40 rounded-xl" />
 
           {/* Content */}
-          <View className="p-4 gap-3">
+          <View className="p-5 justify-between flex-1 gap-3">
             <View className="gap-1">
               <Text className="text-xl font-bold text-surface">{PLACEHOLDER_RECIPE.name}</Text>
               <Text className="text-sm text-surface opacity-90 leading-5" numberOfLines={2}>

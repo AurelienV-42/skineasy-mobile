@@ -26,7 +26,7 @@ export function IndicatorCard({
   disabled = false,
 }: IndicatorCardProps): React.ReactElement {
   const content = (
-    <View className="flex-1 p-3 gap-4 bg-surface rounded-xl shadow-sm">
+    <View className="p-3 gap-4 bg-surface rounded-xl shadow-sm">
       {/* Top row: Icon + Label + Dots */}
       <View className="flex-row justify-between items-center">
         <View className="flex-row items-center gap-1.5">
@@ -54,13 +54,13 @@ export function IndicatorCard({
 
   if (onPress && !disabled) {
     return (
-      <Pressable onPress={onPress} haptic="light" className="flex-1">
+      <Pressable onPress={onPress} haptic="light">
         {content}
       </Pressable>
     )
   }
 
-  return <View className="flex-1">{content}</View>
+  return content
 }
 
 function renderVisual(type: VisualType, data?: number[] | number): React.ReactElement {
