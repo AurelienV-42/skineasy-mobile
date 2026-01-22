@@ -10,7 +10,7 @@
 import { Search, X } from 'lucide-react-native'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, FlatList, Text, TextInput, View } from 'react-native'
+import { ActivityIndicator, ScrollView, Text, TextInput, View } from 'react-native'
 
 import { useSportTypes } from '@features/journal/hooks/useJournal'
 import { enrichSportTypes } from '@features/journal/utils/sportMapping'
@@ -155,29 +155,27 @@ export function SportTypeSelector({ value, onChange }: SportTypeSelectorProps) {
           </View>
 
           {/* Sport Types List */}
-          <FlatList
-            data={filteredSportTypes}
-            keyExtractor={(item) => item.id}
-            nestedScrollEnabled
-            renderItem={({ item }) => (
-              <Pressable
-                onPress={() => handleSelect(item.id)}
-                haptic="light"
-                className="flex-row items-center justify-between py-3 border-b border-border"
-              >
-                <Text className="text-base text-text">{item.label}</Text>
-                {value === item.id && <View className="w-2 h-2 rounded-full bg-primary" />}
-              </Pressable>
-            )}
-            ListEmptyComponent={
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {filteredSportTypes.length === 0 ? (
               <View className="py-8">
                 <Text className="text-center text-textMuted">
                   {t('journal.sport.noActivitiesFound')}
                 </Text>
               </View>
-            }
-            showsVerticalScrollIndicator={false}
-          />
+            ) : (
+              filteredSportTypes.map((item) => (
+                <Pressable
+                  key={item.id}
+                  onPress={() => handleSelect(item.id)}
+                  haptic="light"
+                  className="flex-row items-center justify-between py-3 border-b border-border"
+                >
+                  <Text className="text-base text-text">{item.label}</Text>
+                  {value === item.id && <View className="w-2 h-2 rounded-full bg-primary" />}
+                </Pressable>
+              ))
+            )}
+          </ScrollView>
         </View>
       </BottomSheet>
     </View>

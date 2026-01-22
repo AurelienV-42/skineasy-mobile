@@ -5,7 +5,10 @@ const KEYS = {
   ACCESS_TOKEN: 'access_token',
   REFRESH_TOKEN: 'refresh_token',
   LOCALE: 'locale',
+  SPORT_GOAL_MINUTES: 'sport_goal_minutes',
 } as const
+
+const DEFAULT_SPORT_GOAL_MINUTES = 120 // 2 hours
 
 export async function getToken(): Promise<string | null> {
   try {
@@ -53,4 +56,17 @@ export async function getLocale(): Promise<string | null> {
 
 export async function setLocale(locale: string): Promise<void> {
   await AsyncStorage.setItem(KEYS.LOCALE, locale)
+}
+
+export async function getSportGoal(): Promise<number> {
+  try {
+    const value = await AsyncStorage.getItem(KEYS.SPORT_GOAL_MINUTES)
+    return value ? Number(value) : DEFAULT_SPORT_GOAL_MINUTES
+  } catch {
+    return DEFAULT_SPORT_GOAL_MINUTES
+  }
+}
+
+export async function setSportGoal(minutes: number): Promise<void> {
+  await AsyncStorage.setItem(KEYS.SPORT_GOAL_MINUTES, String(minutes))
 }

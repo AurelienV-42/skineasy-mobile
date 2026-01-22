@@ -197,6 +197,10 @@
     "sport": {
       "title": "Physical Exercise",
       "screenTitle": "Physical Exercise",
+      "listTitle": "Activities",
+      "time": "Time",
+      "goalFormat": "/ {{hours}} hours",
+      "add": "Add",
       "addActivity": "Activity Type",
       "selectActivity": "Select Activity",
       "moreActivities": "More activities...",

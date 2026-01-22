@@ -198,6 +198,10 @@
     "sport": {
       "title": "Exercice physique",
       "screenTitle": "Exercice physique",
+      "listTitle": "Activités",
+      "time": "Temps",
+      "goalFormat": "/ {{hours}} heures",
+      "add": "Ajouter",
       "addActivity": "Type d'activité",
       "selectActivity": "Sélectionner une activité",
       "moreActivities": "Plus d'activités...",

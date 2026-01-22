@@ -15,11 +15,12 @@ import { Dumbbell, Flame, MessageSquare, PersonStanding, Timer } from 'lucide-re
 import { useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { Alert, Text, View } from 'react-native'
 
 import { SportTypeSelector } from '@features/journal/components/SportTypeSelector'
 import {
   useCreateSport,
+  useDeleteSport,
   useSportEntries,
   useSportTypes,
   useUpdateSport,
@@ -43,6 +44,7 @@ export default function SportScreen() {
   const params = useLocalSearchParams<{ id?: string; date?: string }>()
   const createSport = useCreateSport()
   const updateSport = useUpdateSport()
+  const deleteSport = useDeleteSport()
   const { data: sportTypes } = useSportTypes()
 
   // If editing, fetch existing entry
@@ -134,6 +136,24 @@ export default function SportScreen() {
       t('journal.sport.intensity.veryHard'),
     ]
     return labels[level - 1] || ''
+  }
+
+  const handleDelete = (): void => {
+    if (!existingEntry) return
+
+    Alert.alert(t('common.deleteConfirmTitle'), t('common.deleteConfirmMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('common.delete'),
+        style: 'destructive',
+        onPress: () => {
+          deleteSport.mutate(
+            { id: existingEntry.id, date: dateToUse },
+            { onSuccess: () => router.back() }
+          )
+        },
+      },
+    ])
   }
 
   return (
@@ -236,12 +256,26 @@ export default function SportScreen() {
       </View>
 
       {/* Save Button */}
-      <Button
-        title={t('common.save')}
-        onPress={handleSubmit(onSubmit)}
-        disabled={!isValid || createSport.isPending || updateSport.isPending}
-        loading={createSport.isPending || updateSport.isPending}
-      />
+      <View>
+        <Button
+          title={t('common.save')}
+          onPress={handleSubmit(onSubmit)}
+          disabled={!isValid || createSport.isPending || updateSport.isPending}
+          loading={createSport.isPending || updateSport.isPending}
+        />
+
+        {/* Delete Button (only when editing) */}
+        {existingEntry && (
+          <Button
+            title={t('common.delete')}
+            variant="outline"
+            onPress={handleDelete}
+            disabled={deleteSport.isPending}
+            loading={deleteSport.isPending}
+            className="mt-4"
+          />
+        )}
+      </View>
     </ScreenHeader>
   )
 }
