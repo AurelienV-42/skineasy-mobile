@@ -82,14 +82,14 @@ export default function DashboardScreen(): React.ReactElement {
             />
           </Animated.View>
 
-          {/* Routine Banner */}
-          <Animated.View style={animStyles[4]}>
-            <RoutineBannerContainer onPress={() => router.push('/routine')} />
-          </Animated.View>
-
           {/* Recipe of the Day */}
           <Animated.View style={animStyles[5]}>
             <RecipeOfTheDay />
+          </Animated.View>
+
+          {/* Routine Banner */}
+          <Animated.View style={animStyles[4]}>
+            <RoutineBannerContainer />
           </Animated.View>
         </View>
       </ScrollView>

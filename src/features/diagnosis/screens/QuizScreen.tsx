@@ -14,6 +14,7 @@ import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
 import { useUserStore } from '@shared/stores/user.store'
 import { haptic } from '@shared/utils/haptic'
 import { logger } from '@shared/utils/logger'
+import { routineStorage } from '@shared/utils/routineStorage'
 import { colors } from '@theme/colors'
 
 const TYPEFORM_BASE_URL = 'https://form.typeform.com/to/XOEB81yk'
@@ -37,7 +38,7 @@ export default function QuizScreen() {
 
   // Handle completion with rspid
   const handleCompletionWithRspid = useCallback(
-    (rspid: string) => {
+    async (rspid: string) => {
       if (isCompleted) return
       setIsCompleted(true)
       haptic.success()
@@ -46,6 +47,11 @@ export default function QuizScreen() {
 
       // Invalidate diagnosis queries to refresh data
       queryClient.invalidateQueries({ queryKey: queryKeys.diagnosis })
+
+      // Save routineReadyAt for tomorrow 9am
+      const readyAt = routineStorage.getNextMorning9am()
+      await routineStorage.setReadyAt(readyAt)
+      logger.info('[QuizScreen] Routine ready at:', readyAt.toISOString())
 
       // Update user store with rspid (also sets routineStatus to 'processing')
       setRspid(rspid)
@@ -88,7 +94,7 @@ export default function QuizScreen() {
   // Handle close button press with confirmation
   const handleClose = useCallback(() => {
     if (isCompleted) {
-      router.back()
+      router.replace('/')
       return
     }
 
@@ -103,7 +109,7 @@ export default function QuizScreen() {
         style: 'destructive',
         onPress: () => {
           haptic.medium()
-          router.back()
+          router.replace('/')
         },
       },
     ])

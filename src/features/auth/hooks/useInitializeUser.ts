@@ -2,10 +2,12 @@ import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import { authService } from '@features/auth/services/auth.service'
+import { routineService } from '@features/routine/services/routine.service'
+import { queryKeys } from '@shared/config/queryKeys'
 import { useAuthStore } from '@shared/stores/auth.store'
 import { useUserStore } from '@shared/stores/user.store'
-import { queryKeys } from '@shared/config/queryKeys'
 import { logger } from '@shared/utils/logger'
+import { routineStorage } from '@shared/utils/routineStorage'
 
 /**
  * Hook to initialize user data on app start
@@ -16,6 +18,7 @@ export function useInitializeUser() {
   const isAuthLoading = useAuthStore((state) => state.isLoading)
   const setUser = useUserStore((state) => state.setUser)
   const clearUser = useUserStore((state) => state.clearUser)
+  const setRoutineStatus = useUserStore((state) => state.setRoutineStatus)
   const user = useUserStore((state) => state.user)
 
   logger.info('[useInitializeUser] Hook state:', {
@@ -36,6 +39,28 @@ export function useInitializeUser() {
     enabled: isAuthenticated && !isAuthLoading,
     retry: 1,
     staleTime: Infinity, // User data doesn't change often
+  })
+
+  // Fetch routine to determine status
+  const { data: routineData, isLoading: isRoutineLoading } = useQuery({
+    queryKey: queryKeys.routineLast(),
+    queryFn: async () => {
+      logger.info('[useInitializeUser] Fetching routine from /routine/last')
+      try {
+        const result = await routineService.getLastRoutine()
+        logger.info('[useInitializeUser] /routine/last response:', result)
+        return result
+      } catch (err) {
+        // 404 means no routine exists - return null instead of throwing
+        if (err instanceof Error && err.message.includes('404')) {
+          logger.info('[useInitializeUser] No routine found (404)')
+          return null
+        }
+        throw err
+      }
+    },
+    enabled: isAuthenticated && !isAuthLoading,
+    staleTime: 5 * 60 * 1000,
   })
 
   logger.info('[useInitializeUser] Query state:', {
@@ -61,8 +86,33 @@ export function useInitializeUser() {
     }
   }, [error, clearUser])
 
+  // Sync routine status to store
+  useEffect(() => {
+    async function syncRoutineStatus(): Promise<void> {
+      if (isRoutineLoading || !isAuthenticated) return
+
+      if (!routineData) {
+        logger.info('[useInitializeUser] No routine, setting status to none')
+        setRoutineStatus('none')
+        return
+      }
+
+      // Routine exists - check if ready time has passed
+      const readyAt = await routineStorage.getReadyAt()
+      if (readyAt && new Date() < readyAt) {
+        logger.info('[useInitializeUser] Routine processing until:', readyAt)
+        setRoutineStatus('processing')
+      } else {
+        logger.info('[useInitializeUser] Routine ready')
+        setRoutineStatus('ready')
+        await routineStorage.clear() // Clean up
+      }
+    }
+    syncRoutineStatus()
+  }, [routineData, isRoutineLoading, isAuthenticated, setRoutineStatus])
+
   return {
-    isLoading: isAuthLoading || isLoading,
+    isLoading: isAuthLoading || isLoading || isRoutineLoading,
     error,
   }
 }

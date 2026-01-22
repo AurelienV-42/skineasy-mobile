@@ -30,7 +30,7 @@ function ProductCarouselItem({ category, productName, imageUrl }: ProductCarouse
   return (
     <View className="w-24 mr-3 items-center">
       {/* Product Image */}
-      <View className="w-20 h-20 rounded-xl bg-white border border-border overflow-hidden mb-2">
+      <View className="w-20 h-20 rounded-xl bg-background border border-border overflow-hidden mb-2">
         {imageUrl ? (
           <Image source={{ uri: imageUrl }} className="w-full h-full" resizeMode="cover" />
         ) : (

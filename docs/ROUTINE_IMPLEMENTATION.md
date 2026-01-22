@@ -23,24 +23,47 @@ The Routine Results Screen is the **core value proposition** of SkinEasy. It dis
 ```
 src/features/routine/
 ├── components/
-│   ├── ProcessingBanner.tsx        # Dashboard banner (processing state)
-│   ├── ViewRoutineBanner.tsx       # Dashboard banner (ready state)
-│   └── RoutineBannerContainer.tsx  # Banner state manager
+│   ├── RoutineProcessingState.tsx  # Full-screen processing state with animated clock
+│   ├── RoutineLoadingState.tsx     # Loading spinner
+│   ├── RoutineErrorState.tsx       # Error display
+│   ├── RoutineEmptyState.tsx       # No routine state
+│   ├── RoutineToggle.tsx           # Morning/Evening toggle
+│   ├── RoutineStepCard.tsx         # Step card with product
+│   └── RoutineSummaryCard.tsx      # Skin profile summary
 ├── hooks/
-│   └── useRoutineByRspid.ts        # Fetch routine by response ID
+│   ├── useRoutine.ts               # Fetch routine from /routine/last
+│   ├── useRoutineByRspid.ts        # Fetch routine by response ID (web embed)
+│   └── useTodayRoutine.ts          # Get today's schedule
 ├── screens/
-│   └── RoutineResultsScreen.tsx    # Results display (needs refactor)
-└── services/
-    └── routine.service.ts          # API service
+│   └── RoutineResultsScreen.tsx    # Results display
+├── services/
+│   └── routine.service.ts          # API service
+└── types/
+    └── routine.types.ts            # Full API types
+
+src/features/dashboard/components/
+└── RoutineBanner.tsx               # Dashboard banner (handles none/ready states)
 ```
 
-### Current Limitations
+### Routine Tab States
 
-| Issue              | Description                                  |
-| ------------------ | -------------------------------------------- |
-| Single file        | All components in `RoutineResultsScreen.tsx` |
-| Limited types      | Only basic `RoutineProduct` type             |
-| No `/routine/last` | Only uses `/routine/{rspid}` endpoint        |
+The routine tab (`app/(tabs)/routine.tsx`) handles 3 states:
+
+| State        | Behavior                                            |
+| ------------ | --------------------------------------------------- |
+| `none`       | Shows alert message, redirects to `/diagnosis/quiz` |
+| `processing` | Shows `RoutineProcessingState` with animated clock  |
+| `ready`      | Shows `RoutineResultsScreen` with full routine      |
+
+### Dashboard Banner States
+
+The dashboard `RoutineBannerContainer` handles states:
+
+| State        | Behavior                     |
+| ------------ | ---------------------------- |
+| `none`       | Shows quiz CTA banner        |
+| `processing` | Returns `null` (hidden)      |
+| `ready`      | Shows "routine ready" banner |
 
 ---
 
@@ -128,30 +151,31 @@ src/features/routine/
 | 13   | Haptics    | Light haptic on toggle        |
 | 14   | Testing    | Test iOS/Android/Web          |
 
-### 2.5 New File Structure (After MVP)
+### 2.5 Current File Structure
 
 ```
 src/features/routine/
 ├── components/
 │   ├── RoutineToggle.tsx           # Morning/Evening toggle
 │   ├── RoutineStepCard.tsx         # Step with product
-│   ├── RoutineSummaryCard.tsx      # Skin profile summary (Phase 5)
+│   ├── RoutineSummaryCard.tsx      # Skin profile summary
 │   ├── RoutineLoadingState.tsx     # Loading spinner
 │   ├── RoutineErrorState.tsx       # Error display
 │   ├── RoutineEmptyState.tsx       # No routine state
-│   ├── ProcessingBanner.tsx        # Existing
-│   ├── ViewRoutineBanner.tsx       # Existing
-│   └── RoutineBannerContainer.tsx  # Existing
+│   └── RoutineProcessingState.tsx  # Full-screen processing with animated clock
 ├── hooks/
-│   ├── useRoutine.ts               # NEW: Full routine from /routine/last
-│   ├── useRoutineByRspid.ts        # Existing (for web embed)
-│   └── useTodayRoutine.ts          # NEW: Get today's schedule
+│   ├── useRoutine.ts               # Full routine from /routine/last
+│   ├── useRoutineByRspid.ts        # For web embed
+│   └── useTodayRoutine.ts          # Get today's schedule
 ├── screens/
-│   └── RoutineResultsScreen.tsx    # Refactored as orchestrator
+│   └── RoutineResultsScreen.tsx    # Results orchestrator
 ├── services/
-│   └── routine.service.ts          # Updated with getLastRoutine()
+│   └── routine.service.ts          # API service
 └── types/
-    └── routine.types.ts            # NEW: Full API types
+    └── routine.types.ts            # Full API types
+
+src/features/dashboard/components/
+└── RoutineBanner.tsx               # Dashboard banner (quiz/ready states)
 ```
 
 ---
