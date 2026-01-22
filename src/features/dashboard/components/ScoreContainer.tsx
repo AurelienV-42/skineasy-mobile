@@ -50,7 +50,7 @@ export function ScoreContainer({ score, onPlusPress }: ScoreContainerProps): Rea
           />
           {/* Score text centered in the arc */}
           <View className="absolute items-center" style={{ top: SIZE * 0.25 }}>
-            <Text className="text-base font-medium text-surface opacity-80 mb-1">
+            <Text className="text-base font-medium text-surface opacity-80">
               {t('dashboard.score.label')}
             </Text>
             <Text className="text-5xl font-bold text-surface">{score}</Text>

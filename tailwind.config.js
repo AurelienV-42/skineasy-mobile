@@ -40,6 +40,19 @@ module.exports = {
         medium: ['ChocolatesMedium'],
         bold: ['ChocolatesBold'],
       },
+      fontSize: {
+        // Override default font sizes to use 1.2 line height for Chocolates font
+        xs: ['0.75rem', { lineHeight: '0.9rem' }],
+        sm: ['0.875rem', { lineHeight: '1.05rem' }],
+        base: ['1rem', { lineHeight: '1.2rem' }],
+        lg: ['1.125rem', { lineHeight: '1.35rem' }],
+        xl: ['1.25rem', { lineHeight: '1.5rem' }],
+        '2xl': ['1.5rem', { lineHeight: '1.8rem' }],
+        '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
+        '4xl': ['2.25rem', { lineHeight: '2.7rem' }],
+        '5xl': ['3rem', { lineHeight: '3.6rem' }],
+        '6xl': ['3.75rem', { lineHeight: '4.5rem' }],
+      },
       spacing: {
         xs: '4px',
         sm: '8px',
