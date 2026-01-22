@@ -34,7 +34,7 @@ function ToggleButton({
       accessibilityLabel={label}
       accessibilityState={{ selected: isSelected }}
     >
-      <Icon size={20} color={isSelected ? colors.surface : colors.text} strokeWidth={2} />
+      <Icon size={20} color={isSelected ? colors.surface : colors.text} />
       <Text className={`ml-2 font-medium ${isSelected ? 'text-white' : 'text-text'}`}>{label}</Text>
       <View
         className={`ml-2 px-2 py-0.5 rounded-full ${isSelected ? 'bg-white/20' : 'bg-gray-100'}`}

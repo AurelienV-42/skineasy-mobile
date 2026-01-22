@@ -205,7 +205,7 @@ export default function NutritionScreen() {
               accessibilityLabel={t('journal.nutrition.takePhoto')}
               haptic="light"
             >
-              <Camera size={32} color={colors.primary} strokeWidth={2} />
+              <Camera size={32} color={colors.primary} />
               <Text className="text-sm text-textMuted mt-2">
                 {t('journal.nutrition.takePhoto')}
               </Text>
@@ -217,7 +217,7 @@ export default function NutritionScreen() {
               accessibilityLabel={t('journal.nutrition.gallery')}
               haptic="light"
             >
-              <ImageIcon size={32} color={colors.primary} strokeWidth={2} />
+              <ImageIcon size={32} color={colors.primary} />
               <Text className="text-sm text-textMuted mt-2">{t('journal.nutrition.gallery')}</Text>
             </Pressable>
           </View>

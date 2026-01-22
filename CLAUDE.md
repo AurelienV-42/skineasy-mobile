@@ -18,6 +18,7 @@ React Native (Expo) skincare app - iOS & Android
 2. **No barrel files** - Import from source directly, not index.ts re-exports
 3. **No backend errors in UI** - Use i18n keys, backend errors aren't translated
 4. **Date format** - API: `"2025-01-15T00:00:00.000Z"`, birthday only: `"YYYY-MM-DD"`
+5. **NativeWind only** - Always use `className` with Tailwind classes, never `StyleSheet.create()`. Exception: `Animated.View` and `GlassView` require `style` prop
 
 ### Haptic Intensity
 

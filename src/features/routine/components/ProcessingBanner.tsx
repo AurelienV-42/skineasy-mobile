@@ -91,7 +91,7 @@ export function ProcessingBanner({ onPress }: ProcessingBannerProps) {
           <View className="flex-row items-center flex-1">
             <View className="mr-4">
               <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
-                <Clock size={32} color={colors.surface} strokeWidth={2} />
+                <Clock size={32} color={colors.surface} />
               </Animated.View>
             </View>
             <View className="flex-1">

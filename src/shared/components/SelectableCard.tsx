@@ -24,7 +24,7 @@ export function SelectableCard({
 
   const content = (
     <View className="flex-row items-center gap-3">
-      {Icon && <Icon color={textColor} size={20} strokeWidth={2} />}
+      {Icon && <Icon color={textColor} size={20} />}
       <Text className={`font-semibold text-base ${selected ? 'text-primaryDark' : 'text-primary'}`}>
         {label}
       </Text>

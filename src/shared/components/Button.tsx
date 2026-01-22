@@ -1,4 +1,5 @@
-import { Text, ActivityIndicator, PressableProps } from 'react-native'
+import type { LucideIcon } from 'lucide-react-native'
+import { ActivityIndicator, PressableProps, Text, View } from 'react-native'
 
 import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
@@ -14,6 +15,14 @@ interface ButtonProps extends Omit<PressableProps, 'children'> {
    * Haptic feedback level - defaults to 'heavy' for buttons (save/submit actions)
    */
   haptic?: HapticLevel
+  /**
+   * Icon component to render after the title
+   */
+  iconRight?: LucideIcon
+  /**
+   * Make button fit content width instead of full width
+   */
+  fitContent?: boolean
 }
 
 const variantStyles = {
@@ -41,14 +50,17 @@ export function Button({
   disabled,
   className,
   haptic = 'heavy', // Default to heavy for buttons (save/submit actions)
+  iconRight: IconRight,
+  fitContent = false,
   ...props
 }: ButtonProps) {
   const styles = variantStyles[variant]
   const isDisabled = disabled || loading
+  const iconColor = variant === 'primary' ? colors.surface : colors.text
 
   return (
     <Pressable
-      className={`w-full h-14 rounded-xl items-center justify-center ${styles.container} ${
+      className={`${fitContent ? 'px-4' : 'w-full'} h-14 rounded-xl items-center justify-center flex-row gap-1 ${styles.container} ${
         isDisabled ? 'opacity-50' : ''
       } ${className || ''}`}
       style={{
@@ -65,7 +77,10 @@ export function Button({
       {loading ? (
         <ActivityIndicator color={variant === 'primary' ? colors.surface : colors.primary} />
       ) : (
-        <Text className={`text-base font-semibold ${styles.text}`}>{title}</Text>
+        <View className="flex-row items-center gap-1">
+          <Text className={`text-base font-semibold ${styles.text}`}>{title}</Text>
+          {IconRight && <IconRight size={18} color={iconColor} strokeWidth={2.5} />}
+        </View>
       )}
     </Pressable>
   )

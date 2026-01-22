@@ -53,7 +53,7 @@ export function QuizBanner({ onPress }: QuizBannerProps) {
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center flex-1">
             <View className="mr-4">
-              <Sparkles size={32} color="#FFFFFF" strokeWidth={2} />
+              <Sparkles size={32} color="#FFFFFF" />
             </View>
             <View className="flex-1">
               <Text className="text-lg font-bold text-white mb-1">{t('dashboard.quiz.title')}</Text>

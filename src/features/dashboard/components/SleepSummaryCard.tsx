@@ -90,7 +90,7 @@ export function SleepSummaryCard({
               className="flex-row items-center gap-4"
             >
               <View className="items-center">
-                <QualityIcon size={40} color={colors.primary} strokeWidth={2} />
+                <QualityIcon size={40} color={colors.primary} />
                 <Text className="text-xs text-textMuted mt-1">
                   {getQualityLabel(entry.quality)}
                 </Text>

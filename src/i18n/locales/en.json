@@ -87,7 +87,6 @@
     "createAccount": "Create Account"
   },
   "dashboard": {
-    "greeting": "Hello {{name}}",
     "today": "Today",
     "yesterday": "Yesterday",
     "tomorrow": "Tomorrow",
@@ -117,6 +116,26 @@
         "dinner": "Dinner",
         "snack": "Snack"
       }
+    },
+    "indicators": {
+      "title": "Your indicators",
+      "observations": "Observations",
+      "sleep": "Sleep",
+      "nutrition": "Nutrition",
+      "stress": "Stress",
+      "hydration": "Hydration",
+      "sport": "Activity",
+      "cycle": "Cycle",
+      "excellent": "Excellent",
+      "neutral": "Neutral",
+      "lutealPhase": "Luteal phase"
+    },
+    "score": {
+      "label": "Score"
+    },
+    "recipe": {
+      "title": "Recipe of the day",
+      "discover": "Discover"
     },
     "navigation": {
       "previousDay": "Previous day",

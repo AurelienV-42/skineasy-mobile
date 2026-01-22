@@ -1,32 +1,33 @@
 import { useRouter } from 'expo-router'
+import { Layers } from 'lucide-react-native'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, Text, View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Avatar } from '@shared/components/Avatar'
-import { DailySummary } from '@features/dashboard/components/DailySummary'
+import { DayProgressDots } from '@features/dashboard/components/DayProgressDots'
 import { DateNavigation } from '@features/dashboard/components/DateNavigation'
+import { IndicatorsList } from '@features/dashboard/components/IndicatorsList'
+import { RecipeOfTheDay } from '@features/dashboard/components/RecipeOfTheDay'
+import { ScoreContainer } from '@features/dashboard/components/ScoreContainer'
+import { SectionHeader } from '@features/dashboard/components/SectionHeader'
 import {
-  useDeleteMeal,
-  useDeleteSleep,
-  useDeleteSport,
   useMealEntries,
   useSleepEntries,
   useSportEntries,
 } from '@features/journal/hooks/useJournal'
 import { RoutineBannerContainer } from '@features/routine/components/RoutineBannerContainer'
+import { Avatar } from '@shared/components/Avatar'
 import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
 import { useUserStore } from '@shared/stores/user.store'
-import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
 import { toUTCDateString } from '@shared/utils/date'
 
-export default function DashboardScreen() {
+export default function DashboardScreen(): React.ReactElement {
   const { t } = useTranslation()
   const router = useRouter()
   const user = useUserStore((state) => state.user)
-  const animStyles = useEntranceAnimation(4)
+  const animStyles = useEntranceAnimation(6)
 
   // Selected date state
   const [selectedDate, setSelectedDate] = useState(new Date())
@@ -35,57 +36,19 @@ export default function DashboardScreen() {
   const dateString = toUTCDateString(selectedDate)
 
   // Fetch journal data for selected date
-  const { data: sleepEntries = [], isLoading: sleepLoading } = useSleepEntries(dateString)
-  const { data: mealEntries = [], isLoading: mealLoading } = useMealEntries(dateString)
-  const { data: sportEntries = [], isLoading: sportLoading } = useSportEntries(dateString)
-
-  // Delete mutations
-  const deleteSleep = useDeleteSleep()
-  const deleteMeal = useDeleteMeal()
-  const deleteSport = useDeleteSport()
-
-  const isLoading = sleepLoading || mealLoading || sportLoading
-
-  // Delete handlers
-  const handleDeleteSleep = (id: number) => {
-    deleteSleep.mutate({ id, date: dateString })
-  }
-
-  const handleDeleteMeal = (id: number) => {
-    deleteMeal.mutate({ id, date: dateString })
-  }
-
-  const handleDeleteSport = (id: number) => {
-    deleteSport.mutate({ id, date: dateString })
-  }
-
-  // Edit handlers - navigate to edit screens with entry data
-  const handleEditSleep = (entry: SleepEntry) => {
-    router.push({ pathname: '/journal/sleep', params: { id: entry.id, date: dateString } })
-  }
-
-  const handleEditMeal = (entry: MealEntry) => {
-    router.push({ pathname: '/journal/nutrition', params: { id: entry.id, date: dateString } })
-  }
-
-  const handleEditSport = (entry: SportEntry) => {
-    router.push({ pathname: '/journal/sport', params: { id: entry.id, date: dateString } })
-  }
+  const { data: sleepEntries = [] } = useSleepEntries(dateString)
+  const { data: mealEntries = [] } = useMealEntries(dateString)
+  const { data: sportEntries = [] } = useSportEntries(dateString)
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        {/* Greeting + Avatar */}
+        {/* Top bar: Date Navigation + Avatar */}
         <Animated.View
           style={animStyles[0]}
-          className="px-4 pt-4 pb-2 flex-row justify-between items-start"
+          className="px-4 pt-4 pb-2 flex-row justify-between items-center"
         >
-          <View>
-            <Text className="text-2xl font-bold text-text mb-1">
-              {t('dashboard.greeting', { name: user?.firstname || '' })}
-            </Text>
-            <Text className="text-sm text-textMuted">{t('dashboard.reminder')}</Text>
-          </View>
+          <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
           <Avatar
             firstname={user?.firstname}
             lastname={user?.lastname}
@@ -95,36 +58,39 @@ export default function DashboardScreen() {
           />
         </Animated.View>
 
-        {/* Date Navigation */}
+        {/* Day Progress Dots */}
         <Animated.View style={animStyles[1]}>
-          <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
+          <DayProgressDots selectedDate={selectedDate} onDateSelect={setSelectedDate} />
         </Animated.View>
 
-        {/* Daily Summary - Expandable Cards */}
-        <Animated.View style={animStyles[2]} className="pt-2">
-          <Text className="text-lg font-semibold text-text mb-4 px-4">
-            {t('dashboard.summary.title')}
-          </Text>
-          <DailySummary
-            key={dateString}
+        {/* Score Container */}
+        <Animated.View style={animStyles[2]}>
+          <ScoreContainer score={0} />
+        </Animated.View>
+
+        {/* Indicators Section */}
+        <Animated.View style={animStyles[3]} className="pt-4">
+          <SectionHeader icon={Layers} title={t('dashboard.indicators.title')} />
+          <IndicatorsList
             sleepEntries={sleepEntries}
             mealEntries={mealEntries}
             sportEntries={sportEntries}
-            isLoading={isLoading}
             date={dateString}
-            onDeleteSleep={handleDeleteSleep}
-            onDeleteMeal={handleDeleteMeal}
-            onDeleteSport={handleDeleteSport}
-            onEditSleep={handleEditSleep}
-            onEditMeal={handleEditMeal}
-            onEditSport={handleEditSport}
           />
         </Animated.View>
 
         {/* Routine Banner */}
-        <Animated.View style={animStyles[3]} className="px-4 py-4">
+        <Animated.View style={animStyles[4]} className="px-4 py-4">
           <RoutineBannerContainer />
         </Animated.View>
+
+        {/* Recipe of the Day */}
+        <Animated.View style={animStyles[5]}>
+          <RecipeOfTheDay />
+        </Animated.View>
+
+        {/* Bottom spacing for tab bar */}
+        <View className="h-24" />
       </ScrollView>
     </SafeAreaView>
   )

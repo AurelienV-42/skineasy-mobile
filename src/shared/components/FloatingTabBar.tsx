@@ -1,4 +1,3 @@
-import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect'
 import { useTabTrigger } from 'expo-router/ui'
 import { Home, Sparkles } from 'lucide-react-native'
 import { useEffect, useState } from 'react'
@@ -7,6 +6,7 @@ import { LayoutChangeEvent, Pressable, StyleSheet, Text, View } from 'react-nati
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
+import { GlassContainer } from '@shared/components/GlassContainer'
 import { colors } from '@theme/colors'
 
 export const SPRING_CONFIG = { damping: 60, stiffness: 300 }
@@ -45,12 +45,14 @@ function TabButton({ tab, onFocusChange, index }: TabButtonProps): React.ReactEl
 
   return (
     <Pressable
-      style={styles.tabButton}
+      className="flex-1 items-center gap-1 py-1"
       onPress={triggerProps.onPress}
       onLongPress={triggerProps.onLongPress}
     >
       <Icon color={color} size={24} />
-      <Text style={[styles.tabLabel, { color }]}>{t(tab.labelKey)}</Text>
+      <Text className="font-medium text-xs" style={{ color }}>
+        {t(tab.labelKey)}
+      </Text>
     </Pressable>
   )
 }
@@ -87,7 +89,6 @@ function TabBarContent({ containerWidth }: TabBarContentProps): React.ReactEleme
 
 export function FloatingTabBar(): React.ReactElement {
   const insets = useSafeAreaInsets()
-  const isGlassAvailable = isLiquidGlassAvailable()
   const [containerWidth, setContainerWidth] = useState(0)
 
   const bottomPosition = Math.max(insets.bottom, 16)
@@ -96,45 +97,21 @@ export function FloatingTabBar(): React.ReactElement {
     setContainerWidth(event.nativeEvent.layout.width)
   }
 
-  if (isGlassAvailable) {
-    return (
-      <GlassView
-        style={[styles.container, { bottom: bottomPosition }]}
-        glassEffectStyle="regular"
-        onLayout={handleLayout}
-      >
-        {containerWidth > 0 && <TabBarContent containerWidth={containerWidth} />}
-      </GlassView>
-    )
-  }
-
   return (
-    <View
-      style={[styles.container, styles.fallback, { bottom: bottomPosition }]}
-      onLayout={handleLayout}
-    >
-      {containerWidth > 0 && <TabBarContent containerWidth={containerWidth} />}
+    <View className="absolute left-[15%] right-[15%]" style={{ bottom: bottomPosition }}>
+      <GlassContainer style={styles.glassContainer} glassStyle="regular" onLayout={handleLayout}>
+        {containerWidth > 0 && <TabBarContent containerWidth={containerWidth} />}
+      </GlassContainer>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    left: '15%',
-    right: '15%',
+  glassContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 8,
     borderRadius: 32,
-  },
-  fallback: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 8,
   },
   bubble: {
     position: 'absolute',
@@ -142,15 +119,5 @@ const styles = StyleSheet.create({
     bottom: 6,
     backgroundColor: `${colors.primary}20`,
     borderRadius: 24,
-  },
-  tabButton: {
-    flex: 1,
-    alignItems: 'center',
-    gap: 4,
-    paddingVertical: 4,
-  },
-  tabLabel: {
-    fontFamily: 'Roboto_500Medium',
-    fontSize: 12,
   },
 })

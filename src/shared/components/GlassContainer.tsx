@@ -1,23 +1,40 @@
 import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect'
-import { StyleSheet, View, ViewStyle } from 'react-native'
+import { LayoutChangeEvent, StyleSheet, View, ViewStyle } from 'react-native'
+
+type GlassEffectStyle = 'clear' | 'regular'
 
 type GlassContainerProps = {
   children: React.ReactNode
   style?: ViewStyle
+  glassStyle?: GlassEffectStyle
+  onLayout?: (event: LayoutChangeEvent) => void
 }
 
-export function GlassContainer({ children, style }: GlassContainerProps): React.ReactElement {
+export function GlassContainer({
+  children,
+  style,
+  glassStyle = 'clear',
+  onLayout,
+}: GlassContainerProps): React.ReactElement {
   const isGlassAvailable = isLiquidGlassAvailable()
 
   if (isGlassAvailable) {
     return (
-      <GlassView style={[styles.container, style]} glassEffectStyle="clear">
+      <GlassView
+        style={[styles.container, style]}
+        glassEffectStyle={glassStyle}
+        onLayout={onLayout}
+      >
         {children}
       </GlassView>
     )
   }
 
-  return <View style={[styles.container, styles.fallback, style]}>{children}</View>
+  return (
+    <View style={[styles.container, styles.fallback, style]} onLayout={onLayout}>
+      {children}
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
