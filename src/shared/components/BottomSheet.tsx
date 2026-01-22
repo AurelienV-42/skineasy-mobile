@@ -48,7 +48,7 @@ export function BottomSheet({
       onDidDismiss={onClose}
       grabber
       scrollable={scrollable}
-      style={{ paddingTop: 20 }}
+      style={{ paddingTop: 24 }}
       backgroundColor={backgroundColor}
     >
       {children}

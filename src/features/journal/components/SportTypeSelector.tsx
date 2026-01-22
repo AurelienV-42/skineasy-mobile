@@ -130,7 +130,7 @@ export function SportTypeSelector({ value, onChange }: SportTypeSelectorProps) {
         }}
         scrollable
       >
-        <View className="flex-1 px-4">
+        <View className="flex-1 px-5">
           {/* Title */}
           <Text className="text-xl font-bold text-text mb-4">
             {t('journal.sport.selectActivity')}
@@ -155,7 +155,7 @@ export function SportTypeSelector({ value, onChange }: SportTypeSelectorProps) {
           </View>
 
           {/* Sport Types List */}
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView showsVerticalScrollIndicator={false} className="px-5">
             {filteredSportTypes.length === 0 ? (
               <View className="py-8">
                 <Text className="text-center text-textMuted">

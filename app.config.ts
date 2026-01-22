@@ -12,7 +12,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   splash: {
     image: './assets/splash-icon.png',
     resizeMode: 'contain',
-    backgroundColor: '#FFF9F5',
+    backgroundColor: '#F4E9E0',
   },
   ios: {
     supportsTablet: false,
@@ -24,7 +24,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
-      backgroundColor: '#FFF9F5',
+      backgroundColor: '#F4E9E0',
     },
     package: 'com.skineasy.app',
     edgeToEdgeEnabled: true,
