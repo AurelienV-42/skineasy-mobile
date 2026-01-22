@@ -1,6 +1,8 @@
 import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect'
 import { LayoutChangeEvent, StyleSheet, View, ViewStyle } from 'react-native'
 
+import { colors } from '@theme/colors'
+
 type GlassEffectStyle = 'clear' | 'regular'
 
 type GlassContainerProps = {
@@ -8,13 +10,17 @@ type GlassContainerProps = {
   style?: ViewStyle
   glassStyle?: GlassEffectStyle
   onLayout?: (event: LayoutChangeEvent) => void
+  tintColor?: string
+  isInteractive?: boolean
 }
 
 export function GlassContainer({
   children,
   style,
-  glassStyle = 'clear',
+  glassStyle = 'regular',
   onLayout,
+  tintColor = colors.surface,
+  isInteractive = false,
 }: GlassContainerProps): React.ReactElement {
   const isGlassAvailable = isLiquidGlassAvailable()
 
@@ -24,6 +30,8 @@ export function GlassContainer({
         style={[styles.container, style]}
         glassEffectStyle={glassStyle}
         onLayout={onLayout}
+        tintColor={tintColor}
+        isInteractive={isInteractive}
       >
         {children}
       </GlassView>
@@ -41,6 +49,8 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 20,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: colors.creamMuted,
   },
   fallback: {
     backgroundColor: 'rgba(255, 255, 255, 0.95)',

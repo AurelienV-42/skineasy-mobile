@@ -1,9 +1,11 @@
 import type { LucideIcon } from 'lucide-react-native'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, type ViewStyle } from 'react-native'
 
 import { GlassContainer } from '@shared/components/GlassContainer'
 import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
+
+type Variant = 'horizontal' | 'vertical'
 
 type SelectableCardProps = {
   selected: boolean
@@ -11,6 +13,16 @@ type SelectableCardProps = {
   label: string
   icon?: LucideIcon
   haptic?: 'light' | 'medium' | 'heavy'
+  variant?: Variant
+  iconSize?: number
+}
+
+function getContainerStyle(variant: Variant, selected: boolean): ViewStyle {
+  return {
+    ...styles.base,
+    ...styles[variant],
+    ...(selected && styles.selected),
+  }
 }
 
 export function SelectableCard({
@@ -19,35 +31,45 @@ export function SelectableCard({
   label,
   icon: Icon,
   haptic = 'light',
+  variant = 'horizontal',
+  iconSize = 20,
 }: SelectableCardProps): React.ReactElement {
   const textColor = selected ? colors.primary : colors.textMuted
-
-  const content = (
-    <View className="flex-row items-center gap-3">
-      {Icon && <Icon color={textColor} size={20} />}
-      <Text className={`font-semibold text-base ${selected ? 'text-primaryDark' : 'text-primary'}`}>
-        {label}
-      </Text>
-    </View>
-  )
+  const isVertical = variant === 'vertical'
 
   return (
     <Pressable onPress={onPress} haptic={haptic}>
-      <GlassContainer style={selected ? styles.selected : styles.unselected}>
-        {content}
+      <GlassContainer
+        style={getContainerStyle(variant, selected)}
+        tintColor={selected ? colors.background : 'transparent'}
+      >
+        <View className={isVertical ? 'items-center' : 'flex-row items-center gap-3'}>
+          {Icon && <Icon color={textColor} size={iconSize} strokeWidth={2} />}
+          <Text
+            className={`font-semibold ${isVertical ? 'text-sm mt-3' : 'text-base'} ${selected ? 'text-primary' : 'text-textMuted'}`}
+          >
+            {label}
+          </Text>
+        </View>
       </GlassContainer>
     </Pressable>
   )
 }
 
 const styles = StyleSheet.create({
-  selected: {
+  base: {
+  },
+  horizontal: {
     paddingVertical: 20,
     paddingHorizontal: 20,
   },
-  unselected: {
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    backgroundColor: colors.surface,
+  vertical: {
+    paddingVertical: 24,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  selected: {
+    backgroundColor: colors.background,
   },
 })

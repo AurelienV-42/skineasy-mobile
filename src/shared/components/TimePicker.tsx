@@ -12,6 +12,7 @@ import { Platform, Text, View } from 'react-native'
 
 import { BottomSheet } from '@shared/components/BottomSheet'
 import { Button } from '@shared/components/Button'
+import { GlassContainer } from '@shared/components/GlassContainer'
 import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
 
@@ -68,14 +69,14 @@ export function TimePicker({ value, onChange, label, title }: TimePickerProps): 
       {label && <Text className="text-sm font-medium text-text mb-2">{label}</Text>}
 
       {/* Trigger */}
-      <Pressable
-        onPress={handleOpen}
-        haptic="light"
-        className="bg-surface border border-border rounded-xl py-4 px-4"
-      >
-        <Text className="text-4xl font-bold text-brown-dark text-center">
-          {formatDuration(value)}
-        </Text>
+      <Pressable onPress={handleOpen} haptic="light">
+        <GlassContainer
+          style={{ paddingVertical: 16, paddingHorizontal: 16 }}
+        >
+          <Text className="text-4xl font-bold text-brown-dark text-center">
+            {formatDuration(value)}
+          </Text>
+        </GlassContainer>
       </Pressable>
 
       {/* BottomSheet with Picker */}

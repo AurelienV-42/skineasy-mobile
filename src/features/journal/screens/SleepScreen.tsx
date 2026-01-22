@@ -19,12 +19,11 @@ import { Text, View } from 'react-native'
 import { useSleepEntries, useUpsertSleep } from '@features/journal/hooks/useJournal'
 import { sleepFormSchema, type SleepFormInput } from '@features/journal/schemas/journal.schema'
 import { Button } from '@shared/components/Button'
-import { Pressable } from '@shared/components/Pressable'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
+import { SelectableCard } from '@shared/components/SelectableCard'
 import { TimePicker } from '@shared/components/TimePicker'
 import type { SleepQuality } from '@shared/types/journal.types'
 import { getTodayUTC, toISODateString } from '@shared/utils/date'
-import { colors } from '@theme/colors'
 
 const QUALITY_LEVELS = [
   { value: 1 as SleepQuality, icon: Frown, labelKey: 'journal.sleep.quality.bad' },
@@ -109,32 +108,17 @@ export default function SleepScreen() {
       <View className="mb-8">
         <Text className="font-medium text-text mb-3">{t('journal.sleep.question')}</Text>
         <View className="flex-row gap-3">
-          {QUALITY_LEVELS.map(({ value, icon: Icon, labelKey }) => (
-            <Pressable
-              key={value}
-              onPress={() => setValue('quality', value)}
-              haptic="light"
-              className={`flex-1 items-center justify-center py-6 rounded-xl border-2 ${
-                selectedQuality === value
-                  ? 'border-primary bg-primary/10'
-                  : 'border-border bg-surface'
-              }`}
-              accessibilityLabel={t(labelKey)}
-              accessibilityRole="button"
-            >
-              <Icon
-                size={40}
-                color={selectedQuality === value ? colors.primary : colors.textMuted}
-                strokeWidth={2}
+          {QUALITY_LEVELS.map(({ value, icon, labelKey }) => (
+            <View key={value} className="flex-1">
+              <SelectableCard
+                selected={selectedQuality === value}
+                onPress={() => setValue('quality', value)}
+                label={t(labelKey)}
+                icon={icon}
+                variant="vertical"
+                iconSize={40}
               />
-              <Text
-                className={`text-sm mt-3 ${
-                  selectedQuality === value ? 'text-primary font-medium' : 'text-textMuted'
-                }`}
-              >
-                {t(labelKey)}
-              </Text>
-            </Pressable>
+            </View>
           ))}
         </View>
       </View>

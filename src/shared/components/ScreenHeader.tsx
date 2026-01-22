@@ -21,6 +21,7 @@ interface ScreenHeaderProps {
   /** Icon to display next to the title */
   icon?: LucideIcon
   className?: string
+  childrenClassName?: string
 }
 
 // Context to provide scroll functionality to child components
@@ -43,6 +44,7 @@ export function ScreenHeader({
   canGoBack = true,
   icon: Icon,
   className = '',
+  childrenClassName = '',
 }: ScreenHeaderProps) {
   const { t } = useTranslation()
   const router = useRouter()
@@ -57,13 +59,13 @@ export function ScreenHeader({
   }
 
   const content = (
-    <Animated.View style={animStyles[1]} className={`flex-1 px-4 ${className}`}>
+    <Animated.View style={animStyles[1]} className={`flex-1 px-4 ${childrenClassName}`}>
       {children}
     </Animated.View>
   )
 
   return (
-    <SafeAreaView edges={edges} className="flex-1 bg-background">
+    <SafeAreaView edges={edges} className={`flex-1 bg-surface ${className}`}>
       {/* Custom Header */}
       <Animated.View
         style={animStyles[0]}

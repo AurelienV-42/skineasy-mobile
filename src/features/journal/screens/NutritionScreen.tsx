@@ -157,7 +157,7 @@ export default function NutritionScreen() {
   const isLoading = uploadImage.isPending || createMeal.isPending || updateMeal.isPending
 
   return (
-    <ScreenHeader title={t('journal.nutrition.screenTitle')} icon={Utensils} className="pt-2">
+    <ScreenHeader title={t('journal.nutrition.screenTitle')} icon={Utensils} childrenClassName="pt-2">
       {/* Food Name Input */}
       <View>
         <Controller

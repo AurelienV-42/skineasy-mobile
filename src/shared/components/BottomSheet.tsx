@@ -17,6 +17,7 @@ interface BottomSheetProps {
   children: React.ReactNode
   height?: number | 'auto'
   scrollable?: boolean
+  backgroundColor?: string
 }
 
 export function BottomSheet({
@@ -25,14 +26,15 @@ export function BottomSheet({
   children,
   height = 'auto',
   scrollable = false,
+  backgroundColor,
 }: BottomSheetProps) {
   const sheet = useRef<TrueSheet>(null)
 
   useEffect(() => {
     if (visible) {
-      sheet.current?.present()
+      sheet.current?.present().catch(() => {})
     } else {
-      sheet.current?.dismiss()
+      sheet.current?.dismiss().catch(() => {})
     }
   }, [visible])
 
@@ -45,9 +47,9 @@ export function BottomSheet({
       detents={detents}
       onDidDismiss={onClose}
       grabber
-      // backgroundColor={'transparent'}
       scrollable={scrollable}
       style={{ paddingTop: 20 }}
+      backgroundColor={backgroundColor}
     >
       {children}
     </TrueSheet>

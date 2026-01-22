@@ -41,7 +41,7 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
     typeContent?.irritationPotential && typeContent.irritationPotential.length > 0
 
   return (
-    <BottomSheet visible={visible} onClose={onClose} scrollable>
+    <BottomSheet visible={visible} onClose={onClose} scrollable backgroundColor={colors.surface}>
       <ScrollView className="pt-8 px-4" showsVerticalScrollIndicator={false} nestedScrollEnabled>
         {/* Header: Image + Title */}
         <View className="flex-row items-center mb-4">
@@ -131,7 +131,7 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
         {product.url && (
           <Pressable
             onPress={handleBuyPress}
-            className="bg-primary rounded-xl py-3 px-4 flex-row items-center justify-center mb-6"
+            className="bg-primary rounded-xl py-3 px-4 flex-row items-center justify-center"
           >
             <ExternalLink size={18} color="#FFFFFF" />
             <Text className="text-white font-semibold ml-2">{t('routine.productDetail.buy')}</Text>
