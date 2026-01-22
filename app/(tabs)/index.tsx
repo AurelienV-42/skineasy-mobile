@@ -44,25 +44,27 @@ export default function DashboardScreen(): React.ReactElement {
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="gap-6 pb-24">
           {/* Top bar: Date Navigation + Avatar */}
-          <View className="gap-2"><Animated.View
-            style={animStyles[0]}
-            className="px-4 flex-row justify-between items-center"
-          >
-            <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
-            <Avatar
-              firstname={user?.firstname}
-              lastname={user?.lastname}
-              email={user?.email}
-              size={32}
-              onPress={() => router.push('/profile')}
-            />
-          </Animated.View>
+          <View className="gap-2">
+            <Animated.View
+              style={animStyles[0]}
+              className="px-4 flex-row justify-between items-center"
+            >
+              <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
+              <Avatar
+                firstname={user?.firstname}
+                lastname={user?.lastname}
+                email={user?.email}
+                size={32}
+                onPress={() => router.push('/profile')}
+              />
+            </Animated.View>
 
-          {/* Day Progress Dots */}
-          <Animated.View style={animStyles[1]}>
-            <DayProgressDots onDateSelect={setSelectedDate} />
-          </Animated.View>
-</View>
+            {/* Day Progress Dots */}
+            <Animated.View style={animStyles[1]}>
+              <DayProgressDots onDateSelect={setSelectedDate} />
+            </Animated.View>
+          </View>
+
           {/* Score Container */}
           <Animated.View style={animStyles[2]}>
             <ScoreContainer score={40} />

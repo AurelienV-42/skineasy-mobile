@@ -30,8 +30,8 @@ export function IndicatorCard({
       {/* Top row: Icon + Label + Dots */}
       <View className="flex-row justify-between items-center">
         <View className="flex-row items-center gap-1.5">
-          <Icon size={20} color={colors.textMuted} />
-          <Text className="text-sm font-semibold text-text-muted">{label}</Text>
+          <Icon size={20} color={colors.brownDark} />
+          <Text className="text-sm font-semibold text-brown-dark">{label}</Text>
         </View>
         <View className="flex-row items-center gap-0.5">
           {[0, 1, 2, 3, 4].map((i) => (

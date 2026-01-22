@@ -17,9 +17,7 @@ export function SectionHeader({ icon: Icon, title }: SectionHeaderProps): React.
       >
         <Icon size={16} color={colors.brownDark} strokeWidth={2.5} />
       </View>
-      <Text className="text-brown-dark font-semibold">
-        {title}
-      </Text>
+      <Text className="text-brown-dark font-semibold">{title}</Text>
     </View>
   )
 }
