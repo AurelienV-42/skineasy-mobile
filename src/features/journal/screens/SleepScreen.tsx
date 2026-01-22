@@ -116,7 +116,7 @@ export default function SleepScreen() {
   }
 
   return (
-    <ScreenHeader title={t('journal.sleep.screenTitle')} icon={Moon} childrenClassName='gap-6'>
+    <ScreenHeader title={t('journal.sleep.screenTitle')} icon={Moon} childrenClassName="gap-6">
       {/* Sleep Duration Picker */}
       <View>
         <TimePicker
@@ -148,24 +148,25 @@ export default function SleepScreen() {
 
       {/* Save Button */}
       <View>
-      <Button
-        title={t('common.save')}
-        onPress={handleSubmit(onSubmit)}
-        disabled={!isValid || upsertSleep.isPending}
-        loading={upsertSleep.isPending}
-      />
-
-      {/* Delete Button (only when editing) */}
-      {existingEntry && (
         <Button
-          title={t('common.delete')}
-          variant="outline"
-          onPress={handleDelete}
-          disabled={deleteSleep.isPending}
-          loading={deleteSleep.isPending}
-          className="mt-4"
+          title={t('common.save')}
+          onPress={handleSubmit(onSubmit)}
+          disabled={!isValid || upsertSleep.isPending}
+          loading={upsertSleep.isPending}
         />
-      )}</View>
+
+        {/* Delete Button (only when editing) */}
+        {existingEntry && (
+          <Button
+            title={t('common.delete')}
+            variant="outline"
+            onPress={handleDelete}
+            disabled={deleteSleep.isPending}
+            loading={deleteSleep.isPending}
+            className="mt-4"
+          />
+        )}
+      </View>
     </ScreenHeader>
   )
 }

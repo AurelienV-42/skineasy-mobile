@@ -193,6 +193,47 @@ export default function NutritionScreen() {
         />
       </View>
 
+      {/* Meal Type Selector */}
+      <View>
+        <SectionHeader icon={Clock} title={t('journal.nutrition.mealType')} className="px-0 mb-3" />
+        <Controller
+          control={control}
+          name="meal_type"
+          render={({ field: { onChange, value } }) => (
+            <View className="flex-row gap-2">
+              {MEAL_TYPES.map((mealType) => {
+                const Icon = mealType.icon
+                const isSelected = value === mealType.id
+                return (
+                  <Pressable
+                    key={mealType.id}
+                    onPress={() => onChange(isSelected ? null : mealType.id)}
+                    haptic="light"
+                    className={`flex-1 items-center justify-center py-3 rounded-xl border ${
+                      isSelected ? 'bg-secondary border-secondary' : 'bg-surface border-border'
+                    }`}
+                    accessibilityLabel={t(`dashboard.summary.mealType.${mealType.id}`)}
+                  >
+                    <Icon
+                      size={24}
+                      color={isSelected ? '#FFF' : colors.textMuted}
+                      strokeWidth={2}
+                    />
+                    <Text
+                      className={`text-xs mt-1 ${
+                        isSelected ? 'text-white font-medium' : 'text-textMuted'
+                      }`}
+                    >
+                      {t(`dashboard.summary.mealType.${mealType.id}`)}
+                    </Text>
+                  </Pressable>
+                )
+              })}
+            </View>
+          )}
+        />
+      </View>
+
       {/* Image Picker */}
       <View>
         <SectionHeader
@@ -242,47 +283,6 @@ export default function NutritionScreen() {
             </Pressable>
           </View>
         )}
-      </View>
-
-      {/* Meal Type Selector */}
-      <View>
-        <SectionHeader icon={Clock} title={t('journal.nutrition.mealType')} className="px-0 mb-3" />
-        <Controller
-          control={control}
-          name="meal_type"
-          render={({ field: { onChange, value } }) => (
-            <View className="flex-row gap-2">
-              {MEAL_TYPES.map((mealType) => {
-                const Icon = mealType.icon
-                const isSelected = value === mealType.id
-                return (
-                  <Pressable
-                    key={mealType.id}
-                    onPress={() => onChange(isSelected ? null : mealType.id)}
-                    haptic="light"
-                    className={`flex-1 items-center justify-center py-3 rounded-xl border ${
-                      isSelected ? 'bg-secondary border-secondary' : 'bg-surface border-border'
-                    }`}
-                    accessibilityLabel={t(`dashboard.summary.mealType.${mealType.id}`)}
-                  >
-                    <Icon
-                      size={24}
-                      color={isSelected ? '#FFF' : colors.textMuted}
-                      strokeWidth={2}
-                    />
-                    <Text
-                      className={`text-xs mt-1 ${
-                        isSelected ? 'text-white font-medium' : 'text-textMuted'
-                      }`}
-                    >
-                      {t(`dashboard.summary.mealType.${mealType.id}`)}
-                    </Text>
-                  </Pressable>
-                )
-              })}
-            </View>
-          )}
-        />
       </View>
 
       {/* Note Input */}

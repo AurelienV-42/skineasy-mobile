@@ -137,7 +137,7 @@ export default function SportScreen() {
   }
 
   return (
-    <ScreenHeader title={t('journal.sport.screenTitle')} icon={Dumbbell} childrenClassName='gap-6'>
+    <ScreenHeader title={t('journal.sport.screenTitle')} icon={Dumbbell} childrenClassName="gap-6">
       {/* Sport Type Selector */}
       <View>
         <SectionHeader
@@ -172,7 +172,8 @@ export default function SportScreen() {
               error={errors.duration?.message ? t(errors.duration.message as string) : undefined}
             />
           )}
-        /></View>
+        />
+      </View>
 
       {/* Intensity Selector */}
       <View>
