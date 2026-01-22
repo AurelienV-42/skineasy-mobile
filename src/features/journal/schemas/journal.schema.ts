@@ -68,7 +68,7 @@ export const mealEntrySchema = z.object({
     .min(1, 'journal.nutrition.foodNameRequired')
     .max(200, 'journal.nutrition.foodNameMaxLength'),
   note: z.string().max(500, 'journal.nutrition.noteMaxLength').nullable().optional(),
-  meal_type: mealTypeSchema.nullable().optional(),
+  meal_type: mealTypeSchema,
 })
 
 export type MealEntryInput = z.infer<typeof mealEntrySchema>
@@ -103,7 +103,7 @@ export const mealFormSchema = z.object({
     .min(1, 'journal.nutrition.foodNameRequired')
     .max(200, 'journal.nutrition.foodNameMaxLength'),
   note: z.string().max(500, 'journal.nutrition.noteMaxLength').nullable().optional(),
-  meal_type: mealTypeSchema.nullable().optional(),
+  meal_type: mealTypeSchema,
 })
 
 export type MealFormInput = z.infer<typeof mealFormSchema>

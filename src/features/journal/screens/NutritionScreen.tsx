@@ -95,16 +95,16 @@ export default function NutritionScreen() {
 
   // Populate form when editing or with pre-selected meal type
   useEffect(() => {
-    if (existingEntry) {
+    if (existingEntry && existingEntry.meal_type) {
       reset({
         food_name: existingEntry.food_name || '',
         note: existingEntry.note || '',
-        meal_type: existingEntry.meal_type || undefined,
+        meal_type: existingEntry.meal_type,
       })
     } else if (params.mealType) {
       reset({
-        food_name: '',
-        note: '',
+        food_name: existingEntry?.food_name || '',
+        note: existingEntry?.note || '',
         meal_type: params.mealType as 'breakfast' | 'lunch' | 'dinner' | 'snack',
       })
     }
@@ -148,7 +148,7 @@ export default function NutritionScreen() {
         photo_url: photoUrl,
         food_name: data.food_name,
         note: data.note || null,
-        meal_type: data.meal_type || null,
+        meal_type: data.meal_type,
       }
 
       if (isEditMode && existingEntry) {

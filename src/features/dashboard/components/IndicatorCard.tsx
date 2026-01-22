@@ -102,7 +102,7 @@ export function IndicatorCard({
   )
 
   const listContent = (
-    <Card padding="sm" className="flex-row items-center justify-between">
+    <Card padding="md" className="flex-row items-center justify-between">
       {/* Left: Dot + Icon + Label */}
       <View className="flex-row items-center gap-2">
         <StatusDot status={status} />

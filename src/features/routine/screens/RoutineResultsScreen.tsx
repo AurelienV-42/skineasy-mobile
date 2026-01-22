@@ -111,7 +111,7 @@ export default function RoutineResultsScreen() {
       {/* Scrollable Step Cards */}
       <ScrollView
         className="flex-1"
-        contentContainerClassName="pt-2 pb-4"
+        contentContainerClassName="pt-2 pb-32"
         showsVerticalScrollIndicator={false}
       >
         {/* Day Header */}
