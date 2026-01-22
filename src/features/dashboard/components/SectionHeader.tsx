@@ -12,8 +12,8 @@ export function SectionHeader({ icon: Icon, title }: SectionHeaderProps): React.
   return (
     <View className="flex-row items-center gap-2 px-4 mb-3">
       <View
-        className="w-7 h-7 rounded-lg items-center justify-center"
-        style={{ backgroundColor: colors.primary + '15' }}
+        className="p-2 rounded-md items-center justify-center border border-brown-dark/20"
+        style={{ backgroundColor: colors.brownDark + '10' }}
       >
         <Icon size={16} color={colors.primary} strokeWidth={2.5} />
       </View>

@@ -87,6 +87,7 @@
     "createAccount": "Create Account"
   },
   "dashboard": {
+    "home": "Home",
     "today": "Today",
     "yesterday": "Yesterday",
     "tomorrow": "Tomorrow",

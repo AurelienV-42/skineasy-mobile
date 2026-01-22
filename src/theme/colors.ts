@@ -29,6 +29,8 @@ export const colors = {
   creamMuted: '#E0C9B8',
   brownDark: '#2E2319',
   brownLight: '#7D604E',
+
+  white: '#FFFFFF',
 } as const
 
 export type ColorKey = keyof typeof colors

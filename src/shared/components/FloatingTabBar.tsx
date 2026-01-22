@@ -19,7 +19,7 @@ type TabConfig = {
 }
 
 const TABS: TabConfig[] = [
-  { name: 'index', href: '/', labelKey: 'dashboard.today', icon: Home },
+  { name: 'index', href: '/', labelKey: 'dashboard.home', icon: Home },
   { name: 'routine', href: '/routine', labelKey: 'routine.title', icon: Sparkles },
 ]
 

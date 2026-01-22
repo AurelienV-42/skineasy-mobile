@@ -49,7 +49,7 @@ export default function LoginScreen() {
             <View>
               {/* Welcome Text */}
               <Animated.View style={animStyles[0]} className="pt-20 mb-10">
-                <Text className="text-3xl font-bold text-brownDark mb-2">
+                <Text className="text-3xl font-bold text-brown-dark mb-2">
                   {t('auth.welcomeBack')}
                 </Text>
               </Animated.View>
