@@ -10,9 +10,11 @@ import { RoutineStepCard } from '@features/routine/components/RoutineStepCard'
 import { RoutineSummaryCard } from '@features/routine/components/RoutineSummaryCard'
 import { RoutineToggle } from '@features/routine/components/RoutineToggle'
 import { useRoutine } from '@features/routine/hooks/useRoutine'
+import { useRoutineCompletionStore } from '@features/routine/stores/routineCompletionStore'
 import { useTodayRoutine } from '@features/routine/hooks/useTodayRoutine'
 import type { TimeOfDay } from '@features/routine/types/routine.types'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
+import { getTodayUTC } from '@shared/utils/date'
 
 /**
  * Main Routine Results Screen
@@ -29,8 +31,11 @@ export default function RoutineResultsScreen() {
   const { data: routine, isLoading, isError } = useRoutine()
   const todayRoutine = useTodayRoutine(routine)
 
+  const { isCompleted } = useRoutineCompletionStore()
+  const today = getTodayUTC()
+
   // Compute category counts and occurrences for ordinal labels
-  // Must be called before early returns to satisfy Rules of Hooks
+  // Sort completed items to the end
   const stepsWithOrdinal = useMemo(() => {
     if (!todayRoutine) return []
 
@@ -43,7 +48,7 @@ export default function RoutineResultsScreen() {
     })
 
     const occurrenceTracker = new Map<string, number>()
-    return currentSteps.map((stepWithProducts) => {
+    const stepsWithMeta = currentSteps.map((stepWithProducts) => {
       const cat = stepWithProducts.step.category
       const occurrence = (occurrenceTracker.get(cat) || 0) + 1
       occurrenceTracker.set(cat, occurrence)
@@ -51,9 +56,12 @@ export default function RoutineResultsScreen() {
         stepWithProducts,
         categoryOccurrence: occurrence,
         totalCategoryCount: categoryCount.get(cat) || 1,
+        completed: isCompleted(today, selectedTime, stepWithProducts.step.order),
       }
     })
-  }, [todayRoutine, selectedTime])
+
+    return stepsWithMeta
+  }, [todayRoutine, selectedTime, isCompleted, today])
 
   // Loading state
   if (isLoading) {
@@ -133,6 +141,7 @@ export default function RoutineResultsScreen() {
               index={index}
               categoryOccurrence={categoryOccurrence}
               totalCategoryCount={totalCategoryCount}
+              timeOfDay={selectedTime}
             />
           )
         )}

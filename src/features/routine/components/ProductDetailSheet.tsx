@@ -6,6 +6,7 @@ import RenderHtml, { type MixedStyleDeclaration } from 'react-native-render-html
 
 import type { ProductDto } from '@features/routine/types/routine.types'
 import { BottomSheet } from '@shared/components/BottomSheet'
+import { Card } from '@shared/components/Card'
 import { Pressable } from '@shared/components/Pressable'
 import { haptic } from '@shared/utils/haptic'
 import { colors } from '@theme/colors'
@@ -48,7 +49,7 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
           {product.illustrationUrl && (
             <Image
               source={{ uri: product.illustrationUrl }}
-              className="p-2 rounded-md bg-white w-32 h-32 rounded-xl mr-4 bg-background"
+              className="p-2 w-32 h-32 rounded-xl mr-4 bg-cream"
               resizeMode="cover"
             />
           )}
@@ -72,36 +73,36 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
         {(typeContent?.application || typeContent?.frequency) && (
           <View className="flex-row mb-4">
             {typeContent?.application && (
-              <View className="flex-1 bg-background rounded-xl p-3 mr-2">
+              <Card padding="sm" className="flex-1 mr-2">
                 <Text className="text-xs text-secondary mb-1">
                   {t('routine.productDetail.application')}
                 </Text>
                 <Text className="text-sm font-medium text-text">{typeContent.application}</Text>
-              </View>
+              </Card>
             )}
             {typeContent?.frequency && (
-              <View className="flex-1 bg-background rounded-xl p-3 ml-2">
+              <Card padding="sm" className="flex-1 ml-2">
                 <Text className="text-xs text-secondary mb-1">
                   {t('routine.productDetail.frequency')}
                 </Text>
                 <Text className="text-sm font-medium text-text">{typeContent.frequency}</Text>
-              </View>
+              </Card>
             )}
           </View>
         )}
         {/* How to Use */}
         {hasHowToUse && (
           <View className="mb-4">
-            <Text className="text-sm font-semibold text-secondary mb-2">
-              {t('routine.productDetail.howToUse')}
-            </Text>
-            <View className="bg-primary/5 rounded-xl p-3">
+            <Card padding="sm">
+              <Text className="text-xs text-secondary mb-1">
+                {t('routine.productDetail.howToUse')}
+              </Text>
               <RenderHtml
                 contentWidth={width - 56}
                 source={{ html: typeContent.howToUse }}
                 baseStyle={HTML_BASE_STYLE}
               />
-            </View>
+            </Card>
           </View>
         )}
 

@@ -1,14 +1,16 @@
-import { ChevronRight } from 'lucide-react-native'
+import { Check, ChevronRight } from 'lucide-react-native'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, Text, View } from 'react-native'
-import { FadeInDown } from 'react-native-reanimated'
+import Animated, { FadeInDown } from 'react-native-reanimated'
 
 import { ProductDetailSheet } from '@features/routine/components/ProductDetailSheet'
+import { useRoutineCompletionStore } from '@features/routine/stores/routineCompletionStore'
 import type { ProductDto, RoutineStepWithProducts } from '@features/routine/types/routine.types'
 import { CATEGORY_LABELS } from '@features/routine/types/routine.types'
 import { Card } from '@shared/components/Card'
 import { Pressable } from '@shared/components/Pressable'
+import { getTodayUTC } from '@shared/utils/date'
 import { haptic } from '@shared/utils/haptic'
 import { colors } from '@theme/colors'
 
@@ -49,6 +51,7 @@ interface RoutineStepCardProps {
   index: number
   categoryOccurrence: number
   totalCategoryCount: number
+  timeOfDay: 'morning' | 'evening'
 }
 
 export function RoutineStepCard({
@@ -56,10 +59,15 @@ export function RoutineStepCard({
   index,
   categoryOccurrence,
   totalCategoryCount,
+  timeOfDay,
 }: RoutineStepCardProps) {
   const { t } = useTranslation()
   const { step, products } = stepWithProducts
   const [selectedProduct, setSelectedProduct] = useState<ProductDto | null>(null)
+
+  const { isCompleted, toggleCompletion } = useRoutineCompletionStore()
+  const today = getTodayUTC()
+  const completed = isCompleted(today, timeOfDay, step.order)
 
   const baseLabel = CATEGORY_LABELS[step.category] || step.category
   const categoryLabel =
@@ -77,47 +85,71 @@ export function RoutineStepCard({
     setSelectedProduct(null)
   }
 
+  const handleToggleCompletion = () => {
+    haptic.light()
+    toggleCompletion(today, timeOfDay, step.order)
+  }
+
   return (
     <>
-      <Card
-        animated
-        entering={FadeInDown.delay(index * 100).springify()}
-        padding="md"
-        className="mb-4"
-      >
-        {/* Step Header */}
-        <View className="flex-row items-center mb-3">
-          <View className="bg-primary w-7 h-7 rounded-full items-center justify-center mr-3">
-            <Text className="text-white font-bold text-sm">{step.order}</Text>
+      <Animated.View style={{ opacity: completed ? 0.5 : 1 }} className="mb-4">
+        <Card animated entering={FadeInDown.delay(index * 100).springify()} padding="md">
+          {/* Step Header */}
+          <View className="flex-row items-center mb-3">
+            {/* Step badge - tappable */}
+            <Pressable onPress={handleToggleCompletion} className="mr-3">
+              {completed ? (
+                <View className="w-8 h-8 rounded-full bg-success items-center justify-center">
+                  <Check size={18} color="#FFFFFF" />
+                </View>
+              ) : (
+                <View
+                  className="w-8 h-8 items-center justify-center"
+                  style={{
+                    borderWidth: 2,
+                    borderStyle: 'dashed',
+                    borderColor: colors.primary,
+                    borderRadius: 16,
+                  }}
+                >
+                  <Text className="text-primary font-bold text-sm">{step.order}</Text>
+                </View>
+              )}
+            </Pressable>
+
+            <Text
+              className={`text-base font-semibold ${completed ? 'text-text-muted' : 'text-text'}`}
+            >
+              {categoryLabel}
+            </Text>
+            {products.length > 1 && (
+              <View className="ml-2 px-2 py-0.5 rounded-full bg-primary/10">
+                <Text className="text-xs font-semibold text-primary">{products.length}</Text>
+              </View>
+            )}
           </View>
-          <Text className="text-base font-semibold text-text">{categoryLabel}</Text>
-          {products.length > 1 && (
-            <View className="ml-2 px-2 py-0.5 rounded-full bg-primary/10">
-              <Text className="text-xs font-semibold text-primary">{products.length}</Text>
+
+          {/* Products */}
+          {hasProducts ? (
+            <>
+              <View className="mb-3">
+                {products.map((product, productIndex) => (
+                  <ProductItem
+                    key={product.id}
+                    product={product}
+                    isLast={productIndex === products.length - 1}
+                    onPress={() => handleProductPress(product)}
+                  />
+                ))}
+              </View>
+            </>
+          ) : (
+            <View className="py-4 items-center">
+              <Text className="text-textMuted text-sm">{t('routine.noProductForStep')}</Text>
             </View>
           )}
-        </View>
-
-        {/* Products */}
-        {hasProducts ? (
-          <>
-            <View className="mb-3">
-              {products.map((product, productIndex) => (
-                <ProductItem
-                  key={product.id}
-                  product={product}
-                  isLast={productIndex === products.length - 1}
-                  onPress={() => handleProductPress(product)}
-                />
-              ))}
-            </View>
-          </>
-        ) : (
-          <View className="py-4 items-center">
-            <Text className="text-textMuted text-sm">{t('routine.noProductForStep')}</Text>
-          </View>
-        )}
-      </Card>
+        </Card>
+      </Animated.View>
 
       <ProductDetailSheet
         product={selectedProduct}
