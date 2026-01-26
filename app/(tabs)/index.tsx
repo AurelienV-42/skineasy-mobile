@@ -12,12 +12,13 @@ import { IndicatorsList } from '@features/dashboard/components/IndicatorsList'
 import { RecipeOfTheDay } from '@features/dashboard/components/RecipeOfTheDay'
 import { RoutineBannerContainer } from '@features/dashboard/components/RoutineBanner'
 import { ScoreContainer } from '@features/dashboard/components/ScoreContainer'
-import { SectionHeader } from '@shared/components/SectionHeader'
+import { calculateDayScore } from '@features/dashboard/utils/score'
 import {
   useMealEntries,
   useSleepEntries,
   useSportEntries,
 } from '@features/journal/hooks/useJournal'
+import { SectionHeader } from '@shared/components/SectionHeader'
 import { Avatar } from '@shared/components/Avatar'
 import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
 import { useUserStore } from '@shared/stores/user.store'
@@ -39,6 +40,9 @@ export default function DashboardScreen(): React.ReactElement {
   const { data: sleepEntries = [] } = useSleepEntries(dateString)
   const { data: mealEntries = [] } = useMealEntries(dateString)
   const { data: sportEntries = [] } = useSportEntries(dateString)
+
+  // Compute score for selected date
+  const score = calculateDayScore(sleepEntries[0], mealEntries, sportEntries)
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
@@ -68,7 +72,7 @@ export default function DashboardScreen(): React.ReactElement {
 
           {/* Score Container */}
           <Animated.View style={animStyles[2]}>
-            <ScoreContainer score={40} />
+            <ScoreContainer score={score} />
           </Animated.View>
 
           {/* Indicators Section */}
