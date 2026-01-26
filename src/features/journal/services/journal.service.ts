@@ -12,6 +12,7 @@ import type {
   CreateSleepEntryDto,
   CreateSportEntryDto,
   ImageUploadResponse,
+  JournalWeekResponse,
   MealEntry,
   SleepEntry,
   SleepUpsertResponse,
@@ -195,6 +196,24 @@ export const sportTypesService = {
 }
 
 /**
+ * Batch Entries Service
+ */
+export const entriesService = {
+  /**
+   * Get all journal entries for a date range (batch endpoint)
+   * @param startDate - Start date in YYYY-MM-DD format
+   * @param endDate - End date in YYYY-MM-DD format (max 14 days range)
+   */
+  async getByDateRange(startDate: string, endDate: string): Promise<JournalWeekResponse> {
+    logger.info('[Journal API] Fetching entries for range:', { startDate, endDate })
+    const response = await api.get<ApiResponse<JournalWeekResponse>>(
+      `/api/v1/journal/entries?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`
+    )
+    return response.data
+  },
+}
+
+/**
  * Combined Journal Service
  */
 export const journalService = {
@@ -202,4 +221,5 @@ export const journalService = {
   sport: sportService,
   meal: mealService,
   sportTypes: sportTypesService,
+  entries: entriesService,
 }

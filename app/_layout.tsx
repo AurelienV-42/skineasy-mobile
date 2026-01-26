@@ -1,8 +1,9 @@
+import { useReactQueryDevTools } from '@dev-plugins/react-query'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -93,6 +94,8 @@ function RootLayoutContent() {
 }
 
 export default Sentry.wrap(function RootLayout() {
+  useReactQueryDevTools(queryClient)
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <KeyboardProvider statusBarTranslucent navigationBarTranslucent>

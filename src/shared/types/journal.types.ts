@@ -126,3 +126,12 @@ export interface JournalEntriesResponse {
   sport: SportEntry[]
   meals: MealEntry[]
 }
+
+/**
+ * Journal Week Response (batch endpoint)
+ */
+export interface JournalWeekResponse {
+  sleeps: SleepEntry[]
+  sports: SportEntry[]
+  meals: MealEntry[]
+}

@@ -99,11 +99,37 @@ No data logged = 0 score for that category.
 
 ## Files
 
-| File                                                   | Purpose               |
-| ------------------------------------------------------ | --------------------- |
-| `src/features/dashboard/utils/score.ts`                | Scoring functions     |
-| `src/features/dashboard/hooks/useWeekScores.ts`        | Hook for 7-day scores |
-| `src/features/dashboard/utils/__tests__/score.test.ts` | Unit tests            |
+| File                                                   | Purpose                 |
+| ------------------------------------------------------ | ----------------------- |
+| `src/shared/config/scoreConfig.ts`                     | Config values (weights) |
+| `src/features/dashboard/utils/score.ts`                | Scoring functions       |
+| `src/features/dashboard/hooks/useWeekScores.ts`        | Hook for 7-day scores   |
+| `src/features/dashboard/utils/__tests__/score.test.ts` | Unit tests              |
+
+---
+
+## API
+
+Week scores use a batch endpoint to reduce API calls (1 instead of 21):
+
+```
+GET /api/v1/journal/entries?startDate=2025-01-17&endDate=2025-01-23
+
+Response:
+{
+  "data": {
+    "sleeps": [...],
+    "sports": [...],
+    "meals": [...]
+  }
+}
+```
+
+Constraints:
+
+- Max 14 days range
+- Date format: YYYY-MM-DD
+- startDate must be <= endDate
 
 ---
 
@@ -122,3 +148,7 @@ No data logged = 0 score for that category.
 - Meals: breakfast only → 25
 - Activity: none → 0
 - **Total: `75.4*0.4 + 25*0.3 + 0*0.3` = 30 + 8 = 38**
+
+```
+
+```

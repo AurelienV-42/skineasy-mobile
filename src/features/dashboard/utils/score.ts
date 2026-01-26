@@ -1,37 +1,26 @@
+import { scoreConfig } from '@shared/config/scoreConfig'
 import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
 
-const SLEEP_WEIGHT = 0.4
-const NUTRITION_WEIGHT = 0.3
-const ACTIVITY_WEIGHT = 0.3
-
-const OPTIMAL_SLEEP_MIN = 7
-const OPTIMAL_SLEEP_MAX = 9
-const SLEEP_HOURS_WEIGHT = 0.6
-const SLEEP_QUALITY_WEIGHT = 0.4
-
-const TARGET_ACTIVITY_MINUTES = 30
-const INTENSITY_BONUS_THRESHOLD = 3
-const INTENSITY_BONUS_PER_LEVEL = 0.1
-
-const POINTS_PER_MEAL_TYPE = 25
-const DETAIL_BONUS_PER_MEAL = 5
-const MAX_DETAIL_BONUS = 20
+const { weights, sleep, activity, nutrition } = scoreConfig
 
 export function calculateSleepScore(entry: SleepEntry | undefined): number {
   if (!entry) return 0
 
   let hoursScore: number
-  if (entry.hours >= OPTIMAL_SLEEP_MIN && entry.hours <= OPTIMAL_SLEEP_MAX) {
+  if (entry.hours >= sleep.optimalHoursMin && entry.hours <= sleep.optimalHoursMax) {
     hoursScore = 100
-  } else if (entry.hours < OPTIMAL_SLEEP_MIN) {
-    hoursScore = Math.max(0, (entry.hours / OPTIMAL_SLEEP_MIN) * 100)
+  } else if (entry.hours < sleep.optimalHoursMin) {
+    hoursScore = Math.max(0, (entry.hours / sleep.optimalHoursMin) * 100)
   } else {
-    hoursScore = Math.max(0, 100 - (entry.hours - OPTIMAL_SLEEP_MAX) * 20)
+    hoursScore = Math.max(
+      0,
+      100 - (entry.hours - sleep.optimalHoursMax) * sleep.oversleepPenaltyPerHour
+    )
   }
 
   const qualityScore = entry.quality * 20
 
-  return hoursScore * SLEEP_HOURS_WEIGHT + qualityScore * SLEEP_QUALITY_WEIGHT
+  return hoursScore * sleep.hoursWeight + qualityScore * sleep.qualityWeight
 }
 
 export function calculateActivityScore(entries: SportEntry[]): number {
@@ -40,10 +29,10 @@ export function calculateActivityScore(entries: SportEntry[]): number {
   const totalMinutes = entries.reduce((sum, e) => sum + e.duration, 0)
   const avgIntensity = entries.reduce((sum, e) => sum + e.intensity, 0) / entries.length
 
-  const durationScore = Math.min(100, (totalMinutes / TARGET_ACTIVITY_MINUTES) * 100)
+  const durationScore = Math.min(100, (totalMinutes / activity.targetMinutes) * 100)
 
-  const intensityBonus = Math.max(0, avgIntensity - INTENSITY_BONUS_THRESHOLD)
-  const intensityMultiplier = 1 + intensityBonus * INTENSITY_BONUS_PER_LEVEL
+  const intensityBonus = Math.max(0, avgIntensity - activity.intensityBonusThreshold)
+  const intensityMultiplier = 1 + intensityBonus * activity.intensityBonusPerLevel
 
   return Math.min(100, durationScore * intensityMultiplier)
 }
@@ -52,10 +41,13 @@ export function calculateNutritionScore(entries: MealEntry[]): number {
   if (entries.length === 0) return 0
 
   const mealTypes = new Set(entries.map((e) => e.meal_type).filter(Boolean))
-  const typeScore = mealTypes.size * POINTS_PER_MEAL_TYPE
+  const typeScore = mealTypes.size * nutrition.pointsPerMealType
 
   const detailedMeals = entries.filter((e) => e.photo_url || e.food_name).length
-  const detailBonus = Math.min(MAX_DETAIL_BONUS, detailedMeals * DETAIL_BONUS_PER_MEAL)
+  const detailBonus = Math.min(
+    nutrition.maxDetailBonus,
+    detailedMeals * nutrition.detailBonusPerMeal
+  )
 
   return Math.min(100, typeScore + detailBonus)
 }
@@ -70,6 +62,8 @@ export function calculateDayScore(
   const activityScore = calculateActivityScore(sportEntries)
 
   return Math.round(
-    sleepScore * SLEEP_WEIGHT + nutritionScore * NUTRITION_WEIGHT + activityScore * ACTIVITY_WEIGHT
+    sleepScore * weights.sleep +
+      nutritionScore * weights.nutrition +
+      activityScore * weights.activity
   )
 }
