@@ -41,6 +41,7 @@ import { Input } from '@shared/components/Input'
 import { Pressable } from '@shared/components/Pressable'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
 import { SectionHeader } from '@shared/components/SectionHeader'
+import { cn } from '@shared/utils/cn'
 import { getTodayUTC, toISODateString } from '@shared/utils/date'
 import { pickImageFromGallery, takePhoto } from '@shared/utils/image'
 import { colors } from '@theme/colors'
@@ -231,9 +232,10 @@ export default function NutritionScreen() {
                     key={mealType.id}
                     onPress={() => onChange(isSelected ? null : mealType.id)}
                     haptic="light"
-                    className={`flex-1 items-center justify-center py-3 rounded-xl border ${
+                    className={cn(
+                      'flex-1 items-center justify-center py-3 rounded-xl border',
                       isSelected ? 'bg-secondary border-secondary' : 'bg-surface border-border'
-                    }`}
+                    )}
                     accessibilityLabel={t(`dashboard.summary.mealType.${mealType.id}`)}
                   >
                     <Icon
@@ -242,9 +244,10 @@ export default function NutritionScreen() {
                       strokeWidth={2}
                     />
                     <Text
-                      className={`text-xs mt-1 ${
+                      className={cn(
+                        'text-xs mt-1',
                         isSelected ? 'text-white font-medium' : 'text-textMuted'
-                      }`}
+                      )}
                     >
                       {t(`dashboard.summary.mealType.${mealType.id}`)}
                     </Text>

@@ -12,6 +12,7 @@ import Animated, {
 
 import { Card } from '@shared/components/Card'
 import { Pressable } from '@shared/components/Pressable'
+import { cn } from '@shared/utils/cn'
 import { colors } from '@theme/colors'
 
 type IndicatorStatus = 'empty' | 'partial' | 'complete'
@@ -112,7 +113,7 @@ export function IndicatorCard({
 
       {/* Right: Value + Chevron */}
       <View className="flex-row items-center gap-2">
-        <Text className={`text-base font-bold ${isEmpty ? 'text-text-muted' : 'text-text'}`}>
+        <Text className={cn('text-base font-bold', isEmpty ? 'text-text-muted' : 'text-text')}>
           {isEmpty ? t('dashboard.indicators.enterData') : value}
         </Text>
         <ChevronRight size={20} color={colors.textMuted} />

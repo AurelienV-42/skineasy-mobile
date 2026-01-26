@@ -11,6 +11,7 @@ React Native (Expo) skincare app - iOS & Android
 | Haptic    | `@shared/utils/haptic`         | See intensity rules below        |
 | Date      | `@shared/utils/date`           | API uses ISO 8601 UTC            |
 | ENV       | `@shared/config/env`           | Never use process.env at runtime |
+| cn        | `@shared/utils/cn`             | Use for className concatenation  |
 
 ## Project-Specific Rules
 
@@ -19,6 +20,7 @@ React Native (Expo) skincare app - iOS & Android
 3. **No backend errors in UI** - Use i18n keys, backend errors aren't translated
 4. **Date format** - API: `"2025-01-15T00:00:00.000Z"`, birthday only: `"YYYY-MM-DD"`
 5. **NativeWind only** - Always use `className` with Tailwind classes, never `StyleSheet.create()`. Exception: `Animated.View` and `GlassView` require `style` prop
+6. **Use cn() for dynamic classes** - Never use template literals for className concatenation, use `cn()` from `@shared/utils/cn`
 
 ### Haptic Intensity
 

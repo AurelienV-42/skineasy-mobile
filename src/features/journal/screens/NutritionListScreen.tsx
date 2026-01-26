@@ -21,6 +21,7 @@ import { Card } from '@shared/components/Card'
 import { Pressable } from '@shared/components/Pressable'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
 import type { MealType } from '@shared/types/journal.types'
+import { cn } from '@shared/utils/cn'
 import { toUTCDateString } from '@shared/utils/date'
 import { colors } from '@theme/colors'
 
@@ -101,7 +102,10 @@ export default function NutritionListScreen(): React.ReactElement {
                       {t(`dashboard.summary.mealType.${mealType.id}`)}
                     </Text>
                     <Text
-                      className={`text-base font-medium ${hasEntry ? 'text-text' : 'text-text-muted'}`}
+                      className={cn(
+                        'text-base font-medium',
+                        hasEntry ? 'text-text' : 'text-text-muted'
+                      )}
                     >
                       {hasEntry ? entry.food_name : t('journal.nutrition.empty')}
                     </Text>

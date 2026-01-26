@@ -2,6 +2,7 @@ import type { LucideIcon } from 'lucide-react-native'
 import { ActivityIndicator, PressableProps, Text, View } from 'react-native'
 
 import { Pressable } from '@shared/components/Pressable'
+import { cn } from '@shared/utils/cn'
 import { colors } from '@theme/colors'
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline'
@@ -65,9 +66,13 @@ export function Button({
 
   return (
     <Pressable
-      className={`${fitContent ? 'px-4' : 'w-full'} h-14 rounded-xl items-center justify-center flex-row gap-1 ${styles.container} ${
-        isDisabled ? 'opacity-50' : ''
-      } ${className || ''}`}
+      className={cn(
+        fitContent ? 'px-4' : 'w-full',
+        'h-14 rounded-xl items-center justify-center flex-row gap-1',
+        styles.container,
+        isDisabled && 'opacity-50',
+        className
+      )}
       style={{
         shadowColor: variant === 'primary' ? colors.primary : '#000',
         shadowOffset: { width: 0, height: isDisabled ? 0 : 4 },

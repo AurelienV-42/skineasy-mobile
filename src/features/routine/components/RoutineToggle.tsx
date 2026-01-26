@@ -6,6 +6,7 @@ import { Text, View } from 'react-native'
 import type { TimeOfDay } from '@features/routine/types/routine.types'
 import { Card } from '@shared/components/Card'
 import { Pressable } from '@shared/components/Pressable'
+import { cn } from '@shared/utils/cn'
 import { colors } from '@theme/colors'
 
 interface ToggleButtonProps {
@@ -35,13 +36,18 @@ function ToggleButton({
     >
       <Card isPressed={isSelected} padding="sm" className="flex-row items-center justify-center">
         <Icon size={20} color={isSelected ? colors.surface : colors.text} />
-        <Text className={`ml-2 font-medium ${isSelected ? 'text-white' : 'text-text'}`}>
+        <Text className={cn('ml-2 font-medium', isSelected ? 'text-white' : 'text-text')}>
           {label}
         </Text>
         <View
-          className={`ml-2 px-2 py-0.5 rounded-full ${isSelected ? 'bg-white/20' : 'bg-gray-100'}`}
+          className={cn(
+            'ml-2 px-2 py-0.5 rounded-full',
+            isSelected ? 'bg-white/20' : 'bg-gray-100'
+          )}
         >
-          <Text className={`text-xs font-semibold ${isSelected ? 'text-white' : 'text-gray-700'}`}>
+          <Text
+            className={cn('text-xs font-semibold', isSelected ? 'text-white' : 'text-gray-700')}
+          >
             {stepCount}
           </Text>
         </View>

@@ -34,6 +34,7 @@ import { Pressable } from '@shared/components/Pressable'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
 import { SectionHeader } from '@shared/components/SectionHeader'
 import type { SportIntensity } from '@shared/types/journal.types'
+import { cn } from '@shared/utils/cn'
 import { getTodayUTC, toISODateString } from '@shared/utils/date'
 
 const INTENSITY_LEVELS = [1, 2, 3, 4, 5] as const
@@ -240,9 +241,10 @@ export default function SportScreen() {
                 className="items-center justify-center"
               >
                 <Text
-                  className={`text-2xl font-bold ${
+                  className={cn(
+                    'text-2xl font-bold',
                     selectedIntensity === level ? 'text-white' : 'text-text'
-                  }`}
+                  )}
                 >
                   {level}
                 </Text>

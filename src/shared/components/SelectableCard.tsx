@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, type ViewStyle } from 'react-native'
 
 import { GlassContainer } from '@shared/components/GlassContainer'
 import { Pressable } from '@shared/components/Pressable'
+import { cn } from '@shared/utils/cn'
 import { colors } from '@theme/colors'
 
 type Variant = 'horizontal' | 'vertical'
@@ -46,7 +47,11 @@ export function SelectableCard({
         <View className={isVertical ? 'items-center' : 'flex-row items-center gap-3'}>
           {Icon && <Icon color={textColor} size={iconSize} strokeWidth={2} />}
           <Text
-            className={`font-semibold ${isVertical ? 'text-sm mt-3' : 'text-base'} ${selected ? 'text-primary' : 'text-textMuted'}`}
+            className={cn(
+              'font-semibold',
+              isVertical ? 'text-sm mt-3' : 'text-base',
+              selected ? 'text-primary' : 'text-textMuted'
+            )}
           >
             {label}
           </Text>

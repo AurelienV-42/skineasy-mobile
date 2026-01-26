@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import { Pressable } from '@shared/components/Pressable'
+import { cn } from '@shared/utils/cn'
 import { colors } from '@theme/colors'
 
 interface DateNavigationProps {
@@ -49,7 +50,7 @@ export function DateNavigation({
   const monthName = format(selectedDate, 'MMMM', { locale: isFrench ? fr : undefined })
 
   return (
-    <View className={`flex-row items-center justify-between ${className}`}>
+    <View className={cn('flex-row items-center justify-between', className)}>
       {/* Previous Day */}
       <Pressable
         onPress={handlePrevDay}
@@ -73,7 +74,10 @@ export function DateNavigation({
         onPress={handleNextDay}
         haptic="light"
         disabled={isToday(selectedDate)}
-        className={`w-10 h-10 items-center justify-center ${isToday(selectedDate) ? 'opacity-30' : ''}`}
+        className={cn(
+          'w-10 h-10 items-center justify-center',
+          isToday(selectedDate) && 'opacity-30'
+        )}
         accessibilityLabel={t('dashboard.navigation.nextDay')}
       >
         <ChevronRight size={24} color={colors.textMuted} />

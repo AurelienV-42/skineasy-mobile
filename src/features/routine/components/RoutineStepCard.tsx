@@ -10,6 +10,7 @@ import type { ProductDto, RoutineStepWithProducts } from '@features/routine/type
 import { CATEGORY_LABELS } from '@features/routine/types/routine.types'
 import { Card } from '@shared/components/Card'
 import { Pressable } from '@shared/components/Pressable'
+import { cn } from '@shared/utils/cn'
 import { getTodayUTC } from '@shared/utils/date'
 import { haptic } from '@shared/utils/haptic'
 import { colors } from '@theme/colors'
@@ -24,7 +25,7 @@ function ProductItem({ product, isLast, onPress }: ProductItemProps) {
   return (
     <Pressable
       onPress={onPress}
-      className={`flex-row items-center ${!isLast ? 'mb-3 pb-3 border-b border-border/50' : ''}`}
+      className={cn('flex-row items-center', !isLast && 'mb-3 pb-3 border-b border-border/50')}
     >
       {product.illustrationUrl && (
         <Image
@@ -118,7 +119,7 @@ export function RoutineStepCard({
             </Pressable>
 
             <Text
-              className={`text-base font-semibold ${completed ? 'text-text-muted' : 'text-text'}`}
+              className={cn('text-base font-semibold', completed ? 'text-text-muted' : 'text-text')}
             >
               {categoryLabel}
             </Text>

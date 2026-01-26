@@ -4,6 +4,7 @@ import { Animated, Text, TextInput, View, type TextInputProps } from 'react-nati
 
 import { Pressable } from '@shared/components/Pressable'
 import { useScrollContext } from '@shared/components/ScreenHeader'
+import { cn } from '@shared/utils/cn'
 import { haptic } from '@shared/utils/haptic'
 import { colors } from '@theme/colors'
 
@@ -138,13 +139,15 @@ export const Input = forwardRef<TextInput, InputProps>(
     return (
       <View ref={containerRef} className="w-full mb-6">
         <View
-          className={`relative ${
+          className={cn(
+            'relative bg-surface rounded-xl',
             isFocused
               ? 'border-2 border-primary'
               : error
                 ? 'border-2 border-error'
-                : 'border border-border'
-          } bg-surface rounded-xl ${className || ''}`}
+                : 'border border-border',
+            className
+          )}
           style={{
             height: multiline ? multilineHeight : 24 + 40, // Icon Size + padding vertical
             shadowColor: isFocused ? colors.primary : '#000',
@@ -179,7 +182,10 @@ export const Input = forwardRef<TextInput, InputProps>(
           {/* Input */}
           <TextInput
             ref={ref}
-            className={`w-full h-full ${showPasswordToggle && secureTextEntry ? 'pr-14' : 'pr-4'} pl-4 text-text`}
+            className={cn(
+              'w-full h-full pl-4 text-text',
+              showPasswordToggle && secureTextEntry ? 'pr-14' : 'pr-4'
+            )}
             textAlignVertical={multiline ? 'top' : 'center'}
             style={[{ fontSize: 14, lineHeight: 18, paddingTop: multiline ? 12 : 0 }, style]}
             onFocus={handleFocus}

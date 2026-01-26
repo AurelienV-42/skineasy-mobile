@@ -3,6 +3,7 @@ import { forwardRef, useEffect, useRef, useState } from 'react'
 import { Animated, Text, TextInput, View, type TextInputProps } from 'react-native'
 
 import { useScrollContext } from '@shared/components/ScreenHeader'
+import { cn } from '@shared/utils/cn'
 import { haptic } from '@shared/utils/haptic'
 import { colors } from '@theme/colors'
 
@@ -180,13 +181,15 @@ export const DateInput = forwardRef<TextInput, DateInputProps>(
     return (
       <View ref={containerRef} className="w-full mb-6">
         <View
-          className={`relative ${
+          className={cn(
+            'relative bg-surface rounded-xl',
             isFocused
               ? 'border-2 border-primary'
               : error
                 ? 'border-2 border-error'
-                : 'border border-border'
-          } bg-surface rounded-xl ${className || ''}`}
+                : 'border border-border',
+            className
+          )}
           style={{
             height: 24 + 40, // Icon Size + padding vertical
             shadowColor: isFocused ? colors.primary : '#000',
