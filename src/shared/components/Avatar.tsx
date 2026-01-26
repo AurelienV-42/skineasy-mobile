@@ -5,7 +5,8 @@ import { Pressable } from '@shared/components/Pressable'
 import { colors } from '@theme/colors'
 
 interface AvatarProps {
-  picture?: string | null
+  avatar?: string | null
+  picture?: string | null // Deprecated: use avatar instead
   firstname?: string | null
   lastname?: string | null
   email?: string | null
@@ -28,6 +29,7 @@ function getInitials(
 }
 
 export function Avatar({
+  avatar,
   picture,
   firstname,
   lastname,
@@ -37,6 +39,7 @@ export function Avatar({
 }: AvatarProps): React.ReactElement {
   const initials = getInitials(firstname, lastname, email)
   const fontSize = Math.floor(size * 0.4)
+  const imageUri = avatar ?? picture
 
   const containerStyle = {
     width: size,
@@ -44,8 +47,8 @@ export function Avatar({
     borderRadius: size / 2,
   }
 
-  const content = picture ? (
-    <Image source={{ uri: picture }} style={[styles.image, containerStyle]} />
+  const content = imageUri ? (
+    <Image source={{ uri: imageUri }} style={[styles.image, containerStyle]} />
   ) : initials ? (
     <View style={[styles.initialsContainer, containerStyle]}>
       <Text style={[styles.initials, { fontSize }]}>{initials}</Text>

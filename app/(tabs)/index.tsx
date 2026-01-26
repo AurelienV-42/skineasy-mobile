@@ -56,7 +56,7 @@ export default function DashboardScreen(): React.ReactElement {
             >
               <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
               <Avatar
-                avatar={user?.avatar ? getImageUrl(user.avatar) : undefined}
+                avatar={user?.avatar}
                 firstname={user?.firstname}
                 lastname={user?.lastname}
                 email={user?.email}

@@ -9,10 +9,9 @@
  * - No server-side compression
  */
 
-import * as ImagePicker from 'expo-image-picker'
-import * as ImageManipulator from 'expo-image-manipulator'
-import { ENV } from '@shared/config/env'
 import { logger } from '@shared/utils/logger'
+import * as ImageManipulator from 'expo-image-manipulator'
+import * as ImagePicker from 'expo-image-picker'
 
 type PermissionDeniedHandler = () => void
 
@@ -216,18 +215,4 @@ export function imageUriToFormData(uri: string, fieldName: string = 'image'): Fo
   } as unknown as Blob)
 
   return formData
-}
-
-/**
- * Build full image URL from relative path
- *
- * @param path - Relative path or full URL
- * @returns Full URL or null if path is null/empty
- */
-export function getImageUrl(path: string | null): string | null {
-  if (!path) return null
-  if (path.startsWith('http://') || path.startsWith('https://')) {
-    return path
-  }
-  return `${ENV.API_URL}${path}`
 }

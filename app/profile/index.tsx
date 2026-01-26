@@ -15,6 +15,7 @@ import { Alert, Linking, Text, View } from 'react-native'
 
 import { useDeleteAccount } from '@features/profile/hooks/useDeleteAccount'
 import * as Sentry from '@sentry/react-native'
+import { Avatar } from '@shared/components/Avatar'
 import { Pressable } from '@shared/components/Pressable'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
 import { useAuthStore } from '@shared/stores/auth.store'
@@ -106,9 +107,22 @@ export default function ProfileScreen(): React.ReactElement {
 
   return (
     <ScreenHeader title={t('profile.title')} edges={['top']}>
+      {/* Avatar */}
+      {!!user && (
+        <View className="items-center mb-6">
+          <Avatar
+            avatar={user.avatar}
+            firstname={user.firstname}
+            lastname={user.lastname}
+            email={user.email}
+            size={80}
+          />
+        </View>
+      )}
+
       {/* User Info */}
       {!!user && (
-        <View className="mb-8">
+        <View className="mb-8 items-center">
           <Text className="text-lg font-medium text-text">
             {user?.firstname} {user?.lastname}
           </Text>

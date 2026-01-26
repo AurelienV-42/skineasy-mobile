@@ -42,7 +42,7 @@ import { Pressable } from '@shared/components/Pressable'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
 import { SectionHeader } from '@shared/components/SectionHeader'
 import { getTodayUTC, toISODateString } from '@shared/utils/date'
-import { getImageUrl, pickImageFromGallery, takePhoto } from '@shared/utils/image'
+import { pickImageFromGallery, takePhoto } from '@shared/utils/image'
 import { colors } from '@theme/colors'
 
 const MEAL_TYPES = [
@@ -72,11 +72,7 @@ export default function NutritionScreen() {
   const [imageWasModified, setImageWasModified] = useState(false)
 
   // Compute effective image URI: use local if modified, else use existing entry's image
-  const imageUri = imageWasModified
-    ? localImageUri
-    : existingEntry?.photo_url
-      ? getImageUrl(existingEntry.photo_url)
-      : null
+  const imageUri = imageWasModified ? localImageUri : (existingEntry?.photo_url ?? null)
 
   const setImageUri = (uri: string | null) => {
     setImageWasModified(true)

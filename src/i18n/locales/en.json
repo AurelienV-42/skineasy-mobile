@@ -306,9 +306,16 @@
     "logoutTitle": "Log Out",
     "updateSuccess": "Profile Updated",
     "updateSuccessMessage": "Your profile has been successfully updated.",
+    "updateError": "Failed to update profile",
     "emailReadOnly": "Email cannot be changed",
     "birthday": "Birthday",
-    "selectBirthday": "Select birthday"
+    "selectBirthday": "Select birthday",
+    "changePhoto": "Change Photo",
+    "takePhoto": "Take Photo",
+    "chooseFromGallery": "Choose from Gallery",
+    "cameraPermissionRequired": "Permission to access camera is required",
+    "galleryPermissionRequired": "Permission to access gallery is required",
+    "avatarUploadError": "Failed to upload photo"
   },
   "diagnosis": {
     "required": "Diagnosis Required",

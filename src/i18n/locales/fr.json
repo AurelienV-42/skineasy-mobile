@@ -307,9 +307,16 @@
     "logoutTitle": "Déconnexion",
     "updateSuccess": "Profil mis à jour",
     "updateSuccessMessage": "Ton profil a été mis à jour avec succès.",
+    "updateError": "Échec de la mise à jour du profil",
     "emailReadOnly": "L'email ne peut pas être modifié",
     "birthday": "Date de naissance",
-    "selectBirthday": "Sélectionner la date de naissance"
+    "selectBirthday": "Sélectionner la date de naissance",
+    "changePhoto": "Changer la photo",
+    "takePhoto": "Prendre une photo",
+    "chooseFromGallery": "Choisir dans la galerie",
+    "cameraPermissionRequired": "L'accès à l'appareil photo est requis",
+    "galleryPermissionRequired": "L'accès à la galerie est requis",
+    "avatarUploadError": "Échec du téléchargement de la photo"
   },
   "diagnosis": {
     "required": "Diagnostic requis",
