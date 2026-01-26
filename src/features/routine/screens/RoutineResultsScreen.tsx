@@ -10,8 +10,8 @@ import { RoutineStepCard } from '@features/routine/components/RoutineStepCard'
 import { RoutineSummaryCard } from '@features/routine/components/RoutineSummaryCard'
 import { RoutineToggle } from '@features/routine/components/RoutineToggle'
 import { useRoutine } from '@features/routine/hooks/useRoutine'
-import { useRoutineCompletionStore } from '@features/routine/stores/routineCompletionStore'
 import { useTodayRoutine } from '@features/routine/hooks/useTodayRoutine'
+import { useRoutineCompletionStore } from '@features/routine/stores/routineCompletionStore'
 import type { TimeOfDay } from '@features/routine/types/routine.types'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
 import { getTodayUTC } from '@shared/utils/date'
@@ -99,7 +99,7 @@ export default function RoutineResultsScreen() {
       title={t('routine.resultsTitle')}
       noScroll
       canGoBack={false}
-      className="bg-cream"
+      className="bg-background"
     >
       {/* Skin Profile Summary */}
       <RoutineSummaryCard

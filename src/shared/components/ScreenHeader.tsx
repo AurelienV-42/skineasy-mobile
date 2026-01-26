@@ -8,6 +8,7 @@ import { Edge, SafeAreaView } from 'react-native-safe-area-context'
 
 import { Pressable } from '@shared/components/Pressable'
 import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
+import { cn } from '@shared/utils/cn'
 import { colors } from '@theme/colors'
 
 interface ScreenHeaderProps {
@@ -65,7 +66,7 @@ export function ScreenHeader({
   )
 
   return (
-    <SafeAreaView edges={edges} className={`flex-1 bg-surface ${className}`}>
+    <SafeAreaView edges={edges} className={cn(`flex-1 bg-surface`, className)}>
       {/* Custom Header */}
       <Animated.View
         style={animStyles[0]}
