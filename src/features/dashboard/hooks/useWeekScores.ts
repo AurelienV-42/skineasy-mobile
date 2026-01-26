@@ -6,7 +6,7 @@ import { queryKeys } from '@shared/config/queryKeys'
 import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
 import { toUTCDateString } from '@shared/utils/date'
 
-import { calculateDayScore } from '../utils/score'
+import { calculateDayScore } from '@features/dashboard/utils/score'
 
 type DayScore = {
   date: Date

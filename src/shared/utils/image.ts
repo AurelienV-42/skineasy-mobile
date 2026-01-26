@@ -151,50 +151,6 @@ export async function compressImage(uri: string): Promise<string> {
 }
 
 /**
- * Pick and compress an image from gallery
- * Convenience method combining pickImageFromGallery + compressImage
- *
- * @returns Promise<string | null> - URI of the compressed image, or null if canceled
- */
-export async function pickAndCompressImage(): Promise<string | null> {
-  const imageUri = await pickImageFromGallery()
-
-  if (!imageUri) {
-    return null
-  }
-
-  try {
-    const compressedUri = await compressImage(imageUri)
-    return compressedUri
-  } catch (error) {
-    logger.error('[Image] Error in pickAndCompressImage:', error)
-    return null
-  }
-}
-
-/**
- * Take and compress a photo
- * Convenience method combining takePhoto + compressImage
- *
- * @returns Promise<string | null> - URI of the compressed photo, or null if canceled
- */
-export async function takeAndCompressPhoto(): Promise<string | null> {
-  const photoUri = await takePhoto()
-
-  if (!photoUri) {
-    return null
-  }
-
-  try {
-    const compressedUri = await compressImage(photoUri)
-    return compressedUri
-  } catch (error) {
-    logger.error('[Image] Error in takeAndCompressPhoto:', error)
-    return null
-  }
-}
-
-/**
  * Convert image URI to FormData for upload
  *
  * @param uri - Local URI of the image

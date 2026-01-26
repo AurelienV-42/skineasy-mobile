@@ -17,9 +17,7 @@ const PLACEHOLDER_RECIPE = {
 export function RecipeOfTheDay(): React.ReactElement {
   const { t } = useTranslation()
 
-  const handlePress = (): void => {
-    // TODO: Navigate to recipe detail or open URL
-  }
+  const handlePress = (): void => {}
 
   return (
     <View className="py-2">

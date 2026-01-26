@@ -14,8 +14,6 @@ import {
   isToday as isTodayFns,
   isYesterday as isYesterdayFns,
   isTomorrow as isTomorrowFns,
-  subDays,
-  addDays,
   startOfDay,
 } from 'date-fns'
 
@@ -35,22 +33,6 @@ export function toUTCDateString(date: Date): string {
 }
 
 /**
- * Convert a UTC ISO string to a local Date object
- * Used when receiving dates from the API
- *
- * @param utcString - UTC ISO string (e.g., "2025-01-15T00:00:00.000Z")
- * @returns Local Date object
- *
- * @example
- * const utcString = "2025-01-15T00:00:00.000Z"
- * const localDate = fromUTCDateString(utcString)
- * // User in Paris sees: Jan 15, 2025 01:00 (GMT+1)
- */
-export function fromUTCDateString(utcString: string): Date {
-  return parseISO(utcString)
-}
-
-/**
  * Get today's date in YYYY-MM-DD format
  * Used for creating journal entries for "today"
  *
@@ -61,24 +43,6 @@ export function fromUTCDateString(utcString: string): Date {
  */
 export function getTodayUTC(): string {
   return toUTCDateString(new Date())
-}
-
-/**
- * Get yesterday's date in YYYY-MM-DD format
- *
- * @returns Date string in YYYY-MM-DD format for yesterday
- */
-export function getYesterdayUTC(): string {
-  return toUTCDateString(subDays(new Date(), 1))
-}
-
-/**
- * Get tomorrow's date in YYYY-MM-DD format
- *
- * @returns Date string in YYYY-MM-DD format for tomorrow
- */
-export function getTomorrowUTC(): string {
-  return toUTCDateString(addDays(new Date(), 1))
 }
 
 /**
@@ -95,21 +59,6 @@ export function getTomorrowUTC(): string {
 export function formatDate(date: Date | string, formatPattern: string = 'PPPP'): string {
   const dateObj = typeof date === 'string' ? parseISO(date) : date
   return format(dateObj, formatPattern)
-}
-
-/**
- * Format a date for short display (e.g., "Jan 15")
- *
- * @param date - Date to format (can be Date object or UTC ISO string)
- * @returns Formatted short date string
- *
- * @example
- * formatDateShort(new Date(2025, 0, 15)) // "Jan 15"
- * formatDateShort("2025-01-15T00:00:00.000Z") // "Jan 15"
- */
-export function formatDateShort(date: Date | string): string {
-  const dateObj = typeof date === 'string' ? parseISO(date) : date
-  return format(dateObj, 'MMM d')
 }
 
 /**

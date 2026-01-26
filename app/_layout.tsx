@@ -12,6 +12,7 @@ import Toast from 'react-native-toast-message'
 import assets from '@assets'
 import { useInitializeUser } from '@features/auth/hooks/useInitializeUser'
 import * as Sentry from '@sentry/react-native'
+import { ErrorBoundary } from '@shared/components/ErrorBoundary'
 import { OfflineBanner } from '@shared/components/OfflineBanner'
 import { queryClient } from '@shared/config/queryClient'
 import { initSentry } from '@shared/config/sentry'
@@ -101,7 +102,9 @@ export default Sentry.wrap(function RootLayout() {
       <KeyboardProvider statusBarTranslucent navigationBarTranslucent>
         <QueryClientProvider client={queryClient}>
           <SafeAreaProvider>
-            <RootLayoutContent />
+            <ErrorBoundary>
+              <RootLayoutContent />
+            </ErrorBoundary>
           </SafeAreaProvider>
         </QueryClientProvider>
       </KeyboardProvider>

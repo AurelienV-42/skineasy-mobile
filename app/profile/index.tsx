@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router'
 import {
+  AlertTriangle,
   Bug,
   ChevronRight,
   FileText,
@@ -10,6 +11,7 @@ import {
   Trash2,
   UserPen,
 } from 'lucide-react-native'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Linking, Text, View } from 'react-native'
 
@@ -21,6 +23,27 @@ import { ScreenHeader } from '@shared/components/ScreenHeader'
 import { useAuthStore } from '@shared/stores/auth.store'
 import { useUserStore } from '@shared/stores/user.store'
 import { colors } from '@theme/colors'
+
+function ErrorBoundaryTestButton(): React.ReactElement {
+  const [shouldThrow, setShouldThrow] = useState(false)
+
+  if (shouldThrow) {
+    throw new Error('Test ErrorBoundary crash from DEV mode')
+  }
+
+  return (
+    <Pressable
+      onPress={() => setShouldThrow(true)}
+      haptic="light"
+      className="flex-row items-center justify-between p-4"
+    >
+      <View className="flex-row items-center gap-3">
+        <AlertTriangle size={20} color={colors.warning} />
+        <Text className="text-base text-warning">Test ErrorBoundary (DEV only)</Text>
+      </View>
+    </Pressable>
+  )
+}
 
 export default function ProfileScreen(): React.ReactElement {
   const { t, i18n } = useTranslation()
@@ -229,19 +252,20 @@ export default function ProfileScreen(): React.ReactElement {
         </Pressable>
       </View>
 
-      {/* DEV Only - Sentry Test Button */}
+      {/* DEV Only - Test Buttons */}
       {__DEV__ && (
         <View className="bg-surface mt-4 mb-8 -mx-4">
           <Pressable
             onPress={handleTestSentry}
             haptic="light"
-            className="flex-row items-center justify-between p-4"
+            className="flex-row items-center justify-between p-4 border-b border-border"
           >
             <View className="flex-row items-center gap-3">
               <Bug size={20} color={colors.warning} />
               <Text className="text-base text-warning">Test Sentry (DEV only)</Text>
             </View>
           </Pressable>
+          <ErrorBoundaryTestButton />
         </View>
       )}
     </ScreenHeader>

@@ -14,7 +14,7 @@ import { Frown, Meh, Moon, Smile } from 'lucide-react-native'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { Alert, View } from 'react-native'
+import { ActivityIndicator, Alert, Text, View } from 'react-native'
 
 import { useDeleteSleep, useSleepEntries, useUpsertSleep } from '@features/journal/hooks/useJournal'
 import { sleepFormSchema, type SleepFormInput } from '@features/journal/schemas/journal.schema'
@@ -43,7 +43,7 @@ export default function SleepScreen() {
 
   // Fetch today's entry (or specific date if provided)
   const dateToUse = params.date || getTodayUTC()
-  const { data: sleepEntries } = useSleepEntries(dateToUse)
+  const { data: sleepEntries, isLoading, isError, refetch } = useSleepEntries(dateToUse)
   // Use specific id if editing, otherwise get first entry for today
   const existingEntry = params.id
     ? sleepEntries?.find((e) => e.id === Number(params.id))
@@ -113,6 +113,27 @@ export default function SleepScreen() {
         },
       },
     ])
+  }
+
+  if (isLoading) {
+    return (
+      <ScreenHeader title={t('journal.sleep.screenTitle')} icon={Moon}>
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator size="large" />
+        </View>
+      </ScreenHeader>
+    )
+  }
+
+  if (isError) {
+    return (
+      <ScreenHeader title={t('journal.sleep.screenTitle')} icon={Moon}>
+        <View className="flex-1 items-center justify-center px-6">
+          <Text className="text-base text-textMuted text-center mb-4">{t('common.error')}</Text>
+          <Button title={t('common.retry')} onPress={() => refetch()} haptic="medium" />
+        </View>
+      </ScreenHeader>
+    )
   }
 
   return (

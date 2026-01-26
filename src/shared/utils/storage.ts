@@ -66,7 +66,3 @@ export async function getSportGoal(): Promise<number> {
     return DEFAULT_SPORT_GOAL_MINUTES
   }
 }
-
-export async function setSportGoal(minutes: number): Promise<void> {
-  await AsyncStorage.setItem(KEYS.SPORT_GOAL_MINUTES, String(minutes))
-}

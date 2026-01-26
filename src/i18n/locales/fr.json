@@ -7,6 +7,7 @@
   "common": {
     "loading": "Chargement...",
     "error": "Une erreur est survenue",
+    "errorBoundaryDescription": "Quelque chose s'est mal passé. Veuillez réessayer.",
     "retry": "Réessayer",
     "save": "Enregistrer",
     "cancel": "Annuler",

@@ -15,7 +15,7 @@ import { Dumbbell, Flame, MessageSquare, PersonStanding, Timer } from 'lucide-re
 import { useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { Alert, Text, View } from 'react-native'
+import { ActivityIndicator, Alert, Text, View } from 'react-native'
 
 import { SportTypeSelector } from '@features/journal/components/SportTypeSelector'
 import {
@@ -49,7 +49,7 @@ export default function SportScreen() {
 
   // If editing, fetch existing entry
   const dateToUse = params.date || getTodayUTC()
-  const { data: sportEntries } = useSportEntries(dateToUse)
+  const { data: sportEntries, isLoading, isError, refetch } = useSportEntries(dateToUse)
   const existingEntry = sportEntries?.find((e) => e.id === Number(params.id))
   const isEditMode = !!params.id
 
@@ -154,6 +154,27 @@ export default function SportScreen() {
         },
       },
     ])
+  }
+
+  if (isLoading) {
+    return (
+      <ScreenHeader title={t('journal.sport.screenTitle')} icon={Dumbbell}>
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator size="large" />
+        </View>
+      </ScreenHeader>
+    )
+  }
+
+  if (isError) {
+    return (
+      <ScreenHeader title={t('journal.sport.screenTitle')} icon={Dumbbell}>
+        <View className="flex-1 items-center justify-center px-6">
+          <Text className="text-base text-textMuted text-center mb-4">{t('common.error')}</Text>
+          <Button title={t('common.retry')} onPress={() => refetch()} haptic="medium" />
+        </View>
+      </ScreenHeader>
+    )
   }
 
   return (
