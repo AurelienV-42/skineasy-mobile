@@ -18,6 +18,7 @@ import { ErrorBoundary } from '@shared/components/ErrorBoundary'
 import { OfflineBanner } from '@shared/components/OfflineBanner'
 import { queryClient } from '@shared/config/queryClient'
 import { initSentry } from '@shared/config/sentry'
+import { useAppUpdates } from '@shared/hooks/useAppUpdates'
 import { useNetworkStatus } from '@shared/hooks/useNetworkStatus'
 import { useAuthStore } from '@shared/stores/auth.store'
 import { useHealthKitStore } from '@shared/stores/healthkit.store'
@@ -39,6 +40,9 @@ function RootLayoutContent() {
 
   // Initialize network status listener
   useNetworkStatus()
+
+  // Silent OTA updates (production only)
+  useAppUpdates()
 
   const [fontsLoaded] = useFonts({
     ChocolatesRegular: assets.ChocolatesRegular,

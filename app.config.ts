@@ -48,6 +48,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
   },
   scheme: 'skineasy',
+  updates: {
+    enabled: true,
+    checkAutomatically: 'WIFI_ONLY',
+    fallbackToCacheTimeout: 30000,
+    url: 'https://u.expo.dev/dfbff412-fc10-4a77-b170-eb432c2969b9',
+  },
   plugins: [
     'expo-router',
     'expo-secure-store',

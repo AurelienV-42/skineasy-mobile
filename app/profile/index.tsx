@@ -3,6 +3,7 @@ import {
   AlertTriangle,
   Bug,
   ChevronRight,
+  Download,
   FileText,
   Languages,
   Lock,
@@ -18,6 +19,7 @@ import { Alert, Linking, Text, View } from 'react-native'
 import { HealthKitSyncButton } from '@features/healthkit/components/HealthKitSyncButton'
 import { useDeleteAccount } from '@features/profile/hooks/useDeleteAccount'
 import * as Sentry from '@sentry/react-native'
+import { checkAndApplyUpdate } from '@shared/hooks/useAppUpdates'
 import { Avatar } from '@shared/components/Avatar'
 import { Pressable } from '@shared/components/Pressable'
 import { ScreenHeader } from '@shared/components/ScreenHeader'
@@ -41,6 +43,33 @@ function ErrorBoundaryTestButton(): React.ReactElement {
       <View className="flex-row items-center gap-3">
         <AlertTriangle size={20} color={colors.warning} />
         <Text className="text-base text-warning">Test ErrorBoundary (DEV only)</Text>
+      </View>
+    </Pressable>
+  )
+}
+
+function CheckUpdatesButton(): React.ReactElement {
+  const [isChecking, setIsChecking] = useState(false)
+
+  const handleCheckUpdates = async (): Promise<void> => {
+    setIsChecking(true)
+    const result = await checkAndApplyUpdate()
+    setIsChecking(false)
+    Alert.alert('Updates', result)
+  }
+
+  return (
+    <Pressable
+      onPress={handleCheckUpdates}
+      haptic="light"
+      disabled={isChecking}
+      className="flex-row items-center justify-between p-4"
+    >
+      <View className="flex-row items-center gap-3">
+        <Download size={20} color={colors.warning} />
+        <Text className="text-base text-warning">
+          {isChecking ? 'Checking...' : 'Check for Updates (DEV only)'}
+        </Text>
       </View>
     </Pressable>
   )
@@ -268,6 +297,7 @@ export default function ProfileScreen(): React.ReactElement {
             </View>
           </Pressable>
           <ErrorBoundaryTestButton />
+          <CheckUpdatesButton />
         </View>
       )}
     </ScreenHeader>
