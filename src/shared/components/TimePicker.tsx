@@ -19,13 +19,14 @@ import { Hourglass } from 'lucide-react-native'
 import { SectionHeader } from '@shared/components/SectionHeader'
 
 interface TimePickerProps {
-  value: number // minutes
+  value: number | undefined // minutes
   onChange: (minutes: number) => void
   label?: string
   title?: string // Title shown in the BottomSheet
 }
 
-function formatDuration(minutes: number): string {
+function formatDuration(minutes: number | undefined): string {
+  if (minutes === undefined) return '--:--'
   const hours = Math.floor(minutes / 60)
   const mins = minutes % 60
   return `${hours}h${mins.toString().padStart(2, '0')}`
@@ -41,13 +42,15 @@ function dateToMinutes(date: Date): number {
   return date.getHours() * 60 + date.getMinutes()
 }
 
+const DEFAULT_PICKER_MINUTES = 480 // 8 hours
+
 export function TimePicker({ value, onChange, label, title }: TimePickerProps): React.ReactElement {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
-  const [tempValue, setTempValue] = useState(value)
+  const [tempValue, setTempValue] = useState(value ?? DEFAULT_PICKER_MINUTES)
 
   const handleOpen = (): void => {
-    setTempValue(value)
+    setTempValue(value ?? DEFAULT_PICKER_MINUTES)
     setIsOpen(true)
   }
 

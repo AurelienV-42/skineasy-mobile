@@ -11,7 +11,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Frown, Meh, Moon, Smile } from 'lucide-react-native'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, Alert, Text, View } from 'react-native'
@@ -24,15 +24,14 @@ import { SectionHeader } from '@shared/components/SectionHeader'
 import { SelectableCard } from '@shared/components/SelectableCard'
 import { TimePicker } from '@shared/components/TimePicker'
 import type { SleepQuality } from '@shared/types/journal.types'
-import { getTodayUTC, toISODateString } from '@shared/utils/date'
+import { toISODateString, toUTCDateString } from '@shared/utils/date'
+import { DateNavigation } from '@features/dashboard/components/DateNavigation'
 
 const QUALITY_LEVELS = [
   { value: 1 as SleepQuality, icon: Frown, labelKey: 'journal.sleep.quality.bad' },
   { value: 3 as SleepQuality, icon: Meh, labelKey: 'journal.sleep.quality.neutral' },
   { value: 5 as SleepQuality, icon: Smile, labelKey: 'journal.sleep.quality.good' },
 ]
-
-const DEFAULT_MINUTES = 480 // 8 hours
 
 export default function SleepScreen() {
   const { t } = useTranslation()
@@ -41,9 +40,12 @@ export default function SleepScreen() {
   const upsertSleep = useUpsertSleep()
   const deleteSleep = useDeleteSleep()
 
-  // Fetch today's entry (or specific date if provided)
-  const dateToUse = params.date || getTodayUTC()
-  const { data: sleepEntries, isLoading, isError, refetch } = useSleepEntries(dateToUse)
+  const [selectedDate, setSelectedDate] = useState(() =>
+    params.date ? new Date(params.date) : new Date()
+  )
+
+  const dateString = toUTCDateString(selectedDate)
+  const { data: sleepEntries, isLoading, isError, refetch } = useSleepEntries(dateString)
   // Use specific id if editing, otherwise get first entry for today
   const existingEntry = params.id
     ? sleepEntries?.find((e) => e.id === Number(params.id))
@@ -55,37 +57,42 @@ export default function SleepScreen() {
     setValue,
     watch,
     reset,
+    trigger,
   } = useForm<SleepFormInput>({
     resolver: zodResolver(sleepFormSchema),
     mode: 'onChange',
     defaultValues: {
-      minutes: DEFAULT_MINUTES,
-      quality: 3,
+      minutes: undefined,
+      quality: undefined,
     },
   })
 
-  // Populate form when editing
+  // Sync form with selected date's entry
   useEffect(() => {
-    if (existingEntry) {
-      // Convert decimal hours to minutes
-      const minutes = Math.round(existingEntry.hours * 60)
-      reset({
-        minutes,
-        quality: existingEntry.quality as SleepQuality,
-      })
+    if (isLoading) return
+
+    const syncForm = async (): Promise<void> => {
+      if (existingEntry) {
+        const minutes = Math.round(existingEntry.hours * 60)
+        reset({ minutes, quality: existingEntry.quality as SleepQuality })
+      } else {
+        reset({ minutes: undefined, quality: undefined })
+      }
+      await trigger()
     }
-  }, [existingEntry, reset])
+    void syncForm()
+  }, [existingEntry, isLoading, reset, trigger])
 
   // eslint-disable-next-line react-hooks/incompatible-library
-  const selectedMinutes = watch('minutes') ?? DEFAULT_MINUTES
-  const selectedQuality = watch('quality') ?? 3
+  const selectedMinutes = watch('minutes')
+  const selectedQuality = watch('quality')
 
   const onSubmit = (data: SleepFormInput) => {
     // Convert minutes to decimal hours for API
     const hours = data.minutes / 60
 
     const dto = {
-      date: toISODateString(dateToUse),
+      date: toISODateString(dateString),
       hours,
       quality: data.quality as SleepQuality,
     }
@@ -107,7 +114,7 @@ export default function SleepScreen() {
         style: 'destructive',
         onPress: () => {
           deleteSleep.mutate(
-            { id: existingEntry.id, date: dateToUse },
+            { id: existingEntry.id, date: dateString },
             { onSuccess: () => router.back() }
           )
         },
@@ -138,11 +145,16 @@ export default function SleepScreen() {
 
   return (
     <ScreenHeader title={t('journal.sleep.screenTitle')} icon={Moon} childrenClassName="gap-6">
+      <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
+
       {/* Sleep Duration Picker */}
       <View>
         <TimePicker
           value={selectedMinutes}
-          onChange={(val) => setValue('minutes', val, { shouldValidate: true })}
+          onChange={(val) => {
+            setValue('minutes', val, { shouldValidate: true })
+            void trigger()
+          }}
           label={t('journal.sleep.hours')}
           title={t('journal.sleep.pickerTitle')}
         />
@@ -156,7 +168,10 @@ export default function SleepScreen() {
             <View key={value} className="flex-1">
               <SelectableCard
                 selected={selectedQuality === value}
-                onPress={() => setValue('quality', value)}
+                onPress={() => {
+                  setValue('quality', value, { shouldValidate: true })
+                  void trigger()
+                }}
                 label={t(labelKey)}
                 icon={icon}
                 variant="vertical"

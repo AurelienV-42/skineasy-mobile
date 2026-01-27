@@ -4,6 +4,6 @@ export const appConfig = {
     animations: true,
   },
   ui: {
-    indicatorLayout: 'list' as 'grid' | 'list',
+    indicatorLayout: 'grid' as 'grid' | 'list',
   },
 }
