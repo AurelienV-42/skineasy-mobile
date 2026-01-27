@@ -239,6 +239,27 @@
         "dancing": "Danse",
         "other": "Autre"
       }
+    },
+    "stress": {
+      "screenTitle": "Stress",
+      "level": {
+        "minimal": "Minimal",
+        "mild": "Léger",
+        "moderate": "Modéré",
+        "high": "Élevé",
+        "intense": "Intense"
+      },
+      "description": {
+        "minimal": "Tu te sens calme et détendu(e), sans stress significatif.",
+        "mild": "Journée légèrement stressante. Tu as bien géré dans l'ensemble.",
+        "moderate": "Stress perceptible. Tu ressens une certaine tension.",
+        "high": "Journée stressante. Tu te sens parfois débordé(e).",
+        "intense": "Journée vraiment difficile. Tu te sens submergée, anxieuse, avec peu de moments de répit."
+      },
+      "saveSuccess": "Niveau de stress enregistré",
+      "saveError": "Échec de l'enregistrement du stress",
+      "deleteSuccess": "Entrée de stress supprimée",
+      "deleteError": "Échec de la suppression du stress"
     }
   },
   "routine": {

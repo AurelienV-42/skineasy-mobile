@@ -1,11 +1,11 @@
 import { useRouter } from 'expo-router'
-import { Dumbbell, Moon, Utensils } from 'lucide-react-native'
+import { Dumbbell, Moon, Smile, Utensils } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, View } from 'react-native'
 
 import { IndicatorCard } from '@features/dashboard/components/IndicatorCard'
 import { appConfig } from '@shared/config/appConfig'
-import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
+import type { MealEntry, SleepEntry, SportEntry, StressEntry } from '@shared/types/journal.types'
 
 type IndicatorStatus = 'empty' | 'partial' | 'complete'
 
@@ -18,13 +18,23 @@ interface IndicatorsListProps {
   sleepEntries: SleepEntry[]
   mealEntries: MealEntry[]
   sportEntries: SportEntry[]
+  stressEntries: StressEntry[]
   date: string
+}
+
+const STRESS_LEVEL_KEYS: Record<number, string> = {
+  1: 'minimal',
+  2: 'mild',
+  3: 'moderate',
+  4: 'high',
+  5: 'intense',
 }
 
 export function IndicatorsList({
   sleepEntries,
   mealEntries,
   sportEntries,
+  stressEntries,
   date,
 }: IndicatorsListProps): React.ReactElement {
   const layout = appConfig.ui.indicatorLayout
@@ -46,11 +56,16 @@ export function IndicatorsList({
   const totalSportMinutes = sportEntries.reduce((acc, entry) => acc + (entry.duration || 0), 0)
   const sportValue = totalSportMinutes > 0 ? `${totalSportMinutes} min` : '-'
 
-  const navigateToJournal = (type: 'sleep' | 'nutrition' | 'sport'): void => {
+  const stressLevel = stressEntries.length > 0 ? stressEntries[0].level : 0
+  const stressValue =
+    stressLevel > 0 ? t(`journal.stress.level.${STRESS_LEVEL_KEYS[stressLevel]}`) : '-'
+
+  const navigateToJournal = (type: 'sleep' | 'nutrition' | 'sport' | 'stress'): void => {
     const paths = {
       sleep: '/journal/sleep',
       nutrition: '/journal/nutrition',
       sport: '/journal/sport',
+      stress: '/journal/stress',
     }
     router.push({ pathname: paths[type], params: { date } })
   }
@@ -60,6 +75,7 @@ export function IndicatorsList({
   const nutritionStatus: IndicatorStatus =
     mealCount >= 3 ? 'complete' : mealCount > 0 ? 'partial' : 'empty'
   const sportStatus: IndicatorStatus = sportEntries.length > 0 ? 'complete' : 'empty'
+  const stressStatus: IndicatorStatus = stressEntries.length > 0 ? 'complete' : 'empty'
 
   // Display value for nutrition partial state
   const nutritionValue =
@@ -94,7 +110,7 @@ export function IndicatorsList({
           </View>
         </View>
 
-        {/* Bottom row: Sport (half width) */}
+        {/* Bottom row: Sport + Stress */}
         <View className="flex-row gap-2">
           <View style={{ width: CARD_WIDTH }}>
             <IndicatorCard
@@ -106,7 +122,16 @@ export function IndicatorsList({
               layout="grid"
             />
           </View>
-          <View style={{ width: CARD_WIDTH }} />
+          <View style={{ width: CARD_WIDTH }}>
+            <IndicatorCard
+              icon={Smile}
+              label={t('dashboard.indicators.stress')}
+              value={stressValue}
+              onPress={() => navigateToJournal('stress')}
+              status={stressStatus}
+              layout="grid"
+            />
+          </View>
         </View>
       </View>
     )
@@ -136,6 +161,14 @@ export function IndicatorsList({
         value={sportValue}
         onPress={() => navigateToJournal('sport')}
         status={sportStatus}
+        layout="list"
+      />
+      <IndicatorCard
+        icon={Smile}
+        label={t('dashboard.indicators.stress')}
+        value={stressValue}
+        onPress={() => navigateToJournal('stress')}
+        status={stressStatus}
         layout="list"
       />
     </View>

@@ -1,5 +1,5 @@
 import { scoreConfig } from '@shared/config/scoreConfig'
-import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
+import type { MealEntry, SleepEntry, SportEntry, StressEntry } from '@shared/types/journal.types'
 
 const { weights, sleep, activity, nutrition } = scoreConfig
 
@@ -52,18 +52,34 @@ export function calculateNutritionScore(entries: MealEntry[]): number {
   return Math.min(100, typeScore + detailBonus)
 }
 
+export function calculateStressScore(entry: StressEntry | undefined): number {
+  if (!entry) return 0
+
+  const { stress } = scoreConfig
+  // Inverse relationship: lower stress level = higher score
+  // Level 1 -> 100, Level 5 -> 20
+  const scoreRange = stress.maxScore - stress.minScore
+  const levelRange = 4 // 5 - 1
+  const scorePerLevel = scoreRange / levelRange
+
+  return stress.maxScore - (entry.level - 1) * scorePerLevel
+}
+
 export function calculateDayScore(
   sleepEntry: SleepEntry | undefined,
   mealEntries: MealEntry[],
-  sportEntries: SportEntry[]
+  sportEntries: SportEntry[],
+  stressEntry?: StressEntry
 ): number {
   const sleepScore = calculateSleepScore(sleepEntry)
   const nutritionScore = calculateNutritionScore(mealEntries)
   const activityScore = calculateActivityScore(sportEntries)
+  const stressScore = calculateStressScore(stressEntry)
 
   return Math.round(
     sleepScore * weights.sleep +
       nutritionScore * weights.nutrition +
-      activityScore * weights.activity
+      activityScore * weights.activity +
+      stressScore * weights.stress
   )
 }

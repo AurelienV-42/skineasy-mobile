@@ -238,6 +238,27 @@
         "dancing": "Dancing",
         "other": "Other"
       }
+    },
+    "stress": {
+      "screenTitle": "Stress",
+      "level": {
+        "minimal": "Minimal",
+        "mild": "Mild",
+        "moderate": "Moderate",
+        "high": "High",
+        "intense": "Intense"
+      },
+      "description": {
+        "minimal": "You feel calm and relaxed, with no significant stress.",
+        "mild": "Slightly stressful day. You managed well overall.",
+        "moderate": "Noticeable stress. You feel some tension.",
+        "high": "Stressful day. You feel overwhelmed at times.",
+        "intense": "Very difficult day. You feel overwhelmed, anxious, with little respite."
+      },
+      "saveSuccess": "Stress level saved",
+      "saveError": "Failed to save stress level",
+      "deleteSuccess": "Stress entry deleted",
+      "deleteError": "Failed to delete stress entry"
     }
   },
   "routine": {

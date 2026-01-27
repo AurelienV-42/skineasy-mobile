@@ -22,3 +22,9 @@ export {
   useUpdateMeal,
   useDeleteMeal,
 } from '@features/journal/hooks/useMeal'
+
+export {
+  useStressEntries,
+  useUpsertStress,
+  useDeleteStress,
+} from '@features/journal/hooks/useStress'

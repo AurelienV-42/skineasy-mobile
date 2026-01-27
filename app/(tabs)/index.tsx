@@ -17,6 +17,7 @@ import {
   useMealEntries,
   useSleepEntries,
   useSportEntries,
+  useStressEntries,
 } from '@features/journal/hooks/useJournal'
 import { SectionHeader } from '@shared/components/SectionHeader'
 import { Avatar } from '@shared/components/Avatar'
@@ -40,9 +41,10 @@ export default function DashboardScreen(): React.ReactElement {
   const { data: sleepEntries = [] } = useSleepEntries(dateString)
   const { data: mealEntries = [] } = useMealEntries(dateString)
   const { data: sportEntries = [] } = useSportEntries(dateString)
+  const { data: stressEntries = [] } = useStressEntries(dateString)
 
   // Compute score for selected date
-  const score = calculateDayScore(sleepEntries[0], mealEntries, sportEntries)
+  const score = calculateDayScore(sleepEntries[0], mealEntries, sportEntries, stressEntries[0])
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
@@ -83,6 +85,7 @@ export default function DashboardScreen(): React.ReactElement {
               sleepEntries={sleepEntries}
               mealEntries={mealEntries}
               sportEntries={sportEntries}
+              stressEntries={stressEntries}
               date={dateString}
             />
           </Animated.View>

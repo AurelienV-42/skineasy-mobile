@@ -32,6 +32,11 @@ export const sleepQualitySchema = z.number().int().min(1).max(5)
 export const sportIntensitySchema = z.number().int().min(1).max(5)
 
 /**
+ * Stress Level (1-5 scale matching backend)
+ */
+export const stressLevelSchema = z.number().int().min(1).max(5)
+
+/**
  * Sleep Entry Schema (API DTO)
  */
 export const sleepEntrySchema = z.object({
@@ -107,6 +112,12 @@ export const mealFormSchema = z.object({
 })
 
 export type MealFormInput = z.infer<typeof mealFormSchema>
+
+export const stressFormSchema = z.object({
+  level: stressLevelSchema,
+})
+
+export type StressFormInput = z.infer<typeof stressFormSchema>
 
 // Legacy exports for backward compatibility with existing code
 export const sleepQualityEnum = z.enum(['bad', 'neutral', 'good'])

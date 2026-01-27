@@ -11,6 +11,7 @@ import type {
   CreateMealEntryDto,
   CreateSleepEntryDto,
   CreateSportEntryDto,
+  CreateStressEntryDto,
   ImageUploadResponse,
   JournalWeekResponse,
   MealEntry,
@@ -18,6 +19,8 @@ import type {
   SleepUpsertResponse,
   SportEntry,
   SportTypeInfo,
+  StressEntry,
+  StressUpsertResponse,
 } from '@shared/types/journal.types'
 import { imageUriToFormData } from '@shared/utils/image'
 import { logger } from '@shared/utils/logger'
@@ -196,6 +199,33 @@ export const sportTypesService = {
 }
 
 /**
+ * Stress Entry Service
+ */
+export const stressService = {
+  async getByDate(date: string): Promise<StressEntry[]> {
+    logger.info('[Journal API] Fetching stress entries for date:', date)
+    const response = await api.get<ApiResponse<StressEntry[]>>(
+      `/api/v1/journal/stresses?date=${encodeURIComponent(date)}`
+    )
+    return response.data
+  },
+
+  async upsert(dto: CreateStressEntryDto): Promise<StressUpsertResponse> {
+    logger.info('[Journal API] Upserting stress entry:', dto)
+    const response = await api.put<ApiResponse<StressUpsertResponse>>(
+      '/api/v1/journal/stress/upsert',
+      dto
+    )
+    return response.data
+  },
+
+  async delete(id: number): Promise<void> {
+    logger.info('[Journal API] Deleting stress entry:', id)
+    await api.delete(`/api/v1/journal/stress/${id}`)
+  },
+}
+
+/**
  * Batch Entries Service
  */
 export const entriesService = {
@@ -220,6 +250,7 @@ export const journalService = {
   sleep: sleepService,
   sport: sportService,
   meal: mealService,
+  stress: stressService,
   sportTypes: sportTypesService,
   entries: entriesService,
 }

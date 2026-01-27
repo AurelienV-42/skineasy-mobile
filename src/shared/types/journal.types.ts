@@ -32,6 +32,9 @@ export type SleepQuality = 1 | 2 | 3 | 4 | 5
 // Sport Intensity (1-5 scale)
 export type SportIntensity = 1 | 2 | 3 | 4 | 5
 
+// Stress Level (1-5 scale)
+export type StressLevel = 1 | 2 | 3 | 4 | 5
+
 /**
  * Sleep Entry
  * One entry per customer per day (unique constraint)
@@ -77,6 +80,19 @@ export interface MealEntry {
 }
 
 /**
+ * Stress Entry
+ * One entry per customer per day (unique constraint)
+ */
+export interface StressEntry {
+  id: number
+  customer_id: number
+  date: string // ISO 8601 UTC format: "2025-01-15T00:00:00.000Z"
+  level: StressLevel // 1-5
+  note: string | null
+  created_at: string // ISO 8601
+}
+
+/**
  * DTOs for creating/updating entries
  */
 
@@ -102,6 +118,12 @@ export interface CreateMealEntryDto {
   meal_type?: MealType | null
 }
 
+export interface CreateStressEntryDto {
+  date: string // ISO 8601 UTC format: "2025-01-15T00:00:00.000Z"
+  level: StressLevel // 1-5
+  note?: string | null
+}
+
 /**
  * Sleep Upsert Response
  * Indicates whether a new entry was created or an existing one was updated
@@ -109,6 +131,14 @@ export interface CreateMealEntryDto {
 export interface SleepUpsertResponse {
   data: SleepEntry
   created: boolean // true if new entry, false if updated existing
+}
+
+/**
+ * Stress Upsert Response
+ */
+export interface StressUpsertResponse {
+  data: StressEntry
+  created: boolean
 }
 
 /**
@@ -134,4 +164,5 @@ export interface JournalWeekResponse {
   sleeps: SleepEntry[]
   sports: SportEntry[]
   meals: MealEntry[]
+  stresses: StressEntry[]
 }
