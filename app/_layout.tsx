@@ -4,12 +4,14 @@ import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React, { useEffect } from 'react'
+import { Platform } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
 
 import assets from '@assets'
+import { useHealthKitAutoSync } from '@features/healthkit/hooks/useHealthKitAutoSync'
 import { useInitializeUser } from '@features/auth/hooks/useInitializeUser'
 import * as Sentry from '@sentry/react-native'
 import { ErrorBoundary } from '@shared/components/ErrorBoundary'
@@ -18,6 +20,7 @@ import { queryClient } from '@shared/config/queryClient'
 import { initSentry } from '@shared/config/sentry'
 import { useNetworkStatus } from '@shared/hooks/useNetworkStatus'
 import { useAuthStore } from '@shared/stores/auth.store'
+import { useHealthKitStore } from '@shared/stores/healthkit.store'
 import { logger } from '@shared/utils/logger'
 import '../src/global.css'
 import '../src/i18n'
@@ -47,10 +50,20 @@ function RootLayoutContent() {
   // Initialize user data from /me endpoint
   const { isLoading: isUserLoading } = useInitializeUser()
 
+  // Load HealthKit persisted state
+  const loadHealthKitState = useHealthKitStore((state) => state.loadPersistedState)
+
+  // Auto-sync HealthKit on app open
+  useHealthKitAutoSync(isAuthenticated)
+
   useEffect(() => {
     logger.info('[_layout] Loading token...')
     loadToken()
-  }, [loadToken])
+    // Load HealthKit state on iOS
+    if (Platform.OS === 'ios') {
+      loadHealthKitState()
+    }
+  }, [loadToken, loadHealthKitState])
 
   useEffect(() => {
     logger.info('[_layout] State:', {

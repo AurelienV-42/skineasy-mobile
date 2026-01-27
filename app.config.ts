@@ -20,6 +20,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     config: {
       usesNonExemptEncryption: false,
     },
+    infoPlist: {
+      NSHealthShareUsageDescription:
+        'SkinEasy uses your health data to track sleep, activity, and nutrition for skin health insights.',
+    },
   },
   android: {
     adaptiveIcon: {
@@ -58,5 +62,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         organization: 'aurelien-vandaele',
       },
     ],
+    'react-native-health',
   ],
 })

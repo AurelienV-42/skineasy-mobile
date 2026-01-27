@@ -355,5 +355,17 @@
     "passwordsDoNotMatch": "Passwords do not match",
     "firstnameMin": "First name must be at least {{min}} characters",
     "lastnameMin": "Last name must be at least {{min}} characters"
+  },
+  "healthkit": {
+    "syncButton": "Sync Apple Health",
+    "syncing": "Syncing...",
+    "lastSync": "Last sync: {{date}}",
+    "neverSynced": "Never synced",
+    "notAuthorized": "Tap to authorize",
+    "syncSuccess": "Health data synced",
+    "syncError": "Failed to sync health data",
+    "permissionDenied": "Health access denied",
+    "notAvailable": "Apple Health is not available on this device",
+    "simulatorError": "Apple Health is not available in simulator"
   }
 }

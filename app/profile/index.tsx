@@ -15,6 +15,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Linking, Text, View } from 'react-native'
 
+import { HealthKitSyncButton } from '@features/healthkit/components/HealthKitSyncButton'
 import { useDeleteAccount } from '@features/profile/hooks/useDeleteAccount'
 import * as Sentry from '@sentry/react-native'
 import { Avatar } from '@shared/components/Avatar'
@@ -255,6 +256,7 @@ export default function ProfileScreen(): React.ReactElement {
       {/* DEV Only - Test Buttons */}
       {__DEV__ && (
         <View className="bg-surface mt-4 mb-8 -mx-4">
+          <HealthKitSyncButton />
           <Pressable
             onPress={handleTestSentry}
             haptic="light"
