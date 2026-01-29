@@ -262,7 +262,7 @@
     }
   },
   "routine": {
-    "title": "Routine",
+    "title": "Your routine",
     "ordinal": {
       "first": "First",
       "second": "Second"
@@ -367,5 +367,10 @@
     "permissionDenied": "Health access denied",
     "notAvailable": "Apple Health is not available on this device",
     "simulatorError": "Apple Health is not available in simulator"
+  },
+  "forceUpdate": {
+    "title": "Update Required",
+    "message": "A new version of Skin Easy is available. Please update to continue using the app.",
+    "button": "Update Now"
   }
 }

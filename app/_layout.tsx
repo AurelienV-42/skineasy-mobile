@@ -15,10 +15,12 @@ import { useHealthKitAutoSync } from '@features/healthkit/hooks/useHealthKitAuto
 import { useInitializeUser } from '@features/auth/hooks/useInitializeUser'
 import * as Sentry from '@sentry/react-native'
 import { ErrorBoundary } from '@shared/components/ErrorBoundary'
+import { ForceUpdateModal } from '@shared/components/ForceUpdateModal'
 import { OfflineBanner } from '@shared/components/OfflineBanner'
 import { queryClient } from '@shared/config/queryClient'
 import { initSentry } from '@shared/config/sentry'
 import { useAppUpdates } from '@shared/hooks/useAppUpdates'
+import { useForceUpdate } from '@shared/hooks/useForceUpdate'
 import { useNetworkStatus } from '@shared/hooks/useNetworkStatus'
 import { useAuthStore } from '@shared/stores/auth.store'
 import { useHealthKitStore } from '@shared/stores/healthkit.store'
@@ -43,6 +45,9 @@ function RootLayoutContent() {
 
   // Silent OTA updates (production only)
   useAppUpdates()
+
+  // Force update check for outdated app versions
+  const { needsUpdate, openStore } = useForceUpdate()
 
   const [fontsLoaded] = useFonts({
     ChocolatesRegular: assets.ChocolatesRegular,
@@ -89,6 +94,11 @@ function RootLayoutContent() {
 
   if (!fontsLoaded || isAuthLoading || isUserLoading) {
     return null
+  }
+
+  // Show blocking modal if app version is outdated
+  if (needsUpdate) {
+    return <ForceUpdateModal onUpdate={openStore} />
   }
 
   return (

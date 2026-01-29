@@ -19,8 +19,8 @@ import {
   useSportEntries,
   useStressEntries,
 } from '@features/journal/hooks/useJournal'
-import { SectionHeader } from '@shared/components/SectionHeader'
 import { Avatar } from '@shared/components/Avatar'
+import { SectionHeader } from '@shared/components/SectionHeader'
 import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
 import { useUserStore } from '@shared/stores/user.store'
 import { toUTCDateString } from '@shared/utils/date'

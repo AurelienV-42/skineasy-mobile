@@ -144,3 +144,69 @@ Update failures are automatically reported to Sentry with tag `feature: ota-upda
 3. **Monitor Sentry** - Watch for update-related errors
 4. **Gradual rollout** - For critical updates, consider staged deployment
 5. **Keep native code stable** - Minimize native changes to maximize OTA capability
+
+---
+
+## Force Update (Native Version)
+
+For breaking changes that require a new native build (not OTA), we have a force update mechanism.
+
+### How It Works
+
+```
+App Launch
+    │
+    ▼
+Fetch /api/v1/app/config
+    │
+    ├─ Error ──► Fail open (continue normally)
+    │
+    └─ Success
+         │
+         ▼
+    Compare versions
+         │
+         ├─ Current >= minimum ──► Continue app
+         │
+         └─ Current < minimum ──► Show blocking modal
+                                       │
+                                       ▼
+                                  "Update Now"
+                                       │
+                                       ▼
+                                  Open App Store
+```
+
+### Backend Endpoint
+
+```
+GET /api/v1/app/config
+Response: {
+  "minimumVersion": "1.2.0",
+  "storeUrls": {
+    "ios": "https://apps.apple.com/app/...",
+    "android": "https://play.google.com/store/apps/..."
+  }
+}
+```
+
+### When to Bump `minimumVersion`
+
+- Breaking API changes
+- Critical security fixes
+- New native module added
+- App permissions changed
+- Required native SDK update
+
+### Files
+
+- [useForceUpdate.ts](../src/shared/hooks/useForceUpdate.ts) - Version check hook
+- [ForceUpdateModal.tsx](../src/shared/components/ForceUpdateModal.tsx) - Blocking UI
+- [appConfig.service.ts](../src/shared/services/appConfig.service.ts) - API service
+
+### Testing
+
+1. Set backend `minimumVersion` to `"999.0.0"`
+2. Open app → Should see blocking modal
+3. Tap "Update Now" → Should open App Store
+4. Reset `minimumVersion` to current version → App works normally

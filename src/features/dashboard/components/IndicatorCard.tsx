@@ -89,7 +89,7 @@ export function IndicatorCard({
       <View className="flex-row justify-between items-end">
         {isEmpty ? (
           <>
-            <Text className="text-base text-text-muted">{t('dashboard.indicators.enterData')}</Text>
+            <View />
             <ChevronRight size={20} color={colors.textMuted} />
           </>
         ) : (

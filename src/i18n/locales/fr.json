@@ -263,7 +263,7 @@
     }
   },
   "routine": {
-    "title": "Routine",
+    "title": "Ta routine",
     "ordinal": {
       "first": "Premier",
       "second": "Second"
@@ -368,5 +368,10 @@
     "permissionDenied": "Accès santé refusé",
     "notAvailable": "Apple Health n'est pas disponible sur cet appareil",
     "simulatorError": "Apple Health n'est pas disponible sur simulateur"
+  },
+  "forceUpdate": {
+    "title": "Mise à jour requise",
+    "message": "Une nouvelle version de Skin Easy est disponible. Merci de mettre à jour l'application pour continuer.",
+    "button": "Mettre à jour"
   }
 }

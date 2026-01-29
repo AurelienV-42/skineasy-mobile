@@ -137,7 +137,7 @@ POST /auth/refresh        { refresh_token } -> { access_token }
 
 GET  /user/profile        -> User
 
-GET  /diagnosis/latest    -> Diagnosis (includes routine) | 404
+GET  /routine/latest    -> Routine | 404
 
 GET  /journal/entries?date=YYYY-MM-DD  -> JournalEntry[]
 POST /journal/entry       -> JournalEntry
