@@ -28,7 +28,13 @@ export function useInitializeUser() {
     userId: user?.id,
   })
 
-  const { data, error, isLoading, isFetching } = useQuery({
+  const {
+    data,
+    error,
+    isLoading,
+    isFetching,
+    refetch: refetchUser,
+  } = useQuery({
     queryKey: queryKeys.user,
     queryFn: async () => {
       logger.info('[useInitializeUser] Fetching user data from /me endpoint')
@@ -51,12 +57,9 @@ export function useInitializeUser() {
         logger.info('[useInitializeUser] /routine/last response:', result)
         return result
       } catch (err) {
-        // 404 means no routine exists - return null instead of throwing
-        if (err instanceof Error && err.message.includes('404')) {
-          logger.info('[useInitializeUser] No routine found (404)')
-          return null
-        }
-        throw err
+        // Any error (404, 400, network) = treat as no routine
+        logger.warn('[useInitializeUser] Routine fetch failed:', err)
+        return null
       }
     },
     enabled: isAuthenticated && !isAuthLoading,
@@ -114,5 +117,6 @@ export function useInitializeUser() {
   return {
     isLoading: isAuthLoading || isLoading || isRoutineLoading,
     error,
+    refetch: refetchUser,
   }
 }

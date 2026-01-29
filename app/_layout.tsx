@@ -11,11 +11,12 @@ import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-cont
 import Toast from 'react-native-toast-message'
 
 import assets from '@assets'
-import { useHealthKitAutoSync } from '@features/healthkit/hooks/useHealthKitAutoSync'
 import { useInitializeUser } from '@features/auth/hooks/useInitializeUser'
+import { useHealthKitAutoSync } from '@features/healthkit/hooks/useHealthKitAutoSync'
 import * as Sentry from '@sentry/react-native'
 import { ErrorBoundary } from '@shared/components/ErrorBoundary'
 import { ForceUpdateModal } from '@shared/components/ForceUpdateModal'
+import { InitErrorScreen } from '@shared/components/InitErrorScreen'
 import { OfflineBanner } from '@shared/components/OfflineBanner'
 import { queryClient } from '@shared/config/queryClient'
 import { initSentry } from '@shared/config/sentry'
@@ -57,7 +58,7 @@ function RootLayoutContent() {
   })
 
   // Initialize user data from /me endpoint
-  const { isLoading: isUserLoading } = useInitializeUser()
+  const { isLoading: isUserLoading, error: userError, refetch } = useInitializeUser()
 
   // Load HealthKit persisted state
   const loadHealthKitState = useHealthKitStore((state) => state.loadPersistedState)
@@ -99,6 +100,11 @@ function RootLayoutContent() {
   // Show blocking modal if app version is outdated
   if (needsUpdate) {
     return <ForceUpdateModal onUpdate={openStore} />
+  }
+
+  // Show error screen if user initialization failed
+  if (userError) {
+    return <InitErrorScreen onRetry={refetch} />
   }
 
   return (

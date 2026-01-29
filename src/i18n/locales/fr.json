@@ -8,6 +8,7 @@
     "loading": "Chargement...",
     "error": "Une erreur est survenue",
     "errorBoundaryDescription": "Quelque chose s'est mal passé. Veuillez réessayer.",
+    "initErrorDescription": "Impossible de charger tes données. Vérifie ta connexion et réessaie.",
     "retry": "Réessayer",
     "save": "Enregistrer",
     "cancel": "Annuler",

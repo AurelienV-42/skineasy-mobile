@@ -8,6 +8,7 @@
     "loading": "Loading...",
     "error": "An error occurred",
     "errorBoundaryDescription": "Something went wrong. Please try again.",
+    "initErrorDescription": "Unable to load your data. Please check your connection and try again.",
     "retry": "Retry",
     "save": "Save",
     "cancel": "Cancel",
