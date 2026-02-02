@@ -46,7 +46,10 @@ export function useForceUpdate(): UseForceUpdateReturn {
     if (storeUrl) {
       Linking.openURL(storeUrl)
     } else {
-      Alert.alert('An error occured', `Please open ${Platform.OS === 'ios' ? 'App Store' : 'Google Play Store'} to update the app to the latest version to continue.`)
+      Alert.alert(
+        'An error occured',
+        `Please open ${Platform.OS === 'ios' ? 'App Store' : 'Google Play Store'} to update the app to the latest version to continue.`
+      )
     }
   }
 
