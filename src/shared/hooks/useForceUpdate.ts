@@ -16,7 +16,7 @@ interface UseForceUpdateReturn {
  * Fails open (continues normally) if check fails.
  */
 export function useForceUpdate(): UseForceUpdateReturn {
-  const [needsUpdate, setNeedsUpdate] = useState(true)
+  const [needsUpdate, setNeedsUpdate] = useState(false)
   const [storeUrl, setStoreUrl] = useState<string | null>(null)
 
   useEffect(() => {
