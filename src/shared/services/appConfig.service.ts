@@ -1,4 +1,5 @@
 import { api } from '@shared/services/api'
+import type { ApiResponse } from '@shared/types/api.types'
 
 interface AppConfig {
   minimumVersion: string
@@ -8,11 +9,11 @@ interface AppConfig {
   }
 }
 
-interface AppConfigResponse {
-  data: AppConfig
-}
-
 export const appConfigService = {
-  getConfig: (): Promise<AppConfigResponse> =>
-    api.get<AppConfigResponse>('/api/v1/app/config', { skipAuth: true }),
+  getConfig: async (): Promise<AppConfig> => {
+    const response = await api.get<ApiResponse<AppConfig>>('/api/v1/app/config', {
+      skipAuth: true,
+    })
+    return response.data
+  },
 }

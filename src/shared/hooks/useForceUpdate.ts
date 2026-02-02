@@ -1,6 +1,6 @@
 import Constants from 'expo-constants'
 import { useEffect, useState } from 'react'
-import { Linking, Platform } from 'react-native'
+import { Alert, Linking, Platform } from 'react-native'
 
 import { appConfigService } from '@shared/services/appConfig.service'
 import { logger } from '@shared/utils/logger'
@@ -16,22 +16,22 @@ interface UseForceUpdateReturn {
  * Fails open (continues normally) if check fails.
  */
 export function useForceUpdate(): UseForceUpdateReturn {
-  const [needsUpdate, setNeedsUpdate] = useState(false)
+  const [needsUpdate, setNeedsUpdate] = useState(true)
   const [storeUrl, setStoreUrl] = useState<string | null>(null)
 
   useEffect(() => {
     const checkVersion = async (): Promise<void> => {
       try {
-        const { data } = await appConfigService.getConfig()
+        const config = await appConfigService.getConfig()
         const currentVersion = Constants.expoConfig?.version ?? '0.0.0'
 
-        if (compareVersions(currentVersion, data.minimumVersion) < 0) {
+        if (compareVersions(currentVersion, config.minimumVersion) < 0) {
           logger.info('[ForceUpdate] Update required:', {
             current: currentVersion,
-            minimum: data.minimumVersion,
+            minimum: config.minimumVersion,
           })
           setNeedsUpdate(true)
-          setStoreUrl(Platform.OS === 'ios' ? data.storeUrls.ios : data.storeUrls.android)
+          setStoreUrl(Platform.OS === 'ios' ? config.storeUrls.ios : config.storeUrls.android)
         }
       } catch (error) {
         logger.error('[ForceUpdate] Failed to check version:', error)
@@ -45,6 +45,8 @@ export function useForceUpdate(): UseForceUpdateReturn {
   const openStore = (): void => {
     if (storeUrl) {
       Linking.openURL(storeUrl)
+    } else {
+      Alert.alert('An error occured', `Please open ${Platform.OS === 'ios' ? 'App Store' : 'Google Play Store'} to update the app to the latest version to continue.`)
     }
   }
 

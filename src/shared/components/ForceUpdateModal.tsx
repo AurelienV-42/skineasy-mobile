@@ -19,7 +19,7 @@ export function ForceUpdateModal({ onUpdate }: ForceUpdateModalProps): React.Rea
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1 justify-center items-center px-8">
-        <Image source={assets.logo} className="w-24 h-24 mb-8 rounded-2xl" resizeMode="contain" />
+        <Image source={assets.logo} className="w-40 h-40 mb-8 rounded-2xl" resizeMode="contain" />
 
         <Text className="text-2xl font-bold text-text text-center mb-4">
           {t('forceUpdate.title')}
