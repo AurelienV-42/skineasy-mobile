@@ -1,4 +1,12 @@
 {
+  "calendar": {
+    "title": "Calendrier",
+    "noData": "Pas de données pour ce jour",
+    "sleep": "Sommeil",
+    "nutrition": "Nutrition",
+    "sport": "Activité",
+    "stress": "Stress"
+  },
   "welcome": {
     "tagline": "UNE PEAU, UNE HISTOIRE",
     "getStarted": "Commencer",
@@ -140,7 +148,12 @@
       "lutealPhase": "Phase lutéale",
       "enterData": "Entre tes données",
       "mealsEntered_one": "{{count}} repas entré",
-      "mealsEntered_other": "{{count}} repas entrés"
+      "mealsEntered_other": "{{count}} repas entrés",
+      "mealsCount_one": "{{count}} repas",
+      "mealsCount_other": "{{count}} repas",
+      "mealsAndPhotos": "{{meals}} repas • {{photos}} photos",
+      "activitiesCount_one": "{{count}} activité",
+      "activitiesCount_other": "{{count}} activités"
     },
     "score": {
       "label": "Score"
@@ -164,6 +177,7 @@
       "hours": "Temps de sommeil",
       "pickerTitle": "Entre ton temps de sommeil",
       "quality": {
+        "label": "Qualité",
         "bad": "Mal",
         "neutral": "Neutre",
         "good": "Bien"
@@ -244,6 +258,7 @@
     "stress": {
       "screenTitle": "Stress",
       "level": {
+        "label": "Niveau",
         "minimal": "Minimal",
         "mild": "Léger",
         "moderate": "Modéré",

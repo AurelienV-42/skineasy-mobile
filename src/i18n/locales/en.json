@@ -1,4 +1,12 @@
 {
+  "calendar": {
+    "title": "Calendar",
+    "noData": "No data for this day",
+    "sleep": "Sleep",
+    "nutrition": "Nutrition",
+    "sport": "Activity",
+    "stress": "Stress"
+  },
   "welcome": {
     "tagline": "ONE SKIN, ONE STORY",
     "getStarted": "Get Started",
@@ -139,7 +147,12 @@
       "lutealPhase": "Luteal phase",
       "enterData": "Enter your data",
       "mealsEntered_one": "{{count}} meal entered",
-      "mealsEntered_other": "{{count}} meals entered"
+      "mealsEntered_other": "{{count}} meals entered",
+      "mealsCount_one": "{{count}} meal",
+      "mealsCount_other": "{{count}} meals",
+      "mealsAndPhotos": "{{meals}} meals • {{photos}} photos",
+      "activitiesCount_one": "{{count}} activity",
+      "activitiesCount_other": "{{count}} activities"
     },
     "score": {
       "label": "Score"
@@ -163,6 +176,7 @@
       "hours": "Sleep time",
       "pickerTitle": "Enter your sleep time",
       "quality": {
+        "label": "Quality",
         "bad": "Bad",
         "neutral": "Neutral",
         "good": "Good"
@@ -243,6 +257,7 @@
     "stress": {
       "screenTitle": "Stress",
       "level": {
+        "label": "Level",
         "minimal": "Minimal",
         "mild": "Mild",
         "moderate": "Moderate",

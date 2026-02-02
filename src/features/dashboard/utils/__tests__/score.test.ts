@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
+import type { MealEntry, SleepEntry, SportEntry, StressEntry } from '@shared/types/journal.types'
 
 import {
   calculateActivityScore,
@@ -41,6 +41,15 @@ const makeMealEntry = (
   food_name: hasDetails ? 'Salad' : null,
   note: null,
   meal_type: mealType,
+  created_at: '2025-01-15T00:00:00.000Z',
+})
+
+const makeStressEntry = (level: 1 | 2 | 3 | 4 | 5): StressEntry => ({
+  id: 1,
+  customer_id: 1,
+  date: '2025-01-15T00:00:00.000Z',
+  level,
+  note: null,
   created_at: '2025-01-15T00:00:00.000Z',
 })
 
@@ -173,13 +182,15 @@ describe('calculateDayScore', () => {
       makeMealEntry('snack'),
     ] // 100
     const sports = [makeSportEntry(30, 3)] // 100
+    const stress = makeStressEntry(1) // 100 (minimal stress)
 
-    expect(calculateDayScore(sleep, meals, sports)).toBe(100)
+    expect(calculateDayScore(sleep, meals, sports, stress)).toBe(100)
   })
 
   it('returns partial score when some data missing', () => {
     const sleep = makeSleepEntry(8, 5) // 100
     const score = calculateDayScore(sleep, [], [])
-    expect(score).toBe(40) // 100 * 0.4
+    // sleep(100) * 0.35 = 35, no nutrition/activity/stress
+    expect(score).toBe(35)
   })
 })

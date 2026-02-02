@@ -1,7 +1,7 @@
 import { ChevronRight, type LucideIcon } from 'lucide-react-native'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { Image, Text, View } from 'react-native'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -12,7 +12,6 @@ import Animated, {
 
 import { Card } from '@shared/components/Card'
 import { Pressable } from '@shared/components/Pressable'
-import { cn } from '@shared/utils/cn'
 import { colors } from '@theme/colors'
 
 type IndicatorStatus = 'empty' | 'partial' | 'complete'
@@ -22,6 +21,12 @@ interface IndicatorCardProps {
   icon: LucideIcon
   label: string
   value: string
+  /** Visual indicator (stars, dots, emoji) displayed on the right */
+  visualIndicator?: string
+  /** Secondary text info (meal types, activity name, note) */
+  secondaryText?: string
+  /** Thumbnail URL for nutrition card */
+  thumbnailUrl?: string
   onPress?: () => void
   disabled?: boolean
   status: IndicatorStatus
@@ -66,6 +71,9 @@ export function IndicatorCard({
   icon: Icon,
   label,
   value,
+  visualIndicator,
+  secondaryText,
+  thumbnailUrl,
   onPress,
   disabled = false,
   status,
@@ -103,21 +111,41 @@ export function IndicatorCard({
   )
 
   const listContent = (
-    <Card padding="md" className="flex-row items-center justify-between">
-      {/* Left: Dot + Icon + Label */}
-      <View className="flex-row items-center gap-2">
-        <StatusDot status={status} />
-        <Icon size={20} color={colors.brownDark} />
-        <Text className="font-semibold text-brown-dark">{label}</Text>
-      </View>
-
-      {/* Right: Value + Chevron */}
-      <View className="flex-row items-center gap-2">
-        <Text className={cn('text-base font-bold', isEmpty ? 'text-text-muted' : 'text-text')}>
-          {isEmpty ? t('dashboard.indicators.enterData') : value}
-        </Text>
+    <Card padding="md" className="gap-3">
+      {/* Header row: Dot + Icon + Label + Chevron */}
+      <View className="flex-row items-center justify-between">
+        <View className="flex-row items-center gap-2">
+          <StatusDot status={status} />
+          <Icon size={20} color={colors.brownDark} />
+          <Text className="font-semibold text-brown-dark">{label}</Text>
+        </View>
         <ChevronRight size={20} color={colors.textMuted} />
       </View>
+
+      {/* Content row: Value + Visual indicator (or thumbnail) */}
+      {isEmpty ? (
+        <Text className="text-sm text-text-muted ml-5">{t('dashboard.indicators.enterData')}</Text>
+      ) : (
+        <View className="flex-row items-center justify-between ml-5">
+          <View className="flex-1 gap-0.5">
+            <Text className="text-lg font-bold text-text">{value}</Text>
+            {secondaryText && (
+              <Text className="text-sm text-text-muted" numberOfLines={1}>
+                {secondaryText}
+              </Text>
+            )}
+          </View>
+          {thumbnailUrl ? (
+            <Image
+              source={{ uri: thumbnailUrl }}
+              className="w-12 h-12 rounded-lg"
+              resizeMode="cover"
+            />
+          ) : visualIndicator ? (
+            <Text className="text-base text-text-muted">{visualIndicator}</Text>
+          ) : null}
+        </View>
+      )}
     </Card>
   )
 

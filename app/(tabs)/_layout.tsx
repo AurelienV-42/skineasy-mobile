@@ -55,6 +55,7 @@ export default function TabsLayout(): React.ReactElement | null {
         <TabSlot renderFn={renderTabScreen} detachInactiveScreens={false} />
         <TabList style={{ display: 'none' }}>
           <TabTrigger name="index" href="/" />
+          <TabTrigger name="calendar" href="/calendar" />
           <TabTrigger name="routine" href="/routine" />
         </TabList>
         <FloatingTabBar />

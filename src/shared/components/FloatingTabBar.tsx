@@ -1,5 +1,5 @@
 import { useTabTrigger } from 'expo-router/ui'
-import { Home, ListTodo } from 'lucide-react-native'
+import { CalendarDays, Home, Sparkles } from 'lucide-react-native'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LayoutChangeEvent, Pressable, StyleSheet, Text, View } from 'react-native'
@@ -20,7 +20,8 @@ type TabConfig = {
 
 const TABS: TabConfig[] = [
   { name: 'index', href: '/', labelKey: 'dashboard.home', icon: Home },
-  { name: 'routine', href: '/routine', labelKey: 'routine.title', icon: ListTodo },
+  { name: 'calendar', href: '/calendar', labelKey: 'calendar.title', icon: CalendarDays },
+  { name: 'routine', href: '/routine', labelKey: 'routine.title', icon: Sparkles },
 ]
 
 const TAB_COUNT = TABS.length

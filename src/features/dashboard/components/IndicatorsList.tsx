@@ -30,6 +30,14 @@ const STRESS_LEVEL_KEYS: Record<number, string> = {
   5: 'intense',
 }
 
+const STRESS_EMOJIS: Record<number, string> = {
+  1: '😌',
+  2: '🙂',
+  3: '😐',
+  4: '😟',
+  5: '😰',
+}
+
 export function IndicatorsList({
   sleepEntries,
   mealEntries,
@@ -82,6 +90,39 @@ export function IndicatorsList({
     nutritionStatus === 'partial'
       ? t('dashboard.indicators.mealsEntered', { count: mealCount })
       : mealValue
+
+  // Sleep: quality stars ★★★☆☆
+  const sleepQuality = sleepEntries[0]?.quality ?? 0
+  const sleepVisual =
+    sleepQuality > 0 ? '★'.repeat(sleepQuality) + '☆'.repeat(5 - sleepQuality) : undefined
+
+  // Nutrition: meal types as secondary text, first photo as thumbnail
+  const mealTypes = [...new Set(mealEntries.map((m) => m.meal_type).filter(Boolean))] as string[]
+  const nutritionSecondary =
+    mealTypes.length > 0
+      ? mealTypes.map((type) => t(`dashboard.summary.mealType.${type}`)).join(', ')
+      : undefined
+  const nutritionThumbnail = mealEntries.find((m) => m.photo_url)?.photo_url ?? undefined
+
+  // Sport: activity name as secondary, intensity dots as visual
+  const activityCount = sportEntries.length
+  const avgIntensity =
+    activityCount > 0
+      ? Math.round(sportEntries.reduce((sum, s) => sum + s.intensity, 0) / activityCount)
+      : 0
+  const sportVisual =
+    activityCount > 0 ? '●'.repeat(avgIntensity) + '○'.repeat(5 - avgIntensity) : undefined
+  const sportNames = [
+    ...new Set(sportEntries.map((s) => s.sportType?.name).filter(Boolean)),
+  ] as string[]
+  const sportSecondary =
+    sportNames.length > 0
+      ? sportNames.map((name) => t(`journal.sport.activities.${name}`)).join(', ')
+      : undefined
+
+  // Stress: emoji as visual, note as secondary
+  const stressVisual = stressEntries[0] ? STRESS_EMOJIS[stressEntries[0].level] : undefined
+  const stressSecondary = stressEntries[0]?.note?.substring(0, 40) ?? undefined
 
   if (layout === 'grid') {
     return (
@@ -138,11 +179,12 @@ export function IndicatorsList({
   }
 
   return (
-    <View className="px-4 gap-2">
+    <View className="px-4 gap-3">
       <IndicatorCard
         icon={Moon}
         label={t('dashboard.indicators.sleep')}
         value={sleepValue}
+        visualIndicator={sleepVisual}
         onPress={() => navigateToJournal('sleep')}
         status={sleepStatus}
         layout="list"
@@ -151,6 +193,8 @@ export function IndicatorsList({
         icon={Utensils}
         label={t('dashboard.indicators.nutrition')}
         value={nutritionValue}
+        secondaryText={nutritionSecondary}
+        thumbnailUrl={nutritionThumbnail}
         onPress={() => navigateToJournal('nutrition')}
         status={nutritionStatus}
         layout="list"
@@ -159,6 +203,8 @@ export function IndicatorsList({
         icon={Dumbbell}
         label={t('dashboard.indicators.sport')}
         value={sportValue}
+        secondaryText={sportSecondary}
+        visualIndicator={sportVisual}
         onPress={() => navigateToJournal('sport')}
         status={sportStatus}
         layout="list"
@@ -167,6 +213,8 @@ export function IndicatorsList({
         icon={Smile}
         label={t('dashboard.indicators.stress')}
         value={stressValue}
+        secondaryText={stressSecondary}
+        visualIndicator={stressVisual}
         onPress={() => navigateToJournal('stress')}
         status={stressStatus}
         layout="list"
