@@ -156,7 +156,12 @@
       "activitiesCount_other": "{{count}} activités"
     },
     "score": {
-      "label": "Score"
+      "label": "Score",
+      "missing_one": "{{count}} indicateur manquant",
+      "missing_other": "{{count}} indicateurs manquants"
+    },
+    "addIndicator": {
+      "title": "Quel indicateur veux-tu ajouter ?"
     },
     "recipe": {
       "title": "La recette du jour",

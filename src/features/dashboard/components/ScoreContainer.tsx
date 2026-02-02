@@ -10,13 +10,18 @@ import { colors } from '@theme/colors'
 
 interface ScoreContainerProps {
   score: number // 0-100
+  missingCount?: number
   onPlusPress?: () => void
 }
 
 const SIZE = 200
 const STROKE_WIDTH = 20
 
-export function ScoreContainer({ score, onPlusPress }: ScoreContainerProps): React.ReactElement {
+export function ScoreContainer({
+  score,
+  missingCount,
+  onPlusPress,
+}: ScoreContainerProps): React.ReactElement {
   const { t } = useTranslation()
 
   return (
@@ -32,7 +37,7 @@ export function ScoreContainer({ score, onPlusPress }: ScoreContainerProps): Rea
           <Pressable
             onPress={onPlusPress}
             haptic="light"
-            className="absolute top-3 right-3 w-10 h-10 rounded-xl bg-surface items-center justify-center"
+            className="absolute top-3 right-3 w-10 h-10 rounded-lg bg-surface items-center justify-center"
           >
             <Plus size={20} color={colors.textMuted} strokeWidth={2} />
           </Pressable>
@@ -55,6 +60,11 @@ export function ScoreContainer({ score, onPlusPress }: ScoreContainerProps): Rea
             </Text>
             <Text className="text-5xl font-bold text-surface">{score}</Text>
             <Text className="-mt-2 text-base font-medium text-surface opacity-60">/ 100</Text>
+            {missingCount !== undefined && missingCount > 0 && (
+              <Text className="mt-1 text-sm text-surface opacity-70">
+                {t('dashboard.score.missing', { count: missingCount })}
+              </Text>
+            )}
           </View>
         </View>
       </ImageBackground>

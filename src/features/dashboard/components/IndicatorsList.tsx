@@ -124,6 +124,12 @@ export function IndicatorsList({
   const stressVisual = stressEntries[0] ? STRESS_EMOJIS[stressEntries[0].level] : undefined
   const stressSecondary = stressEntries[0]?.note?.substring(0, 40) ?? undefined
 
+  // Only show cards with data
+  const showSleep = sleepEntries.length > 0
+  const showNutrition = mealEntries.length > 0
+  const showSport = sportEntries.length > 0
+  const showStress = stressEntries.length > 0
+
   if (layout === 'grid') {
     return (
       <View className="px-4 gap-2">
@@ -180,45 +186,53 @@ export function IndicatorsList({
 
   return (
     <View className="px-4 gap-3">
-      <IndicatorCard
-        icon={Moon}
-        label={t('dashboard.indicators.sleep')}
-        value={sleepValue}
-        visualIndicator={sleepVisual}
-        onPress={() => navigateToJournal('sleep')}
-        status={sleepStatus}
-        layout="list"
-      />
-      <IndicatorCard
-        icon={Utensils}
-        label={t('dashboard.indicators.nutrition')}
-        value={nutritionValue}
-        secondaryText={nutritionSecondary}
-        thumbnailUrl={nutritionThumbnail}
-        onPress={() => navigateToJournal('nutrition')}
-        status={nutritionStatus}
-        layout="list"
-      />
-      <IndicatorCard
-        icon={Dumbbell}
-        label={t('dashboard.indicators.sport')}
-        value={sportValue}
-        secondaryText={sportSecondary}
-        visualIndicator={sportVisual}
-        onPress={() => navigateToJournal('sport')}
-        status={sportStatus}
-        layout="list"
-      />
-      <IndicatorCard
-        icon={Smile}
-        label={t('dashboard.indicators.stress')}
-        value={stressValue}
-        secondaryText={stressSecondary}
-        visualIndicator={stressVisual}
-        onPress={() => navigateToJournal('stress')}
-        status={stressStatus}
-        layout="list"
-      />
+      {showSleep && (
+        <IndicatorCard
+          icon={Moon}
+          label={t('dashboard.indicators.sleep')}
+          value={sleepValue}
+          visualIndicator={sleepVisual}
+          onPress={() => navigateToJournal('sleep')}
+          status={sleepStatus}
+          layout="list"
+        />
+      )}
+      {showNutrition && (
+        <IndicatorCard
+          icon={Utensils}
+          label={t('dashboard.indicators.nutrition')}
+          value={nutritionValue}
+          secondaryText={nutritionSecondary}
+          thumbnailUrl={nutritionThumbnail}
+          onPress={() => navigateToJournal('nutrition')}
+          status={nutritionStatus}
+          layout="list"
+        />
+      )}
+      {showSport && (
+        <IndicatorCard
+          icon={Dumbbell}
+          label={t('dashboard.indicators.sport')}
+          value={sportValue}
+          secondaryText={sportSecondary}
+          visualIndicator={sportVisual}
+          onPress={() => navigateToJournal('sport')}
+          status={sportStatus}
+          layout="list"
+        />
+      )}
+      {showStress && (
+        <IndicatorCard
+          icon={Smile}
+          label={t('dashboard.indicators.stress')}
+          value={stressValue}
+          secondaryText={stressSecondary}
+          visualIndicator={stressVisual}
+          onPress={() => navigateToJournal('stress')}
+          status={stressStatus}
+          layout="list"
+        />
+      )}
     </View>
   )
 }
