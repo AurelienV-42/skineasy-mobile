@@ -93,16 +93,18 @@ export default function DashboardScreen(): React.ReactElement {
           </Animated.View>
 
           {/* Indicators Section */}
-          {missingCount < 4 && <Animated.View style={animStyles[3]}>
-            <SectionHeader icon={Layers} title={t('dashboard.indicators.title')} />
-            <IndicatorsList
-              sleepEntries={sleepEntries}
-              mealEntries={mealEntries}
-              sportEntries={sportEntries}
-              stressEntries={stressEntries}
-              date={dateString}
-            />
-          </Animated.View>}
+          {missingCount < 4 && (
+            <Animated.View style={animStyles[3]}>
+              <SectionHeader icon={Layers} title={t('dashboard.indicators.title')} />
+              <IndicatorsList
+                sleepEntries={sleepEntries}
+                mealEntries={mealEntries}
+                sportEntries={sportEntries}
+                stressEntries={stressEntries}
+                date={dateString}
+              />
+            </Animated.View>
+          )}
 
           {/* Recipe of the Day */}
           <Animated.View style={animStyles[5]}>

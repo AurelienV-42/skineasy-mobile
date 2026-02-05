@@ -1,12 +1,13 @@
 import { useTabTrigger } from 'expo-router/ui'
 import { CalendarDays, Home, Sparkles } from 'lucide-react-native'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LayoutChangeEvent, Pressable, StyleSheet, Text, View } from 'react-native'
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { GlassContainer } from '@shared/components/GlassContainer'
+import { useTabBarContext } from '@shared/contexts/TabBarContext'
 import { colors } from '@theme/colors'
 
 export const SPRING_CONFIG = { damping: 60, stiffness: 300 }
@@ -29,20 +30,14 @@ const BUBBLE_PADDING = 8
 
 type TabButtonProps = {
   tab: TabConfig
-  onFocusChange: (index: number, isFocused: boolean) => void
-  index: number
 }
 
-function TabButton({ tab, onFocusChange, index }: TabButtonProps): React.ReactElement {
+function TabButton({ tab }: TabButtonProps): React.ReactElement {
   const { t } = useTranslation()
   const { trigger, triggerProps } = useTabTrigger({ name: tab.name, href: tab.href })
   const Icon = tab.icon
   const isFocused = trigger?.isFocused ?? false
   const color = isFocused ? colors.primary : colors.textMuted
-
-  useEffect(() => {
-    onFocusChange(index, isFocused)
-  }, [isFocused, index, onFocusChange])
 
   return (
     <Pressable
@@ -63,15 +58,9 @@ type TabBarContentProps = {
 }
 
 function TabBarContent({ containerWidth }: TabBarContentProps): React.ReactElement {
-  const activeIndex = useSharedValue(0)
+  const { activeIndex } = useTabBarContext()
   const tabWidth = containerWidth / TAB_COUNT
   const bubbleWidth = tabWidth - BUBBLE_PADDING * 2
-
-  const handleFocusChange = (index: number, isFocused: boolean): void => {
-    if (isFocused) {
-      activeIndex.value = withSpring(index, SPRING_CONFIG)
-    }
-  }
 
   const bubbleStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: activeIndex.value * tabWidth + BUBBLE_PADDING }],
@@ -81,8 +70,8 @@ function TabBarContent({ containerWidth }: TabBarContentProps): React.ReactEleme
   return (
     <>
       <Animated.View style={[styles.bubble, bubbleStyle]} />
-      {TABS.map((tab, index) => (
-        <TabButton key={tab.name} tab={tab} index={index} onFocusChange={handleFocusChange} />
+      {TABS.map((tab) => (
+        <TabButton key={tab.name} tab={tab} />
       ))}
     </>
   )

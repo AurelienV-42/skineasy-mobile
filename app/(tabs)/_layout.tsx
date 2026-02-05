@@ -7,22 +7,38 @@ import {
   TabsSlotRenderOptions,
   TabTrigger,
 } from 'expo-router/ui'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { StyleSheet, useWindowDimensions, View } from 'react-native'
-import Animated, {
-  SharedValue,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated'
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 
 import { FloatingTabBar, SPRING_CONFIG } from '@shared/components/FloatingTabBar'
+import { TabBarContext, useTabBarContext } from '@shared/contexts/TabBarContext'
 import { useAuthStore } from '@shared/stores/auth.store'
+
+// Map route names to visual tab indices (must match FloatingTabBar TABS order)
+const TAB_INDEX_MAP: Record<string, number> = {
+  index: 0,
+  calendar: 1,
+  routine: 2,
+}
 
 export default function TabsLayout(): React.ReactElement | null {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const { width } = useWindowDimensions()
   const activeIndex = useSharedValue(0)
+
+  const setActiveIndex = useCallback(
+    (index: number) => {
+      // eslint-disable-next-line react-hooks/immutability
+      activeIndex.value = withSpring(index, SPRING_CONFIG)
+    },
+    [activeIndex]
+  )
+
+  const contextValue = useMemo(
+    () => ({ activeIndex, setActiveIndex }),
+    [activeIndex, setActiveIndex]
+  )
 
   if (!isAuthenticated) {
     return <Redirect href="/(auth)/login" />
@@ -30,18 +46,20 @@ export default function TabsLayout(): React.ReactElement | null {
 
   const renderTabScreen = (
     descriptor: TabsDescriptor,
-    { index, isFocused, loaded }: TabsSlotRenderOptions
+    { isFocused, loaded }: TabsSlotRenderOptions
   ): React.ReactElement | null => {
     if (!loaded && !isFocused) {
       return null
     }
 
+    // Use route name to get visual index (expo-router index is alphabetical by filename)
+    const visualIndex = TAB_INDEX_MAP[descriptor.route.name] ?? 0
+
     return (
       <AnimatedScreen
         key={descriptor.route.key}
-        index={index}
+        index={visualIndex}
         isFocused={isFocused}
-        activeIndex={activeIndex}
         width={width}
       >
         {descriptor.render()}
@@ -50,24 +68,25 @@ export default function TabsLayout(): React.ReactElement | null {
   }
 
   return (
-    <View className="flex-1">
-      <Tabs>
-        <TabSlot renderFn={renderTabScreen} detachInactiveScreens={false} />
-        <TabList style={{ display: 'none' }}>
-          <TabTrigger name="index" href="/" />
-          <TabTrigger name="calendar" href="/calendar" />
-          <TabTrigger name="routine" href="/routine" />
-        </TabList>
-        <FloatingTabBar />
-      </Tabs>
-    </View>
+    <TabBarContext.Provider value={contextValue}>
+      <View className="flex-1">
+        <Tabs>
+          <TabSlot renderFn={renderTabScreen} detachInactiveScreens={false} />
+          <TabList style={{ display: 'none' }}>
+            <TabTrigger name="index" href="/" />
+            <TabTrigger name="calendar" href="/calendar" />
+            <TabTrigger name="routine" href="/routine" />
+          </TabList>
+          <FloatingTabBar />
+        </Tabs>
+      </View>
+    </TabBarContext.Provider>
   )
 }
 
 type AnimatedScreenProps = {
   index: number
   isFocused: boolean
-  activeIndex: SharedValue<number>
   width: number
   children: React.ReactNode
 }
@@ -75,16 +94,16 @@ type AnimatedScreenProps = {
 function AnimatedScreen({
   index,
   isFocused,
-  activeIndex,
   width,
   children,
 }: AnimatedScreenProps): React.ReactElement {
+  const { activeIndex, setActiveIndex } = useTabBarContext()
+
   useEffect(() => {
     if (isFocused) {
-      // eslint-disable-next-line react-hooks/immutability
-      activeIndex.value = withSpring(index, SPRING_CONFIG)
+      setActiveIndex(index)
     }
-  }, [isFocused, index, activeIndex])
+  }, [isFocused, index, setActiveIndex])
 
   const animatedStyle = useAnimatedStyle(() => {
     const offset = (index - activeIndex.value) * width
