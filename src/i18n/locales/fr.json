@@ -1,12 +1,4 @@
 {
-  "calendar": {
-    "title": "Calendrier",
-    "noData": "Pas de données pour ce jour",
-    "sleep": "Sommeil",
-    "nutrition": "Nutrition",
-    "sport": "Activité",
-    "stress": "Stress"
-  },
   "welcome": {
     "tagline": "UNE PEAU, UNE HISTOIRE",
     "getStarted": "Commencer",
@@ -174,6 +166,13 @@
     }
   },
   "journal": {
+    "title": "Journal",
+    "openCalendar": "Ouvrir le calendrier",
+    "noData": "Pas de données pour ce jour",
+    "sectionSleep": "Sommeil",
+    "sectionNutrition": "Nutrition",
+    "sectionSport": "Activité",
+    "sectionStress": "Stress",
     "dailySummary": "Récapitulatif journalier",
     "sleep": {
       "title": "Sommeil",

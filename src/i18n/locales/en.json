@@ -1,12 +1,4 @@
 {
-  "calendar": {
-    "title": "Calendar",
-    "noData": "No data for this day",
-    "sleep": "Sleep",
-    "nutrition": "Nutrition",
-    "sport": "Activity",
-    "stress": "Stress"
-  },
   "welcome": {
     "tagline": "ONE SKIN, ONE STORY",
     "getStarted": "Get Started",
@@ -173,6 +165,13 @@
     }
   },
   "journal": {
+    "title": "Journal",
+    "openCalendar": "Open Calendar",
+    "noData": "No data for this day",
+    "sectionSleep": "Sleep",
+    "sectionNutrition": "Nutrition",
+    "sectionSport": "Activity",
+    "sectionStress": "Stress",
     "dailySummary": "Daily Summary",
     "sleep": {
       "title": "Sleep",

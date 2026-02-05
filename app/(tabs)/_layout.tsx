@@ -18,7 +18,7 @@ import { useAuthStore } from '@shared/stores/auth.store'
 // Map route names to visual tab indices (must match FloatingTabBar TABS order)
 const TAB_INDEX_MAP: Record<string, number> = {
   index: 0,
-  calendar: 1,
+  journal: 1,
   routine: 2,
 }
 
@@ -74,7 +74,7 @@ export default function TabsLayout(): React.ReactElement | null {
           <TabSlot renderFn={renderTabScreen} detachInactiveScreens={false} />
           <TabList style={{ display: 'none' }}>
             <TabTrigger name="index" href="/" />
-            <TabTrigger name="calendar" href="/calendar" />
+            <TabTrigger name="journal" href="/journal" />
             <TabTrigger name="routine" href="/routine" />
           </TabList>
           <FloatingTabBar />

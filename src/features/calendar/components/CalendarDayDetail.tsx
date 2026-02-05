@@ -34,7 +34,7 @@ function SleepDetail({ entry }: { entry?: SleepEntry }): React.ReactElement | nu
     <Card padding="md" className="gap-2">
       <View className="flex-row items-center gap-2">
         <Moon size={20} color={colors.brownDark} />
-        <Text className="font-semibold text-brown-dark">{t('calendar.sleep')}</Text>
+        <Text className="font-semibold text-brown-dark">{t('journal.sectionSleep')}</Text>
       </View>
       <View className="flex-row items-center justify-between">
         <Text className="text-text">{t('journal.sleep.hours')}</Text>
@@ -57,7 +57,7 @@ function MealsDetail({ entries }: { entries: MealEntry[] }): React.ReactElement 
     <Card padding="md" className="gap-3">
       <View className="flex-row items-center gap-2">
         <Utensils size={20} color={colors.brownDark} />
-        <Text className="font-semibold text-brown-dark">{t('calendar.nutrition')}</Text>
+        <Text className="font-semibold text-brown-dark">{t('journal.sectionNutrition')}</Text>
         <Text className="text-text-muted">({entries.length})</Text>
       </View>
       {entries.map((meal) => (
@@ -95,7 +95,7 @@ function SportsDetail({ entries }: { entries: SportEntry[] }): React.ReactElemen
     <Card padding="md" className="gap-3">
       <View className="flex-row items-center gap-2">
         <Dumbbell size={20} color={colors.brownDark} />
-        <Text className="font-semibold text-brown-dark">{t('calendar.sport')}</Text>
+        <Text className="font-semibold text-brown-dark">{t('journal.sectionSport')}</Text>
         <Text className="text-text-muted">({entries.length})</Text>
       </View>
       {entries.map((sport) => (
@@ -129,7 +129,7 @@ function StressDetail({ entry }: { entry?: StressEntry }): React.ReactElement | 
     <Card padding="md" className="gap-2">
       <View className="flex-row items-center gap-2">
         <Smile size={20} color={colors.brownDark} />
-        <Text className="font-semibold text-brown-dark">{t('calendar.stress')}</Text>
+        <Text className="font-semibold text-brown-dark">{t('journal.sectionStress')}</Text>
       </View>
       <View className="flex-row items-center justify-between">
         <Text className="text-text">{t('journal.stress.level.label')}</Text>
@@ -145,7 +145,7 @@ function EmptyState(): React.ReactElement {
 
   return (
     <View className="items-center justify-center py-8">
-      <Text className="text-text-muted">{t('calendar.noData')}</Text>
+      <Text className="text-text-muted">{t('journal.noData')}</Text>
     </View>
   )
 }
