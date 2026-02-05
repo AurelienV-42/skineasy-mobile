@@ -168,7 +168,10 @@
   "journal": {
     "title": "Journal",
     "openCalendar": "Ouvrir le calendrier",
-    "noData": "Pas de données pour ce jour",
+    "emptyTitle": "Commence ton journal peau",
+    "emptySubtitle": "Suis tes habitudes pour révéler des tendances",
+    "addEntry": "Ajouter une entrée",
+    "skinScore": "Ton score peau du jour",
     "sectionSleep": "Sommeil",
     "sectionNutrition": "Nutrition",
     "sectionSport": "Activité",

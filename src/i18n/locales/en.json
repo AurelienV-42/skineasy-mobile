@@ -167,7 +167,10 @@
   "journal": {
     "title": "Journal",
     "openCalendar": "Open Calendar",
-    "noData": "No data for this day",
+    "emptyTitle": "Start your skin journal",
+    "emptySubtitle": "Track your daily habits to reveal patterns",
+    "addEntry": "Add Entry",
+    "skinScore": "Your day's skin score",
     "sectionSleep": "Sleep",
     "sectionNutrition": "Nutrition",
     "sectionSport": "Activity",

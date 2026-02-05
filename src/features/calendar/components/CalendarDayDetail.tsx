@@ -1,8 +1,9 @@
-import { Moon, Dumbbell, Smile, Utensils } from 'lucide-react-native'
+import { Droplets, Moon, Dumbbell, Plus, Smile, Utensils } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { Image, ScrollView, Text, View } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 
+import { Button } from '@shared/components/Button'
 import { Card } from '@shared/components/Card'
 import { journalService } from '@features/journal/services/journal.service'
 import { queryKeys } from '@shared/config/queryKeys'
@@ -11,6 +12,7 @@ import { colors } from '@theme/colors'
 
 interface CalendarDayDetailProps {
   date: string
+  onAddEntry?: () => void
 }
 
 const STRESS_LEVEL_KEYS: Record<number, string> = {
@@ -140,17 +142,31 @@ function StressDetail({ entry }: { entry?: StressEntry }): React.ReactElement | 
   )
 }
 
-function EmptyState(): React.ReactElement {
+function EmptyState({ onAddEntry }: { onAddEntry?: () => void }): React.ReactElement {
   const { t } = useTranslation()
 
   return (
-    <View className="items-center justify-center py-8">
-      <Text className="text-text-muted">{t('journal.noData')}</Text>
+    <View className="flex-1 items-center justify-center px-8">
+      <View className="w-20 h-20 rounded-full bg-surface items-center justify-center mb-6">
+        <Droplets size={40} color={colors.primary} strokeWidth={1.5} />
+      </View>
+      <Text className="text-xl font-semibold text-brown-dark text-center mb-2">
+        {t('journal.emptyTitle')}
+      </Text>
+      <Text className="text-base text-text-muted text-center mb-8">
+        {t('journal.emptySubtitle')}
+      </Text>
+      {onAddEntry && (
+        <Button title={t('journal.addEntry')} onPress={onAddEntry} iconLeft={Plus} fitContent />
+      )}
     </View>
   )
 }
 
-export function CalendarDayDetail({ date }: CalendarDayDetailProps): React.ReactElement {
+export function CalendarDayDetail({
+  date,
+  onAddEntry,
+}: CalendarDayDetailProps): React.ReactElement {
   const { data, isLoading } = useQuery({
     queryKey: queryKeys.journalEntriesRange(date, date),
     queryFn: () => journalService.entries.getByDateRange(date, date),
@@ -173,7 +189,7 @@ export function CalendarDayDetail({ date }: CalendarDayDetailProps): React.React
   const hasData = sleeps.length > 0 || meals.length > 0 || sports.length > 0 || stresses.length > 0
 
   if (!hasData) {
-    return <EmptyState />
+    return <EmptyState onAddEntry={onAddEntry} />
   }
 
   return (
