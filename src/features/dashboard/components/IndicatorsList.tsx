@@ -1,11 +1,18 @@
 import { useRouter } from 'expo-router'
-import { Dumbbell, Moon, Smile, Utensils } from 'lucide-react-native'
+import { Dumbbell, Moon, Search, Smile, Utensils } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, View } from 'react-native'
+import { Dimensions, Text, View } from 'react-native'
 
 import { IndicatorCard } from '@features/dashboard/components/IndicatorCard'
 import { appConfig } from '@shared/config/appConfig'
-import type { MealEntry, SleepEntry, SportEntry, StressEntry } from '@shared/types/journal.types'
+import { colors } from '@theme/colors'
+import type {
+  MealEntry,
+  ObservationEntry,
+  SleepEntry,
+  SportEntry,
+  StressEntry,
+} from '@shared/types/journal.types'
 
 type IndicatorStatus = 'empty' | 'partial' | 'complete'
 
@@ -19,6 +26,7 @@ interface IndicatorsListProps {
   mealEntries: MealEntry[]
   sportEntries: SportEntry[]
   stressEntries: StressEntry[]
+  observationEntries: ObservationEntry[]
   date: string
 }
 
@@ -43,6 +51,7 @@ export function IndicatorsList({
   mealEntries,
   sportEntries,
   stressEntries,
+  observationEntries,
   date,
 }: IndicatorsListProps): React.ReactElement {
   const layout = appConfig.ui.indicatorLayout
@@ -68,12 +77,15 @@ export function IndicatorsList({
   const stressValue =
     stressLevel > 0 ? t(`journal.stress.level.${STRESS_LEVEL_KEYS[stressLevel]}`) : '-'
 
-  const navigateToJournal = (type: 'sleep' | 'nutrition' | 'sport' | 'stress'): void => {
+  const navigateToJournal = (
+    type: 'sleep' | 'nutrition' | 'sport' | 'stress' | 'observations'
+  ): void => {
     const paths = {
       sleep: '/journal/sleep',
       nutrition: '/journal/nutrition',
       sport: '/journal/sport',
       stress: '/journal/stress',
+      observations: '/journal/observations',
     }
     router.push({ pathname: paths[type], params: { date } })
   }
@@ -84,6 +96,12 @@ export function IndicatorsList({
     mealCount >= 3 ? 'complete' : mealCount > 0 ? 'partial' : 'empty'
   const sportStatus: IndicatorStatus = sportEntries.length > 0 ? 'complete' : 'empty'
   const stressStatus: IndicatorStatus = stressEntries.length > 0 ? 'complete' : 'empty'
+  const observationStatus: IndicatorStatus = observationEntries.length > 0 ? 'complete' : 'empty'
+
+  const observation = observationEntries[0]
+  const observationValue = observation
+    ? `${observation.positives.length + observation.negatives.length}`
+    : '-'
 
   // Display value for nutrition partial state
   const nutritionValue =
@@ -124,11 +142,57 @@ export function IndicatorsList({
   const stressVisual = stressEntries[0] ? STRESS_EMOJIS[stressEntries[0].level] : undefined
   const stressSecondary = stressEntries[0]?.note?.substring(0, 40) ?? undefined
 
+  const MAX_CHIPS = 3
+  const observationChips = observation
+    ? [
+        ...observation.positives.map((key) => ({
+          key,
+          label: t(`journal.observations.positive.${key}`),
+          type: 'positive' as const,
+        })),
+        ...observation.negatives.map((key) => ({
+          key,
+          label: t(`journal.observations.negative.${key}`),
+          type: 'negative' as const,
+        })),
+      ]
+    : []
+  const visibleChips = observationChips.slice(0, MAX_CHIPS)
+  const overflowCount = observationChips.length - MAX_CHIPS
+
+  const observationCustomContent =
+    observationChips.length > 0 ? (
+      <View className="flex-row flex-wrap items-center gap-1.5">
+        {visibleChips.map(({ key, label, type }) => (
+          <View
+            key={key}
+            className="rounded-full px-2.5 py-1"
+            style={{
+              backgroundColor: type === 'positive' ? `${colors.success}18` : `${colors.error}18`,
+            }}
+          >
+            <Text
+              className="text-xs font-medium"
+              style={{ color: type === 'positive' ? colors.success : colors.error }}
+            >
+              {label}
+            </Text>
+          </View>
+        ))}
+        {overflowCount > 0 && (
+          <Text className="text-xs text-text-muted">
+            {t('dashboard.indicators.andMore', { count: overflowCount })}
+          </Text>
+        )}
+      </View>
+    ) : undefined
+
   // Only show cards with data
   const showSleep = sleepEntries.length > 0
   const showNutrition = mealEntries.length > 0
   const showSport = sportEntries.length > 0
   const showStress = stressEntries.length > 0
+  const showObservations = observationEntries.length > 0
 
   if (layout === 'grid') {
     return (
@@ -157,7 +221,7 @@ export function IndicatorsList({
           </View>
         </View>
 
-        {/* Bottom row: Sport + Stress */}
+        {/* Middle row: Sport + Stress */}
         <View className="flex-row gap-2">
           <View style={{ width: CARD_WIDTH }}>
             <IndicatorCard
@@ -176,6 +240,20 @@ export function IndicatorsList({
               value={stressValue}
               onPress={() => navigateToJournal('stress')}
               status={stressStatus}
+              layout="grid"
+            />
+          </View>
+        </View>
+
+        {/* Bottom row: Observations */}
+        <View className="flex-row gap-2">
+          <View style={{ width: CARD_WIDTH }}>
+            <IndicatorCard
+              icon={Search}
+              label={t('dashboard.indicators.observations')}
+              value={observationValue}
+              onPress={() => navigateToJournal('observations')}
+              status={observationStatus}
               layout="grid"
             />
           </View>
@@ -230,6 +308,17 @@ export function IndicatorsList({
           visualIndicator={stressVisual}
           onPress={() => navigateToJournal('stress')}
           status={stressStatus}
+          layout="list"
+        />
+      )}
+      {showObservations && (
+        <IndicatorCard
+          icon={Search}
+          label={t('dashboard.indicators.observations')}
+          value={observationValue}
+          customContent={observationCustomContent}
+          onPress={() => navigateToJournal('observations')}
+          status={observationStatus}
           layout="list"
         />
       )}

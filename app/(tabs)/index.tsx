@@ -62,6 +62,7 @@ export default function DashboardScreen(): React.ReactElement {
     mealEntries.length === 0,
     sportEntries.length === 0,
     stressEntries.length === 0,
+    observationEntries.length === 0,
   ].filter(Boolean).length
 
   return (
@@ -101,7 +102,7 @@ export default function DashboardScreen(): React.ReactElement {
           </Animated.View>
 
           {/* Indicators Section */}
-          {missingCount < 4 && (
+          {missingCount < 5 && (
             <Animated.View style={animStyles[3]}>
               <SectionHeader icon={Layers} title={t('dashboard.indicators.title')} />
               <IndicatorsList
@@ -109,6 +110,7 @@ export default function DashboardScreen(): React.ReactElement {
                 mealEntries={mealEntries}
                 sportEntries={sportEntries}
                 stressEntries={stressEntries}
+                observationEntries={observationEntries}
                 date={dateString}
               />
             </Animated.View>

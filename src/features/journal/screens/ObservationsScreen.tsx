@@ -162,7 +162,7 @@ export default function ObservationsScreen(): React.ReactElement {
               title={t('journal.observations.positivePoints')}
               className="mb-3 px-0"
             />
-            <View className="flex-row flex-wrap gap-2">
+            <View className="flex-row flex-wrap gap-3">
               {POSITIVE_OBSERVATIONS.map((key) => (
                 <ObservationChip
                   key={key}
@@ -183,7 +183,7 @@ export default function ObservationsScreen(): React.ReactElement {
               title={t('journal.observations.negativePoints')}
               className="mb-3 px-0"
             />
-            <View className="flex-row flex-wrap gap-2">
+            <View className="flex-row flex-wrap gap-3">
               {NEGATIVE_OBSERVATIONS.map((key) => (
                 <ObservationChip
                   key={key}

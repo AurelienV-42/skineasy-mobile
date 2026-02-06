@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Droplets, Dumbbell, Moon, Plus, Smile, Utensils } from 'lucide-react-native'
+import { Droplets, Dumbbell, Moon, Plus, Search, Smile, Utensils } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { Image, ScrollView, Text, View } from 'react-native'
 
@@ -7,7 +7,13 @@ import { journalService } from '@features/journal/services/journal.service'
 import { Button } from '@shared/components/Button'
 import { Card } from '@shared/components/Card'
 import { queryKeys } from '@shared/config/queryKeys'
-import type { MealEntry, SleepEntry, SportEntry, StressEntry } from '@shared/types/journal.types'
+import type {
+  MealEntry,
+  ObservationEntry,
+  SleepEntry,
+  SportEntry,
+  StressEntry,
+} from '@shared/types/journal.types'
 import { colors } from '@theme/colors'
 
 interface CalendarDayDetailProps {
@@ -142,6 +148,46 @@ function StressDetail({ entry }: { entry?: StressEntry }): React.ReactElement | 
   )
 }
 
+function ObservationsDetail({ entry }: { entry?: ObservationEntry }): React.ReactElement | null {
+  const { t } = useTranslation()
+
+  if (!entry) return null
+
+  const total = entry.positives.length + entry.negatives.length
+  if (total === 0) return null
+
+  return (
+    <Card padding="md" className="gap-2">
+      <View className="flex-row items-center gap-2">
+        <Search size={20} color={colors.brownDark} />
+        <Text className="font-semibold text-brown-dark">{t('journal.sectionObservations')}</Text>
+      </View>
+      {entry.positives.length > 0 && (
+        <View className="flex-row flex-wrap gap-1">
+          {entry.positives.map((key) => (
+            <View key={key} className="bg-success/10 rounded-full px-3 py-1">
+              <Text className="text-sm text-success">
+                {t(`journal.observations.positive.${key}`)}
+              </Text>
+            </View>
+          ))}
+        </View>
+      )}
+      {entry.negatives.length > 0 && (
+        <View className="flex-row flex-wrap gap-1">
+          {entry.negatives.map((key) => (
+            <View key={key} className="bg-error/10 rounded-full px-3 py-1">
+              <Text className="text-sm text-error">
+                {t(`journal.observations.negative.${key}`)}
+              </Text>
+            </View>
+          ))}
+        </View>
+      )}
+    </Card>
+  )
+}
+
 function EmptyState({ onAddEntry }: { onAddEntry?: () => void }): React.ReactElement {
   const { t } = useTranslation()
 
@@ -185,8 +231,14 @@ export function CalendarDayDetail({
   const meals = data?.meals ?? []
   const sports = data?.sports ?? []
   const stresses = data?.stresses ?? []
+  const observations = data?.observations ?? []
 
-  const hasData = sleeps.length > 0 || meals.length > 0 || sports.length > 0 || stresses.length > 0
+  const hasData =
+    sleeps.length > 0 ||
+    meals.length > 0 ||
+    sports.length > 0 ||
+    stresses.length > 0 ||
+    observations.length > 0
 
   if (!hasData) {
     return <EmptyState onAddEntry={onAddEntry} />
@@ -199,6 +251,7 @@ export function CalendarDayDetail({
         <MealsDetail entries={meals} />
         <SportsDetail entries={sports} />
         <StressDetail entry={stresses[0]} />
+        <ObservationsDetail entry={observations[0]} />
       </View>
     </ScrollView>
   )

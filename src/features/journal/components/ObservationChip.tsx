@@ -16,10 +16,11 @@ type ObservationChipProps = {
   variant: ChipVariant
 }
 
-function getContainerStyle(selected: boolean): ViewStyle {
+function getContainerStyle(variant: ChipVariant, selected: boolean): ViewStyle {
+  if (!selected) return styles.container
   return {
     ...styles.container,
-    ...(selected && styles.selected),
+    backgroundColor: variant === 'positive' ? colors.background : 'rgba(232, 76, 63, 0.15)',
   }
 }
 
@@ -45,7 +46,7 @@ export function ObservationChip({
   return (
     <Pressable onPress={onPress} haptic="light">
       <GlassContainer
-        style={getContainerStyle(selected)}
+        style={getContainerStyle(variant, selected)}
         tintColor={getTintColor(variant, selected)}
       >
         <View className="flex-row items-center gap-2">
@@ -68,10 +69,8 @@ export function ObservationChip({
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-  },
-  selected: {
-    backgroundColor: colors.background,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 16
   },
 })

@@ -28,7 +28,7 @@ export function useUpsertStress() {
 
       const dateKey = fromISOToDateString(variables.date)
       queryClient.invalidateQueries({ queryKey: queryKeys.journalStress(dateKey) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(dateKey) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() })
 
       haptic.success()
       Toast.show({
@@ -58,7 +58,7 @@ export function useDeleteStress() {
       logger.info('[useDeleteStress] Success')
 
       queryClient.invalidateQueries({ queryKey: queryKeys.journalStress(variables.date) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(variables.date) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() })
 
       haptic.light()
       Toast.show({

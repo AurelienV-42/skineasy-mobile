@@ -27,6 +27,8 @@ interface IndicatorCardProps {
   secondaryText?: string
   /** Thumbnail URL for nutrition card */
   thumbnailUrl?: string
+  /** Custom content replacing the default value/visual row in list layout */
+  customContent?: React.ReactNode
   onPress?: () => void
   disabled?: boolean
   status: IndicatorStatus
@@ -74,6 +76,7 @@ export function IndicatorCard({
   visualIndicator,
   secondaryText,
   thumbnailUrl,
+  customContent,
   onPress,
   disabled = false,
   status,
@@ -125,6 +128,8 @@ export function IndicatorCard({
       {/* Content row: Value + Visual indicator (or thumbnail) */}
       {isEmpty ? (
         <Text className="text-sm text-text-muted ml-5">{t('dashboard.indicators.enterData')}</Text>
+      ) : customContent ? (
+        <View className="ml-5">{customContent}</View>
       ) : (
         <View className="flex-row items-center justify-between ml-5">
           <View className="flex-1 gap-0.5">

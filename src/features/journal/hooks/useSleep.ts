@@ -28,7 +28,7 @@ export function useUpsertSleep() {
 
       const dateKey = fromISOToDateString(variables.date)
       queryClient.invalidateQueries({ queryKey: queryKeys.journalSleep(dateKey) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(dateKey) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() })
 
       haptic.success()
       Toast.show({
@@ -58,7 +58,7 @@ export function useDeleteSleep() {
       logger.info('[useDeleteSleep] Success')
 
       queryClient.invalidateQueries({ queryKey: queryKeys.journalSleep(variables.date) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(variables.date) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() })
 
       haptic.light()
       Toast.show({

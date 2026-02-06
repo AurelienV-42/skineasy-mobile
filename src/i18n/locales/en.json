@@ -144,7 +144,8 @@
       "mealsCount_other": "{{count}} meals",
       "mealsAndPhotos": "{{meals}} meals • {{photos}} photos",
       "activitiesCount_one": "{{count}} activity",
-      "activitiesCount_other": "{{count}} activities"
+      "activitiesCount_other": "{{count}} activities",
+      "andMore": "+{{count}} more"
     },
     "score": {
       "label": "Score",
@@ -175,6 +176,7 @@
     "sectionNutrition": "Nutrition",
     "sectionSport": "Activity",
     "sectionStress": "Stress",
+    "sectionObservations": "Observations",
     "dailySummary": "Daily Summary",
     "sleep": {
       "title": "Sleep",

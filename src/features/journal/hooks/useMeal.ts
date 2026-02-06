@@ -45,7 +45,7 @@ export function useCreateMeal() {
 
       const dateKey = fromISOToDateString(variables.date)
       queryClient.invalidateQueries({ queryKey: queryKeys.journalMeal(dateKey) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(dateKey) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() })
 
       haptic.success()
       Toast.show({
@@ -76,7 +76,7 @@ export function useUpdateMeal() {
       logger.info('[useUpdateMeal] Success:', data)
 
       queryClient.invalidateQueries({ queryKey: queryKeys.journalMeal(variables.date) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(variables.date) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() })
 
       haptic.success()
       Toast.show({
@@ -106,7 +106,7 @@ export function useDeleteMeal() {
       logger.info('[useDeleteMeal] Success')
 
       queryClient.invalidateQueries({ queryKey: queryKeys.journalMeal(variables.date) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(variables.date) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() })
 
       haptic.light()
       Toast.show({

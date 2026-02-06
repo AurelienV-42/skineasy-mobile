@@ -28,7 +28,7 @@ export function useUpsertObservations() {
 
       const dateKey = fromISOToDateString(variables.date)
       queryClient.invalidateQueries({ queryKey: queryKeys.journalObservations(dateKey) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(dateKey) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() })
 
       haptic.success()
       Toast.show({
@@ -58,7 +58,7 @@ export function useDeleteObservations() {
       logger.info('[useDeleteObservations] Success')
 
       queryClient.invalidateQueries({ queryKey: queryKeys.journalObservations(variables.date) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(variables.date) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() })
 
       haptic.light()
       Toast.show({

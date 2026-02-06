@@ -60,7 +60,7 @@ export function useCreateSport() {
 
       const dateKey = fromISOToDateString(variables.date)
       queryClient.invalidateQueries({ queryKey: queryKeys.journalSport(dateKey) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(dateKey) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() })
 
       haptic.success()
       Toast.show({
@@ -91,7 +91,7 @@ export function useUpdateSport() {
       logger.info('[useUpdateSport] Success:', data)
 
       queryClient.invalidateQueries({ queryKey: queryKeys.journalSport(variables.date) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(variables.date) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() })
 
       haptic.success()
       Toast.show({
@@ -121,7 +121,7 @@ export function useDeleteSport() {
       logger.info('[useDeleteSport] Success')
 
       queryClient.invalidateQueries({ queryKey: queryKeys.journalSport(variables.date) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.journalEntries(variables.date) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() })
 
       haptic.light()
       Toast.show({

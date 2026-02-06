@@ -9,6 +9,7 @@ export const queryKeys = {
 
   // Journal
   journal: ['journal'] as const,
+  journalAllEntries: () => [...queryKeys.journal, 'entries'] as const,
   journalEntries: (date: string) => [...queryKeys.journal, 'entries', date] as const,
   journalEntriesRange: (startDate: string, endDate: string) =>
     [...queryKeys.journal, 'entries', startDate, endDate] as const,
