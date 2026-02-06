@@ -119,6 +119,21 @@ export const stressFormSchema = z.object({
 
 export type StressFormInput = z.infer<typeof stressFormSchema>
 
+/**
+ * Observation Form Schema
+ * At least one positive or negative observation required
+ */
+export const observationFormSchema = z
+  .object({
+    positives: z.array(z.string()),
+    negatives: z.array(z.string()),
+  })
+  .refine((data) => data.positives.length > 0 || data.negatives.length > 0, {
+    message: 'journal.observations.atLeastOneRequired',
+  })
+
+export type ObservationFormInput = z.infer<typeof observationFormSchema>
+
 // Legacy exports for backward compatibility with existing code
 export const sleepQualityEnum = z.enum(['bad', 'neutral', 'good'])
 export const sportActivityEnum = sportTypeSchema

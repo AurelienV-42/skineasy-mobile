@@ -1,9 +1,10 @@
 export const scoreConfig = {
   weights: {
-    sleep: 0.35,
-    nutrition: 0.25,
-    activity: 0.25,
+    sleep: 0.3,
+    nutrition: 0.2,
+    activity: 0.2,
     stress: 0.15,
+    observations: 0.15,
   },
   sleep: {
     hoursWeight: 0.6,
@@ -23,9 +24,13 @@ export const scoreConfig = {
     maxDetailBonus: 20,
   },
   stress: {
-    // Lower stress = better score (inverse relationship)
-    // Level 1 (minimal) = 100, Level 5 (intense) = 20
     maxScore: 100,
     minScore: 20,
+  },
+  observations: {
+    baseScore: 50,
+    pointsPerPositive: 12,
+    pointsPerNegative: 8,
+    trackingBonus: 10,
   },
 }

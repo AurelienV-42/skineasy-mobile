@@ -1,5 +1,11 @@
 import { scoreConfig } from '@shared/config/scoreConfig'
-import type { MealEntry, SleepEntry, SportEntry, StressEntry } from '@shared/types/journal.types'
+import type {
+  MealEntry,
+  ObservationEntry,
+  SleepEntry,
+  SportEntry,
+  StressEntry,
+} from '@shared/types/journal.types'
 
 const { weights, sleep, activity, nutrition } = scoreConfig
 
@@ -65,21 +71,37 @@ export function calculateStressScore(entry: StressEntry | undefined): number {
   return stress.maxScore - (entry.level - 1) * scorePerLevel
 }
 
+export function calculateObservationScore(entry: ObservationEntry | undefined): number {
+  if (!entry) return 0
+
+  const { observations } = scoreConfig
+  const raw =
+    observations.baseScore +
+    entry.positives.length * observations.pointsPerPositive -
+    entry.negatives.length * observations.pointsPerNegative +
+    observations.trackingBonus
+
+  return Math.min(100, Math.max(0, raw))
+}
+
 export function calculateDayScore(
   sleepEntry: SleepEntry | undefined,
   mealEntries: MealEntry[],
   sportEntries: SportEntry[],
-  stressEntry?: StressEntry
+  stressEntry?: StressEntry,
+  observationEntry?: ObservationEntry
 ): number {
   const sleepScore = calculateSleepScore(sleepEntry)
   const nutritionScore = calculateNutritionScore(mealEntries)
   const activityScore = calculateActivityScore(sportEntries)
   const stressScore = calculateStressScore(stressEntry)
+  const observationScore = calculateObservationScore(observationEntry)
 
   return Math.round(
     sleepScore * weights.sleep +
       nutritionScore * weights.nutrition +
       activityScore * weights.activity +
-      stressScore * weights.stress
+      stressScore * weights.stress +
+      observationScore * weights.observations
   )
 }

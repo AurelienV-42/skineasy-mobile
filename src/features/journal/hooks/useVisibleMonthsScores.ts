@@ -5,7 +5,13 @@ import { eachDayOfInterval, endOfMonth, format, isSameDay, parseISO, startOfMont
 import { calculateDayScore } from '@features/dashboard/utils/score'
 import { journalService } from '@features/journal/services/journal.service'
 import { queryKeys } from '@shared/config/queryKeys'
-import type { MealEntry, SleepEntry, SportEntry, StressEntry } from '@shared/types/journal.types'
+import type {
+  MealEntry,
+  ObservationEntry,
+  SleepEntry,
+  SportEntry,
+  StressEntry,
+} from '@shared/types/journal.types'
 import { toUTCDateString } from '@shared/utils/date'
 import { colors } from '@theme/colors'
 
@@ -57,6 +63,7 @@ export function useVisibleMonthsScores(visibleMonths: { year: number; month: num
       const meals: MealEntry[] = query.data.meals ?? []
       const sports: SportEntry[] = query.data.sports ?? []
       const stresses: StressEntry[] = query.data.stresses ?? []
+      const observations: ObservationEntry[] = query.data.observations ?? []
 
       const days = eachDayOfInterval({ start: monthStart, end: monthEnd })
 
@@ -66,8 +73,15 @@ export function useVisibleMonthsScores(visibleMonths: { year: number; month: num
         const dayMeals = filterByDate(meals, day)
         const daySports = filterByDate(sports, day)
         const dayStress = filterByDate(stresses, day)
+        const dayObservations = filterByDate(observations, day)
 
-        const score = calculateDayScore(daySleeps[0], dayMeals, daySports, dayStress[0])
+        const score = calculateDayScore(
+          daySleeps[0],
+          dayMeals,
+          daySports,
+          dayStress[0],
+          dayObservations[0]
+        )
         const color = getScoreColor(score)
 
         if (color) {

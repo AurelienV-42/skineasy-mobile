@@ -3,7 +3,13 @@ import { isSameDay, parseISO, subDays } from 'date-fns'
 
 import { journalService } from '@features/journal/services/journal.service'
 import { queryKeys } from '@shared/config/queryKeys'
-import type { MealEntry, SleepEntry, SportEntry } from '@shared/types/journal.types'
+import type {
+  MealEntry,
+  ObservationEntry,
+  SleepEntry,
+  SportEntry,
+  StressEntry,
+} from '@shared/types/journal.types'
 import { toUTCDateString } from '@shared/utils/date'
 
 import { calculateDayScore } from '@features/dashboard/utils/score'
@@ -32,15 +38,19 @@ export function useWeekScores(): DayScore[] {
   const sleeps: SleepEntry[] = data?.sleeps ?? []
   const meals: MealEntry[] = data?.meals ?? []
   const sports: SportEntry[] = data?.sports ?? []
+  const stresses: StressEntry[] = data?.stresses ?? []
+  const observations: ObservationEntry[] = data?.observations ?? []
 
   return weekDays.map((date) => {
     const daySleeps = filterByDate(sleeps, date)
     const dayMeals = filterByDate(meals, date)
     const daySports = filterByDate(sports, date)
+    const dayStress = filterByDate(stresses, date)
+    const dayObservations = filterByDate(observations, date)
 
     return {
       date,
-      score: calculateDayScore(daySleeps[0], dayMeals, daySports),
+      score: calculateDayScore(daySleeps[0], dayMeals, daySports, dayStress[0], dayObservations[0]),
     }
   })
 }

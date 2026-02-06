@@ -16,6 +16,7 @@ export const queryKeys = {
   journalSport: (date: string) => [...queryKeys.journal, 'sport', date] as const,
   journalMeal: (date: string) => [...queryKeys.journal, 'meal', date] as const,
   journalStress: (date: string) => [...queryKeys.journal, 'stress', date] as const,
+  journalObservations: (date: string) => [...queryKeys.journal, 'observations', date] as const,
   sportTypes: () => [...queryKeys.journal, 'sport-types'] as const,
 
   // Routine

@@ -20,6 +20,7 @@ import {
   useSportEntries,
   useStressEntries,
 } from '@features/journal/hooks/useJournal'
+import { useObservationsEntry } from '@features/journal/hooks/useObservations'
 import { Avatar } from '@shared/components/Avatar'
 import { SectionHeader } from '@shared/components/SectionHeader'
 import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation'
@@ -44,9 +45,16 @@ export default function DashboardScreen(): React.ReactElement {
   const { data: mealEntries = [] } = useMealEntries(dateString)
   const { data: sportEntries = [] } = useSportEntries(dateString)
   const { data: stressEntries = [] } = useStressEntries(dateString)
+  const { data: observationEntries = [] } = useObservationsEntry(dateString)
 
   // Compute score for selected date
-  const score = calculateDayScore(sleepEntries[0], mealEntries, sportEntries, stressEntries[0])
+  const score = calculateDayScore(
+    sleepEntries[0],
+    mealEntries,
+    sportEntries,
+    stressEntries[0],
+    observationEntries[0]
+  )
 
   // Calculate missing indicators count
   const missingCount = [

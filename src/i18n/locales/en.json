@@ -282,6 +282,35 @@
       "saveError": "Failed to save stress level",
       "deleteSuccess": "Stress entry deleted",
       "deleteError": "Failed to delete stress entry"
+    },
+    "observations": {
+      "screenTitle": "Observations",
+      "positivePoints": "Positive points",
+      "negativePoints": "Negative points",
+      "positive": {
+        "skinHydrated": "Hydrated skin",
+        "fewerPimples": "Fewer pimples",
+        "glowingSkin": "Glowing skin",
+        "smootherSkin": "Smoother skin"
+      },
+      "negative": {
+        "acne": "Acne",
+        "excessSebum": "Excess sebum",
+        "atopicSkin": "Atopic skin (eczema, psoriasis...)",
+        "roughTexture": "Rough texture",
+        "redness": "Redness",
+        "blackheads": "Blackheads",
+        "drySkin": "Dry skin",
+        "hyperpigmentation": "Hyperpigmentation spots",
+        "sensitiveSkin": "Sensitive skin",
+        "wrinkles": "Wrinkles and fine lines",
+        "dullComplexion": "Dull complexion"
+      },
+      "atLeastOneRequired": "Select at least one observation",
+      "saveSuccess": "Observations saved",
+      "saveError": "Failed to save observations",
+      "deleteSuccess": "Observations deleted",
+      "deleteError": "Failed to delete observations"
     }
   },
   "routine": {

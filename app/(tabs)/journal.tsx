@@ -14,6 +14,7 @@ import {
   useSportEntries,
   useStressEntries,
 } from '@features/journal/hooks/useJournal'
+import { useObservationsEntry } from '@features/journal/hooks/useObservations'
 
 export default function JournalScreen(): React.ReactElement {
   const today = new Date()
@@ -25,13 +26,21 @@ export default function JournalScreen(): React.ReactElement {
   const { data: mealEntries = [] } = useMealEntries(selectedDate)
   const { data: sportEntries = [] } = useSportEntries(selectedDate)
   const { data: stressEntries = [] } = useStressEntries(selectedDate)
+  const { data: observationEntries = [] } = useObservationsEntry(selectedDate)
 
-  const score = calculateDayScore(sleepEntries[0], mealEntries, sportEntries, stressEntries[0])
+  const score = calculateDayScore(
+    sleepEntries[0],
+    mealEntries,
+    sportEntries,
+    stressEntries[0],
+    observationEntries[0]
+  )
   const hasData =
     sleepEntries.length > 0 ||
     mealEntries.length > 0 ||
     sportEntries.length > 0 ||
-    stressEntries.length > 0
+    stressEntries.length > 0 ||
+    observationEntries.length > 0
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>

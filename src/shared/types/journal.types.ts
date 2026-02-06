@@ -165,4 +165,29 @@ export interface JournalWeekResponse {
   sports: SportEntry[]
   meals: MealEntry[]
   stresses: StressEntry[]
+  observations: ObservationEntry[]
+}
+
+/**
+ * Observation Entry
+ * One entry per customer per day (unique constraint)
+ */
+export interface ObservationEntry {
+  id: number
+  customer_id: number
+  date: string // ISO 8601 UTC: "2025-01-15T00:00:00.000Z"
+  positives: string[] // e.g. ["skinHydrated", "fewerPimples"]
+  negatives: string[] // e.g. ["acne", "excessSebum"]
+  created_at: string
+}
+
+export interface CreateObservationEntryDto {
+  date: string // ISO 8601 UTC
+  positives: string[]
+  negatives: string[]
+}
+
+export interface ObservationUpsertResponse {
+  data: ObservationEntry
+  created: boolean
 }

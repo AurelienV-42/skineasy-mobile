@@ -9,12 +9,15 @@ import { api } from '@shared/services/api'
 import type { ApiResponse } from '@shared/types/api.types'
 import type {
   CreateMealEntryDto,
+  CreateObservationEntryDto,
   CreateSleepEntryDto,
   CreateSportEntryDto,
   CreateStressEntryDto,
   ImageUploadResponse,
   JournalWeekResponse,
   MealEntry,
+  ObservationEntry,
+  ObservationUpsertResponse,
   SleepEntry,
   SleepUpsertResponse,
   SportEntry,
@@ -226,6 +229,33 @@ export const stressService = {
 }
 
 /**
+ * Observation Entry Service
+ */
+export const observationsService = {
+  async getByDate(date: string): Promise<ObservationEntry[]> {
+    logger.info('[Journal API] Fetching observations for date:', date)
+    const response = await api.get<ApiResponse<ObservationEntry[]>>(
+      `/api/v1/journal/observations?date=${encodeURIComponent(date)}`
+    )
+    return response.data
+  },
+
+  async upsert(dto: CreateObservationEntryDto): Promise<ObservationUpsertResponse> {
+    logger.info('[Journal API] Upserting observation entry:', dto)
+    const response = await api.put<ApiResponse<ObservationUpsertResponse>>(
+      '/api/v1/journal/observations/upsert',
+      dto
+    )
+    return response.data
+  },
+
+  async delete(id: number): Promise<void> {
+    logger.info('[Journal API] Deleting observation entry:', id)
+    await api.delete(`/api/v1/journal/observations/${id}`)
+  },
+}
+
+/**
  * Batch Entries Service
  */
 export const entriesService = {
@@ -251,6 +281,7 @@ export const journalService = {
   sport: sportService,
   meal: mealService,
   stress: stressService,
+  observations: observationsService,
   sportTypes: sportTypesService,
   entries: entriesService,
 }

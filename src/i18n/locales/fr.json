@@ -283,6 +283,35 @@
       "saveError": "Échec de l'enregistrement du stress",
       "deleteSuccess": "Entrée de stress supprimée",
       "deleteError": "Échec de la suppression du stress"
+    },
+    "observations": {
+      "screenTitle": "Observations",
+      "positivePoints": "Les points positifs",
+      "negativePoints": "Les points négatifs",
+      "positive": {
+        "skinHydrated": "Peau hydratée",
+        "fewerPimples": "Moins de boutons",
+        "glowingSkin": "Peau lumineuse",
+        "smootherSkin": "Peau plus lisse"
+      },
+      "negative": {
+        "acne": "Acné",
+        "excessSebum": "Excès de sébum",
+        "atopicSkin": "Peau atopique (eczéma, psoriasis...)",
+        "roughTexture": "Peau rugueuse ou texture",
+        "redness": "Rougeurs",
+        "blackheads": "Points noirs",
+        "drySkin": "Sécheresse cutanée",
+        "hyperpigmentation": "Tâches d'hyperpigmentation",
+        "sensitiveSkin": "Peau sensible",
+        "wrinkles": "Rides et ridules",
+        "dullComplexion": "Teint terne"
+      },
+      "atLeastOneRequired": "Sélectionne au moins une observation",
+      "saveSuccess": "Observations enregistrées",
+      "saveError": "Échec de l'enregistrement des observations",
+      "deleteSuccess": "Observations supprimées",
+      "deleteError": "Échec de la suppression des observations"
     }
   },
   "routine": {

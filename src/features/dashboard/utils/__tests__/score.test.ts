@@ -1,11 +1,18 @@
 import { describe, it, expect } from 'vitest'
 
-import type { MealEntry, SleepEntry, SportEntry, StressEntry } from '@shared/types/journal.types'
+import type {
+  MealEntry,
+  ObservationEntry,
+  SleepEntry,
+  SportEntry,
+  StressEntry,
+} from '@shared/types/journal.types'
 
 import {
   calculateActivityScore,
   calculateDayScore,
   calculateNutritionScore,
+  calculateObservationScore,
   calculateSleepScore,
 } from '../score'
 
@@ -168,12 +175,63 @@ describe('calculateNutritionScore', () => {
   })
 })
 
+const makeObservationEntry = (positives: string[], negatives: string[]): ObservationEntry => ({
+  id: 1,
+  customer_id: 1,
+  date: '2025-01-15T00:00:00.000Z',
+  positives,
+  negatives,
+  created_at: '2025-01-15T00:00:00.000Z',
+})
+
+describe('calculateObservationScore', () => {
+  it('returns 0 for undefined entry', () => {
+    expect(calculateObservationScore(undefined)).toBe(0)
+  })
+
+  it('returns tracking bonus + base for empty arrays', () => {
+    const entry = makeObservationEntry([], [])
+    expect(calculateObservationScore(entry)).toBe(60) // 50 base + 10 tracking
+  })
+
+  it('adds points for positives', () => {
+    const entry = makeObservationEntry(['skinHydrated', 'glowingSkin'], [])
+    expect(calculateObservationScore(entry)).toBe(84) // 50 + 24 + 10
+  })
+
+  it('subtracts points for negatives', () => {
+    const entry = makeObservationEntry([], ['acne', 'redness'])
+    expect(calculateObservationScore(entry)).toBe(44) // 50 - 16 + 10
+  })
+
+  it('handles mix of positives and negatives', () => {
+    const entry = makeObservationEntry(['skinHydrated'], ['acne', 'redness', 'drySkin'])
+    expect(calculateObservationScore(entry)).toBe(48) // 50 + 12 - 24 + 10
+  })
+
+  it('clamps to 0 when heavily negative', () => {
+    const entry = makeObservationEntry(
+      [],
+      ['acne', 'redness', 'drySkin', 'excessSebum', 'blackheads', 'roughTexture', 'wrinkles']
+    )
+    expect(calculateObservationScore(entry)).toBe(4) // 50 - 56 + 10 = 4
+  })
+
+  it('clamps to 100 when all positives', () => {
+    const entry = makeObservationEntry(
+      ['skinHydrated', 'fewerPimples', 'glowingSkin', 'smootherSkin'],
+      []
+    )
+    expect(calculateObservationScore(entry)).toBe(100) // 50 + 48 + 10 = 108 -> clamped 100
+  })
+})
+
 describe('calculateDayScore', () => {
   it('returns 0 for no data', () => {
     expect(calculateDayScore(undefined, [], [])).toBe(0)
   })
 
-  it('returns weighted average of all scores', () => {
+  it('returns 100 for all perfect scores', () => {
     const sleep = makeSleepEntry(8, 5) // 100
     const meals = [
       makeMealEntry('breakfast'),
@@ -182,15 +240,26 @@ describe('calculateDayScore', () => {
       makeMealEntry('snack'),
     ] // 100
     const sports = [makeSportEntry(30, 3)] // 100
-    const stress = makeStressEntry(1) // 100 (minimal stress)
+    const stress = makeStressEntry(1) // 100
+    const observations = makeObservationEntry(
+      ['skinHydrated', 'fewerPimples', 'glowingSkin', 'smootherSkin'],
+      []
+    ) // 100 (clamped)
 
-    expect(calculateDayScore(sleep, meals, sports, stress)).toBe(100)
+    expect(calculateDayScore(sleep, meals, sports, stress, observations)).toBe(100)
   })
 
   it('returns partial score when some data missing', () => {
     const sleep = makeSleepEntry(8, 5) // 100
     const score = calculateDayScore(sleep, [], [])
-    // sleep(100) * 0.35 = 35, no nutrition/activity/stress
-    expect(score).toBe(35)
+    // sleep(100) * 0.30 = 30
+    expect(score).toBe(30)
+  })
+
+  it('includes observation weight in total', () => {
+    const observations = makeObservationEntry(['skinHydrated'], []) // 72
+    const score = calculateDayScore(undefined, [], [], undefined, observations)
+    // observation(72) * 0.15 = 10.8 -> 11
+    expect(score).toBe(11)
   })
 })
