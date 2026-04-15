@@ -40,10 +40,7 @@ export function SelectableCard({
 
   return (
     <Pressable onPress={onPress} haptic={haptic}>
-      <GlassContainer
-        style={getContainerStyle(variant, selected)}
-        tintColor={selected ? colors.background : 'transparent'}
-      >
+      <GlassContainer style={getContainerStyle(variant, selected)} tintColor="transparent">
         <View className={isVertical ? 'items-center' : 'flex-row items-center gap-3'}>
           {Icon && <Icon color={textColor} size={iconSize} strokeWidth={2} />}
           <Text
@@ -74,6 +71,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   selected: {
-    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.primary,
   },
 });

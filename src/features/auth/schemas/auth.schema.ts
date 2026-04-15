@@ -9,7 +9,7 @@ export const registerSchema = z
   .object({
     firstname: z.string().min(2, { message: 'validation.firstnameMin' }),
     lastname: z.string().min(2, { message: 'validation.lastnameMin' }),
-    id_gender: z.number().min(1).max(3), // 1=Mr, 2=Mrs, 3=Other
+    id_gender: z.number({ message: 'auth.genderRequired' }).min(1).max(3), // 1=Mr, 2=Mrs, 3=Other
     birthday: z.string().optional(),
     email: z.email({ message: 'validation.invalidEmail' }),
     password: z.string().min(6, { message: 'validation.passwordMin' }),

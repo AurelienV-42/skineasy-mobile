@@ -1,8 +1,9 @@
 {
   "welcome": {
     "tagline": "UNE PEAU, UNE HISTOIRE",
+    "existingAccount": "Ton compte SkinEasy fonctionne aussi ici. Connecte-toi pour retrouver ta routine.",
     "getStarted": "Commencer",
-    "signIn": "Vous avez déjà un compte ? Me connecter"
+    "signIn": "Me connecter"
   },
   "common": {
     "loading": "Chargement...",

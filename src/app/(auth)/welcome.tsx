@@ -93,7 +93,10 @@ export default function WelcomeScreen() {
             </Link>
           </Animated.View>
 
-          <Animated.View style={secondaryButtonStyle}>
+          <Animated.View style={secondaryButtonStyle} className="gap-2">
+            <Animated.Text className="text-sm text-text/70 text-center">
+              {t('welcome.existingAccount')}
+            </Animated.Text>
             <Link href="/(auth)/login" asChild>
               <Button title={t('welcome.signIn')} variant="outline" haptic="medium" />
             </Link>

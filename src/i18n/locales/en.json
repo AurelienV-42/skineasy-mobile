@@ -1,8 +1,9 @@
 {
   "welcome": {
     "tagline": "ONE SKIN, ONE STORY",
+    "existingAccount": "Your SkinEasy account works here too. Sign in to pick up your routine.",
     "getStarted": "Get Started",
-    "signIn": "Already have an account? Sign In"
+    "signIn": "Sign In"
   },
   "common": {
     "loading": "Loading...",

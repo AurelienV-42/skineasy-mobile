@@ -109,7 +109,7 @@ export function DateInput({
             <DateTimePicker
               value={tempDate}
               mode="date"
-              display="inline"
+              display="spinner"
               onChange={handleChange}
               maximumDate={maximumDate}
               locale={i18n.language}

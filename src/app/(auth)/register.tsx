@@ -41,13 +41,14 @@ export default function RegisterScreen() {
     trigger,
     formState: { errors },
     getValues,
+    watch,
   } = useForm<RegisterInput>({
     mode: 'onChange',
     resolver: zodResolver(registerSchema),
     defaultValues: {
       firstname: '',
       lastname: '',
-      id_gender: 2, // Female default
+      id_gender: undefined,
       birthday: '',
       email: '',
       password: '',
@@ -117,7 +118,9 @@ export default function RegisterScreen() {
 
   const isStep1Valid = getValues('firstname')?.length >= 2 && getValues('lastname')?.length >= 2;
 
-  const isStep2Valid = getValues('id_gender') >= 1 && getValues('id_gender') <= 3;
+  const watchedGender = watch('id_gender');
+  const isStep2Valid =
+    typeof watchedGender === 'number' && watchedGender >= 1 && watchedGender <= 3;
 
   const isStep4Valid =
     getValues('email')?.length > 0 &&
