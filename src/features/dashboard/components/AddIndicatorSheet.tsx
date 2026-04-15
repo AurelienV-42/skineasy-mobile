@@ -3,6 +3,7 @@ import { Dumbbell, Moon, Search, Smile, Utensils } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 
+import { useSportEntries } from '@features/journal/hooks/useSport';
 import { BottomSheet } from '@shared/components/bottom-sheet';
 import { Button } from '@shared/components/button';
 import { Pressable } from '@shared/components/pressable';
@@ -29,9 +30,14 @@ export function AddIndicatorSheet({
 }: AddIndicatorSheetProps): React.ReactElement {
   const { t } = useTranslation();
   const router = useRouter();
+  const { data: sportEntries = [] } = useSportEntries(date);
 
-  const handlePress = (path: string): void => {
+  const handlePress = (key: string, path: string): void => {
     onClose();
+    if (key === 'sport' && sportEntries.length === 0) {
+      router.push({ pathname: '/journal/sport/new', params: { date } });
+      return;
+    }
     router.push({ pathname: path, params: { date } });
   };
 
@@ -45,7 +51,7 @@ export function AddIndicatorSheet({
           {INDICATORS.map(({ key, icon: Icon, path }) => (
             <View key={key} className="w-1/2 p-2">
               <Pressable
-                onPress={() => handlePress(path)}
+                onPress={() => handlePress(key, path)}
                 haptic="light"
                 className="aspect-square rounded-2xl bg-surface items-center justify-center gap-2"
               >

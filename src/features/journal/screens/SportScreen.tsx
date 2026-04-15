@@ -211,6 +211,7 @@ export default function SportScreen() {
               onChangeText={onChange}
               onBlur={onBlur}
               keyboardType="number-pad"
+              placeholder={t('journal.sport.durationPlaceholder')}
               error={errors.duration?.message ? t(errors.duration.message as string) : undefined}
             />
           )}

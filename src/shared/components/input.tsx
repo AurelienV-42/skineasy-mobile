@@ -8,7 +8,7 @@ import { cn } from '@shared/utils/cn';
 import { haptic } from '@shared/utils/haptic';
 import { colors } from '@theme/colors';
 
-interface InputProps extends Omit<TextInputProps, 'placeholder'> {
+interface InputProps extends TextInputProps {
   label?: string;
   error?: string;
   /**
@@ -41,6 +41,7 @@ export const Input = forwardRef<TextInput, InputProps>(
       secureTextEntry,
       numberOfLines = 4,
       value,
+      placeholder,
       ...props
     },
     ref,
@@ -193,8 +194,9 @@ export const Input = forwardRef<TextInput, InputProps>(
             multiline={multiline}
             secureTextEntry={secureTextEntry && !isPasswordVisible}
             value={value}
+            placeholder={label ? undefined : placeholder}
+            placeholderTextColor={colors.textMuted}
             {...props}
-            placeholder={undefined}
           />
 
           {/* Password Toggle */}

@@ -264,6 +264,7 @@
       "searchActivities": "Rechercher des activités...",
       "noActivitiesFound": "Aucune activité trouvée",
       "duration": "Durée",
+      "durationPlaceholder": "30",
       "minutes": "min",
       "note": "Note (optionnelle)",
       "noteMaxLength": "La note ne peut pas dépasser 500 caractères",

@@ -12,3 +12,5 @@
 - Added native in-app password recovery screen replacing the website WebView
 - Added password reset screen wired for deep-link token flow
 - Added docs/deeplinking.md covering scheme, testing, and Supabase integration plan
+- Changed sport add flow to skip the day list and open the new-activity screen when no sport is logged
+- Fixed sport duration input missing placeholder by allowing placeholder on Input when no floating label
