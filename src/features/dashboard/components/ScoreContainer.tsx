@@ -22,7 +22,7 @@ export function ScoreContainer({ score, missingCount }: ScoreContainerProps): Re
     <View className="px-4">
       <ImageBackground
         source={assets.scoreSkin}
-        className="rounded-2xl overflow-hidden pt-5"
+        className="rounded-2xl overflow-hidden pt-6"
         style={{ height: SIZE * 0.85 }}
         imageStyle={{ borderRadius: 16 }}
       >
@@ -43,11 +43,11 @@ export function ScoreContainer({ score, missingCount }: ScoreContainerProps): Re
             </Text>
             <Text className="text-5xl font-bold text-surface">{score}</Text>
             <Text className="-mt-2 text-base font-medium text-surface opacity-60">/ 100</Text>
-            {missingCount !== undefined && missingCount > 0 && (
+            {/* {missingCount !== undefined && missingCount > 0 && (
               <Text className="mt-1 text-sm text-surface opacity-70">
                 {t('dashboard.score.missing', { count: missingCount })}
               </Text>
-            )}
+            )} */}
           </View>
         </View>
       </ImageBackground>
