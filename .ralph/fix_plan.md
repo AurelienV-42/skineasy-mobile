@@ -234,7 +234,7 @@ if (error) toast.error(t(error.message));
 
 ---
 
-> **Remaining phases** (Phase 7-10) are parked in `fix_plan_backlog.md`. When ALL items in Phase 6 are `[x]`, promote Phase 7.
+> **Remaining phases** (Phase 8-10) are parked in `fix_plan_backlog.md`. When ALL items in Phase 7 are `[x]`, promote Phase 8.
 
 ---
 
@@ -344,3 +344,20 @@ if (error) toast.error(t(error.message));
   - Parse `min_version` and `store_urls` rows from jsonb `value`
   - Use `mapSupabaseError` for error handling
 - [x] No auth required (app_config has anon SELECT policy) -- verify no getSession call
+
+---
+
+## Phase 7 -- Push Notifications
+
+### 7.1 Push token registration service
+
+- [x] Create `src/shared/services/push-tokens.service.ts`
+  - `registerToken(token, platform, deviceId?)` -> upsert into `push_tokens` on `(user_id, token)`
+  - `unregisterToken(token)` -> delete row
+- [ ] Call `registerToken` after login + on app foreground (when permissions are granted)
+- [ ] Call `unregisterToken` on logout
+
+### 7.2 Wire into existing flow
+
+- [ ] Audit current push token flow: `rg "push" src/features/ src/shared/`
+- [ ] Migrate any existing token registration to the new service
