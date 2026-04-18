@@ -129,20 +129,19 @@ Root
 
 ---
 
-## API Endpoints
+## Supabase
 
-```
-POST /auth/login          { email, password } -> { access_token, refresh_token, user }
-POST /auth/register       { firstname, lastname, email, password } -> { access_token, user }
-POST /auth/refresh        { refresh_token } -> { access_token }
+Project ID: `lyhhipvipgbqsytfqwdw` — full schema in `docs/supabase-migration.md`
 
-GET  /user/profile        -> User
-
-GET  /routine/latest    -> Routine | 404
-
-GET  /journal/entries?date=YYYY-MM-DD  -> JournalEntry[]
-POST /journal/entry       -> JournalEntry
-```
+| Resource       | Details                                                                                   |
+| -------------- | ----------------------------------------------------------------------------------------- |
+| Auth           | `supabase.auth.*` — session auto-managed by SDK                                           |
+| Client profile | `clients` table (extends `auth.users` via DB trigger)                                     |
+| Journal tables | `sleep_entries`, `sport_entries`, `meal_entries`, `stress_entries`, `observation_entries` |
+| Other tables   | `diagnoses`, `push_tokens`, `app_config`, `sport_types`                                   |
+| Avatars bucket | `avatars` (public) — path: `{user_id}/{filename}`                                         |
+| Meal photos    | `meal-photos` (private) — signed URLs, 1h expiry                                          |
+| Error mapping  | `src/lib/error-mapper.ts` — Supabase codes → i18n keys                                    |
 
 ---
 

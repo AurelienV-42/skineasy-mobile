@@ -4,8 +4,6 @@
  * Allows users to log sleep data with:
  * - Hours of sleep (time picker)
  * - Sleep quality (1-5 scale: 1=Bad, 3=Neutral, 5=Good)
- *
- * Connected to real backend API with validation
  */
 
 import { zodResolver } from '@hookform/resolvers/zod';

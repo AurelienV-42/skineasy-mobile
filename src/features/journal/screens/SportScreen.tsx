@@ -5,8 +5,6 @@
  * - Sport type selector (premium hybrid UI)
  * - Duration input (minutes)
  * - Intensity selector (1-5 scale)
- *
- * Connected to real backend API with validation
  */
 
 import { zodResolver } from '@hookform/resolvers/zod';

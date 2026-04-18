@@ -5,8 +5,6 @@
  * - Photo upload (camera or gallery)
  * - Optional note (max 500 characters)
  * - Optional meal type (breakfast, lunch, dinner, snack)
- *
- * Connected to real backend API with image upload and validation
  */
 
 import { zodResolver } from '@hookform/resolvers/zod';
