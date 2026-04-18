@@ -23,8 +23,8 @@ import { cn } from '@shared/utils/cn';
 import { haptic } from '@shared/utils/haptic';
 import { colors } from '@theme/colors';
 import { DEMO_QUESTIONS } from '@features/questionnaire-demo/constants';
+import { StepProgressBar } from '@features/questionnaire-demo/components/progress-bar';
 
-const TOTAL_STEPS = 3;
 const SPRING_CONFIG = { damping: 20, stiffness: 300 };
 
 type DemoStep = 0 | 1 | 2 | 3;
@@ -40,40 +40,6 @@ const INITIAL_ANSWERS: DemoAnswers = {
   concerns: [],
   ageRange: null,
 };
-
-function AnimatedSegment({ filled }: { filled: boolean }): React.ReactElement {
-  const [trackWidth, setTrackWidth] = useState(0);
-  const translateX = useSharedValue(-200);
-
-  useEffect(() => {
-    if (trackWidth === 0) return;
-    translateX.value = withSpring(filled ? 0 : -trackWidth, SPRING_CONFIG);
-  }, [filled, trackWidth]);
-
-  const fillStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }],
-  }));
-
-  return (
-    <View
-      className="flex-1 h-1.5 rounded-full overflow-hidden"
-      style={{ backgroundColor: colors.border }}
-      onLayout={(e) => setTrackWidth(e.nativeEvent.layout.width)}
-    >
-      <Animated.View style={[fillStyle, { flex: 1, backgroundColor: colors.primary }]} />
-    </View>
-  );
-}
-
-function StepProgressBar({ step }: { step: DemoStep }): React.ReactElement {
-  return (
-    <View className="flex-row gap-1.5 flex-1 ml-4">
-      {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-        <AnimatedSegment key={i} filled={step > i} />
-      ))}
-    </View>
-  );
-}
 
 function TappableCard({
   onPress,
