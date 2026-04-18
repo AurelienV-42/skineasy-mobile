@@ -197,7 +197,7 @@ All labels via i18n keys under `questionnaireDemo.*`.
 - [x] **Progress bar**: segments fill with a `withSpring` width animation on each step advance
 - [x] **Answer selection**: tapped card scales up briefly (0.97 -> 1.0) with spring + haptic.light
 - [x] **CTA button**: animates enabled state (opacity 0.4 -> 1.0) when answer is selected
-- [ ] **Completion screen**: confetti / sparkle burst (use `react-native-reanimated` particle animation or a simple ring of animated dots pulsing outward), big checkmark, "Merci !" heading, "Tu as l'air d'avoir une super peau ✨" subtitle, "Retour" CTA
+- [x] **Completion screen**: confetti / sparkle burst (use `react-native-reanimated` particle animation or a simple ring of animated dots pulsing outward), big checkmark, "Merci !" heading, "Tu as l'air d'avoir une super peau ✨" subtitle, "Retour" CTA
 
 ### 10.6 Visual style (playful)
 

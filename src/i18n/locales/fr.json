@@ -441,7 +441,10 @@
   },
   "questionnaireDemo": {
     "title": "Découvre ta peau",
-    "next": "Suivant"
+    "next": "Suivant",
+    "back": "Retour",
+    "completionTitle": "Merci !",
+    "completionSubtitle": "Tu as l'air d'avoir une super peau ✨"
   },
   "diagnosis": {
     "required": "Diagnostic requis",

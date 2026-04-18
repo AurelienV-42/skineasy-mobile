@@ -440,7 +440,10 @@
   },
   "questionnaireDemo": {
     "title": "Discover your skin",
-    "next": "Next"
+    "next": "Next",
+    "back": "Go back",
+    "completionTitle": "Thank you!",
+    "completionSubtitle": "You seem to have amazing skin ✨"
   },
   "diagnosis": {
     "required": "Diagnosis Required",
