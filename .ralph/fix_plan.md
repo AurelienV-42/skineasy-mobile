@@ -234,7 +234,7 @@ if (error) toast.error(t(error.message));
 
 ---
 
-> **Remaining phases** (Phase 6-10) are parked in `fix_plan_backlog.md`. When ALL items in Phase 5 are `[x]`, promote Phase 6.
+> **Remaining phases** (Phase 7-10) are parked in `fix_plan_backlog.md`. When ALL items in Phase 6 are `[x]`, promote Phase 7.
 
 ---
 
@@ -332,3 +332,15 @@ if (error) toast.error(t(error.message));
 ### 5.3 Tests
 
 - [x] Create profile tests in `src/features/profile/__tests__/` with Supabase mocks
+
+---
+
+## Phase 6 -- App Config Migration
+
+### 6.1 App config service rewrite
+
+- [x] Rewrite `src/shared/services/appConfig.service.ts`
+  - `getConfig()` -> `supabase.from('app_config').select()` (returns all rows)
+  - Parse `min_version` and `store_urls` rows from jsonb `value`
+  - Use `mapSupabaseError` for error handling
+- [x] No auth required (app_config has anon SELECT policy) -- verify no getSession call
