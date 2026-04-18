@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useUserStore } from '@shared/stores/user.store';
 import type { UserProfile } from '@shared/types/user.types';
+import type { ResolveRoutineResult } from '@features/routine/data/resolve-routine.api';
 
 describe('useUserStore', () => {
   beforeEach(() => {
@@ -62,5 +63,44 @@ describe('useUserStore', () => {
     const state = useUserStore.getState();
     expect(state.user).toBeNull();
     expect(state.hasDiagnosis).toBe(false);
+  });
+
+  describe('routineResolution', () => {
+    it('starts as null', () => {
+      expect(useUserStore.getState().routineResolution).toBeNull();
+    });
+
+    it.each<ResolveRoutineResult>([
+      { status: 'needs_form' },
+      { status: 'needs_purchase' },
+      { status: 'response_found_generation_pending' },
+      { status: 'typeform_unavailable' },
+      {
+        status: 'ready',
+        routine: {
+          id: 'r-1',
+          user_id: 'u-1',
+          status: 'ready',
+          algorithm_version: 'v1',
+          created_at: '2026-01-01T00:00:00.000Z',
+        },
+      },
+    ])('setRoutineResolution stores status "$status"', (result) => {
+      const { setRoutineResolution } = useUserStore.getState();
+      setRoutineResolution(result);
+      expect(useUserStore.getState().routineResolution?.status).toBe(result.status);
+    });
+
+    it('clearUser resets routineResolution to null', () => {
+      useUserStore.setState({ routineResolution: { status: 'needs_form' } });
+      useUserStore.getState().clearUser();
+      expect(useUserStore.getState().routineResolution).toBeNull();
+    });
+
+    it('setRoutineResolution accepts null', () => {
+      useUserStore.setState({ routineResolution: { status: 'needs_form' } });
+      useUserStore.getState().setRoutineResolution(null);
+      expect(useUserStore.getState().routineResolution).toBeNull();
+    });
   });
 });
