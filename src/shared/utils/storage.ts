@@ -1,51 +1,11 @@
-import * as SecureStore from 'expo-secure-store';
-
 import { storage } from '@lib/storage';
 
 const KEYS = {
-  ACCESS_TOKEN: 'access_token',
-  REFRESH_TOKEN: 'refresh_token',
   LOCALE: 'locale',
   SPORT_GOAL_MINUTES: 'sport_goal_minutes',
 } as const;
 
 const DEFAULT_SPORT_GOAL_MINUTES = 120; // 2 hours
-
-export async function getToken(): Promise<string | null> {
-  try {
-    return await SecureStore.getItemAsync(KEYS.ACCESS_TOKEN);
-  } catch {
-    return null;
-  }
-}
-
-export async function setToken(token: string): Promise<void> {
-  await SecureStore.setItemAsync(KEYS.ACCESS_TOKEN, token);
-}
-
-export async function removeToken(): Promise<void> {
-  await SecureStore.deleteItemAsync(KEYS.ACCESS_TOKEN);
-}
-
-export async function getRefreshToken(): Promise<string | null> {
-  try {
-    return await SecureStore.getItemAsync(KEYS.REFRESH_TOKEN);
-  } catch {
-    return null;
-  }
-}
-
-export async function setRefreshToken(token: string): Promise<void> {
-  await SecureStore.setItemAsync(KEYS.REFRESH_TOKEN, token);
-}
-
-export async function removeRefreshToken(): Promise<void> {
-  await SecureStore.deleteItemAsync(KEYS.REFRESH_TOKEN);
-}
-
-export async function clearAllTokens(): Promise<void> {
-  await Promise.all([removeToken(), removeRefreshToken()]);
-}
 
 export async function getLocale(): Promise<string | null> {
   return storage.getString(KEYS.LOCALE) ?? null;
