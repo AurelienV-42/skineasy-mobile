@@ -1,5 +1,5 @@
 import { useReactQueryDevTools } from '@dev-plugins/react-query';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -19,6 +19,7 @@ import { ForceUpdateModal } from '@shared/components/force-update-modal';
 import { InitErrorScreen } from '@shared/components/init-error-screen';
 import { OfflineBanner } from '@shared/components/offline-banner';
 import { queryClient } from '@shared/config/queryClient';
+import { queryPersister } from '@lib/query-persister';
 import { initSentry } from '@shared/config/sentry';
 import { useAppUpdates } from '@shared/hooks/useAppUpdates';
 import { useForceUpdate } from '@shared/hooks/useForceUpdate';
@@ -122,13 +123,16 @@ export default Sentry.wrap(function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <KeyboardProvider statusBarTranslucent navigationBarTranslucent>
-        <QueryClientProvider client={queryClient}>
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={{ persister: queryPersister }}
+        >
           <SafeAreaProvider>
             <ErrorBoundary>
               <RootLayoutContent />
             </ErrorBoundary>
           </SafeAreaProvider>
-        </QueryClientProvider>
+        </PersistQueryClientProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>
   );
