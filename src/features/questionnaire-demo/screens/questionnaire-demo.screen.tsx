@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { X } from 'lucide-react-native';
+import { ArrowLeft, X } from 'lucide-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
@@ -68,7 +68,7 @@ export function QuestionnaireDemoScreen(): React.ReactElement {
   const [answers, _setAnswers] = useState<DemoAnswers>(INITIAL_ANSWERS);
 
   const advance = (): void => setStep((s) => Math.min(s + 1, 3) as DemoStep);
-  const _goBack = (): void => setStep((s) => Math.max(s - 1, 0) as DemoStep);
+  const goBack = (): void => setStep((s) => Math.max(s - 1, 0) as DemoStep);
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -76,6 +76,11 @@ export function QuestionnaireDemoScreen(): React.ReactElement {
         <Pressable onPress={() => router.back()} haptic="light">
           <X size={24} color={colors.text} />
         </Pressable>
+        {step > 0 && (
+          <Pressable onPress={goBack} haptic="light" className="ml-2">
+            <ArrowLeft size={24} color={colors.text} />
+          </Pressable>
+        )}
         <StepProgressBar step={step} />
       </View>
 
