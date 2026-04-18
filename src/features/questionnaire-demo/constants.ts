@@ -1,44 +1,44 @@
 export type AnswerOption = {
   value: string;
-  label: string;
+  labelKey: string;
   emoji: string;
 };
 
 export type DemoQuestion = {
-  title: string;
+  titleKey: string;
   options: AnswerOption[];
 };
 
 export const DEMO_QUESTIONS: DemoQuestion[] = [
   {
-    title: 'Type de peau ressenti',
+    titleKey: 'questionnaireDemo.q1Title',
     options: [
-      { value: 'very-dry', label: 'Très sèche', emoji: '🌵' },
-      { value: 'dry', label: 'Sèche', emoji: '🌸' },
-      { value: 'normal', label: 'Normale', emoji: '✨' },
-      { value: 'mixed', label: 'Mixte', emoji: '🌊' },
-      { value: 'oily', label: 'Grasse', emoji: '🍃' },
+      { value: 'very-dry', labelKey: 'questionnaireDemo.q1VeryDry', emoji: '🌵' },
+      { value: 'dry', labelKey: 'questionnaireDemo.q1Dry', emoji: '🌸' },
+      { value: 'normal', labelKey: 'questionnaireDemo.q1Normal', emoji: '✨' },
+      { value: 'mixed', labelKey: 'questionnaireDemo.q1Mixed', emoji: '🌊' },
+      { value: 'oily', labelKey: 'questionnaireDemo.q1Oily', emoji: '🍃' },
     ],
   },
   {
-    title: 'Tes préoccupations principales',
+    titleKey: 'questionnaireDemo.q2Title',
     options: [
-      { value: 'imperfections', label: 'Imperfections', emoji: '😔' },
-      { value: 'wrinkles', label: 'Rides', emoji: '😌' },
-      { value: 'sensitivity', label: 'Sensibilité', emoji: '🌼' },
-      { value: 'spots', label: 'Taches', emoji: '☀️' },
-      { value: 'blackheads', label: 'Points noirs', emoji: '🔵' },
-      { value: 'glow', label: 'Éclat', emoji: '💎' },
+      { value: 'imperfections', labelKey: 'questionnaireDemo.q2Imperfections', emoji: '😔' },
+      { value: 'wrinkles', labelKey: 'questionnaireDemo.q2Wrinkles', emoji: '😌' },
+      { value: 'sensitivity', labelKey: 'questionnaireDemo.q2Sensitivity', emoji: '🌼' },
+      { value: 'spots', labelKey: 'questionnaireDemo.q2Spots', emoji: '☀️' },
+      { value: 'blackheads', labelKey: 'questionnaireDemo.q2Blackheads', emoji: '🔵' },
+      { value: 'glow', labelKey: 'questionnaireDemo.q2Glow', emoji: '💎' },
     ],
   },
   {
-    title: 'Ton âge',
+    titleKey: 'questionnaireDemo.q3Title',
     options: [
-      { value: 'under-20', label: '< 20', emoji: '🌱' },
-      { value: '20-29', label: '20–29', emoji: '🌿' },
-      { value: '30-39', label: '30–39', emoji: '🌳' },
-      { value: '40-49', label: '40–49', emoji: '🍂' },
-      { value: '50+', label: '50+', emoji: '🌟' },
+      { value: 'under-20', labelKey: 'questionnaireDemo.q3Under20', emoji: '🌱' },
+      { value: '20-29', labelKey: 'questionnaireDemo.q3Range2029', emoji: '🌿' },
+      { value: '30-39', labelKey: 'questionnaireDemo.q3Range3039', emoji: '🌳' },
+      { value: '40-49', labelKey: 'questionnaireDemo.q3Range4049', emoji: '🍂' },
+      { value: '50+', labelKey: 'questionnaireDemo.q3Range50plus', emoji: '🌟' },
     ],
   },
 ];
