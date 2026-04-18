@@ -33,12 +33,10 @@ vi.mock('@lib/supabase', () => ({
 vi.mock('@lib/upload', () => ({ uploadFile: mocks.uploadFile }));
 vi.mock('@shared/utils/image', () => ({ compressImage: mocks.compressImage }));
 
-import {
-  sleepService,
-  mealService,
-  observationsService,
-  sportTypesService,
-} from '@features/journal/services/journal.service';
+import { getSleepByDate, upsertSleep, deleteSleep } from '@features/journal/data/sleep.api';
+import { getMealByDate, uploadMealPhoto } from '@features/journal/data/meal.api';
+import { upsertObservations } from '@features/journal/data/observation.api';
+import { getSportTypes } from '@features/journal/data/sport.api';
 
 const USER_ID = 'user-1';
 
@@ -56,32 +54,32 @@ beforeEach(() => {
   mocks.from.mockReturnValue(mocks.chain);
 });
 
-describe('sleepService.getByDate', () => {
+describe('getSleepByDate', () => {
   it('returns entries for user and date', async () => {
     const entries = [{ id: 's1', user_id: USER_ID, date: '2025-01-15', hours: 8, quality: 4 }];
     setChainResolution({ data: entries, error: null });
 
-    const result = await sleepService.getByDate('2025-01-15');
+    const result = await getSleepByDate('2025-01-15');
     expect(result).toEqual(entries);
   });
 
   it('throws sessionExpired when no user', async () => {
     mocks.getUser.mockResolvedValue({ data: { user: null } });
-    await expect(sleepService.getByDate('2025-01-15')).rejects.toThrow('common.sessionExpired');
+    await expect(getSleepByDate('2025-01-15')).rejects.toThrow('common.sessionExpired');
   });
 
   it('throws mapped error on DB failure', async () => {
     setChainResolution({ data: null, error: { code: '42501' } });
-    await expect(sleepService.getByDate('2025-01-15')).rejects.toThrow('common.permissionDenied');
+    await expect(getSleepByDate('2025-01-15')).rejects.toThrow('common.permissionDenied');
   });
 });
 
-describe('sleepService.upsert', () => {
+describe('upsertSleep', () => {
   it('upserts with user_id and onConflict', async () => {
     const entry = { id: 's1', user_id: USER_ID, date: '2025-01-15', hours: 7, quality: 3 };
     setChainResolution({ data: entry, error: null });
 
-    const result = await sleepService.upsert({ date: '2025-01-15', hours: 7, quality: 3 });
+    const result = await upsertSleep({ date: '2025-01-15', hours: 7, quality: 3 });
     expect(result).toEqual(entry);
     expect(mocks.chain.upsert).toHaveBeenCalledWith(expect.objectContaining({ user_id: USER_ID }), {
       onConflict: 'user_id,date',
@@ -90,25 +88,25 @@ describe('sleepService.upsert', () => {
 
   it('throws mapped error on DB failure', async () => {
     setChainResolution({ data: null, error: { code: '23505' } });
-    await expect(sleepService.upsert({ date: '2025-01-15', hours: 7, quality: 3 })).rejects.toThrow(
+    await expect(upsertSleep({ date: '2025-01-15', hours: 7, quality: 3 })).rejects.toThrow(
       'common.duplicateEntry',
     );
   });
 });
 
-describe('sleepService.delete', () => {
+describe('deleteSleep', () => {
   it('deletes by id without throwing', async () => {
     setChainResolution({ data: null, error: null });
-    await expect(sleepService.delete('s1')).resolves.toBeUndefined();
+    await expect(deleteSleep('s1')).resolves.toBeUndefined();
   });
 });
 
-describe('mealService.getByDate', () => {
+describe('getMealByDate', () => {
   it('returns entries without photo as-is', async () => {
     const entry = { id: 'm1', user_id: USER_ID, date: '2025-01-15', photo_url: null };
     setChainResolution({ data: [entry], error: null });
 
-    const result = await mealService.getByDate('2025-01-15');
+    const result = await getMealByDate('2025-01-15');
     expect(result[0].photo_url).toBeNull();
   });
 
@@ -122,17 +120,17 @@ describe('mealService.getByDate', () => {
       }),
     });
 
-    const result = await mealService.getByDate('2025-01-15');
+    const result = await getMealByDate('2025-01-15');
     expect(result[0].photo_url).toBe('https://signed.url/photo.jpg');
   });
 });
 
-describe('mealService.uploadPhoto', () => {
+describe('uploadMealPhoto', () => {
   it('compresses, uploads, and returns storage path', async () => {
     mocks.compressImage.mockResolvedValue('compressed.jpg');
     mocks.uploadFile.mockResolvedValue({ path: `${USER_ID}/2025-01-15/123.jpg` });
 
-    const path = await mealService.uploadPhoto('original.jpg', '2025-01-15');
+    const path = await uploadMealPhoto('original.jpg', '2025-01-15');
 
     expect(mocks.compressImage).toHaveBeenCalledWith('original.jpg');
     expect(mocks.uploadFile).toHaveBeenCalledWith(
@@ -145,7 +143,7 @@ describe('mealService.uploadPhoto', () => {
   });
 });
 
-describe('observationsService.upsert', () => {
+describe('upsertObservations', () => {
   it('stores positives and negatives as text arrays', async () => {
     const entry = {
       id: 'o1',
@@ -156,7 +154,7 @@ describe('observationsService.upsert', () => {
     };
     setChainResolution({ data: entry, error: null });
 
-    const result = await observationsService.upsert({
+    const result = await upsertObservations({
       date: '2025-01-15',
       positives: ['good sleep', 'exercise'],
       negatives: ['stress'],
@@ -171,7 +169,7 @@ describe('observationsService.upsert', () => {
   });
 });
 
-describe('sportTypesService.getAll', () => {
+describe('getSportTypes', () => {
   it('returns all sport types without requiring auth', async () => {
     const types = [
       { id: 't1', name: 'yoga' },
@@ -179,7 +177,7 @@ describe('sportTypesService.getAll', () => {
     ];
     setChainResolution({ data: types, error: null });
 
-    const result = await sportTypesService.getAll();
+    const result = await getSportTypes();
     expect(result).toEqual(types);
     expect(mocks.getUser).not.toHaveBeenCalled();
   });

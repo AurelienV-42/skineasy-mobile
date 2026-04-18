@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 
 import { DateNavigation } from '@features/dashboard/components/DateNavigation';
-import { useMealEntries } from '@features/journal/hooks/useJournal';
+import { useMealEntries } from '@features/journal/data/meal.queries';
 import { Card } from '@shared/components/card';
 import { Pressable } from '@shared/components/pressable';
 import { ScreenHeader } from '@shared/components/screen-header';

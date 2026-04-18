@@ -3,7 +3,7 @@ import { Droplets, Dumbbell, Moon, Plus, Search, Smile, Utensils } from 'lucide-
 import { useTranslation } from 'react-i18next';
 import { Image, ScrollView, Text, View } from 'react-native';
 
-import { journalService } from '@features/journal/services/journal.service';
+import { getEntriesByDateRange } from '@features/journal/data/entries.api';
 import { Button } from '@shared/components/button';
 import { Card } from '@shared/components/card';
 import { queryKeys } from '@shared/config/queryKeys';
@@ -215,7 +215,7 @@ export function CalendarDayDetail({
 }: CalendarDayDetailProps): React.ReactElement {
   const { data, isLoading } = useQuery({
     queryKey: queryKeys.journalEntriesRange(date, date),
-    queryFn: () => journalService.entries.getByDateRange(date, date),
+    queryFn: () => getEntriesByDateRange(date, date),
     staleTime: 5 * 60 * 1000,
   });
 

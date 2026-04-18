@@ -12,7 +12,7 @@ import {
   useDeleteStress,
   useStressEntries,
   useUpsertStress,
-} from '@features/journal/hooks/useStress';
+} from '@features/journal/data/stress.queries';
 import { stressFormSchema, type StressFormInput } from '@features/journal/schemas/journal.schema';
 import { Button } from '@shared/components/button';
 import { ErrorState } from '@shared/components/error-state';

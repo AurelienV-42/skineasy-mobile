@@ -12,7 +12,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, ScrollView, Text, TextInput, View } from 'react-native';
 
-import { useSportTypes } from '@features/journal/hooks/useJournal';
+import { useSportTypes } from '@features/journal/data/sport.queries';
 import { enrichSportTypes } from '@features/journal/utils/sportMapping';
 import { BottomSheet } from '@shared/components/bottom-sheet';
 import { Pressable } from '@shared/components/pressable';

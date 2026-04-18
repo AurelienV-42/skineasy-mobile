@@ -3,7 +3,7 @@ import { Dumbbell, Moon, Search, Smile, Utensils } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 
-import { useSportEntries } from '@features/journal/hooks/useSport';
+import { useSportEntries } from '@features/journal/data/sport.queries';
 import { BottomSheet } from '@shared/components/bottom-sheet';
 import { Button } from '@shared/components/button';
 import { Pressable } from '@shared/components/pressable';

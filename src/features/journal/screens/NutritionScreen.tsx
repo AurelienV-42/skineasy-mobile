@@ -26,13 +26,13 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Alert, Image, Text, View } from 'react-native';
 
+import { uploadMealPhoto } from '@features/journal/data/meal.api';
 import {
   useCreateMeal,
   useDeleteMeal,
   useMealEntries,
   useUpdateMeal,
-} from '@features/journal/hooks/useJournal';
-import { journalService } from '@features/journal/services/journal.service';
+} from '@features/journal/data/meal.queries';
 import { toast } from '@lib/toast';
 import { mealFormSchema, type MealFormInput } from '@features/journal/schemas/journal.schema';
 import { Button } from '@shared/components/button';
@@ -130,10 +130,7 @@ export default function NutritionScreen() {
     if (imageWasModified && localImageUri) {
       setIsUploading(true);
       try {
-        uploadedPath = await journalService.meal.uploadPhoto(
-          localImageUri,
-          toISODateString(dateToUse),
-        );
+        uploadedPath = await uploadMealPhoto(localImageUri, toISODateString(dateToUse));
       } catch {
         toast.error(t('common.error'), t('journal.nutrition.uploadError'));
         setIsUploading(false);

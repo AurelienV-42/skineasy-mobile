@@ -7,13 +7,11 @@ import { calculateDayScore } from '@features/dashboard/utils/score';
 import { CalendarModal } from '@features/journal/components/CalendarModal';
 import { JournalHeader } from '@features/journal/components/JournalHeader';
 import { JournalScoreBadge } from '@features/journal/components/JournalScoreBadge';
-import {
-  useMealEntries,
-  useSleepEntries,
-  useSportEntries,
-  useStressEntries,
-} from '@features/journal/hooks/useJournal';
-import { useObservationsEntry } from '@features/journal/hooks/useObservations';
+import { useSleepEntries } from '@features/journal/data/sleep.queries';
+import { useSportEntries } from '@features/journal/data/sport.queries';
+import { useMealEntries } from '@features/journal/data/meal.queries';
+import { useStressEntries } from '@features/journal/data/stress.queries';
+import { useObservationsEntry } from '@features/journal/data/observation.queries';
 
 export default function JournalScreen(): React.ReactElement {
   const today = new Date();

@@ -22,7 +22,7 @@ import {
   useSportEntries,
   useSportTypes,
   useUpdateSport,
-} from '@features/journal/hooks/useJournal';
+} from '@features/journal/data/sport.queries';
 import { sportFormSchema, type SportFormInput } from '@features/journal/schemas/journal.schema';
 import { enrichSportTypes } from '@features/journal/utils/sportMapping';
 import { Button } from '@shared/components/button';

@@ -4,12 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import { toast } from '@lib/toast';
 
-import {
-  mealService,
-  sleepService,
-  sportService,
-  sportTypesService,
-} from '@features/journal/services/journal.service';
+import { createMeal } from '@features/journal/data/meal.api';
+import { upsertSleep } from '@features/journal/data/sleep.api';
+import { createSport, getSportTypes as fetchSportTypes } from '@features/journal/data/sport.api';
 import { healthkitService } from '@shared/services/healthkit.service';
 import { useHealthKitStore } from '@shared/stores/healthkit.store';
 import type { SportType, SportTypeInfo } from '@shared/types/journal.types';
@@ -21,7 +18,7 @@ let sportTypesCache: SportTypeInfo[] | null = null;
 
 async function getSportTypes(): Promise<SportTypeInfo[]> {
   if (!sportTypesCache) {
-    sportTypesCache = await sportTypesService.getAll();
+    sportTypesCache = await fetchSportTypes();
   }
   return sportTypesCache;
 }
@@ -156,7 +153,7 @@ async function syncSleepData(startDate: Date, endDate: Date): Promise<void> {
       const processed = healthkitService.processSleepData(samples, dateKey);
       if (processed) {
         try {
-          await sleepService.upsert({
+          await upsertSleep({
             date: processed.date,
             hours: processed.hours,
             quality: processed.quality,
@@ -190,7 +187,7 @@ async function syncWorkoutData(startDate: Date, endDate: Date): Promise<void> {
       const entry = processed[0];
       try {
         const sportTypeId = await getSportTypeId(entry.sportType as SportType);
-        await sportService.create({
+        await createSport({
           date: entry.date,
           sport_type_id: sportTypeId,
           duration: entry.duration,
@@ -228,7 +225,7 @@ async function syncNutritionData(date: Date): Promise<void> {
     if (noteLines.length === 0) return;
 
     try {
-      await mealService.create({
+      await createMeal({
         date: processed.date,
         food_name: 'HealthKit',
         note: noteLines.join('\n'),

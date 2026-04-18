@@ -18,7 +18,7 @@ import {
   useDeleteSleep,
   useSleepEntries,
   useUpsertSleep,
-} from '@features/journal/hooks/useJournal';
+} from '@features/journal/data/sleep.queries';
 import { sleepFormSchema, type SleepFormInput } from '@features/journal/schemas/journal.schema';
 import { Button } from '@shared/components/button';
 import { ErrorState } from '@shared/components/error-state';

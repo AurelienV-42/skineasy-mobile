@@ -20,7 +20,7 @@ import {
   useDeleteObservations,
   useObservationsEntry,
   useUpsertObservations,
-} from '@features/journal/hooks/useObservations';
+} from '@features/journal/data/observation.queries';
 import {
   observationFormSchema,
   type ObservationFormInput,

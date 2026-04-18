@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { isSameDay, parseISO, subDays } from 'date-fns';
 
-import { journalService } from '@features/journal/services/journal.service';
+import { getEntriesByDateRange } from '@features/journal/data/entries.api';
 import { queryKeys } from '@shared/config/queryKeys';
 import type {
   MealEntry,
@@ -31,7 +31,7 @@ export function useWeekScores(): DayScore[] {
 
   const { data } = useQuery({
     queryKey: queryKeys.journalEntriesRange(startDate, endDate),
-    queryFn: () => journalService.entries.getByDateRange(startDate, endDate),
+    queryFn: () => getEntriesByDateRange(startDate, endDate),
     staleTime: 5 * 60 * 1000,
   });
 

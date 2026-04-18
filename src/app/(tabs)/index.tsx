@@ -13,13 +13,11 @@ import { RecipeOfTheDay } from '@features/dashboard/components/RecipeOfTheDay';
 import { RoutineBannerContainer } from '@features/dashboard/components/RoutineBanner';
 import { ScoreContainer } from '@features/dashboard/components/ScoreContainer';
 import { calculateDayScore } from '@features/dashboard/utils/score';
-import {
-  useMealEntries,
-  useSleepEntries,
-  useSportEntries,
-  useStressEntries,
-} from '@features/journal/hooks/useJournal';
-import { useObservationsEntry } from '@features/journal/hooks/useObservations';
+import { useSleepEntries } from '@features/journal/data/sleep.queries';
+import { useSportEntries } from '@features/journal/data/sport.queries';
+import { useMealEntries } from '@features/journal/data/meal.queries';
+import { useStressEntries } from '@features/journal/data/stress.queries';
+import { useObservationsEntry } from '@features/journal/data/observation.queries';
 import { Avatar } from '@shared/components/avatar';
 import { SectionHeader } from '@shared/components/section-header';
 import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation';

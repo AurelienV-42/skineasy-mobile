@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 
 import { DateNavigation } from '@features/dashboard/components/DateNavigation';
-import { useSportEntries, useSportTypes } from '@features/journal/hooks/useJournal';
+import { useSportEntries, useSportTypes } from '@features/journal/data/sport.queries';
 import { Button } from '@shared/components/button';
 import { Card } from '@shared/components/card';
 import { CircleProgress } from '@shared/components/circle-progress';
