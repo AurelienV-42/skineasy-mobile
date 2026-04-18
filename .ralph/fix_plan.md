@@ -262,12 +262,12 @@ if (error) toast.error(t(error.message));
 - [x] Delete `src/shared/services/api.ts` (custom fetch + JWT refresh)
 - [x] Delete `RefreshTokenResponse` type
 - [x] Remove `getRefreshToken`/`setRefreshToken`/`getToken`/`setToken` from storage utils if unused
-- [ ] Remove `API_URL` from `ENV`
+- [x] Remove `API_URL` from `ENV`
 
 ### 3.4 Types update
 
-- [ ] Replace `AuthUser`/`LoginResponse`/`RegisterResponse` in `src/shared/types/api.types.ts` with Supabase-derived types
-- [ ] Update `UserProfile` in `src/shared/types/user.types.ts` to match `clients` row shape
+- [x] Replace `AuthUser`/`LoginResponse`/`RegisterResponse` in `src/shared/types/api.types.ts` with Supabase-derived types
+- [x] Update `UserProfile` in `src/shared/types/user.types.ts` to match `clients` row shape
   - Fields: `id`, `user_id`, `first_name`, `last_name`, `email`, `phone`, `birthday`, `skin_type`, `avatar_url`, `has_routine_access`
 
 ### 3.5 Tests

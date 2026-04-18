@@ -75,9 +75,9 @@ export default function DashboardScreen(): React.ReactElement {
             >
               <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
               <Avatar
-                avatar={user?.avatar}
-                firstname={user?.firstname}
-                lastname={user?.lastname}
+                avatar={user?.avatar_url}
+                firstname={user?.first_name}
+                lastname={user?.last_name}
                 email={user?.email}
                 size={32}
                 onPress={() => router.push('/profile')}

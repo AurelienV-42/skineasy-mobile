@@ -2,12 +2,13 @@ export interface UserProfile {
   id: string;
   user_id: string;
   email: string;
-  firstname: string;
-  lastname: string;
-  skinType?: string;
-  birthday?: string;
-  avatar?: string | null;
-  hasRoutineAccess: boolean;
+  first_name: string;
+  last_name: string;
+  phone?: string | null;
+  skin_type?: string | null;
+  birthday?: string | null;
+  avatar_url?: string | null;
+  has_routine_access: boolean;
 }
 
 export interface AuthState {

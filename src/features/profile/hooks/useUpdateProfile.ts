@@ -41,13 +41,13 @@ export function useUploadAvatar() {
 
   return useMutation({
     mutationFn: async (uri: string) => {
-      const { avatar } = await profileService.uploadAvatar(uri);
-      return avatar;
+      const { avatar_url } = await profileService.uploadAvatar(uri);
+      return avatar_url;
     },
     onSuccess: (avatarUrl) => {
       toast.success(t('profile.updateSuccess'));
       if (user) {
-        setUser({ ...user, avatar: avatarUrl });
+        setUser({ ...user, avatar_url: avatarUrl });
       }
       queryClient.invalidateQueries({ queryKey: queryKeys.user });
     },

@@ -22,10 +22,10 @@ describe('useUserStore', () => {
       id: 'uuid-1',
       user_id: 'auth-uuid-1',
       email: 'test@example.com',
-      firstname: 'John',
-      lastname: 'Doe',
-      skinType: 'oily',
-      hasRoutineAccess: false,
+      first_name: 'John',
+      last_name: 'Doe',
+      skin_type: 'oily',
+      has_routine_access: false,
     };
 
     const { setUser } = useUserStore.getState();
@@ -49,9 +49,9 @@ describe('useUserStore', () => {
         id: 'uuid-1',
         user_id: 'auth-uuid-1',
         email: 'test@example.com',
-        firstname: 'John',
-        lastname: 'Doe',
-        hasRoutineAccess: false,
+        first_name: 'John',
+        last_name: 'Doe',
+        has_routine_access: false,
       },
       hasDiagnosis: true,
     });

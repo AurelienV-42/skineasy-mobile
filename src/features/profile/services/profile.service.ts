@@ -28,16 +28,17 @@ export const profileService = {
       id: updated.id,
       user_id: updated.user_id,
       email: updated.email ?? '',
-      firstname: updated.first_name ?? '',
-      lastname: updated.last_name ?? '',
-      skinType: updated.skin_type ?? undefined,
-      birthday: updated.birthday ?? undefined,
-      avatar: updated.avatar_url ?? null,
-      hasRoutineAccess: updated.has_routine_access,
+      first_name: updated.first_name ?? '',
+      last_name: updated.last_name ?? '',
+      phone: updated.phone ?? null,
+      skin_type: updated.skin_type ?? null,
+      birthday: updated.birthday ?? null,
+      avatar_url: updated.avatar_url ?? null,
+      has_routine_access: updated.has_routine_access,
     };
   },
 
-  uploadAvatar: async (uri: string): Promise<{ avatar: string }> => {
+  uploadAvatar: async (uri: string): Promise<{ avatar_url: string }> => {
     const { data: sessionData } = await supabase.auth.getSession();
     const userId = sessionData.session?.user.id;
     if (!userId) throw new Error('common.sessionExpired');
@@ -55,7 +56,7 @@ export const profileService = {
 
     if (error) throw mapSupabaseError(error);
 
-    return { avatar: publicUrl ?? '' };
+    return { avatar_url: publicUrl ?? '' };
   },
 
   deleteAccount: async (): Promise<void> => {

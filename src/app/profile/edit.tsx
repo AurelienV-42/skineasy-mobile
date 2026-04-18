@@ -29,7 +29,7 @@ export default function EditProfileScreen() {
   const [localAvatarUri, setLocalAvatarUri] = useState<string | null>(null);
   const [avatarWasModified, setAvatarWasModified] = useState(false);
 
-  const avatarUri = avatarWasModified ? localAvatarUri : (user?.avatar ?? null);
+  const avatarUri = avatarWasModified ? localAvatarUri : (user?.avatar_url ?? null);
 
   const {
     control,
@@ -38,8 +38,8 @@ export default function EditProfileScreen() {
   } = useForm<EditProfileInput>({
     resolver: zodResolver(editProfileSchema),
     defaultValues: {
-      firstname: user?.firstname || '',
-      lastname: user?.lastname || '',
+      firstname: user?.first_name || '',
+      lastname: user?.last_name || '',
       email: user?.email || '',
       birthday: user?.birthday || undefined,
     },
@@ -91,8 +91,8 @@ export default function EditProfileScreen() {
       <View className="items-center mb-6">
         <Avatar
           avatar={avatarUri}
-          firstname={user?.firstname}
-          lastname={user?.lastname}
+          firstname={user?.first_name}
+          lastname={user?.last_name}
           email={user?.email}
           size={100}
         />

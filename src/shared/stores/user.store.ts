@@ -27,7 +27,7 @@ export const useUserStore = create<UserState>((set) => ({
 
   setUser: (user) => {
     logger.info('[userStore] setUser called with:', user);
-    set({ user, hasRoutineAccess: user.hasRoutineAccess ?? false });
+    set({ user, hasRoutineAccess: user.has_routine_access ?? false });
   },
 
   setHasDiagnosis: (value) => {

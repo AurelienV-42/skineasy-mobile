@@ -16,12 +16,13 @@ function mapClientToUserProfile(client: ClientRow): UserProfile {
     id: client.id,
     user_id: client.user_id,
     email: client.email ?? '',
-    firstname: client.first_name ?? '',
-    lastname: client.last_name ?? '',
-    skinType: client.skin_type ?? undefined,
-    birthday: client.birthday ?? undefined,
-    avatar: client.avatar_url ?? null,
-    hasRoutineAccess: client.has_routine_access,
+    first_name: client.first_name ?? '',
+    last_name: client.last_name ?? '',
+    phone: client.phone ?? null,
+    skin_type: client.skin_type ?? null,
+    birthday: client.birthday ?? null,
+    avatar_url: client.avatar_url ?? null,
+    has_routine_access: client.has_routine_access,
   };
 }
 

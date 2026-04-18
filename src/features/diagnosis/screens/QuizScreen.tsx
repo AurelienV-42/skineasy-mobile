@@ -34,7 +34,7 @@ export default function QuizScreen() {
   const [isCompleted, setIsCompleted] = useState(false);
 
   // Build Typeform URL with hidden fields
-  const typeformUrl = `${TYPEFORM_BASE_URL}?email=${encodeURIComponent(user?.email || '')}&firstname=${encodeURIComponent(user?.firstname || '')}&lastname=${encodeURIComponent(user?.lastname || '')}`;
+  const typeformUrl = `${TYPEFORM_BASE_URL}?email=${encodeURIComponent(user?.email || '')}&firstname=${encodeURIComponent(user?.first_name || '')}&lastname=${encodeURIComponent(user?.last_name || '')}`;
 
   // Handle completion with rspid
   const handleCompletionWithRspid = useCallback(

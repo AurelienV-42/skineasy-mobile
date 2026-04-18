@@ -164,9 +164,9 @@ export default function ProfileScreen(): React.ReactElement {
       {!!user && (
         <View className="items-center mb-6">
           <Avatar
-            avatar={user.avatar}
-            firstname={user.firstname}
-            lastname={user.lastname}
+            avatar={user.avatar_url}
+            firstname={user.first_name}
+            lastname={user.last_name}
             email={user.email}
             size={80}
           />
@@ -177,12 +177,12 @@ export default function ProfileScreen(): React.ReactElement {
       {!!user && (
         <View className="mb-8 items-center">
           <Text className="text-lg font-medium text-text">
-            {user?.firstname} {user?.lastname}
+            {user?.first_name} {user?.last_name}
           </Text>
           <Text className="text-sm text-textMuted">{user?.email}</Text>
-          {user?.skinType && (
+          {user?.skin_type && (
             <Text className="text-sm text-primary mt-1">
-              {t('profile.skinType')}: {user.skinType}
+              {t('profile.skinType')}: {user.skin_type}
             </Text>
           )}
         </View>
