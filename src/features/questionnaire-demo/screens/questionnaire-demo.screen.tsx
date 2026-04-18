@@ -18,9 +18,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@shared/components/button';
 import { Card } from '@shared/components/card';
 import { Pressable } from '@shared/components/pressable';
-import { haptic } from '@shared/utils/haptic';
 import { cn } from '@shared/utils/cn';
+import { haptic } from '@shared/utils/haptic';
 import { colors } from '@theme/colors';
+import { DEMO_QUESTIONS } from '@features/questionnaire-demo/constants';
 
 const TOTAL_STEPS = 3;
 const SPRING_CONFIG = { damping: 20, stiffness: 300 };
@@ -105,15 +106,26 @@ function QuestionCard({
   step: DemoStep;
   selected: string | null;
 }): React.ReactElement {
+  const question = DEMO_QUESTIONS[step];
+  if (!question) return <View className="flex-1" />;
+
   return (
     <View className="flex-1 gap-3 pt-4">
-      <Text className="text-4xl font-bold text-primary text-center mb-2">{`Q${step + 1}`}</Text>
-      {['Option A', 'Option B', 'Option C'].map((opt) => (
-        <TappableCard key={opt} onPress={() => {}}>
-          <Card isPressed={opt === selected}>
-            <Text className={cn('text-xl', opt === selected ? 'text-white' : 'text-text')}>
-              {opt}
-            </Text>
+      <Text className="text-4xl font-bold text-primary text-center mb-4">{question.title}</Text>
+      {question.options.map((opt) => (
+        <TappableCard key={opt.value} onPress={() => {}}>
+          <Card isPressed={opt.value === selected}>
+            <View className="flex-row items-center gap-3">
+              <Text className="text-2xl">{opt.emoji}</Text>
+              <Text
+                className={cn(
+                  'text-xl flex-1',
+                  opt.value === selected ? 'text-white' : 'text-text',
+                )}
+              >
+                {opt.label}
+              </Text>
+            </View>
           </Card>
         </TappableCard>
       ))}
