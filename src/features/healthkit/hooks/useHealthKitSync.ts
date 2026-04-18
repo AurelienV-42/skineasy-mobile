@@ -26,13 +26,13 @@ async function getSportTypes(): Promise<SportTypeInfo[]> {
   return sportTypesCache;
 }
 
-async function getSportTypeId(sportType: SportType): Promise<number> {
+async function getSportTypeId(sportType: SportType): Promise<string> {
   const sportTypes = await getSportTypes();
   const found = sportTypes.find((st) => st.name === sportType);
   // Default to 'other' if not found
   if (!found) {
     const other = sportTypes.find((st) => st.name === 'other');
-    return other?.id ?? 1;
+    return other?.id ?? '';
   }
   return found.id;
 }

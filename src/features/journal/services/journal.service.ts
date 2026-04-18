@@ -1,281 +1,279 @@
-/**
- * Journal API Service
- *
- * Handles all API requests for journal entries (sleep, sport, meal)
- * Based on BACKEND_API.md specification
- */
-
-import { api } from '@shared/services/api';
-import type { ApiResponse } from '@shared/types/api.types';
+import { mapSupabaseError } from '@lib/error-mapper';
+import { supabase } from '@lib/supabase';
 import type {
   CreateMealEntryDto,
   CreateObservationEntryDto,
   CreateSleepEntryDto,
   CreateSportEntryDto,
   CreateStressEntryDto,
-  ImageUploadResponse,
   JournalWeekResponse,
   MealEntry,
   ObservationEntry,
-  ObservationUpsertResponse,
   SleepEntry,
-  SleepUpsertResponse,
   SportEntry,
   SportTypeInfo,
   StressEntry,
-  StressUpsertResponse,
 } from '@shared/types/journal.types';
-import { imageUriToFormData } from '@shared/utils/image';
-import { logger } from '@shared/utils/logger';
+import type { Database } from '@lib/supabase.types';
 
-/**
- * Sleep Entry Service
- */
+async function getUserId(): Promise<string> {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error('common.sessionExpired');
+  return user.id;
+}
+
 export const sleepService = {
-  /**
-   * Get sleep entries for a specific date
-   * @param date - Date in YYYY-MM-DD format (e.g., "2025-01-15")
-   */
   async getByDate(date: string): Promise<SleepEntry[]> {
-    logger.info('[Journal API] Fetching sleep entries for date:', date);
-    const response = await api.get<ApiResponse<SleepEntry[]>>(
-      `/api/v1/journal/sleeps?date=${encodeURIComponent(date)}`,
-    );
-    return response.data;
+    const userId = await getUserId();
+    const { data, error } = await supabase
+      .from('sleep_entries')
+      .select()
+      .eq('user_id', userId)
+      .eq('date', date);
+    if (error) throw mapSupabaseError(error);
+    return data as SleepEntry[];
   },
 
-  /**
-   * Create or update sleep entry (upsert)
-   * @param dto - Sleep entry data
-   * @returns Created or updated sleep entry + created flag
-   */
-  async upsert(dto: CreateSleepEntryDto): Promise<SleepUpsertResponse> {
-    logger.info('[Journal API] Upserting sleep entry:', dto);
-    const response = await api.put<ApiResponse<SleepUpsertResponse>>(
-      '/api/v1/journal/sleep/upsert',
-      dto,
-    );
-    return response.data;
+  async upsert(dto: CreateSleepEntryDto): Promise<SleepEntry> {
+    const userId = await getUserId();
+    const insertData: Database['public']['Tables']['sleep_entries']['Insert'] = {
+      ...dto,
+      user_id: userId,
+    };
+    const { data, error } = await supabase
+      .from('sleep_entries')
+      .upsert(insertData, { onConflict: 'user_id,date' })
+      .select()
+      .single();
+    if (error) throw mapSupabaseError(error);
+    return data as SleepEntry;
   },
 
-  /**
-   * Delete sleep entry by ID
-   * @param id - Sleep entry ID
-   */
-  async delete(id: number): Promise<void> {
-    logger.info('[Journal API] Deleting sleep entry:', id);
-    await api.delete(`/api/v1/journal/sleep/${id}`);
+  async delete(id: string): Promise<void> {
+    const { error } = await supabase.from('sleep_entries').delete().eq('id', id);
+    if (error) throw mapSupabaseError(error);
   },
 };
 
-/**
- * Sport Entry Service
- */
 export const sportService = {
-  /**
-   * Get sport entries for a specific date
-   * @param date - Date in YYYY-MM-DD format (e.g., "2025-01-15")
-   */
   async getByDate(date: string): Promise<SportEntry[]> {
-    logger.info('[Journal API] Fetching sport entries for date:', date);
-    const response = await api.get<ApiResponse<SportEntry[]>>(
-      `/api/v1/journal/sports?date=${encodeURIComponent(date)}`,
-    );
-    return response.data;
+    const userId = await getUserId();
+    const { data, error } = await supabase
+      .from('sport_entries')
+      .select()
+      .eq('user_id', userId)
+      .eq('date', date);
+    if (error) throw mapSupabaseError(error);
+    return (data ?? []) as SportEntry[];
   },
 
-  /**
-   * Create a new sport entry
-   * @param dto - Sport entry data
-   */
   async create(dto: CreateSportEntryDto): Promise<SportEntry> {
-    logger.info('[Journal API] Creating sport entry:', dto);
-    const response = await api.post<ApiResponse<SportEntry>>('/api/v1/journal/sport', dto);
-    return response.data;
+    const userId = await getUserId();
+    const insertData: Database['public']['Tables']['sport_entries']['Insert'] = {
+      ...dto,
+      user_id: userId,
+    };
+    const { data, error } = await supabase
+      .from('sport_entries')
+      .insert(insertData)
+      .select()
+      .single();
+    if (error) throw mapSupabaseError(error);
+    return data as SportEntry;
   },
 
-  /**
-   * Update a sport entry
-   * @param id - Sport entry ID
-   * @param dto - Updated sport entry data
-   */
-  async update(id: number, dto: Partial<CreateSportEntryDto>): Promise<SportEntry> {
-    logger.info('[Journal API] Updating sport entry:', { id, dto });
-    const response = await api.put<ApiResponse<SportEntry>>(`/api/v1/journal/sport/${id}`, dto);
-    return response.data;
+  async update(id: string, dto: Partial<CreateSportEntryDto>): Promise<SportEntry> {
+    const updateData: Database['public']['Tables']['sport_entries']['Update'] = dto;
+    const { data, error } = await supabase
+      .from('sport_entries')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+    if (error) throw mapSupabaseError(error);
+    return data as SportEntry;
   },
 
-  /**
-   * Delete sport entry by ID
-   * @param id - Sport entry ID
-   */
-  async delete(id: number): Promise<void> {
-    logger.info('[Journal API] Deleting sport entry:', id);
-    await api.delete(`/api/v1/journal/sport/${id}`);
+  async delete(id: string): Promise<void> {
+    const { error } = await supabase.from('sport_entries').delete().eq('id', id);
+    if (error) throw mapSupabaseError(error);
   },
 };
 
-/**
- * Meal Entry Service
- */
 export const mealService = {
-  /**
-   * Get meal entries for a specific date
-   * @param date - Date in YYYY-MM-DD format (e.g., "2025-01-15")
-   */
   async getByDate(date: string): Promise<MealEntry[]> {
-    logger.info('[Journal API] Fetching meal entries for date:', date);
-    const response = await api.get<ApiResponse<MealEntry[]>>(
-      `/api/v1/journal/meals?date=${encodeURIComponent(date)}`,
-    );
-    return response.data;
+    const userId = await getUserId();
+    const { data, error } = await supabase
+      .from('meal_entries')
+      .select()
+      .eq('user_id', userId)
+      .eq('date', date);
+    if (error) throw mapSupabaseError(error);
+    return data as MealEntry[];
   },
 
-  /**
-   * Upload a meal image
-   * @param imageUri - Local URI of the compressed image
-   * @param onProgress - Optional callback for upload progress (0-100)
-   * @returns URL of the uploaded image
-   */
-  async uploadImage(imageUri: string, onProgress?: (progress: number) => void): Promise<string> {
-    logger.info('[Journal API] Uploading meal image');
-
-    const formData = imageUriToFormData(imageUri, 'image');
-
-    const response = await api.postFormData<ApiResponse<ImageUploadResponse>>(
-      '/api/v1/journal/meal/upload',
-      formData,
-      { onProgress },
-    );
-
-    logger.info('[Journal API] Image uploaded successfully:', response.data.url);
-    return response.data.url;
-  },
-
-  /**
-   * Create a new meal entry
-   * @param dto - Meal entry data
-   */
   async create(dto: CreateMealEntryDto): Promise<MealEntry> {
-    logger.info('[Journal API] Creating meal entry:', dto);
-    const response = await api.post<ApiResponse<MealEntry>>('/api/v1/journal/meal', dto);
-    return response.data;
+    const userId = await getUserId();
+    const insertData: Database['public']['Tables']['meal_entries']['Insert'] = {
+      ...dto,
+      user_id: userId,
+    };
+    const { data, error } = await supabase
+      .from('meal_entries')
+      .insert(insertData)
+      .select()
+      .single();
+    if (error) throw mapSupabaseError(error);
+    return data as MealEntry;
   },
 
-  /**
-   * Update a meal entry
-   * @param id - Meal entry ID
-   * @param dto - Updated meal entry data
-   */
-  async update(id: number, dto: Partial<CreateMealEntryDto>): Promise<MealEntry> {
-    logger.info('[Journal API] Updating meal entry:', { id, dto });
-    const response = await api.put<ApiResponse<MealEntry>>(`/api/v1/journal/meal/${id}`, dto);
-    return response.data;
+  async update(id: string, dto: Partial<CreateMealEntryDto>): Promise<MealEntry> {
+    const updateData: Database['public']['Tables']['meal_entries']['Update'] = dto;
+    const { data, error } = await supabase
+      .from('meal_entries')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+    if (error) throw mapSupabaseError(error);
+    return data as MealEntry;
   },
 
-  /**
-   * Delete meal entry by ID
-   * @param id - Meal entry ID
-   */
-  async delete(id: number): Promise<void> {
-    logger.info('[Journal API] Deleting meal entry:', id);
-    await api.delete(`/api/v1/journal/meal/${id}`);
+  async delete(id: string): Promise<void> {
+    const { error } = await supabase.from('meal_entries').delete().eq('id', id);
+    if (error) throw mapSupabaseError(error);
   },
 };
 
-/**
- * Sport Types Service
- */
 export const sportTypesService = {
-  /**
-   * Get all available sport types from backend
-   * @returns Array of sport type info objects with id, name, created_at
-   */
   async getAll(): Promise<SportTypeInfo[]> {
-    logger.info('[Journal API] Fetching sport types');
-
-    const response = await api.get<ApiResponse<SportTypeInfo[]>>('/api/v1/sport-types');
-
-    logger.info(`[Journal API] Fetched ${response.data.length} sport types`);
-    return response.data;
+    const { data, error } = await supabase.from('sport_types').select();
+    if (error) throw mapSupabaseError(error);
+    return data as SportTypeInfo[];
   },
 };
 
-/**
- * Stress Entry Service
- */
 export const stressService = {
   async getByDate(date: string): Promise<StressEntry[]> {
-    logger.info('[Journal API] Fetching stress entries for date:', date);
-    const response = await api.get<ApiResponse<StressEntry[]>>(
-      `/api/v1/journal/stresses?date=${encodeURIComponent(date)}`,
-    );
-    return response.data;
+    const userId = await getUserId();
+    const { data, error } = await supabase
+      .from('stress_entries')
+      .select()
+      .eq('user_id', userId)
+      .eq('date', date);
+    if (error) throw mapSupabaseError(error);
+    return data as StressEntry[];
   },
 
-  async upsert(dto: CreateStressEntryDto): Promise<StressUpsertResponse> {
-    logger.info('[Journal API] Upserting stress entry:', dto);
-    const response = await api.put<ApiResponse<StressUpsertResponse>>(
-      '/api/v1/journal/stress/upsert',
-      dto,
-    );
-    return response.data;
+  async upsert(dto: CreateStressEntryDto): Promise<StressEntry> {
+    const userId = await getUserId();
+    const insertData: Database['public']['Tables']['stress_entries']['Insert'] = {
+      ...dto,
+      user_id: userId,
+    };
+    const { data, error } = await supabase
+      .from('stress_entries')
+      .upsert(insertData, { onConflict: 'user_id,date' })
+      .select()
+      .single();
+    if (error) throw mapSupabaseError(error);
+    return data as StressEntry;
   },
 
-  async delete(id: number): Promise<void> {
-    logger.info('[Journal API] Deleting stress entry:', id);
-    await api.delete(`/api/v1/journal/stress/${id}`);
+  async delete(id: string): Promise<void> {
+    const { error } = await supabase.from('stress_entries').delete().eq('id', id);
+    if (error) throw mapSupabaseError(error);
   },
 };
 
-/**
- * Observation Entry Service
- */
 export const observationsService = {
   async getByDate(date: string): Promise<ObservationEntry[]> {
-    logger.info('[Journal API] Fetching observations for date:', date);
-    const response = await api.get<ApiResponse<ObservationEntry[]>>(
-      `/api/v1/journal/observations?date=${encodeURIComponent(date)}`,
-    );
-    return response.data;
+    const userId = await getUserId();
+    const { data, error } = await supabase
+      .from('observation_entries')
+      .select()
+      .eq('user_id', userId)
+      .eq('date', date);
+    if (error) throw mapSupabaseError(error);
+    return data as ObservationEntry[];
   },
 
-  async upsert(dto: CreateObservationEntryDto): Promise<ObservationUpsertResponse> {
-    logger.info('[Journal API] Upserting observation entry:', dto);
-    const response = await api.put<ApiResponse<ObservationUpsertResponse>>(
-      '/api/v1/journal/observations/upsert',
-      dto,
-    );
-    return response.data;
+  async upsert(dto: CreateObservationEntryDto): Promise<ObservationEntry> {
+    const userId = await getUserId();
+    const insertData: Database['public']['Tables']['observation_entries']['Insert'] = {
+      ...dto,
+      user_id: userId,
+    };
+    const { data, error } = await supabase
+      .from('observation_entries')
+      .upsert(insertData, { onConflict: 'user_id,date' })
+      .select()
+      .single();
+    if (error) throw mapSupabaseError(error);
+    return data as ObservationEntry;
   },
 
-  async delete(id: number): Promise<void> {
-    logger.info('[Journal API] Deleting observation entry:', id);
-    await api.delete(`/api/v1/journal/observations/${id}`);
+  async delete(id: string): Promise<void> {
+    const { error } = await supabase.from('observation_entries').delete().eq('id', id);
+    if (error) throw mapSupabaseError(error);
   },
 };
 
-/**
- * Batch Entries Service
- */
 export const entriesService = {
-  /**
-   * Get all journal entries for a date range (batch endpoint)
-   * @param startDate - Start date in YYYY-MM-DD format
-   * @param endDate - End date in YYYY-MM-DD format (max 14 days range)
-   */
   async getByDateRange(startDate: string, endDate: string): Promise<JournalWeekResponse> {
-    logger.info('[Journal API] Fetching entries for range:', { startDate, endDate });
-    const response = await api.get<ApiResponse<JournalWeekResponse>>(
-      `/api/v1/journal/entries?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`,
-    );
-    return response.data;
+    const userId = await getUserId();
+
+    const [sleeps, sports, meals, stresses, observations] = await Promise.all([
+      supabase
+        .from('sleep_entries')
+        .select()
+        .eq('user_id', userId)
+        .gte('date', startDate)
+        .lte('date', endDate),
+      supabase
+        .from('sport_entries')
+        .select()
+        .eq('user_id', userId)
+        .gte('date', startDate)
+        .lte('date', endDate),
+      supabase
+        .from('meal_entries')
+        .select()
+        .eq('user_id', userId)
+        .gte('date', startDate)
+        .lte('date', endDate),
+      supabase
+        .from('stress_entries')
+        .select()
+        .eq('user_id', userId)
+        .gte('date', startDate)
+        .lte('date', endDate),
+      supabase
+        .from('observation_entries')
+        .select()
+        .eq('user_id', userId)
+        .gte('date', startDate)
+        .lte('date', endDate),
+    ]);
+
+    if (sleeps.error) throw mapSupabaseError(sleeps.error);
+    if (sports.error) throw mapSupabaseError(sports.error);
+    if (meals.error) throw mapSupabaseError(meals.error);
+    if (stresses.error) throw mapSupabaseError(stresses.error);
+    if (observations.error) throw mapSupabaseError(observations.error);
+
+    return {
+      sleeps: (sleeps.data ?? []) as SleepEntry[],
+      sports: (sports.data ?? []) as SportEntry[],
+      meals: (meals.data ?? []) as MealEntry[],
+      stresses: (stresses.data ?? []) as StressEntry[],
+      observations: (observations.data ?? []) as ObservationEntry[],
+    };
   },
 };
 
-/**
- * Combined Journal Service
- */
 export const journalService = {
   sleep: sleepService,
   sport: sportService,

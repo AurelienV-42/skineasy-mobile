@@ -17,7 +17,6 @@ export {
 
 export {
   useMealEntries,
-  useUploadMealImage,
   useCreateMeal,
   useUpdateMeal,
   useDeleteMeal,

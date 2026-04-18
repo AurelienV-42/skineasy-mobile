@@ -10,12 +10,12 @@
 import { parseISO } from 'date-fns';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ChevronRight, Dumbbell } from 'lucide-react-native';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 
 import { DateNavigation } from '@features/dashboard/components/DateNavigation';
-import { useSportEntries } from '@features/journal/hooks/useJournal';
+import { useSportEntries, useSportTypes } from '@features/journal/hooks/useJournal';
 import { Button } from '@shared/components/button';
 import { Card } from '@shared/components/card';
 import { CircleProgress } from '@shared/components/circle-progress';
@@ -49,6 +49,11 @@ export default function SportListScreen(): React.ReactElement {
 
   const dateString = toUTCDateString(selectedDate);
   const { data: sportEntries = [] } = useSportEntries(dateString);
+  const { data: sportTypes } = useSportTypes();
+  const sportTypeMap = useMemo(
+    () => new Map(sportTypes?.map((st) => [st.id, st.name]) ?? []),
+    [sportTypes],
+  );
 
   const totalMinutes = sportEntries.reduce((sum, entry) => sum + entry.duration, 0);
   const progress = Math.min((totalMinutes / goalMinutes) * 100, 100);
@@ -122,8 +127,10 @@ export default function SportListScreen(): React.ReactElement {
               <View className="gap-1">
                 <Text className="text-sm text-text-muted">{t('journal.sport.title')}</Text>
                 <Text className="text-lg font-semibold text-text">
-                  {t(`journal.sport.activities.${entry.sportType.name}`)} ({entry.duration}{' '}
-                  {t('journal.sport.minutes')})
+                  {t(
+                    `journal.sport.activities.${sportTypeMap.get(entry.sport_type_id) ?? 'other'}`,
+                  )}{' '}
+                  ({entry.duration} {t('journal.sport.minutes')})
                 </Text>
               </View>
               <ChevronRight size={24} color={colors.textMuted} />

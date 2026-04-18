@@ -33,7 +33,6 @@ import {
   useDeleteMeal,
   useMealEntries,
   useUpdateMeal,
-  useUploadMealImage,
 } from '@features/journal/hooks/useJournal';
 import { mealFormSchema, type MealFormInput } from '@features/journal/schemas/journal.schema';
 import { Button } from '@shared/components/button';
@@ -57,7 +56,6 @@ export default function NutritionScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const params = useLocalSearchParams<{ id?: string; date?: string; mealType?: string }>();
-  const uploadImage = useUploadMealImage();
   const createMeal = useCreateMeal();
   const updateMeal = useUpdateMeal();
   const deleteMeal = useDeleteMeal();
@@ -65,7 +63,7 @@ export default function NutritionScreen() {
   // If editing, fetch existing entry
   const dateToUse = params.date || getTodayUTC();
   const { data: mealEntries } = useMealEntries(dateToUse);
-  const existingEntry = mealEntries?.find((e) => e.id === Number(params.id));
+  const existingEntry = mealEntries?.find((e) => e.id === params.id);
   const isEditMode = !!params.id;
 
   // Track if user has changed the image from the original
@@ -125,53 +123,29 @@ export default function NutritionScreen() {
     setImageUri(null);
   };
 
-  const onSubmit = async (data: MealFormInput) => {
-    try {
-      let photoUrl: string | null = existingEntry?.photo_url || null;
+  const onSubmit = (data: MealFormInput): void => {
+    // TODO Phase 4.2: image upload via Supabase Storage
+    const photoUrl: string | null = imageWasModified ? null : (existingEntry?.photo_url ?? null);
 
-      // Only process image changes if user modified it
-      if (imageWasModified) {
-        if (localImageUri) {
-          // Upload new local image
-          photoUrl = await uploadImage.mutateAsync(localImageUri);
-        } else {
-          // Image was removed
-          photoUrl = null;
-        }
-      }
+    const dto = {
+      date: toISODateString(dateToUse),
+      photo_url: photoUrl,
+      food_name: data.food_name,
+      note: data.note || null,
+      meal_type: data.meal_type,
+    };
 
-      const dto = {
-        date: toISODateString(dateToUse),
-        photo_url: photoUrl,
-        food_name: data.food_name,
-        note: data.note || null,
-        meal_type: data.meal_type,
-      };
-
-      if (isEditMode && existingEntry) {
-        // Update existing entry
-        updateMeal.mutate(
-          { id: existingEntry.id, dto, date: dateToUse },
-          {
-            onSuccess: () => {
-              router.back();
-            },
-          },
-        );
-      } else {
-        // Create new entry
-        createMeal.mutate(dto, {
-          onSuccess: () => {
-            router.back();
-          },
-        });
-      }
-    } catch {
-      // Error is already handled by uploadImage mutation
+    if (isEditMode && existingEntry) {
+      updateMeal.mutate(
+        { id: existingEntry.id, dto, date: dateToUse },
+        { onSuccess: () => router.back() },
+      );
+    } else {
+      createMeal.mutate(dto, { onSuccess: () => router.back() });
     }
   };
 
-  const isLoading = uploadImage.isPending || createMeal.isPending || updateMeal.isPending;
+  const isLoading = createMeal.isPending || updateMeal.isPending;
 
   const handleDelete = (): void => {
     if (!existingEntry) return;

@@ -229,7 +229,7 @@ export interface SportTypeWithMetadata {
   label: string; // Translated label
   icon: string; // Lucide icon name
   popular: boolean; // Show in quick select
-  backendId: number; // Backend database ID
+  backendId: string; // Backend database ID (UUID)
 }
 
 /**
@@ -240,7 +240,7 @@ export interface SportTypeWithMetadata {
  * @returns Sport types with labels, icons, and backend IDs
  */
 export function enrichSportTypes(
-  sportTypes: Array<{ id: number; name: string }>,
+  sportTypes: Array<{ id: string; name: string }>,
   t: TFunction,
 ): SportTypeWithMetadata[] {
   return sportTypes.map((sportType) => ({

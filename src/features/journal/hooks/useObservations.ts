@@ -43,7 +43,7 @@ export function useDeleteObservations() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: ({ id }: { id: number; date: string }) => journalService.observations.delete(id),
+    mutationFn: ({ id }: { id: string; date: string }) => journalService.observations.delete(id),
     onSuccess: (_, variables) => {
       logger.info('[useDeleteObservations] Success');
 

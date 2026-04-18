@@ -17,8 +17,8 @@ import {
 } from '@features/dashboard/utils/score';
 
 const makeSleepEntry = (hours: number, quality: 1 | 2 | 3 | 4 | 5): SleepEntry => ({
-  id: 1,
-  customer_id: 1,
+  id: 'uuid-1',
+  user_id: 'uuid-1',
   date: '2025-01-15T00:00:00.000Z',
   hours,
   quality,
@@ -26,11 +26,10 @@ const makeSleepEntry = (hours: number, quality: 1 | 2 | 3 | 4 | 5): SleepEntry =
 });
 
 const makeSportEntry = (duration: number, intensity: 1 | 2 | 3 | 4 | 5): SportEntry => ({
-  id: 1,
-  customer_id: 1,
+  id: 'uuid-1',
+  user_id: 'uuid-1',
   date: '2025-01-15T00:00:00.000Z',
-  sport_type_id: 1,
-  sportType: { id: 1, name: 'running', created_at: '2025-01-15T00:00:00.000Z' },
+  sport_type_id: 'uuid-1',
   duration,
   intensity,
   note: null,
@@ -41,8 +40,8 @@ const makeMealEntry = (
   mealType: 'breakfast' | 'lunch' | 'dinner' | 'snack' | null,
   hasDetails = false,
 ): MealEntry => ({
-  id: 1,
-  customer_id: 1,
+  id: 'uuid-1',
+  user_id: 'uuid-1',
   date: '2025-01-15T00:00:00.000Z',
   photo_url: hasDetails ? 'https://example.com/photo.jpg' : null,
   food_name: hasDetails ? 'Salad' : null,
@@ -52,8 +51,8 @@ const makeMealEntry = (
 });
 
 const makeStressEntry = (level: 1 | 2 | 3 | 4 | 5): StressEntry => ({
-  id: 1,
-  customer_id: 1,
+  id: 'uuid-1',
+  user_id: 'uuid-1',
   date: '2025-01-15T00:00:00.000Z',
   level,
   note: null,
@@ -176,8 +175,8 @@ describe('calculateNutritionScore', () => {
 });
 
 const makeObservationEntry = (positives: string[], negatives: string[]): ObservationEntry => ({
-  id: 1,
-  customer_id: 1,
+  id: 'uuid-1',
+  user_id: 'uuid-1',
   date: '2025-01-15T00:00:00.000Z',
   positives,
   negatives,

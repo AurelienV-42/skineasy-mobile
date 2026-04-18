@@ -75,7 +75,7 @@ export function useUpdateSport() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: ({ id, dto }: { id: number; dto: Partial<CreateSportEntryDto>; date: string }) =>
+    mutationFn: ({ id, dto }: { id: string; dto: Partial<CreateSportEntryDto>; date: string }) =>
       journalService.sport.update(id, dto),
     onSuccess: (data, variables) => {
       logger.info('[useUpdateSport] Success:', data);
@@ -97,7 +97,7 @@ export function useDeleteSport() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: ({ id }: { id: number; date: string }) => journalService.sport.delete(id),
+    mutationFn: ({ id }: { id: string; date: string }) => journalService.sport.delete(id),
     onSuccess: (_, variables) => {
       logger.info('[useDeleteSport] Success');
 

@@ -16,18 +16,6 @@ export function useMealEntries(date: string) {
   });
 }
 
-export function useUploadMealImage() {
-  const { t } = useTranslation();
-
-  return useMutation({
-    mutationFn: (imageUri: string) => journalService.meal.uploadImage(imageUri),
-    onError: (error) => {
-      logger.error('[useUploadMealImage] Error:', error);
-      toast.error(t('common.error'), t('journal.nutrition.uploadError'));
-    },
-  });
-}
-
 export function useCreateMeal() {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
@@ -55,7 +43,7 @@ export function useUpdateMeal() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: ({ id, dto }: { id: number; dto: Partial<CreateMealEntryDto>; date: string }) =>
+    mutationFn: ({ id, dto }: { id: string; dto: Partial<CreateMealEntryDto>; date: string }) =>
       journalService.meal.update(id, dto),
     onSuccess: (data, variables) => {
       logger.info('[useUpdateMeal] Success:', data);
@@ -77,7 +65,7 @@ export function useDeleteMeal() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: ({ id }: { id: number; date: string }) => journalService.meal.delete(id),
+    mutationFn: ({ id }: { id: string; date: string }) => journalService.meal.delete(id),
     onSuccess: (_, variables) => {
       logger.info('[useDeleteMeal] Success');
 

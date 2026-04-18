@@ -43,7 +43,7 @@ export function useDeleteStress() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: ({ id }: { id: number; date: string }) => journalService.stress.delete(id),
+    mutationFn: ({ id }: { id: string; date: string }) => journalService.stress.delete(id),
     onSuccess: (_, variables) => {
       logger.info('[useDeleteStress] Success');
 
