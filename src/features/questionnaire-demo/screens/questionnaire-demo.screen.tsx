@@ -89,7 +89,7 @@ export function QuestionnaireDemoScreen(): React.ReactElement {
   };
   const handleCompletion = (): void => {
     haptic.success();
-    router.back();
+    setTimeout(() => router.back(), 1500);
   };
 
   return (
