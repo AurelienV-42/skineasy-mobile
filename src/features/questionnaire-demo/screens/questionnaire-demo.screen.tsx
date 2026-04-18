@@ -1,3 +1,4 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { ArrowLeft, CheckCircle, X } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
@@ -271,37 +272,39 @@ export function QuestionnaireDemoScreen(): React.ReactElement {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-row items-center px-4 pt-2 pb-4">
-        <Pressable onPress={() => router.back()} haptic="light">
-          <X size={24} color={colors.text} />
-        </Pressable>
-        {step > 0 && step < 3 && (
-          <Pressable onPress={goBack} haptic="light" className="ml-2">
-            <ArrowLeft size={24} color={colors.text} />
+    <SafeAreaView className="flex-1">
+      <LinearGradient colors={[colors.surface, colors.creamMuted]} style={{ flex: 1 }}>
+        <View className="flex-row items-center px-4 pt-2 pb-4">
+          <Pressable onPress={() => router.back()} haptic="light">
+            <X size={24} color={colors.text} />
           </Pressable>
-        )}
-        <StepProgressBar step={step} />
-      </View>
+          {step > 0 && step < 3 && (
+            <Pressable onPress={goBack} haptic="light" className="ml-2">
+              <ArrowLeft size={24} color={colors.text} />
+            </Pressable>
+          )}
+          <StepProgressBar step={step} />
+        </View>
 
-      {visibleStep === 3 ? (
-        <CompletionScreen onBack={handleCompletion} />
-      ) : (
-        <>
-          <View className="flex-1 px-6 pt-4">
-            <Animated.View style={[cardStyle, { flex: 1 }]}>
-              <QuestionCard step={visibleStep} selected={null} />
+        {visibleStep === 3 ? (
+          <CompletionScreen onBack={handleCompletion} />
+        ) : (
+          <>
+            <View className="flex-1 px-6 pt-4">
+              <Animated.View style={[cardStyle, { flex: 1 }]}>
+                <QuestionCard step={visibleStep} selected={null} />
+              </Animated.View>
+            </View>
+            <Animated.View style={ctaStyle} className="px-6 pb-6 pt-4">
+              <Button
+                title={t('questionnaireDemo.next')}
+                onPress={advance}
+                haptic={hasAnswer(step, answers) ? 'medium' : false}
+              />
             </Animated.View>
-          </View>
-          <Animated.View style={ctaStyle} className="px-6 pb-6 pt-4">
-            <Button
-              title={t('questionnaireDemo.next')}
-              onPress={advance}
-              haptic={hasAnswer(step, answers) ? 'medium' : false}
-            />
-          </Animated.View>
-        </>
-      )}
+          </>
+        )}
+      </LinearGradient>
     </SafeAreaView>
   );
 }

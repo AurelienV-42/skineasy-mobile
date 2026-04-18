@@ -205,7 +205,7 @@ All labels via i18n keys under `questionnaireDemo.*`.
 - [x] Use a brand accent color from `src/theme/colors.ts` for highlights (consult the theme, don't hardcode)
 - [x] Rounded cards with subtle shadows (use existing `Card` component + bolder border on selected)
 - [x] Add emoji or inline SVG icons to each answer card for visual punch
-- [ ] Background: subtle gradient or soft color wash (vs. the flat backgrounds elsewhere)
+- [x] Background: subtle gradient or soft color wash (vs. the flat backgrounds elsewhere)
 - [ ] Use `haptic.selection()` on answer pick, `haptic.success()` on completion
 
 ### 10.7 Component breakdown
