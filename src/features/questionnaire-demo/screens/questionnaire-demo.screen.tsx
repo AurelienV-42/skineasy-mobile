@@ -99,16 +99,14 @@ function TappableCard({
 function QuestionCard({ step }: { step: DemoStep }): React.ReactElement {
   return (
     <View className="flex-1 gap-3 pt-4">
-      <Text className="text-base font-medium text-textMuted text-center mb-2">
-        {`Q${step + 1}`}
-      </Text>
+      <Text className="text-4xl font-bold text-text text-center mb-2">{`Q${step + 1}`}</Text>
       {['Option A', 'Option B', 'Option C'].map((opt) => (
         <TappableCard key={opt} onPress={() => {}}>
           <View
             className="p-4 rounded-xl bg-surface"
             style={{ borderWidth: 1, borderColor: colors.border }}
           >
-            <Text className="text-base text-text">{opt}</Text>
+            <Text className="text-xl text-text">{opt}</Text>
           </View>
         </TappableCard>
       ))}
@@ -175,7 +173,7 @@ function CompletionScreen({ onBack }: { onBack: () => void }): React.ReactElemen
         <Text className="text-4xl font-bold text-text text-center">
           {t('questionnaireDemo.completionTitle')}
         </Text>
-        <Text className="text-lg text-textMuted text-center">
+        <Text className="text-xl text-textMuted text-center">
           {t('questionnaireDemo.completionSubtitle')}
         </Text>
       </View>

@@ -201,7 +201,7 @@ All labels via i18n keys under `questionnaireDemo.*`.
 
 ### 10.6 Visual style (playful)
 
-- [ ] Use larger typography than the default h1/h2 -- go up one level for this flow
+- [x] Use larger typography than the default h1/h2 -- go up one level for this flow
 - [ ] Use a brand accent color from `src/theme/colors.ts` for highlights (consult the theme, don't hardcode)
 - [ ] Rounded cards with subtle shadows (use existing `Card` component + bolder border on selected)
 - [ ] Add emoji or inline SVG icons to each answer card for visual punch
