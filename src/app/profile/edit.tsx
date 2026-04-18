@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Alert, Text, View } from 'react-native';
 
-import { useUpdateProfile, useUploadAvatar } from '@features/profile/hooks/useUpdateProfile';
+import { useUpdateProfile, useUploadAvatar } from '@features/profile/data/profile.queries';
 import { editProfileSchema, type EditProfileInput } from '@features/profile/schemas/profile.schema';
 import { Avatar } from '@shared/components/avatar';
 import { Button } from '@shared/components/button';

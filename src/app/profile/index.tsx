@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, Linking, Text, View } from 'react-native';
 
 import { HealthKitSyncButton } from '@features/healthkit/components/HealthKitSyncButton';
-import { useDeleteAccount } from '@features/profile/hooks/useDeleteAccount';
+import { useDeleteAccount } from '@features/profile/data/profile.queries';
 import * as Sentry from '@sentry/react-native';
 import { checkAndApplyUpdate } from '@shared/hooks/useAppUpdates';
 import { Avatar } from '@shared/components/avatar';

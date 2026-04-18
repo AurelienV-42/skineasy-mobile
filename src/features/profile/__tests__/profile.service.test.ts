@@ -28,7 +28,7 @@ vi.mock('@lib/supabase', () => ({
 vi.mock('@lib/upload', () => ({ uploadFile: mocks.uploadFile }));
 vi.mock('@shared/utils/image', () => ({ compressImage: mocks.compressImage }));
 
-import { profileService } from '@features/profile/services/profile.service';
+import { updateProfile, uploadAvatar, deleteAccount } from '@features/profile/data/profile.api';
 
 const USER_ID = 'user-1';
 const SESSION = { data: { session: { user: { id: USER_ID } } } };
@@ -52,11 +52,11 @@ beforeEach(() => {
   mocks.from.mockReturnValue(mocks.chain);
 });
 
-describe('profileService.updateProfile', () => {
+describe('updateProfile', () => {
   it('updates and returns mapped UserProfile', async () => {
     mocks.chain.single = vi.fn().mockResolvedValue({ data: CLIENT_ROW, error: null });
 
-    const result = await profileService.updateProfile({
+    const result = await updateProfile({
       firstname: 'Jane',
       lastname: 'Doe',
     });
@@ -70,20 +70,20 @@ describe('profileService.updateProfile', () => {
 
   it('throws sessionExpired when no session', async () => {
     mocks.getSession.mockResolvedValue({ data: { session: null } });
-    await expect(profileService.updateProfile({ firstname: 'X', lastname: 'Y' })).rejects.toThrow(
+    await expect(updateProfile({ firstname: 'X', lastname: 'Y' })).rejects.toThrow(
       'common.sessionExpired',
     );
   });
 
   it('throws mapped error on DB failure', async () => {
     mocks.chain.single = vi.fn().mockResolvedValue({ data: null, error: { code: '42501' } });
-    await expect(profileService.updateProfile({ firstname: 'X', lastname: 'Y' })).rejects.toThrow(
+    await expect(updateProfile({ firstname: 'X', lastname: 'Y' })).rejects.toThrow(
       'common.permissionDenied',
     );
   });
 });
 
-describe('profileService.uploadAvatar', () => {
+describe('uploadAvatar', () => {
   it('compresses, uploads, updates clients, and returns avatar_url', async () => {
     mocks.compressImage.mockResolvedValue('compressed.jpg');
     mocks.uploadFile.mockResolvedValue({
@@ -96,7 +96,7 @@ describe('profileService.uploadAvatar', () => {
     };
     mocks.from.mockReturnValue(chainForUpdate);
 
-    const result = await profileService.uploadAvatar('original.jpg');
+    const result = await uploadAvatar('original.jpg');
 
     expect(mocks.compressImage).toHaveBeenCalledWith('original.jpg');
     expect(mocks.uploadFile).toHaveBeenCalledWith(
@@ -110,21 +110,19 @@ describe('profileService.uploadAvatar', () => {
 
   it('throws sessionExpired when no session', async () => {
     mocks.getSession.mockResolvedValue({ data: { session: null } });
-    await expect(profileService.uploadAvatar('original.jpg')).rejects.toThrow(
-      'common.sessionExpired',
-    );
+    await expect(uploadAvatar('original.jpg')).rejects.toThrow('common.sessionExpired');
   });
 });
 
-describe('profileService.deleteAccount', () => {
+describe('deleteAccount', () => {
   it('calls delete_own_account RPC and resolves', async () => {
     mocks.rpc.mockResolvedValue({ error: null });
-    await expect(profileService.deleteAccount()).resolves.toBeUndefined();
+    await expect(deleteAccount()).resolves.toBeUndefined();
     expect(mocks.rpc).toHaveBeenCalledWith('delete_own_account');
   });
 
   it('throws mapped error on RPC failure', async () => {
     mocks.rpc.mockResolvedValue({ error: { code: '42501' } });
-    await expect(profileService.deleteAccount()).rejects.toThrow('common.permissionDenied');
+    await expect(deleteAccount()).rejects.toThrow('common.permissionDenied');
   });
 });
