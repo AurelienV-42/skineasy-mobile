@@ -29,10 +29,16 @@ src/features/<feature>/data/
 One feature per commit. Delete the old `.service.ts` when done.
 
 - [x] **Auth** — `src/features/auth/data/auth.{api,queries}.ts`
-- [ ] **Journal** — `sleep`, `sport`, `meal`, `stress`, `observation`, `entries` (`.api.ts` + `.queries.ts` each)
-- [ ] **Profile** — `src/features/profile/data/profile.{api,queries}.ts`
-- [ ] **App config** — `src/shared/data/app-config.{api,queries}.ts`
-- [ ] **Push tokens** — `src/shared/data/push-tokens.{api,queries}.ts`
+- [x] **Journal sleep** — `src/features/journal/data/sleep.{api,queries}.ts`
+- [x] **Journal sport** — `src/features/journal/data/sport.{api,queries}.ts` (includes sport-types)
+- [x] **Journal meal** — `src/features/journal/data/meal.{api,queries}.ts`
+- [x] **Journal stress** — `src/features/journal/data/stress.{api,queries}.ts`
+- [x] **Journal observation** — `src/features/journal/data/observation.{api,queries}.ts`
+- [x] **Journal entries** — `src/features/journal/data/entries.{api,queries}.ts` (includes useVisibleMonthsScores)
+- [x] **Journal cleanup** — update screen imports from hooks/ to data/, delete old service + hook files
+- [x] **Profile** — `src/features/profile/data/profile.{api,queries}.ts`
+- [x] **App config** — `src/shared/data/app-config.{api,queries}.ts`
+- [x] **Push tokens** — `src/shared/data/push-tokens.{api,queries}.ts`
 
 ---
 
@@ -40,12 +46,12 @@ One feature per commit. Delete the old `.service.ts` when done.
 
 Design: `docs/routine-resolution-flow.md`. `resolve-routine` Edge Function is deployed and waiting.
 
-- [ ] `src/features/routine/data/resolve-routine.{api,queries}.ts` — calls `supabase.functions.invoke('resolve-routine')`, typed union result (`ready` | `response_found_generation_pending` | `needs_form` | `needs_purchase`)
-- [ ] Fire on `supabase.auth.onAuthStateChange('SIGNED_IN')` in `src/app/_layout.tsx` or auth store — NOT on routine tab open. Stash result in user store.
-- [ ] Clear on `SIGNED_OUT`
-- [ ] Routine screen reads result from store, renders 4 branches (i18n under `routine.resolution.*`)
-- [ ] Header refresh action invalidates the resolution query
-- [ ] Delete `src/features/routine/services/routine.service.ts` (currently throws stubs)
+- [x] `src/features/routine/data/resolve-routine.{api,queries}.ts` — calls `supabase.functions.invoke('resolve-routine')`, typed union result (`ready` | `response_found_generation_pending` | `needs_form` | `needs_purchase`)
+- [x] Fire on `supabase.auth.onAuthStateChange('SIGNED_IN')` in `src/app/_layout.tsx` or auth store — NOT on routine tab open. Stash result in user store.
+- [x] Clear on `SIGNED_OUT`
+- [x] Routine screen reads result from store, renders 4 branches (i18n under `routine.resolution.*`)
+- [x] Header refresh action invalidates the resolution query
+- [x] Delete `src/features/routine/services/routine.service.ts` (currently throws stubs)
 - [ ] Tests: mock each of the 4 statuses, assert store state + rendered UI
 
 ---

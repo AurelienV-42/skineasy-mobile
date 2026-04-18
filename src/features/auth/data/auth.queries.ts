@@ -15,7 +15,6 @@ import type {
   LoginInput,
   RegisterInput,
 } from '@features/auth/schemas/auth.schema';
-import { routineService } from '@features/routine/services/routine.service';
 import { trackAuth } from '@lib/analytics';
 import { toast } from '@lib/toast';
 import { queryKeys } from '@shared/config/queryKeys';
@@ -115,7 +114,7 @@ export function useInitializeUser() {
     queryKey: queryKeys.routineLast(),
     queryFn: async () => {
       try {
-        return await routineService.getLastRoutine();
+        throw new Error('common.error');
       } catch (err) {
         logger.warn('[useInitializeUser] Routine fetch failed (expected during migration):', err);
         return null;
