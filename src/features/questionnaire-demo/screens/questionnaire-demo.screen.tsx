@@ -1,15 +1,35 @@
 import { useRouter } from 'expo-router';
+import { X } from 'lucide-react-native';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Pressable } from '@shared/components/pressable';
 import { colors } from '@theme/colors';
-import { X } from 'lucide-react-native';
+
+type DemoStep = 0 | 1 | 2 | 3;
+
+type DemoAnswers = {
+  skinType: string | null;
+  concerns: string[];
+  ageRange: string | null;
+};
+
+const INITIAL_ANSWERS: DemoAnswers = {
+  skinType: null,
+  concerns: [],
+  ageRange: null,
+};
 
 export function QuestionnaireDemoScreen(): React.ReactElement {
   const router = useRouter();
   const { t } = useTranslation();
+  const [step, setStep] = useState<DemoStep>(0);
+  const [_answers, _setAnswers] = useState<DemoAnswers>(INITIAL_ANSWERS);
+
+  const _advance = (): void => setStep((s) => Math.min(s + 1, 3) as DemoStep);
+  const _goBack = (): void => setStep((s) => Math.max(s - 1, 0) as DemoStep);
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -24,6 +44,7 @@ export function QuestionnaireDemoScreen(): React.ReactElement {
         <Text className="text-2xl font-bold text-text text-center">
           {t('questionnaireDemo.title')}
         </Text>
+        <Text className="text-sm text-textMuted mt-2">{`Step ${step}`}</Text>
       </View>
     </SafeAreaView>
   );
