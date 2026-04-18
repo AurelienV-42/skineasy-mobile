@@ -34,13 +34,6 @@ export interface MeResponse {
   };
 }
 
-export interface RefreshTokenResponse {
-  data: {
-    accessToken: string;
-    refreshToken: string;
-  };
-}
-
 // User types
 export interface User {
   id: number;

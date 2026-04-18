@@ -260,7 +260,7 @@ if (error) toast.error(t(error.message));
 ### 3.3 Remove old API infrastructure
 
 - [x] Delete `src/shared/services/api.ts` (custom fetch + JWT refresh)
-- [ ] Delete `RefreshTokenResponse` type
+- [x] Delete `RefreshTokenResponse` type
 - [ ] Remove `getRefreshToken`/`setRefreshToken`/`getToken`/`setToken` from storage utils if unused
 - [ ] Remove `API_URL` from `ENV`
 
