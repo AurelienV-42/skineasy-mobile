@@ -1,7 +1,6 @@
 import { useRouter } from 'expo-router';
 import { X } from 'lucide-react-native';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -38,9 +37,23 @@ function StepProgressBar({ step }: { step: DemoStep }): React.ReactElement {
   );
 }
 
+function QuestionCard({ step }: { step: DemoStep }): React.ReactElement {
+  return (
+    <View className="flex-1 px-6 pt-4">
+      <View
+        className="flex-1 rounded-2xl bg-surface p-6 justify-center items-center"
+        style={{ borderWidth: 1, borderColor: colors.border }}
+      >
+        <Text className="text-lg font-medium text-textMuted text-center">
+          {`Question ${step + 1}`}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
 export function QuestionnaireDemoScreen(): React.ReactElement {
   const router = useRouter();
-  const { t } = useTranslation();
   const [step, setStep] = useState<DemoStep>(0);
   const [_answers, _setAnswers] = useState<DemoAnswers>(INITIAL_ANSWERS);
 
@@ -56,11 +69,7 @@ export function QuestionnaireDemoScreen(): React.ReactElement {
         <StepProgressBar step={step} />
       </View>
 
-      <View className="flex-1 items-center justify-center px-6">
-        <Text className="text-2xl font-bold text-text text-center">
-          {t('questionnaireDemo.title')}
-        </Text>
-      </View>
+      <QuestionCard step={step} />
     </SafeAreaView>
   );
 }
