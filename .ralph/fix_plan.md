@@ -359,5 +359,5 @@ if (error) toast.error(t(error.message));
 
 ### 7.2 Wire into existing flow
 
-- [ ] Audit current push token flow: `rg "push" src/features/ src/shared/`
-- [ ] Migrate any existing token registration to the new service
+- [x] Audit current push token flow: `rg "push" src/features/ src/shared/`
+- [x] Migrate any existing token registration to the new service
