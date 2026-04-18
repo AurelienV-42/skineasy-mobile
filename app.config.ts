@@ -71,5 +71,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     'react-native-health',
+    [
+      'expo-notifications',
+      {
+        color: '#F4E9E0',
+        iosDisplayInForeground: true,
+      },
+    ],
   ],
 });
