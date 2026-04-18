@@ -45,12 +45,15 @@ cp .env.example .env
 
 The Supabase project (`lyhhipvipgbqsytfqwdw`) already has:
 
-- Schema: `clients`, `sleep_entries`, `sport_entries`, `meal_entries`, `stress_entries`, `observation_entries`, `diagnoses`, `push_tokens`, `app_config`, `sport_types`
+- Schema: `clients`, `sleep_entries`, `sport_entries`, `meal_entries`, `stress_entries`, `observation_entries`, `diagnoses`, `push_tokens`, `app_config`, `sport_types`, `routines`
 - Storage buckets: `avatars` (public), `meal-photos` (private)
+- Edge Functions: `resolve-routine` (deployed) — determines routine status on login
 - RLS policies applied
 - DB trigger `handle_new_user` auto-creates a `clients` row on signup
 
 No migrations to run — schema is managed via Supabase dashboard.
+
+See `docs/supabase-migration.md` for full schema and `docs/routine-resolution-flow.md` for the routine resolution design.
 
 ### 4. Run
 

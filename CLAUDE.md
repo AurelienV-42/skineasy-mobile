@@ -133,15 +133,16 @@ Root
 
 Project ID: `lyhhipvipgbqsytfqwdw` — full schema in `docs/supabase-migration.md`
 
-| Resource       | Details                                                                                   |
-| -------------- | ----------------------------------------------------------------------------------------- |
-| Auth           | `supabase.auth.*` — session auto-managed by SDK                                           |
-| Client profile | `clients` table (extends `auth.users` via DB trigger)                                     |
-| Journal tables | `sleep_entries`, `sport_entries`, `meal_entries`, `stress_entries`, `observation_entries` |
-| Other tables   | `diagnoses`, `push_tokens`, `app_config`, `sport_types`                                   |
-| Avatars bucket | `avatars` (public) — path: `{user_id}/{filename}`                                         |
-| Meal photos    | `meal-photos` (private) — signed URLs, 1h expiry                                          |
-| Error mapping  | `src/lib/error-mapper.ts` — Supabase codes → i18n keys                                    |
+| Resource       | Details                                                                                    |
+| -------------- | ------------------------------------------------------------------------------------------ |
+| Auth           | `supabase.auth.*` — session auto-managed by SDK                                            |
+| Client profile | `clients` table (extends `auth.users` via DB trigger)                                      |
+| Journal tables | `sleep_entries`, `sport_entries`, `meal_entries`, `stress_entries`, `observation_entries`  |
+| Other tables   | `diagnoses`, `push_tokens`, `app_config`, `sport_types`, `routines`                        |
+| Avatars bucket | `avatars` (public) — path: `{user_id}/{filename}`                                          |
+| Meal photos    | `meal-photos` (private) — signed URLs, 1h expiry                                           |
+| Edge Functions | `resolve-routine` — called via `supabase.functions.invoke`, returns `ResolveRoutineResult` |
+| Error mapping  | `src/lib/error-mapper.ts` — Supabase codes → i18n keys                                     |
 
 ---
 
