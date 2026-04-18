@@ -7,13 +7,16 @@ import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
+  withSequence,
   withSpring,
+  withTiming,
   type SharedValue,
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@shared/components/button';
 import { Pressable } from '@shared/components/pressable';
+import { haptic } from '@shared/utils/haptic';
 import { colors } from '@theme/colors';
 
 const TOTAL_STEPS = 3;
@@ -67,17 +70,53 @@ function StepProgressBar({ step }: { step: DemoStep }): React.ReactElement {
   );
 }
 
+function TappableCard({
+  onPress,
+  children,
+}: {
+  onPress: () => void;
+  children: React.ReactNode;
+}): React.ReactElement {
+  const scale = useSharedValue(1);
+  const cardStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+
+  const handlePress = (): void => {
+    animateCardTap(scale);
+    haptic.light();
+    onPress();
+  };
+
+  return (
+    <Animated.View style={cardStyle}>
+      <Pressable onPress={handlePress} haptic={false}>
+        {children}
+      </Pressable>
+    </Animated.View>
+  );
+}
+
 function QuestionCard({ step }: { step: DemoStep }): React.ReactElement {
   return (
-    <View
-      className="flex-1 rounded-2xl bg-surface p-6 justify-center items-center"
-      style={{ borderWidth: 1, borderColor: colors.border }}
-    >
-      <Text className="text-lg font-medium text-textMuted text-center">
-        {`Question ${step + 1}`}
+    <View className="flex-1 gap-3 pt-4">
+      <Text className="text-base font-medium text-textMuted text-center mb-2">
+        {`Q${step + 1}`}
       </Text>
+      {['Option A', 'Option B', 'Option C'].map((opt) => (
+        <TappableCard key={opt} onPress={() => {}}>
+          <View
+            className="p-4 rounded-xl bg-surface"
+            style={{ borderWidth: 1, borderColor: colors.border }}
+          >
+            <Text className="text-base text-text">{opt}</Text>
+          </View>
+        </TappableCard>
+      ))}
     </View>
   );
+}
+
+function animateCardTap(scale: SharedValue<number>): void {
+  scale.value = withSequence(withTiming(0.97, { duration: 60 }), withSpring(1, SPRING_CONFIG));
 }
 
 function hasAnswer(step: DemoStep, answers: DemoAnswers): boolean {
