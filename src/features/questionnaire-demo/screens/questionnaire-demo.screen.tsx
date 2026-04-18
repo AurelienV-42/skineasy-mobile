@@ -119,6 +119,10 @@ function animateCardTap(scale: SharedValue<number>): void {
   scale.value = withSequence(withTiming(0.97, { duration: 60 }), withSpring(1, SPRING_CONFIG));
 }
 
+function animateCtaEnabled(ctaOpacity: SharedValue<number>, enabled: boolean): void {
+  ctaOpacity.value = withSpring(enabled ? 1.0 : 0.4, SPRING_CONFIG);
+}
+
 function hasAnswer(step: DemoStep, answers: DemoAnswers): boolean {
   if (step === 0) return answers.skinType !== null;
   if (step === 1) return answers.concerns.length > 0;
@@ -153,20 +157,25 @@ export function QuestionnaireDemoScreen(): React.ReactElement {
   const [answers, _setAnswers] = useState<DemoAnswers>(INITIAL_ANSWERS);
   const tx = useSharedValue(0);
   const opacity = useSharedValue(1);
+  const ctaOpacity = useSharedValue(0.4);
   const cardStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: tx.value }],
     opacity: opacity.value,
   }));
+  const ctaStyle = useAnimatedStyle(() => ({ opacity: ctaOpacity.value }));
 
   const advance = (): void => {
+    if (!hasAnswer(step, answers)) return;
     const next = Math.min(step + 1, 3) as DemoStep;
     setStep(next);
+    animateCtaEnabled(ctaOpacity, false);
     runStepTransition(tx, opacity, setVisibleStep, next, 'forward');
   };
   const goBack = (): void => {
-    const next = Math.max(step - 1, 0) as DemoStep;
-    setStep(next);
-    runStepTransition(tx, opacity, setVisibleStep, next, 'backward');
+    const prev = Math.max(step - 1, 0) as DemoStep;
+    setStep(prev);
+    animateCtaEnabled(ctaOpacity, hasAnswer(prev, answers));
+    runStepTransition(tx, opacity, setVisibleStep, prev, 'backward');
   };
 
   return (
@@ -189,14 +198,13 @@ export function QuestionnaireDemoScreen(): React.ReactElement {
         </Animated.View>
       </View>
 
-      <View className="px-6 pb-6 pt-4">
+      <Animated.View style={ctaStyle} className="px-6 pb-6 pt-4">
         <Button
           title={t('questionnaireDemo.next')}
           onPress={advance}
-          disabled={!hasAnswer(step, answers)}
-          haptic="medium"
+          haptic={hasAnswer(step, answers) ? 'medium' : false}
         />
-      </View>
+      </Animated.View>
     </SafeAreaView>
   );
 }

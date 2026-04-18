@@ -171,12 +171,12 @@ if (error) toast.error(t(error.message));
 
 ### 10.3 Wizard screen structure
 
-- [ ] Create `src/features/questionnaire-demo/screens/questionnaire-demo.screen.tsx`
-- [ ] Local state machine: current step (0 | 1 | 2 | 3 = complete), answers object
-- [ ] Top bar: close button (X) on left, segmented progress bar (3 segments) on right
-- [ ] Content area: animated question card (one at a time)
-- [ ] Bottom: "Suivant" CTA button (disabled until an answer is selected)
-- [ ] Back arrow (except on step 0) -- animates previous step back in
+- [x] Create `src/features/questionnaire-demo/screens/questionnaire-demo.screen.tsx`
+- [x] Local state machine: current step (0 | 1 | 2 | 3 = complete), answers object
+- [x] Top bar: close button (X) on left, segmented progress bar (3 segments) on right
+- [x] Content area: animated question card (one at a time)
+- [x] Bottom: "Suivant" CTA button (disabled until an answer is selected)
+- [x] Back arrow (except on step 0) -- animates previous step back in
 
 ### 10.4 Questions (fake, demo purposes)
 
@@ -193,10 +193,10 @@ All labels via i18n keys under `questionnaireDemo.*`.
 
 ### 10.5 Animations (Reanimated 3)
 
-- [ ] **Step transition**: slide + fade. Current card animates `translateX: 0 -> -30, opacity: 1 -> 0`, new card `translateX: 30 -> 0, opacity: 0 -> 1`. Spring physics.
-- [ ] **Progress bar**: segments fill with a `withSpring` width animation on each step advance
-- [ ] **Answer selection**: tapped card scales up briefly (0.97 -> 1.0) with spring + haptic.light
-- [ ] **CTA button**: animates enabled state (opacity 0.4 -> 1.0) when answer is selected
+- [x] **Step transition**: slide + fade. Current card animates `translateX: 0 -> -30, opacity: 1 -> 0`, new card `translateX: 30 -> 0, opacity: 0 -> 1`. Spring physics.
+- [x] **Progress bar**: segments fill with a `withSpring` width animation on each step advance
+- [x] **Answer selection**: tapped card scales up briefly (0.97 -> 1.0) with spring + haptic.light
+- [x] **CTA button**: animates enabled state (opacity 0.4 -> 1.0) when answer is selected
 - [ ] **Completion screen**: confetti / sparkle burst (use `react-native-reanimated` particle animation or a simple ring of animated dots pulsing outward), big checkmark, "Merci !" heading, "Tu as l'air d'avoir une super peau ✨" subtitle, "Retour" CTA
 
 ### 10.6 Visual style (playful)
