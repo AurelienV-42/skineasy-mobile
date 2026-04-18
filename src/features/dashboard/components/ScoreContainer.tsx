@@ -15,7 +15,10 @@ interface ScoreContainerProps {
 const SIZE = 200;
 const STROKE_WIDTH = 20;
 
-export function ScoreContainer({ score, missingCount }: ScoreContainerProps): React.ReactElement {
+export function ScoreContainer({
+  score,
+  missingCount: _missingCount,
+}: ScoreContainerProps): React.ReactElement {
   const { t } = useTranslation();
 
   return (

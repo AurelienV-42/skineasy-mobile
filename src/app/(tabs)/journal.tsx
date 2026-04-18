@@ -19,7 +19,7 @@ export default function JournalScreen(): React.ReactElement {
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState(format(today, 'yyyy-MM-dd'));
   const [calendarVisible, setCalendarVisible] = useState(false);
-  const [addEntryVisible, setAddEntryVisible] = useState(false);
+  const [_addEntryVisible, _setAddEntryVisible] = useState(false);
 
   const { data: sleepEntries = [] } = useSleepEntries(selectedDate);
   const { data: mealEntries = [] } = useMealEntries(selectedDate);

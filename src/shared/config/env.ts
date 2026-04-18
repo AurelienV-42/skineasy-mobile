@@ -1,6 +1,8 @@
 import Constants from 'expo-constants';
 
 export const ENV = {
+  SUPABASE_URL: (Constants.expoConfig?.extra?.supabaseUrl as string) ?? '',
+  SUPABASE_ANON_KEY: (Constants.expoConfig?.extra?.supabaseAnonKey as string) ?? '',
   API_URL: (Constants.expoConfig?.extra?.apiUrl as string) ?? 'http://localhost:3000',
   TYPEFORM_ID: (Constants.expoConfig?.extra?.typeformId as string) ?? '',
   PRESTASHOP_URL: (Constants.expoConfig?.extra?.prestashopUrl as string) ?? 'https://skineasy.com',

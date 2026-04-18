@@ -39,7 +39,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     bundler: 'metro',
   },
   extra: {
-    apiUrl: process.env.API_URL ?? 'https://api.skineasy.com',
+    supabaseUrl: process.env.SUPABASE_URL ?? '',
+    supabaseAnonKey: process.env.SUPABASE_ANON_KEY ?? '',
     typeformId: process.env.TYPEFORM_ID ?? '',
     prestashopUrl: process.env.PRESTASHOP_URL ?? 'https://skineasy.com',
     devLoginSecret: process.env.DEV_LOGIN_SECRET ?? '',

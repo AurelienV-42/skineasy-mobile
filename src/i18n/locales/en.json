@@ -33,7 +33,14 @@
     "networkError": "Please check your internet connection",
     "notFound": "The requested resource was not found",
     "validationError": "Please check your input and try again",
-    "serverError": "Something went wrong on our end. Please try again later"
+    "serverError": "Something went wrong on our end. Please try again later",
+    "duplicateEntry": "This entry already exists",
+    "invalidReference": "Invalid reference",
+    "permissionDenied": "You don't have permission to perform this action"
+  },
+  "storage": {
+    "fileTooLarge": "File is too large",
+    "unsupportedType": "Unsupported file type"
   },
   "auth": {
     "login": "Login",
@@ -53,6 +60,11 @@
     "hasAccount": "Already have an account?",
     "invalidCredentials": "Invalid credentials",
     "emailAlreadyExists": "An account with this email already exists",
+    "emailNotConfirmed": "Please confirm your email before logging in",
+    "weakPassword": "Password is too weak. Please choose a stronger password.",
+    "tooManyAttempts": "Too many attempts. Please try again later.",
+    "invalidEmail": "Invalid email address",
+    "samePassword": "New password must be different from your current password",
     "registerError": "Unable to create account. Please try again.",
     "registerSuccess": "Account created successfully",
     "welcomeBack": "Welcome back",
