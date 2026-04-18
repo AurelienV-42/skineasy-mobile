@@ -312,4 +312,4 @@ if (error) toast.error(t(error.message));
 
 ### 4.5 Tests
 
-- [ ] Update journal tests in `src/features/journal/__tests__/` with Supabase mocks
+- [x] Update journal tests in `src/features/journal/__tests__/` with Supabase mocks
