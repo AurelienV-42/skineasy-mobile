@@ -1,5 +1,34 @@
 import i18n from 'i18next';
 
+/**
+ * Supabase error code -> i18n key mappings
+ *
+ * Auth codes (Supabase Auth):
+ *   invalid_credentials           -> auth.invalidCredentials
+ *   email_not_confirmed           -> auth.emailNotConfirmed
+ *   user_already_exists           -> auth.emailAlreadyExists
+ *   weak_password                 -> auth.weakPassword
+ *   over_email_send_rate_limit    -> auth.tooManyAttempts
+ *   email_address_invalid         -> auth.invalidEmail
+ *   same_password                 -> auth.samePassword
+ *   session_expired               -> common.sessionExpired
+ *
+ * PostgREST codes:
+ *   PGRST116 (no rows found)      -> common.notFound
+ *   PGRST301 (JWT expired)        -> common.sessionExpired
+ *   PGRST204 (column not found)   -> common.serverError
+ *
+ * Postgres error codes:
+ *   23505 (unique violation)      -> common.duplicateEntry
+ *   23503 (FK violation)          -> common.invalidReference
+ *   42501 (RLS denied)            -> common.permissionDenied
+ *
+ * Storage HTTP status codes:
+ *   413 (file too large)          -> storage.fileTooLarge
+ *   415 (unsupported type)        -> storage.unsupportedType
+ *
+ * Fallback:                       -> common.error
+ */
 const ERROR_MAP: Record<string, string> = {
   // Legacy codes
   INVALID_CREDENTIALS: 'auth.invalidCredentials',
