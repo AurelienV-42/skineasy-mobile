@@ -4,34 +4,20 @@ import { useTranslation } from 'react-i18next';
 import { authService } from '@features/auth/services/auth.service';
 import type { RegisterInput } from '@features/auth/schemas/auth.schema';
 import { toast } from '@lib/toast';
-import { useAuthStore } from '@shared/stores/auth.store';
-import { useUserStore } from '@shared/stores/user.store';
+import { logger } from '@shared/utils/logger';
 
 export function useRegister() {
   const { t } = useTranslation();
-  const setTokens = useAuthStore((state) => state.setTokens);
-  const setUser = useUserStore((state) => state.setUser);
 
   return useMutation({
-    mutationFn: async (data: RegisterInput) => {
-      // Strip confirmPassword - it's only for client-side validation
-      // Also remove empty birthday
+    mutationFn: async (data: RegisterInput): Promise<void> => {
       const { confirmPassword: _, birthday, ...rest } = data;
-      const registerData = {
-        ...rest,
-        ...(birthday ? { birthday } : {}),
-      };
-      const registerResponse = await authService.register(registerData);
-      const { accessToken, refreshToken, user } = registerResponse.data;
-      await setTokens(accessToken, refreshToken);
-      return user;
+      const registerData = { ...rest, ...(birthday ? { birthday } : {}) };
+      logger.info('[useRegister] Attempting registration');
+      await authService.register(registerData);
     },
-    onSuccess: (user) => {
-      setUser(user);
+    onSuccess: () => {
       toast.success(t('auth.registerSuccess'));
-    },
-    onError: () => {
-      toast.error(t('common.error'), t('auth.registerError'));
     },
   });
 }

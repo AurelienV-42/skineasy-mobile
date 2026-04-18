@@ -1,12 +1,13 @@
 export interface UserProfile {
-  id: number;
+  id: string;
+  user_id: string;
   email: string;
   firstname: string;
   lastname: string;
   skinType?: string;
-  birthday?: string; // YYYY-MM-DD format
+  birthday?: string;
   avatar?: string | null;
-  hasRoutineAccess?: boolean;
+  hasRoutineAccess: boolean;
 }
 
 export interface AuthState {

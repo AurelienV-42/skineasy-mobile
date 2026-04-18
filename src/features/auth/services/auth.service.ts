@@ -1,41 +1,53 @@
-import { api } from '@shared/services/api';
-import type { LoginResponse, RegisterResponse, MeResponse } from '@shared/types/api.types';
-import type { LoginInput, RegisterApiInput } from '@features/auth/schemas/auth.schema';
-import { logger } from '@shared/utils/logger';
+import { mapSupabaseError } from '@lib/error-mapper';
+import { supabase } from '@lib/supabase';
+import type { RegisterApiInput } from '@features/auth/schemas/auth.schema';
+import type { Database } from '@lib/supabase.types';
 
-const MOCK_DELAY_MS = 800;
-
-const mockDelay = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, MOCK_DELAY_MS));
+export type ClientRow = Database['public']['Tables']['clients']['Row'];
 
 export const authService = {
-  login: (data: LoginInput): Promise<LoginResponse> => {
-    return api.post<LoginResponse>('/api/v1/auth/login', data, { skipAuth: true });
+  login: async (data: { email: string; password: string }): Promise<void> => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    });
+    if (error) throw mapSupabaseError(error);
   },
 
-  devLogin: (data: { email: string; devSecret: string }): Promise<LoginResponse> => {
-    return api.post<LoginResponse>('/api/v1/auth/dev-login', data, { skipAuth: true });
+  register: async (data: RegisterApiInput): Promise<void> => {
+    const { error } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+      options: {
+        data: { first_name: data.firstname, last_name: data.lastname },
+      },
+    });
+    if (error) throw mapSupabaseError(error);
   },
 
-  register: (data: RegisterApiInput): Promise<RegisterResponse> => {
-    return api.post<RegisterResponse>('/api/v1/auth/register', data, { skipAuth: true });
+  getMe: async (): Promise<ClientRow> => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) throw new Error('common.sessionExpired');
+    const { data, error } = await supabase.from('clients').select().eq('user_id', user.id).single();
+    if (error) throw mapSupabaseError(error);
+    return data;
   },
 
-  getMe: (): Promise<MeResponse> => {
-    return api.get<MeResponse>('/api/v1/auth/me');
+  logout: async (): Promise<void> => {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw mapSupabaseError(error);
   },
 
-  // TODO: wire to Supabase when backend lands. Mocked for now.
   requestPasswordReset: async (data: { email: string }): Promise<void> => {
-    logger.info('[authService] mock requestPasswordReset', { email: data.email });
-    await mockDelay();
+    const { error } = await supabase.auth.resetPasswordForEmail(data.email);
+    if (error) throw mapSupabaseError(error);
   },
 
-  // TODO: wire to Supabase when backend lands. Mocked for now.
   resetPassword: async (data: { token: string; password: string }): Promise<void> => {
-    logger.info('[authService] mock resetPassword', { hasToken: !!data.token });
-    if (!data.token) {
-      throw new Error('INVALID_TOKEN');
-    }
-    await mockDelay();
+    if (!data.token) throw new Error('auth.invalidCredentials');
+    const { error } = await supabase.auth.updateUser({ password: data.password });
+    if (error) throw mapSupabaseError(error);
   },
 };

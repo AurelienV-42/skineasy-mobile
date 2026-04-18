@@ -26,28 +26,22 @@ import { useNetworkStatus } from '@shared/hooks/useNetworkStatus';
 import { useAuthStore } from '@shared/stores/auth.store';
 import { useHealthKitStore } from '@shared/stores/healthkit.store';
 import { logger } from '@shared/utils/logger';
+import { supabase } from '@lib/supabase';
 import '@/global.css';
 import '@/lib/i18n';
 
-// Initialize Sentry before app starts
 initSentry();
-
-// Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
 
 function RootLayoutContent() {
   const insets = useSafeAreaInsets();
-  const loadToken = useAuthStore((state) => state.loadToken);
+  const setAuthenticated = useAuthStore((state) => state.setAuthenticated);
   const isAuthLoading = useAuthStore((state) => state.isLoading);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-  // Initialize network status listener
   useNetworkStatus();
-
-  // Silent OTA updates (production only)
   useAppUpdates();
 
-  // Force update check for outdated app versions
   const { needsUpdate, openStore } = useForceUpdate();
 
   const [fontsLoaded] = useFonts({
@@ -57,52 +51,47 @@ function RootLayoutContent() {
     ChocolatesBold: assets.ChocolatesBold,
   });
 
-  // Initialize user data from /me endpoint
   const { isLoading: isUserLoading, error: userError, refetch } = useInitializeUser();
 
-  // Load HealthKit persisted state
   const loadHealthKitState = useHealthKitStore((state) => state.loadPersistedState);
 
-  // Auto-sync HealthKit on app open
   useHealthKitAutoSync(isAuthenticated);
 
   useEffect(() => {
-    logger.info('[_layout] Loading token...');
-    loadToken();
-    // Load HealthKit state on iOS
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      logger.info('[_layout] Initial session:', !!session);
+      setAuthenticated(!!session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      logger.info('[_layout] Auth state changed:', _event, !!session);
+      setAuthenticated(!!session);
+    });
+
     if (Platform.OS === 'ios') {
       loadHealthKitState();
     }
-  }, [loadToken, loadHealthKitState]);
+
+    return () => subscription.unsubscribe();
+  }, [setAuthenticated, loadHealthKitState]);
 
   useEffect(() => {
-    logger.info('[_layout] State:', {
-      fontsLoaded,
-      isAuthLoading,
-      isUserLoading,
-      isAuthenticated,
-    });
     if (fontsLoaded && !isAuthLoading && !isUserLoading) {
       logger.info('[_layout] All ready, hiding splash screen');
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, isAuthLoading, isUserLoading, isAuthenticated]);
-
-  logger.info(
-    '[_layout] Render check - showing splash?',
-    !fontsLoaded || isAuthLoading || isUserLoading,
-  );
+  }, [fontsLoaded, isAuthLoading, isUserLoading]);
 
   if (!fontsLoaded || isAuthLoading || isUserLoading) {
     return null;
   }
 
-  // Show blocking modal if app version is outdated
   if (needsUpdate) {
     return <ForceUpdateModal onUpdate={openStore} />;
   }
 
-  // Show error screen if user initialization failed
   if (userError) {
     return <InitErrorScreen onRetry={refetch} />;
   }

@@ -1,17 +1,17 @@
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('@shared/services/api', () => ({
-  api: {
-    get: vi.fn(),
-    post: vi.fn(),
-    put: vi.fn(),
-    delete: vi.fn(),
+vi.mock('@lib/supabase', () => ({
+  supabase: {
+    auth: {
+      resetPasswordForEmail: vi.fn().mockResolvedValue({ error: null }),
+      updateUser: vi.fn().mockResolvedValue({ error: null }),
+    },
   },
 }));
 
 import { authService } from '@features/auth/services/auth.service';
 
-describe('authService.requestPasswordReset (mock)', () => {
+describe('authService.requestPasswordReset', () => {
   it('resolves for any email', async () => {
     await expect(
       authService.requestPasswordReset({ email: 'user@example.com' }),
@@ -25,7 +25,7 @@ describe('authService.requestPasswordReset (mock)', () => {
   });
 });
 
-describe('authService.resetPassword (mock)', () => {
+describe('authService.resetPassword', () => {
   it('resolves with a non-empty token', async () => {
     await expect(
       authService.resetPassword({ token: 'abc', password: 'secret123' }),

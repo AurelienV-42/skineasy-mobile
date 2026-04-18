@@ -2,64 +2,62 @@ import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { authService } from '@features/auth/services/auth.service';
+import type { ClientRow } from '@features/auth/services/auth.service';
 import { routineService } from '@features/routine/services/routine.service';
 import { queryKeys } from '@shared/config/queryKeys';
 import { useAuthStore } from '@shared/stores/auth.store';
 import { useUserStore } from '@shared/stores/user.store';
+import type { UserProfile } from '@shared/types/user.types';
 import { logger } from '@shared/utils/logger';
 import { routineStorage } from '@shared/utils/routineStorage';
 
-/**
- * Hook to initialize user data on app start
- * Fetches user profile from /me endpoint when authenticated
- */
+function mapClientToUserProfile(client: ClientRow): UserProfile {
+  return {
+    id: client.id,
+    user_id: client.user_id,
+    email: client.email ?? '',
+    firstname: client.first_name ?? '',
+    lastname: client.last_name ?? '',
+    skinType: client.skin_type ?? undefined,
+    birthday: client.birthday ?? undefined,
+    avatar: client.avatar_url ?? null,
+    hasRoutineAccess: client.has_routine_access,
+  };
+}
+
 export function useInitializeUser() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const isAuthLoading = useAuthStore((state) => state.isLoading);
   const setUser = useUserStore((state) => state.setUser);
   const clearUser = useUserStore((state) => state.clearUser);
   const setRoutineStatus = useUserStore((state) => state.setRoutineStatus);
-  const user = useUserStore((state) => state.user);
-
-  logger.info('[useInitializeUser] Hook state:', {
-    isAuthenticated,
-    isAuthLoading,
-    hasUser: !!user,
-    userId: user?.id,
-  });
 
   const {
     data,
     error,
     isLoading,
-    isFetching,
     refetch: refetchUser,
   } = useQuery({
     queryKey: queryKeys.user,
     queryFn: async () => {
-      logger.info('[useInitializeUser] Fetching user data from /me endpoint');
-      const result = await authService.getMe();
-      logger.info('[useInitializeUser] /me response:', result);
-      return result;
+      logger.info('[useInitializeUser] Fetching user from clients table');
+      const client = await authService.getMe();
+      return mapClientToUserProfile(client);
     },
     enabled: isAuthenticated && !isAuthLoading,
     retry: 1,
-    staleTime: Infinity, // User data doesn't change often
+    staleTime: Infinity,
   });
 
   const hasRoutineAccess = useUserStore((state) => state.hasRoutineAccess);
 
-  // Fetch routine to determine status (skip if no routine access)
   const { data: routineData, isLoading: isRoutineLoading } = useQuery({
     queryKey: queryKeys.routineLast(),
     queryFn: async () => {
-      logger.info('[useInitializeUser] Fetching routine from /routine/last');
       try {
-        const result = await routineService.getLastRoutine();
-        logger.info('[useInitializeUser] /routine/last response:', result);
-        return result;
+        return await routineService.getLastRoutine();
       } catch (err) {
-        logger.warn('[useInitializeUser] Routine fetch failed:', err);
+        logger.warn('[useInitializeUser] Routine fetch failed (expected during migration):', err);
         return null;
       }
     },
@@ -67,54 +65,31 @@ export function useInitializeUser() {
     staleTime: 5 * 60 * 1000,
   });
 
-  logger.info('[useInitializeUser] Query state:', {
-    isLoading,
-    isFetching,
-    hasData: !!data,
-    hasError: !!error,
-    errorMessage: error?.message,
-  });
-
   useEffect(() => {
     if (data) {
-      logger.info('[useInitializeUser] Setting user data in store:', data.data);
-      setUser(data.data);
+      logger.info('[useInitializeUser] Setting user in store');
+      setUser(data);
     }
   }, [data, setUser]);
 
   useEffect(() => {
     if (error) {
-      logger.info('[useInitializeUser] Error fetching user, clearing user data:', error);
-      // If /me fails, clear user data (likely token is invalid)
+      logger.warn('[useInitializeUser] Error fetching user, clearing:', error);
       clearUser();
     }
   }, [error, clearUser]);
 
-  // Sync routine status to store
   useEffect(() => {
     async function syncRoutineStatus(): Promise<void> {
-      if (!isAuthenticated) return;
-
-      if (!hasRoutineAccess) {
-        logger.info('[useInitializeUser] No routine access, setting status to none');
-        setRoutineStatus('none');
-        return;
-      }
-
-      if (isRoutineLoading) return;
-
+      if (!isAuthenticated || !hasRoutineAccess || isRoutineLoading) return;
       if (!routineData) {
-        logger.info('[useInitializeUser] No routine, setting status to none');
         setRoutineStatus('none');
         return;
       }
-
       const readyAt = await routineStorage.getReadyAt();
       if (readyAt && new Date() < readyAt) {
-        logger.info('[useInitializeUser] Routine processing until:', readyAt);
         setRoutineStatus('processing');
       } else {
-        logger.info('[useInitializeUser] Routine ready');
         setRoutineStatus('ready');
         await routineStorage.clear();
       }

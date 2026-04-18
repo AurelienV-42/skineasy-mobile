@@ -82,16 +82,46 @@ CREATE TABLE product_type_content (
 
 **Data source**: Fresh seed. Content can be improved/rewritten during migration.
 
-### 1.3 `routines`
+### 1.3 `questionnaire_responses`
 
-One routine per user (latest is active). Hybrid approach: `analysis` as jsonb (document-like, never edited), products and schedule as proper relational tables.
+Single source of truth for all questionnaire submissions -- regardless of source (Typeform today, native form tomorrow). Every routine references the response it was generated from.
+
+```sql
+CREATE TABLE questionnaire_responses (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  external_id text UNIQUE,                -- Typeform response token (NULL for native forms)
+  source text NOT NULL,                   -- 'typeform' | 'mobile' | 'web'
+  user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+  email text NOT NULL,
+  answers jsonb NOT NULL,                 -- normalized QuestionnaireAnswers
+  schema_version text NOT NULL DEFAULT 'v1', -- bump when the shape of answers changes
+  submitted_at timestamptz DEFAULT now()
+);
+CREATE INDEX idx_questionnaire_responses_user ON questionnaire_responses(user_id);
+CREATE INDEX idx_questionnaire_responses_email ON questionnaire_responses(email);
+CREATE INDEX idx_questionnaire_responses_external ON questionnaire_responses(external_id);
+```
+
+**RLS**: User can SELECT own. Employees can SELECT all (backoffice debugging). Writes via service_role only (Edge Function or adapter).
+
+**Why it helps**:
+
+- Regenerate routine from past answers when algorithm is improved
+- Backoffice can inspect exactly what a user answered
+- Source-agnostic: any form frontend just inserts a row here
+- `schema_version` lets us evolve the answer shape without breaking old records
+
+### 1.4 `routines`
+
+One routine per user (latest is active). Hybrid approach: `analysis` as jsonb (document-like, never edited), products and schedule as proper relational tables. Each routine links back to the questionnaire response that produced it.
 
 ```sql
 CREATE TABLE routines (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
   email text NOT NULL,
-  source text NOT NULL DEFAULT 'api', -- 'typeform' | 'api'
+  questionnaire_response_id uuid REFERENCES questionnaire_responses(id), -- source answers
+  algorithm_version text NOT NULL DEFAULT 'v1', -- bump when algorithm changes
   skin_type text NOT NULL,
   analysis jsonb NOT NULL, -- skin analysis results (read-only after generation)
   brand_cohesion_applied boolean DEFAULT false,
@@ -102,9 +132,12 @@ CREATE TABLE routines (
 CREATE INDEX idx_routines_user ON routines(user_id);
 CREATE INDEX idx_routines_email ON routines(email);
 CREATE INDEX idx_routines_status ON routines(status);
+CREATE INDEX idx_routines_questionnaire ON routines(questionnaire_response_id);
 ```
 
-### 1.4 `routine_products`
+> `source` column removed -- it lives on `questionnaire_responses` now.
+
+### 1.5 `routine_products`
 
 Junction table: which products are in a routine, grouped by category.
 
@@ -127,7 +160,7 @@ CREATE INDEX idx_routine_products_category ON routine_products(routine_id, categ
 
 **Find routines using product X**: `SELECT routine_id FROM routine_products WHERE product_id = X` -- trivial.
 
-### 1.5 `routine_steps`
+### 1.6 `routine_steps`
 
 Weekly schedule: which product category at which time.
 
@@ -313,21 +346,78 @@ baume | gadgets | complements
 
 ## 6. Edge Functions
 
-### 5.1 `generate-routine`
+### 6.1 Architecture
 
-**Trigger**: HTTP POST (from Typeform webhook or direct API call from mobile)
+```
+        Form source                    Persistence                  Generation
+  ┌─────────────────────┐      ┌──────────────────────┐     ┌──────────────────┐
+  │ Typeform webhook    │─┐    │                      │     │ generate-routine │
+  └─────────────────────┘ │    │ questionnaire_       │     │ Edge Function    │
+  ┌─────────────────────┐ ├──> │ responses            │───> │ reads answers    │
+  │ Native form (later) │ │    │ (source of truth)    │     │ writes routines  │
+  └─────────────────────┘─┘    └──────────────────────┘     └──────────────────┘
+```
+
+Any form source writes a row into `questionnaire_responses`. The generation step reads from there -- it no longer knows about Typeform specifically.
+
+### 6.2 `QuestionnaireAnswers` shared interface
+
+Defined once in `supabase/functions/_shared/questionnaire.types.ts`. Both:
+
+- The Typeform adapter (today)
+- A future native form (later)
+
+produce this exact shape.
+
+```ts
+export interface QuestionnaireAnswers {
+  email: string;
+  age: number;
+  gender?: 'female' | 'male' | 'other';
+  // Skin type signals
+  skinFeelsOily?: 'never' | 'sometimes' | 'often' | 'always';
+  skinFeelsDry?: 'never' | 'sometimes' | 'often' | 'always';
+  // Skin state signals
+  concerns: SkinStateType[];
+  hasSensitivity: boolean;
+  // Health
+  isPregnant: boolean;
+  medicalConditions: string[];
+  // ... finalize from current Typeform question set
+}
+```
+
+Bump `schema_version` on `questionnaire_responses` when this shape changes.
+
+### 6.3 `typeform-webhook` Edge Function
+
+**Trigger**: HTTP POST from Typeform
+**Path**: `/functions/v1/typeform-webhook`
 
 **Flow**:
 
-1. Receive payload (Typeform webhook format or direct questionnaire answers)
-2. Parse questionnaire answers
-3. Run skin analysis (skin type, skin states, health conditions)
-4. Query `skincare_products` + `product_type_content` to select & score products
-5. Build weekly routine plan (which products on which days, morning/evening)
-6. Insert `routines` row (with `analysis` jsonb)
-7. Insert `routine_products` rows (product IDs per category)
-8. Insert `routine_steps` rows (weekly schedule)
-9. Link to user via email or `user_id`
+1. Receive Typeform webhook payload
+2. Verify Typeform signature
+3. `typeform-adapter.ts`: map Typeform `form_response.answers[]` -> `QuestionnaireAnswers`
+4. INSERT into `questionnaire_responses` (`source='typeform'`, `external_id=form_response.token`)
+5. Invoke `generate-routine` (direct call or DB trigger) with the new `questionnaire_response_id`
+
+### 6.4 `generate-routine` Edge Function
+
+**Trigger**: HTTP POST (or DB trigger on `questionnaire_responses` INSERT)
+**Path**: `/functions/v1/generate-routine`
+**Body**: `{ questionnaire_response_id: uuid }`
+
+**Flow**:
+
+1. Load the `questionnaire_responses` row by ID
+2. Run skin analysis on `answers` (skin type, skin states, health conditions)
+3. Query `skincare_products` + `product_type_content` to select & score products
+4. Build weekly routine plan
+5. Insert `routines` row (link via `questionnaire_response_id`, store `algorithm_version`)
+6. Insert `routine_products` rows (product IDs per category)
+7. Insert `routine_steps` rows (weekly schedule)
+8. Link to user via `questionnaire_responses.user_id` or email lookup
 
 **Source logic**: Port from `skineasy-backend/src/modules/routine/`:
 
@@ -338,10 +428,34 @@ baume | gadgets | complements
 - `builders/product-selector.ts`
 - `builders/routine-planner.ts`
 
-### 5.2 Typeform webhook
+### 6.5 Native form path (FUTURE, not blocking)
+
+> Decision pending. Architecture is ready whenever you flip the switch.
+
+When/if the native form is built:
+
+1. Mobile form produces a `QuestionnaireAnswers` object (same shape as Typeform adapter output)
+2. Mobile calls an Edge Function `submit-questionnaire` (or inserts directly with RLS) that:
+   - INSERT into `questionnaire_responses` (`source='mobile'`, `external_id=null`)
+   - Invokes `generate-routine`
+3. No change to the algorithm or any downstream table
+
+**What we do NOW to keep this option open**:
+
+- Define `QuestionnaireAnswers` type in shared Edge Function folder from day one
+- `generate-routine` consumes `QuestionnaireAnswers` ONLY (never Typeform-specific fields)
+- Keep Typeform mapping isolated in `typeform-adapter.ts` (easy to keep/remove independently)
+
+**What we do NOT do now**:
+
+- Build the native form UI (out of scope for this migration)
+- Build a question tree / wizard component
+- Migrate the Typeform flow away -- Typeform keeps working
+
+### 6.6 Typeform webhook URL
 
 Currently: `POST {NESTJS_URL}/api/v1/routine/webhook`
-After migration: `POST https://lyhhipvipgbqsytfqwdw.supabase.co/functions/v1/generate-routine`
+After migration: `POST https://lyhhipvipgbqsytfqwdw.supabase.co/functions/v1/typeform-webhook`
 
 Update the webhook URL in Typeform settings after deploying the Edge Function.
 

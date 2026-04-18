@@ -19,11 +19,13 @@ describe('useUserStore', () => {
 
   it('should set user', () => {
     const mockUser: UserProfile = {
-      id: 1,
+      id: 'uuid-1',
+      user_id: 'auth-uuid-1',
       email: 'test@example.com',
       firstname: 'John',
       lastname: 'Doe',
       skinType: 'oily',
+      hasRoutineAccess: false,
     };
 
     const { setUser } = useUserStore.getState();
@@ -42,13 +44,14 @@ describe('useUserStore', () => {
   });
 
   it('should clear user', () => {
-    // Set initial state with user
     useUserStore.setState({
       user: {
-        id: 1,
+        id: 'uuid-1',
+        user_id: 'auth-uuid-1',
         email: 'test@example.com',
         firstname: 'John',
         lastname: 'Doe',
+        hasRoutineAccess: false,
       },
       hasDiagnosis: true,
     });
