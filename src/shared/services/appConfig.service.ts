@@ -1,3 +1,4 @@
+import { mapSupabaseError } from '@lib/error-mapper';
 import { supabase } from '@lib/supabase';
 
 interface AppConfig {
@@ -15,7 +16,7 @@ export const appConfigService = {
       .select('key, value')
       .in('key', ['minimum_version', 'store_urls']);
 
-    if (error) throw new Error('common.error');
+    if (error) throw mapSupabaseError(error);
 
     const rows = data ?? [];
     const configMap = Object.fromEntries(rows.map((r) => [r.key, r.value]));
