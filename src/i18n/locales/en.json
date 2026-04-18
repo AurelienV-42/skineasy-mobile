@@ -438,6 +438,9 @@
     "avatarUploadError": "Failed to upload photo",
     "tryQuestionnaire": "Try new questionnaire"
   },
+  "questionnaireDemo": {
+    "title": "Discover your skin"
+  },
   "diagnosis": {
     "required": "Diagnosis Required",
     "requiredMessage": "Please complete the skin diagnosis to get your personalized routine.",

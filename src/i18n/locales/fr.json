@@ -439,6 +439,9 @@
     "avatarUploadError": "Échec du téléchargement de la photo",
     "tryQuestionnaire": "Tester le nouveau questionnaire"
   },
+  "questionnaireDemo": {
+    "title": "Découvre ta peau"
+  },
   "diagnosis": {
     "required": "Diagnostic requis",
     "requiredMessage": "Complète le diagnostic de peau pour obtenir ta routine personnalisée.",
