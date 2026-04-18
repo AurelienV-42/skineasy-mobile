@@ -21,7 +21,7 @@ export function hasAnswer(step: DemoStep, answers: DemoAnswers): boolean {
   return false;
 }
 
-function updateAnswers(step: DemoStep, value: string, prev: DemoAnswers): DemoAnswers {
+export function updateAnswers(step: DemoStep, value: string, prev: DemoAnswers): DemoAnswers {
   if (step === 0) return { ...prev, skinType: value };
   if (step === 2) return { ...prev, ageRange: value };
   const concerns = prev.concerns.includes(value)

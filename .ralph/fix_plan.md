@@ -225,7 +225,7 @@ All labels via i18n keys under `questionnaireDemo.*`.
 ### 10.9 i18n + tests
 
 - [x] Add all strings to `src/i18n/locales/fr.json` and `en.json` under `questionnaireDemo.*`
-- [ ] Unit test the state machine (step advance, answer validation, completion)
+- [x] Unit test the state machine (step advance, answer validation, completion)
 - [ ] No integration tests needed (fake flow)
 
 ### 10.10 Cleanup consideration
