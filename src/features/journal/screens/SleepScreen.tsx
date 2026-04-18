@@ -14,7 +14,7 @@ import { Frown, Meh, Moon, Smile } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Alert, Text, View } from 'react-native';
+import { Alert, View } from 'react-native';
 
 import {
   useDeleteSleep,
@@ -23,6 +23,8 @@ import {
 } from '@features/journal/hooks/useJournal';
 import { sleepFormSchema, type SleepFormInput } from '@features/journal/schemas/journal.schema';
 import { Button } from '@shared/components/button';
+import { ErrorState } from '@shared/components/error-state';
+import { LoadingState } from '@shared/components/loading-state';
 import { ScreenHeader } from '@shared/components/screen-header';
 import { SectionHeader } from '@shared/components/section-header';
 import { SelectableCard } from '@shared/components/selectable-card';
@@ -52,7 +54,7 @@ export default function SleepScreen() {
   const { data: sleepEntries, isLoading, isError, refetch } = useSleepEntries(dateString);
   // Use specific id if editing, otherwise get first entry for today
   const existingEntry = params.id
-    ? sleepEntries?.find((e) => e.id === Number(params.id))
+    ? sleepEntries?.find((e) => e.id === params.id)
     : sleepEntries?.[0];
 
   const {
@@ -129,9 +131,7 @@ export default function SleepScreen() {
   if (isLoading) {
     return (
       <ScreenHeader title={t('journal.sleep.screenTitle')} icon={Moon}>
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" />
-        </View>
+        <LoadingState />
       </ScreenHeader>
     );
   }
@@ -139,10 +139,7 @@ export default function SleepScreen() {
   if (isError) {
     return (
       <ScreenHeader title={t('journal.sleep.screenTitle')} icon={Moon}>
-        <View className="flex-1 items-center justify-center px-6">
-          <Text className="text-base text-textMuted text-center mb-4">{t('common.error')}</Text>
-          <Button title={t('common.retry')} onPress={() => refetch()} haptic="medium" />
-        </View>
+        <ErrorState messageKey="common.error" onRetry={() => void refetch()} />
       </ScreenHeader>
     );
   }

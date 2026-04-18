@@ -4,7 +4,7 @@ import { Smile } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Alert, Text, View } from 'react-native';
+import { Alert, View } from 'react-native';
 
 import { DateNavigation } from '@features/dashboard/components/DateNavigation';
 import { StressLevelDisplay } from '@features/journal/components/StressLevelDisplay';
@@ -15,6 +15,8 @@ import {
 } from '@features/journal/hooks/useStress';
 import { stressFormSchema, type StressFormInput } from '@features/journal/schemas/journal.schema';
 import { Button } from '@shared/components/button';
+import { ErrorState } from '@shared/components/error-state';
+import { LoadingState } from '@shared/components/loading-state';
 import { ScreenHeader } from '@shared/components/screen-header';
 import { Slider } from '@shared/components/slider';
 import type { StressLevel } from '@shared/types/journal.types';
@@ -40,7 +42,7 @@ export default function StressScreen(): React.ReactElement {
   const { data: stressEntries, isLoading, isError, refetch } = useStressEntries(dateString);
 
   const existingEntry = params.id
-    ? stressEntries?.find((e) => e.id === Number(params.id))
+    ? stressEntries?.find((e) => e.id === params.id)
     : stressEntries?.[0];
 
   const {
@@ -109,9 +111,7 @@ export default function StressScreen(): React.ReactElement {
   if (isLoading) {
     return (
       <ScreenHeader title={t('journal.stress.screenTitle')} icon={Smile}>
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" />
-        </View>
+        <LoadingState />
       </ScreenHeader>
     );
   }
@@ -119,10 +119,7 @@ export default function StressScreen(): React.ReactElement {
   if (isError) {
     return (
       <ScreenHeader title={t('journal.stress.screenTitle')} icon={Smile}>
-        <View className="flex-1 items-center justify-center px-6">
-          <Text className="text-base text-textMuted text-center mb-4">{t('common.error')}</Text>
-          <Button title={t('common.retry')} onPress={() => refetch()} haptic="medium" />
-        </View>
+        <ErrorState messageKey="common.error" onRetry={() => void refetch()} />
       </ScreenHeader>
     );
   }

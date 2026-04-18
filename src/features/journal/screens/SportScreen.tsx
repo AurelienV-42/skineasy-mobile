@@ -15,7 +15,7 @@ import { Dumbbell, Flame, MessageSquare, PersonStanding, Timer } from 'lucide-re
 import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Alert, Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 
 import { SportTypeSelector } from '@features/journal/components/SportTypeSelector';
 import {
@@ -29,6 +29,8 @@ import { sportFormSchema, type SportFormInput } from '@features/journal/schemas/
 import { enrichSportTypes } from '@features/journal/utils/sportMapping';
 import { Button } from '@shared/components/button';
 import { Card } from '@shared/components/card';
+import { ErrorState } from '@shared/components/error-state';
+import { LoadingState } from '@shared/components/loading-state';
 import { Input } from '@shared/components/input';
 import { Pressable } from '@shared/components/pressable';
 import { ScreenHeader } from '@shared/components/screen-header';
@@ -51,12 +53,12 @@ export default function SportScreen() {
   // If editing, fetch existing entry
   const dateToUse = params.date || getTodayUTC();
   const { data: sportEntries, isLoading, isError, refetch } = useSportEntries(dateToUse);
-  const existingEntry = sportEntries?.find((e) => e.id === Number(params.id));
+  const existingEntry = sportEntries?.find((e) => e.id === params.id);
   const isEditMode = !!params.id;
 
   // Create a map of sport type names to backend IDs
   const sportTypeIdMap = useMemo(() => {
-    if (!sportTypes) return new Map<string, number>();
+    if (!sportTypes) return new Map<string, string>();
     const enriched = enrichSportTypes(sportTypes, t);
     return new Map(enriched.map((st) => [st.id, st.backendId]));
   }, [sportTypes, t]);
@@ -79,14 +81,15 @@ export default function SportScreen() {
   // Populate form when editing
   useEffect(() => {
     if (existingEntry) {
+      const sportTypeName = sportTypes?.find((st) => st.id === existingEntry.sport_type_id)?.name;
       reset({
-        type: existingEntry.sportType.name as SportFormInput['type'],
+        type: (sportTypeName ?? 'other') as SportFormInput['type'],
         duration: String(existingEntry.duration),
         intensity: existingEntry.intensity as SportIntensity,
         note: existingEntry.note || '',
       });
     }
-  }, [existingEntry, reset]);
+  }, [existingEntry, sportTypes, reset]);
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const selectedIntensity = watch('intensity') ?? 3;
@@ -160,9 +163,7 @@ export default function SportScreen() {
   if (isLoading) {
     return (
       <ScreenHeader title={t('journal.sport.screenTitle')} icon={Dumbbell}>
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" />
-        </View>
+        <LoadingState />
       </ScreenHeader>
     );
   }
@@ -170,10 +171,7 @@ export default function SportScreen() {
   if (isError) {
     return (
       <ScreenHeader title={t('journal.sport.screenTitle')} icon={Dumbbell}>
-        <View className="flex-1 items-center justify-center px-6">
-          <Text className="text-base text-textMuted text-center mb-4">{t('common.error')}</Text>
-          <Button title={t('common.retry')} onPress={() => refetch()} haptic="medium" />
-        </View>
+        <ErrorState messageKey="common.error" onRetry={() => void refetch()} />
       </ScreenHeader>
     );
   }

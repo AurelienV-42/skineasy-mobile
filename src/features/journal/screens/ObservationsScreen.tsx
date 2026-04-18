@@ -4,7 +4,7 @@ import { Minus, Plus, Search } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Alert, ScrollView, Text, View } from 'react-native';
+import { Alert, ScrollView, View } from 'react-native';
 
 import { DateNavigation } from '@features/dashboard/components/DateNavigation';
 import { ObservationChip } from '@features/journal/components/ObservationChip';
@@ -26,6 +26,8 @@ import {
   type ObservationFormInput,
 } from '@features/journal/schemas/journal.schema';
 import { Button } from '@shared/components/button';
+import { ErrorState } from '@shared/components/error-state';
+import { LoadingState } from '@shared/components/loading-state';
 import { ScreenHeader } from '@shared/components/screen-header';
 import { SectionHeader } from '@shared/components/section-header';
 import { toISODateString, toUTCDateString } from '@shared/utils/date';
@@ -131,9 +133,7 @@ export default function ObservationsScreen(): React.ReactElement {
   if (isLoading) {
     return (
       <ScreenHeader title={t('journal.observations.screenTitle')} icon={Search}>
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" />
-        </View>
+        <LoadingState />
       </ScreenHeader>
     );
   }
@@ -141,10 +141,7 @@ export default function ObservationsScreen(): React.ReactElement {
   if (isError) {
     return (
       <ScreenHeader title={t('journal.observations.screenTitle')} icon={Search}>
-        <View className="flex-1 items-center justify-center px-6">
-          <Text className="mb-4 text-center text-base text-textMuted">{t('common.error')}</Text>
-          <Button title={t('common.retry')} onPress={() => refetch()} haptic="medium" />
-        </View>
+        <ErrorState messageKey="common.error" onRetry={() => void refetch()} />
       </ScreenHeader>
     );
   }
