@@ -69,6 +69,7 @@ describe('authService.register', () => {
         password: 'secret',
         firstname: 'Jane',
         lastname: 'Doe',
+        id_gender: 1,
       }),
     ).resolves.toBeUndefined();
   });
@@ -81,6 +82,7 @@ describe('authService.register', () => {
         password: 'secret',
         firstname: 'Jane',
         lastname: 'Doe',
+        id_gender: 2,
       }),
     ).rejects.toThrow('auth.emailAlreadyExists');
   });
