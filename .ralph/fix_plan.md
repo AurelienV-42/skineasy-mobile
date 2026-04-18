@@ -354,8 +354,8 @@ if (error) toast.error(t(error.message));
 - [x] Create `src/shared/services/push-tokens.service.ts`
   - `registerToken(token, platform, deviceId?)` -> upsert into `push_tokens` on `(user_id, token)`
   - `unregisterToken(token)` -> delete row
-- [ ] Call `registerToken` after login + on app foreground (when permissions are granted)
-- [ ] Call `unregisterToken` on logout
+- [x] Call `registerToken` after login + on app foreground (when permissions are granted)
+- [x] Call `unregisterToken` on logout
 
 ### 7.2 Wire into existing flow
 
