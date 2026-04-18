@@ -9,7 +9,6 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withDelay,
-  withSequence,
   withSpring,
   withTiming,
   type SharedValue,
@@ -17,12 +16,10 @@ import Animated, {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@shared/components/button';
-import { Card } from '@shared/components/card';
 import { Pressable } from '@shared/components/pressable';
-import { cn } from '@shared/utils/cn';
 import { haptic } from '@shared/utils/haptic';
 import { colors } from '@theme/colors';
-import { DEMO_QUESTIONS } from '@features/questionnaire-demo/constants';
+import { QuestionCard } from '@features/questionnaire-demo/components/question-card';
 import { StepProgressBar } from '@features/questionnaire-demo/components/progress-bar';
 
 const SPRING_CONFIG = { damping: 20, stiffness: 300 };
@@ -40,65 +37,6 @@ const INITIAL_ANSWERS: DemoAnswers = {
   concerns: [],
   ageRange: null,
 };
-
-function TappableCard({
-  onPress,
-  children,
-}: {
-  onPress: () => void;
-  children: React.ReactNode;
-}): React.ReactElement {
-  const scale = useSharedValue(1);
-  const cardStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
-
-  const handlePress = (): void => {
-    animateCardTap(scale);
-    haptic.selection();
-    onPress();
-  };
-
-  return (
-    <Animated.View style={cardStyle}>
-      <Pressable onPress={handlePress} haptic={false}>
-        {children}
-      </Pressable>
-    </Animated.View>
-  );
-}
-
-function QuestionCard({
-  step,
-  selected,
-}: {
-  step: DemoStep;
-  selected: string | null;
-}): React.ReactElement {
-  const question = DEMO_QUESTIONS[step];
-  if (!question) return <View className="flex-1" />;
-
-  return (
-    <View className="flex-1 gap-3 pt-4">
-      <Text className="text-4xl font-bold text-primary text-center mb-4">{question.title}</Text>
-      {question.options.map((opt) => (
-        <TappableCard key={opt.value} onPress={() => {}}>
-          <Card isPressed={opt.value === selected}>
-            <View className="flex-row items-center gap-3">
-              <Text className="text-2xl">{opt.emoji}</Text>
-              <Text
-                className={cn(
-                  'text-xl flex-1',
-                  opt.value === selected ? 'text-white' : 'text-text',
-                )}
-              >
-                {opt.label}
-              </Text>
-            </View>
-          </Card>
-        </TappableCard>
-      ))}
-    </View>
-  );
-}
 
 function triggerRing(value: SharedValue<number>, delayMs: number): void {
   value.value = withDelay(delayMs, withTiming(1, { duration: 700 }));
@@ -168,10 +106,6 @@ function CompletionScreen({ onBack }: { onBack: () => void }): React.ReactElemen
       </View>
     </View>
   );
-}
-
-function animateCardTap(scale: SharedValue<number>): void {
-  scale.value = withSequence(withTiming(0.97, { duration: 60 }), withSpring(1, SPRING_CONFIG));
 }
 
 function animateCtaEnabled(ctaOpacity: SharedValue<number>, enabled: boolean): void {
