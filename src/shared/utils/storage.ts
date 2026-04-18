@@ -1,5 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { storage } from '@lib/storage';
 
 const KEYS = {
   ACCESS_TOKEN: 'access_token',
@@ -47,22 +48,13 @@ export async function clearAllTokens(): Promise<void> {
 }
 
 export async function getLocale(): Promise<string | null> {
-  try {
-    return await AsyncStorage.getItem(KEYS.LOCALE);
-  } catch {
-    return null;
-  }
+  return storage.getString(KEYS.LOCALE) ?? null;
 }
 
 export async function setLocale(locale: string): Promise<void> {
-  await AsyncStorage.setItem(KEYS.LOCALE, locale);
+  storage.set(KEYS.LOCALE, locale);
 }
 
 export async function getSportGoal(): Promise<number> {
-  try {
-    const value = await AsyncStorage.getItem(KEYS.SPORT_GOAL_MINUTES);
-    return value ? Number(value) : DEFAULT_SPORT_GOAL_MINUTES;
-  } catch {
-    return DEFAULT_SPORT_GOAL_MINUTES;
-  }
+  return storage.getNumber(KEYS.SPORT_GOAL_MINUTES) ?? DEFAULT_SPORT_GOAL_MINUTES;
 }

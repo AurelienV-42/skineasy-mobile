@@ -1,6 +1,15 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+
+import { storage } from '@lib/storage';
+
+const mmkvStorage = {
+  getItem: (key: string): string | null => storage.getString(key) ?? null,
+  setItem: (key: string, value: string): void => storage.set(key, value),
+  removeItem: (key: string): void => {
+    storage.remove(key);
+  },
+};
 
 type TimeOfDay = 'morning' | 'evening';
 
@@ -53,7 +62,7 @@ export const useRoutineCompletionStore = create<RoutineCompletionState>()(
     }),
     {
       name: 'routine-completion-storage',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => mmkvStorage),
     },
   ),
 );
