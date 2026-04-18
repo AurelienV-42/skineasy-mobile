@@ -79,6 +79,9 @@ function RootLayoutContent() {
           .then(setRoutineResolution)
           .catch((err: unknown) => logger.error('[_layout] resolveRoutine failed:', err));
       }
+      if (_event === 'SIGNED_OUT') {
+        setRoutineResolution(null);
+      }
     });
 
     if (Platform.OS === 'ios') {
