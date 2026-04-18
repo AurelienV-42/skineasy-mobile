@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { ArrowLeft, X } from 'lucide-react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import Animated, {
@@ -33,15 +33,35 @@ const INITIAL_ANSWERS: DemoAnswers = {
   ageRange: null,
 };
 
+function AnimatedSegment({ filled }: { filled: boolean }): React.ReactElement {
+  const [trackWidth, setTrackWidth] = useState(0);
+  const translateX = useSharedValue(-200);
+
+  useEffect(() => {
+    if (trackWidth === 0) return;
+    translateX.value = withSpring(filled ? 0 : -trackWidth, SPRING_CONFIG);
+  }, [filled, trackWidth]);
+
+  const fillStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+  }));
+
+  return (
+    <View
+      className="flex-1 h-1.5 rounded-full overflow-hidden"
+      style={{ backgroundColor: colors.border }}
+      onLayout={(e) => setTrackWidth(e.nativeEvent.layout.width)}
+    >
+      <Animated.View style={[fillStyle, { flex: 1, backgroundColor: colors.primary }]} />
+    </View>
+  );
+}
+
 function StepProgressBar({ step }: { step: DemoStep }): React.ReactElement {
   return (
     <View className="flex-row gap-1.5 flex-1 ml-4">
       {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-        <View
-          key={i}
-          className="flex-1 h-1.5 rounded-full"
-          style={{ backgroundColor: step > i ? colors.primary : colors.border }}
-        />
+        <AnimatedSegment key={i} filled={step > i} />
       ))}
     </View>
   );
