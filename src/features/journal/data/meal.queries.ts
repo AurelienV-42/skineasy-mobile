@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as mealApi from '@features/journal/data/meal.api';
 import { toast } from '@lib/toast';
 import { queryKeys } from '@shared/config/queryKeys';
+import { onMealEntryChanged } from '@shared/services/notifications.service';
 import type { CreateMealEntryDto } from '@shared/types/journal.types';
 import { fromISOToDateString } from '@shared/utils/date';
 import { logger } from '@shared/utils/logger';
@@ -29,6 +30,10 @@ export function useCreateMeal() {
       queryClient.invalidateQueries({ queryKey: queryKeys.journalMeal(dateKey) });
       queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() });
 
+      onMealEntryChanged(dateKey).catch((err: unknown) =>
+        logger.warn('[useCreateMeal] notifications hook failed:', err),
+      );
+
       toast.success(t('journal.nutrition.saveSuccess'));
     },
     onError: (error) => {
@@ -50,6 +55,10 @@ export function useUpdateMeal() {
 
       queryClient.invalidateQueries({ queryKey: queryKeys.journalMeal(variables.date) });
       queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() });
+
+      onMealEntryChanged(variables.date).catch((err: unknown) =>
+        logger.warn('[useUpdateMeal] notifications hook failed:', err),
+      );
 
       toast.success(t('journal.nutrition.saveSuccess'));
     },
@@ -79,6 +88,10 @@ export function useDeleteMeal() {
 
       queryClient.invalidateQueries({ queryKey: queryKeys.journalMeal(variables.date) });
       queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() });
+
+      onMealEntryChanged(variables.date).catch((err: unknown) =>
+        logger.warn('[useDeleteMeal] notifications hook failed:', err),
+      );
 
       toast.success(t('journal.nutrition.deleteSuccess'));
     },

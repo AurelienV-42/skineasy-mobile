@@ -534,5 +534,30 @@
     "title": "Update Required",
     "message": "A new version of Skin Easy is available. Please update to continue using the app.",
     "button": "Update Now"
+  },
+  "notifications": {
+    "journal": {
+      "title": "✍🏽 Don't forget to fill your journal today",
+      "body": "Take a moment to reflect on your day and stay on track."
+    },
+    "bedtime": {
+      "title": "🌙 Time to go to bed",
+      "body": "Give yourself some rest to recover and soothe your nervous system."
+    },
+    "meals": {
+      "title": "🍽️ Plan your meals for the week?",
+      "body": "Planning ahead helps you eat better and avoid last-minute choices."
+    },
+    "settings": {
+      "title": "Notifications",
+      "subtitle": "Choose which reminders you want to receive.",
+      "dailyJournal": "Journal reminder (8 PM)",
+      "dailyJournalHelp": "Every evening, we remind you to fill your journal.",
+      "bedtime": "Bedtime reminder (10 PM)",
+      "bedtimeHelp": "If you slept badly last night, we'll nudge you to go to bed early.",
+      "mealPlanning": "Meal planning (Sunday)",
+      "mealPlanningHelp": "Every Sunday at 2 PM to plan the week's meals."
+    },
+    "profileRow": "Notifications"
   }
 }

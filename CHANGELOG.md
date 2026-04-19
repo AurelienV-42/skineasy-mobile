@@ -2,6 +2,9 @@
 
 ## 1.0.0
 
+- Added local notifications (journal 20h daily, bedtime 22h if bad sleep, Sunday 14h meal planning)
+- Added notifications settings sheet on Profile with 3 toggles persisted in MMKV
+- Added docs/notifications.md covering decisions, triggers, storage and thresholds
 - Changed questionnaire demo to tap-to-advance with simplified fade transitions
 - Fixed progress bar animation using width-based timing instead of translateX
 - Changed answer cards to use lucide icons instead of unrendered emojis

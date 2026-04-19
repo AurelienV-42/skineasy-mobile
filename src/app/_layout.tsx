@@ -1,6 +1,7 @@
 import { useReactQueryDevTools } from '@dev-plugins/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { useFonts } from 'expo-font';
+import * as Notifications from 'expo-notifications';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect } from 'react';
@@ -22,6 +23,7 @@ import { OfflineBanner } from '@shared/components/offline-banner';
 import { queryClient } from '@shared/config/queryClient';
 import { queryPersister } from '@lib/query-persister';
 import { initSentry } from '@shared/config/sentry';
+import { resyncAll as resyncNotifications } from '@shared/services/notifications.service';
 import { useAppUpdates } from '@shared/hooks/useAppUpdates';
 import { useForceUpdate } from '@shared/hooks/useForceUpdate';
 import { useNetworkStatus } from '@shared/hooks/useNetworkStatus';
@@ -36,6 +38,15 @@ import '@/lib/i18n';
 
 initSentry();
 SplashScreen.preventAutoHideAsync();
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowBanner: true,
+    shouldShowList: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 function RootLayoutContent() {
   const insets = useSafeAreaInsets();
@@ -64,6 +75,13 @@ function RootLayoutContent() {
   usePushTokenRegistration(isAuthenticated);
 
   useEffect(() => {
+    if (!isAuthenticated) return;
+    resyncNotifications().catch((err: unknown) =>
+      logger.warn('[_layout] resyncNotifications failed:', err),
+    );
+  }, [isAuthenticated]);
+
+  useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       logger.info('[_layout] Initial session:', !!session);
       setAuthenticated(!!session);
@@ -78,6 +96,9 @@ function RootLayoutContent() {
         resolveRoutine()
           .then(setRoutineResolution)
           .catch((err: unknown) => logger.error('[_layout] resolveRoutine failed:', err));
+        resyncNotifications().catch((err: unknown) =>
+          logger.warn('[_layout] resyncNotifications failed:', err),
+        );
       }
       if (_event === 'SIGNED_OUT') {
         setRoutineResolution(null);

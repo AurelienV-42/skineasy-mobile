@@ -5,6 +5,7 @@ import * as sleepApi from '@features/journal/data/sleep.api';
 import { trackMutation } from '@lib/analytics';
 import { toast } from '@lib/toast';
 import { queryKeys } from '@shared/config/queryKeys';
+import { onSleepEntryDeleted, onSleepEntrySaved } from '@shared/services/notifications.service';
 import type { CreateSleepEntryDto } from '@shared/types/journal.types';
 import { fromISOToDateString } from '@shared/utils/date';
 import { logger } from '@shared/utils/logger';
@@ -31,6 +32,10 @@ export function useUpsertSleep() {
       queryClient.invalidateQueries({ queryKey: queryKeys.journalSleep(dateKey) });
       queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() });
 
+      onSleepEntrySaved(data).catch((err: unknown) =>
+        logger.warn('[useUpsertSleep] notifications hook failed:', err),
+      );
+
       toast.success(t('journal.sleep.saveSuccess'));
     },
     onError: (error) => {
@@ -52,6 +57,10 @@ export function useDeleteSleep() {
 
       queryClient.invalidateQueries({ queryKey: queryKeys.journalSleep(variables.date) });
       queryClient.invalidateQueries({ queryKey: queryKeys.journalAllEntries() });
+
+      onSleepEntryDeleted(variables.date).catch((err: unknown) =>
+        logger.warn('[useDeleteSleep] notifications hook failed:', err),
+      );
 
       toast.success(t('journal.sleep.deleteSuccess'));
     },

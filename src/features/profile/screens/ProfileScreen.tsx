@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import {
   AlertTriangle,
+  Bell,
   Bug,
   ChevronRight,
   ClipboardList,
@@ -18,12 +19,13 @@ import { useTranslation } from 'react-i18next';
 import { Alert, Linking, Text, View } from 'react-native';
 
 import { HealthKitSyncButton } from '@features/healthkit/components/HealthKitSyncButton';
+import { NotificationsSettingsSheet } from '@features/profile/components/notifications-settings-sheet';
 import { useDeleteAccount } from '@features/profile/data/profile.queries';
 import * as Sentry from '@sentry/react-native';
-import { checkAndApplyUpdate } from '@shared/hooks/useAppUpdates';
 import { Avatar } from '@shared/components/avatar';
 import { Pressable } from '@shared/components/pressable';
 import { ScreenHeader } from '@shared/components/screen-header';
+import { checkAndApplyUpdate } from '@shared/hooks/useAppUpdates';
 import { useAuthStore } from '@shared/stores/auth.store';
 import { useUserStore } from '@shared/stores/user.store';
 import { colors } from '@theme/colors';
@@ -83,6 +85,7 @@ export function ProfileScreen(): React.ReactElement {
   const clearUser = useUserStore((state) => state.clearUser);
   const clearAuth = useAuthStore((state) => state.clearAuth);
   const { mutate: deleteAccount, isPending: isDeleting } = useDeleteAccount();
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
 
   const currentLanguage =
     i18n.language === 'fr' ? t('profile.languageFrench') : t('profile.languageEnglish');
@@ -175,11 +178,13 @@ export function ProfileScreen(): React.ReactElement {
 
       {!!user && (
         <View className="mb-8 items-center">
-          <Text className="text-lg font-medium text-text">
-            {user?.first_name} {user?.last_name}
-          </Text>
-          <Text className="text-sm text-textMuted">{user?.email}</Text>
-          {user?.skin_type && (
+          {user.first_name?.length > 0 && user.last_name?.length > 0 && (
+            <Text className="text-lg font-medium text-text">
+              {user.first_name} {user.last_name}
+            </Text>
+          )}
+          <Text className="text-sm text-textMuted">{user.email}</Text>
+          {user.skin_type && (
             <Text className="text-sm text-primary mt-1">
               {t('profile.skinType')}: {user.skin_type}
             </Text>
@@ -203,7 +208,7 @@ export function ProfileScreen(): React.ReactElement {
         <Pressable
           onPress={handleLanguageChange}
           haptic="light"
-          className="flex-row items-center justify-between p-4"
+          className="flex-row items-center justify-between p-4 border-b border-border"
         >
           <View className="flex-row items-center gap-3">
             <Languages size={20} color={colors.primary} />
@@ -213,6 +218,18 @@ export function ProfileScreen(): React.ReactElement {
             <Text className="text-sm text-text-muted">{currentLanguage}</Text>
             <ChevronRight size={20} color={colors.textMuted} />
           </View>
+        </Pressable>
+
+        <Pressable
+          onPress={() => setNotificationsOpen(true)}
+          haptic="medium"
+          className="flex-row items-center justify-between p-4"
+        >
+          <View className="flex-row items-center gap-3">
+            <Bell size={20} color={colors.primary} />
+            <Text className="text-base text-text">{t('notifications.profileRow')}</Text>
+          </View>
+          <ChevronRight size={20} color={colors.textMuted} />
         </Pressable>
       </View>
 
@@ -311,6 +328,11 @@ export function ProfileScreen(): React.ReactElement {
           <CheckUpdatesButton />
         </View>
       )}
+
+      <NotificationsSettingsSheet
+        visible={notificationsOpen}
+        onClose={() => setNotificationsOpen(false)}
+      />
     </ScreenHeader>
   );
 }
