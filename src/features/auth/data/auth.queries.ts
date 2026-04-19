@@ -204,8 +204,8 @@ export function useDevLogin() {
 
   return useMutation({
     mutationFn: async (data: DevLoginInput): Promise<void> => {
-      logger.info('[useDevLogin] Attempting dev login:', { email: data.email });
-      await authApi.login({ email: data.email, password: data.devSecret });
+      logger.info('[useDevLogin] Attempting dev login', { email: data.email });
+      await authApi.devLogin(data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.user });

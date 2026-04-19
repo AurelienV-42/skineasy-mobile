@@ -34,6 +34,23 @@ export async function getMe(): Promise<ClientRow> {
   return data;
 }
 
+export async function devLogin(data: { email: string; devSecret: string }): Promise<void> {
+  const { data: result, error: fnError } = await supabase.functions.invoke<{
+    email: string;
+    token_hash: string;
+  }>('dev-login', {
+    body: { email: data.email, devSecret: data.devSecret },
+  });
+  if (fnError || !result?.token_hash) {
+    throw new Error('auth.invalidCredentials');
+  }
+  const { error: verifyError } = await supabase.auth.verifyOtp({
+    type: 'magiclink',
+    token_hash: result.token_hash,
+  });
+  if (verifyError) throw mapSupabaseError(verifyError);
+}
+
 export async function logout(): Promise<void> {
   const { error } = await supabase.auth.signOut();
   if (error) throw mapSupabaseError(error);
