@@ -30,8 +30,8 @@ export function QuestionCard({
       {question.options.map((opt) => (
         <AnswerCard
           key={opt.value}
-          emoji={opt.emoji}
           label={t(opt.labelKey)}
+          icon={opt.icon}
           selected={isSelected(opt.value, selected)}
           onPress={() => onSelect(opt.value)}
         />

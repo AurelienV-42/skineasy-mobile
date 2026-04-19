@@ -1,16 +1,9 @@
-import { useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { ArrowLeft, X } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import Animated, {
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  type SharedValue,
-} from 'react-native-reanimated';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@shared/components/button';
@@ -21,36 +14,14 @@ import { colors } from '@theme/colors';
 import { CompletionScreen } from '@features/questionnaire-demo/components/completion-screen';
 import { QuestionCard } from '@features/questionnaire-demo/components/question-card';
 import { StepProgressBar } from '@features/questionnaire-demo/components/progress-bar';
+import { X } from 'lucide-react-native';
 import {
   useDemoState,
   type DemoStep,
   type DemoAnswers,
 } from '@features/questionnaire-demo/hooks/use-demo-state';
 
-const SPRING_CONFIG = { damping: 20, stiffness: 300 };
-
-function animateCtaEnabled(ctaOpacity: SharedValue<number>, enabled: boolean): void {
-  ctaOpacity.value = withSpring(enabled ? 1.0 : 0.4, SPRING_CONFIG);
-}
-
-function runStepTransition(
-  tx: SharedValue<number>,
-  opacity: SharedValue<number>,
-  setVisible: (s: DemoStep) => void,
-  next: DemoStep,
-  dir: 'forward' | 'backward',
-): void {
-  const exitX = dir === 'forward' ? -30 : 30;
-  const enterX = dir === 'forward' ? 30 : -30;
-  opacity.value = withSpring(0, SPRING_CONFIG);
-  tx.value = withSpring(exitX, SPRING_CONFIG, () => {
-    tx.value = enterX;
-    opacity.value = 0;
-    runOnJS(setVisible)(next);
-    tx.value = withSpring(0, SPRING_CONFIG);
-    opacity.value = withSpring(1, SPRING_CONFIG);
-  });
-}
+const ADVANCE_DELAY_MS = 220;
 
 function getSelected(step: DemoStep, answers: DemoAnswers): string | string[] | null {
   if (step === 0) return answers.skinType;
@@ -62,32 +33,39 @@ function getSelected(step: DemoStep, answers: DemoAnswers): string | string[] | 
 export function QuestionnaireDemoScreen(): React.ReactElement {
   const router = useRouter();
   const { t } = useTranslation();
-  const { step, setStep, visibleStep, setVisibleStep, answers, setAnswer, canAdvance } =
-    useDemoState();
-  const tx = useSharedValue(0);
-  const opacity = useSharedValue(1);
-  const ctaOpacity = useSharedValue(0.4);
-  const cardStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: tx.value }],
-    opacity: opacity.value,
-  }));
-  const ctaStyle = useAnimatedStyle(() => ({ opacity: ctaOpacity.value }));
+  const { step, setStep, answers, setAnswer, canAdvance } = useDemoState();
+  const [advancing, setAdvancing] = useState(false);
+  const isMultiSelect = useMemo(() => Array.isArray(getSelected(step, answers)), [step, answers]);
 
-  useEffect(() => {
-    animateCtaEnabled(ctaOpacity, canAdvance);
-  }, [canAdvance, ctaOpacity]);
-
-  const advance = (): void => {
-    if (!canAdvance) return;
-    const next = Math.min(step + 1, 3) as DemoStep;
+  const goNext = (fromStep: DemoStep): void => {
+    const next = Math.min(fromStep + 1, 3) as DemoStep;
     setStep(next);
-    runStepTransition(tx, opacity, setVisibleStep, next, 'forward');
+    setAdvancing(false);
   };
+
   const goBack = (): void => {
+    if (step === 0) {
+      router.back();
+      return;
+    }
     const prev = Math.max(step - 1, 0) as DemoStep;
     setStep(prev);
-    runStepTransition(tx, opacity, setVisibleStep, prev, 'backward');
   };
+
+  const handleSelect = (value: string): void => {
+    if (advancing) return;
+    setAnswer(value);
+    if (isMultiSelect) return;
+    setAdvancing(true);
+    setTimeout(() => goNext(step), ADVANCE_DELAY_MS);
+  };
+
+  const handleNext = (): void => {
+    if (advancing || !canAdvance) return;
+    setAdvancing(true);
+    setTimeout(() => goNext(step), ADVANCE_DELAY_MS);
+  };
+
   const handleCompletion = (): void => {
     haptic.success();
     if (__DEV__) toast.success('Démo terminée', undefined, { haptic: false });
@@ -95,43 +73,54 @@ export function QuestionnaireDemoScreen(): React.ReactElement {
   };
 
   return (
-    <SafeAreaView className="flex-1">
-      <LinearGradient colors={[colors.surface, colors.creamMuted]} style={{ flex: 1 }}>
+    <LinearGradient colors={[colors.surface, colors.creamMuted]} style={{ flex: 1 }}>
+      <SafeAreaView className="flex-1" style={{ backgroundColor: 'transparent' }}>
         <View className="flex-row items-center px-4 pt-2 pb-4">
           <Pressable onPress={() => router.back()} haptic="light">
             <X size={24} color={colors.text} />
           </Pressable>
-          {step > 0 && step < 3 && (
-            <Pressable onPress={goBack} haptic="light" className="ml-2">
-              <ArrowLeft size={24} color={colors.text} />
-            </Pressable>
-          )}
           <StepProgressBar step={step} />
         </View>
 
-        {visibleStep === 3 ? (
+        {step === 3 ? (
           <CompletionScreen onBack={handleCompletion} />
         ) : (
           <>
             <View className="flex-1 px-6 pt-4">
-              <Animated.View style={[cardStyle, { flex: 1 }]}>
+              <Animated.View
+                key={step}
+                entering={FadeIn.duration(250)}
+                exiting={FadeOut.duration(150)}
+                style={{ flex: 1 }}
+              >
                 <QuestionCard
-                  step={visibleStep}
-                  selected={getSelected(visibleStep, answers)}
-                  onSelect={setAnswer}
+                  step={step}
+                  selected={getSelected(step, answers)}
+                  onSelect={handleSelect}
                 />
               </Animated.View>
             </View>
-            <Animated.View style={ctaStyle} className="px-6 pb-6 pt-4">
-              <Button
-                title={t('questionnaireDemo.next')}
-                onPress={advance}
-                haptic={canAdvance ? 'medium' : false}
-              />
-            </Animated.View>
+            <View className="px-6 pb-6 pt-4 gap-3">
+              {isMultiSelect && (
+                <Button
+                  title={t('questionnaireDemo.next')}
+                  onPress={handleNext}
+                  haptic="medium"
+                  disabled={!canAdvance}
+                />
+              )}
+              {step > 0 && (
+                <Button
+                  title={t('questionnaireDemo.back')}
+                  onPress={goBack}
+                  haptic="light"
+                  variant="secondary"
+                />
+              )}
+            </View>
           </>
         )}
-      </LinearGradient>
-    </SafeAreaView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }

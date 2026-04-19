@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
-import { CheckCircle } from 'lucide-react-native';
+import { CheckCircle, Sparkles } from 'lucide-react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -73,9 +73,12 @@ export function CompletionScreen({ onBack }: { onBack: () => void }): React.Reac
         <Text className="text-4xl font-bold text-primary text-center">
           {t('questionnaireDemo.completionTitle')}
         </Text>
-        <Text className="text-xl text-textMuted text-center">
-          {t('questionnaireDemo.completionSubtitle')}
-        </Text>
+        <View className="flex-row items-center justify-center gap-2">
+          <Text className="text-xl text-textMuted text-center">
+            {t('questionnaireDemo.completionSubtitle')}
+          </Text>
+          <Sparkles size={20} color={colors.primary} strokeWidth={1.75} />
+        </View>
       </View>
       <View className="w-full">
         <Button title={t('questionnaireDemo.back')} onPress={onBack} haptic={false} />

@@ -1,33 +1,28 @@
-import { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { useEffect } from 'react';
 
 import { colors } from '@theme/colors';
 
 export const TOTAL_STEPS = 3;
 
-const SPRING_CONFIG = { damping: 20, stiffness: 300 };
-
 function AnimatedSegment({ filled }: { filled: boolean }): React.ReactElement {
-  const [trackWidth, setTrackWidth] = useState(0);
-  const translateX = useSharedValue(-200);
+  const progress = useSharedValue(filled ? 1 : 0);
 
   useEffect(() => {
-    if (trackWidth === 0) return;
-    translateX.value = withSpring(filled ? 0 : -trackWidth, SPRING_CONFIG);
-  }, [filled, trackWidth]);
+    progress.value = withTiming(filled ? 1 : 0, { duration: 300 });
+  }, [filled, progress]);
 
   const fillStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }],
+    width: `${progress.value * 100}%`,
   }));
 
   return (
     <View
       className="flex-1 h-1.5 rounded-full overflow-hidden"
       style={{ backgroundColor: colors.border }}
-      onLayout={(e) => setTrackWidth(e.nativeEvent.layout.width)}
     >
-      <Animated.View style={[fillStyle, { flex: 1, backgroundColor: colors.primary }]} />
+      <Animated.View style={[fillStyle, { height: '100%', backgroundColor: colors.primary }]} />
     </View>
   );
 }

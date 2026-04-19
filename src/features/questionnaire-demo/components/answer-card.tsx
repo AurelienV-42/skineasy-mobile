@@ -1,4 +1,6 @@
+import type { LucideIcon } from 'lucide-react-native';
 import { Text, View } from 'react-native';
+import { Check } from 'lucide-react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -12,6 +14,7 @@ import { Card } from '@shared/components/card';
 import { Pressable } from '@shared/components/pressable';
 import { cn } from '@shared/utils/cn';
 import { haptic } from '@shared/utils/haptic';
+import { colors } from '@theme/colors';
 
 const SPRING_CONFIG = { damping: 20, stiffness: 300 };
 
@@ -20,13 +23,13 @@ function animateCardTap(scale: SharedValue<number>): void {
 }
 
 export function AnswerCard({
-  emoji,
   label,
+  icon: Icon,
   selected,
   onPress,
 }: {
-  emoji: string;
   label: string;
+  icon: LucideIcon;
   selected: boolean;
   onPress: () => void;
 }): React.ReactElement {
@@ -39,15 +42,18 @@ export function AnswerCard({
     onPress();
   };
 
+  const iconColor = selected ? colors.surface : colors.primary;
+
   return (
     <Animated.View style={cardStyle}>
       <Pressable onPress={handlePress} haptic={false}>
         <Card isPressed={selected}>
           <View className="flex-row items-center gap-3">
-            <Text className="text-2xl">{emoji}</Text>
+            <Icon size={22} color={iconColor} strokeWidth={1.75} />
             <Text className={cn('text-xl flex-1', selected ? 'text-white' : 'text-text')}>
               {label}
             </Text>
+            {selected && <Check size={22} color={colors.surface} strokeWidth={2.5} />}
           </View>
         </Card>
       </Pressable>

@@ -2,6 +2,12 @@
 
 ## 1.0.0
 
+- Changed questionnaire demo to tap-to-advance with simplified fade transitions
+- Fixed progress bar animation using width-based timing instead of translateX
+- Changed answer cards to use lucide icons instead of unrendered emojis
+- Added Next button on multi-select steps, disabling auto-advance
+- Changed back button to sit at the bottom and hide on first step
+- Fixed safe-area showing white bands by moving gradient above SafeAreaView
 - Added Recommendations section on dashboard with up to 3 journal-driven tips
 - Added docs/recommendations.md describing rules, thresholds, and data windows
 - Added SkinEasy existing-account message on welcome screen
