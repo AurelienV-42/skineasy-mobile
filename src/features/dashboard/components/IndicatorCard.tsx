@@ -47,7 +47,7 @@ export function IndicatorCard({
 }: IndicatorCardProps): React.ReactElement {
   return (
     <Pressable onPress={onPress} haptic="light">
-      <Card padding="md" className="gap-3">
+      <Card padding="md" className="gap-3" style={{ shadowColor: 'transparent' }}>
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center gap-1.5 flex-1">
             <Icon size={18} color={colors.brownDark} />
