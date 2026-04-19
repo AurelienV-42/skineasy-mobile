@@ -17,3 +17,7 @@
 - Changed dashboard indicators to a horizontal carousel always showing all 5 cards, filled ones first
 - Removed unused appConfig.ui.indicatorLayout option
 - Added per-day progress rings on the journal calendar for days with score > 0
+- Added Profile tab in the floating tab bar when routine access is unlocked (4-tab symmetric layout)
+- Changed home avatar to push /account stack screen when no routine access, navigate to /profile tab otherwise
+- Changed profile screen into a shared component rendered by both tab and stack routes
+- Changed profile subroutes (edit, questionnaire-demo) to live under /account/

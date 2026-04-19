@@ -28,6 +28,7 @@ export default function DashboardScreen(): React.ReactElement {
   const { t } = useTranslation();
   const router = useRouter();
   const user = useUserStore((state) => state.user);
+  const hasRoutineAccess = useUserStore((state) => state.hasRoutineAccess);
   const animStyles = useEntranceAnimation(6);
 
   // Selected date state
@@ -78,7 +79,7 @@ export default function DashboardScreen(): React.ReactElement {
                 lastname={user?.last_name}
                 email={user?.email}
                 size={32}
-                onPress={() => router.push('/profile')}
+                onPress={() => router.push(hasRoutineAccess ? '/profile' : '/account')}
               />
             </Animated.View>
 

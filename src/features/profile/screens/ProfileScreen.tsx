@@ -76,7 +76,7 @@ function CheckUpdatesButton(): React.ReactElement {
   );
 }
 
-export default function ProfileScreen(): React.ReactElement {
+export function ProfileScreen(): React.ReactElement {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const user = useUserStore((state) => state.user);
@@ -161,7 +161,6 @@ export default function ProfileScreen(): React.ReactElement {
 
   return (
     <ScreenHeader title={t('profile.title')} edges={['top']}>
-      {/* Avatar */}
       {!!user && (
         <View className="items-center mb-6">
           <Avatar
@@ -174,7 +173,6 @@ export default function ProfileScreen(): React.ReactElement {
         </View>
       )}
 
-      {/* User Info */}
       {!!user && (
         <View className="mb-8 items-center">
           <Text className="text-lg font-medium text-text">
@@ -189,10 +187,9 @@ export default function ProfileScreen(): React.ReactElement {
         </View>
       )}
 
-      {/* Menu Items */}
       <View className="bg-surface mb-4 -mx-4">
         <Pressable
-          onPress={() => router.push('/profile/edit')}
+          onPress={() => router.push('/account/edit')}
           haptic="medium"
           className="flex-row items-center justify-between p-4 border-b border-border"
         >
@@ -219,7 +216,6 @@ export default function ProfileScreen(): React.ReactElement {
         </Pressable>
       </View>
 
-      {/* Legal Section */}
       <View className="bg-surface mb-4 -mx-4">
         <Pressable
           onPress={() => openUrl(t('profile.termsOfSaleUrl'))}
@@ -258,7 +254,6 @@ export default function ProfileScreen(): React.ReactElement {
         </Pressable>
       </View>
 
-      {/* Account Actions */}
       <View className="bg-surface -mx-4">
         <Pressable
           onPress={handleLogout}
@@ -283,11 +278,10 @@ export default function ProfileScreen(): React.ReactElement {
         </Pressable>
       </View>
 
-      {/* DEV Only - Test Buttons */}
       {__DEV__ && (
         <View className="bg-surface mt-4 mb-8 -mx-4">
           <Pressable
-            onPress={() => router.push('/profile/questionnaire-demo')}
+            onPress={() => router.push('/account/questionnaire-demo')}
             haptic="medium"
             className="flex-row items-center justify-between p-4 border-b border-border"
           >
