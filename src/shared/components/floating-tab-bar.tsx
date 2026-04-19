@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { useTabTrigger } from 'expo-router/ui';
-import { BookOpen, Home, Plus, Sparkles } from 'lucide-react-native';
+import { BookOpen, Home, Plus, Sparkles, User } from 'lucide-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LayoutChangeEvent, Pressable as RNPressable, StyleSheet, Text, View } from 'react-native';
@@ -35,12 +35,10 @@ const BASE_TABS: TabConfig[] = [
   { name: 'journal', href: '/journal', labelKey: 'journal.title', icon: BookOpen },
 ];
 
-const ROUTINE_TAB: TabConfig = {
-  name: 'routine',
-  href: '/routine',
-  labelKey: 'routine.title',
-  icon: Sparkles,
-};
+const ROUTINE_TABS: TabConfig[] = [
+  { name: 'routine', href: '/routine', labelKey: 'routine.title', icon: Sparkles },
+  { name: 'profile', href: '/profile', labelKey: 'profile.title', icon: User },
+];
 
 type TabButtonProps = {
   tab: TabConfig;
@@ -133,8 +131,8 @@ export function FloatingTabBar(): React.ReactElement {
 
   const bottomPosition = Math.max(insets.bottom, 16);
 
-  const allTabs = hasRoutineAccess ? [...BASE_TABS, ROUTINE_TAB] : BASE_TABS;
-  const splitIndex = Math.ceil(allTabs.length / 2);
+  const allTabs = hasRoutineAccess ? [...BASE_TABS, ...ROUTINE_TABS] : BASE_TABS;
+  const splitIndex = allTabs.length / 2;
   const leftTabs = allTabs.slice(0, splitIndex);
   const rightTabs = allTabs.slice(splitIndex);
 

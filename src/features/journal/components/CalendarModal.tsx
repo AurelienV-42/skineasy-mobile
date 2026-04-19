@@ -1,7 +1,8 @@
 import { format } from 'date-fns';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Calendar, type DateData } from 'react-native-calendars';
 
+import { CalendarDayCircle } from '@features/calendar/components/CalendarDayCircle';
 import { useMonthScores } from '@features/calendar/hooks/useMonthScores';
 import { BottomSheet } from '@shared/components/bottom-sheet';
 import { colors } from '@theme/colors';
@@ -26,32 +27,7 @@ export function CalendarModal({
     month: todayDate.getMonth(),
   });
 
-  const { markedDates } = useMonthScores(visibleMonth.year, visibleMonth.month);
-
-  const finalMarkedDates = useMemo(() => {
-    const result: Record<string, object> = {};
-
-    // Convert multi-dot format to simple dot format and filter score=0
-    for (const [date, value] of Object.entries(markedDates)) {
-      const dots = (value as { dots: { color: string }[] }).dots;
-      const dotColor = dots?.[0]?.color;
-      if (dotColor && dotColor !== colors.textMuted) {
-        result[date] = {
-          marked: true,
-          dotColor,
-        };
-      }
-    }
-
-    // Add selected date marker
-    result[selectedDate] = {
-      ...result[selectedDate],
-      selected: true,
-      selectedColor: colors.primary,
-    };
-
-    return result;
-  }, [markedDates, selectedDate]);
+  const { scores } = useMonthScores(visibleMonth.year, visibleMonth.month);
 
   const handleDayPress = (day: DateData): void => {
     onDateSelect(day.dateString);
@@ -62,6 +38,25 @@ export function CalendarModal({
     setVisibleMonth({ year: month.year, month: month.month - 1 });
   };
 
+  const renderDay = ({
+    date,
+    state,
+  }: {
+    date?: DateData;
+    state?: string;
+  }): React.ReactElement | null => {
+    if (!date) return null;
+    return (
+      <CalendarDayCircle
+        day={date.day}
+        score={scores[date.dateString] ?? 0}
+        state={state ?? ''}
+        isSelected={date.dateString === selectedDate}
+        onPress={() => handleDayPress(date)}
+      />
+    );
+  };
+
   return (
     <BottomSheet visible={visible} onClose={onClose} backgroundColor={colors.background}>
       <Calendar
@@ -70,21 +65,14 @@ export function CalendarModal({
         onMonthChange={handleMonthChange}
         maxDate={today}
         enableSwipeMonths
-        markingType="dot"
-        markedDates={finalMarkedDates}
+        dayComponent={renderDay}
         theme={{
           backgroundColor: colors.background,
           calendarBackground: colors.background,
           textSectionTitleColor: colors.textMuted,
-          dayTextColor: colors.text,
-          todayTextColor: colors.primary,
-          selectedDayBackgroundColor: colors.primary,
-          selectedDayTextColor: colors.white,
           monthTextColor: colors.brownDark,
           textMonthFontWeight: 'bold',
-          textDayFontSize: 14,
           textMonthFontSize: 17,
-          textDisabledColor: colors.textMuted,
           arrowColor: colors.brownDark,
         }}
       />

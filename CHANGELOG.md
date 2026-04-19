@@ -16,3 +16,4 @@
 - Fixed sport duration input missing placeholder by allowing placeholder on Input when no floating label
 - Changed dashboard indicators to a horizontal carousel always showing all 5 cards, filled ones first
 - Removed unused appConfig.ui.indicatorLayout option
+- Added per-day progress rings on the journal calendar for days with score > 0

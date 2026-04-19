@@ -16,6 +16,7 @@ import { toUTCDateString } from '@shared/utils/date';
 import { colors } from '@theme/colors';
 
 type MarkedDates = Record<string, { dots: { color: string }[] }>;
+type Scores = Record<string, number>;
 
 function getScoreColor(score: number): string {
   if (score > 70) return colors.success;
@@ -31,7 +32,7 @@ function filterByDate<T extends { date: string }>(entries: T[], targetDate: Date
 export function useMonthScores(
   year: number,
   month: number,
-): { markedDates: MarkedDates; isLoading: boolean } {
+): { markedDates: MarkedDates; scores: Scores; isLoading: boolean } {
   const monthStart = startOfMonth(new Date(year, month));
   const monthEnd = endOfMonth(monthStart);
   const startDate = toUTCDateString(monthStart);
@@ -43,8 +44,8 @@ export function useMonthScores(
     staleTime: 5 * 60 * 1000,
   });
 
-  const markedDates = useMemo<MarkedDates>(() => {
-    if (!data) return {};
+  const { markedDates, scores } = useMemo<{ markedDates: MarkedDates; scores: Scores }>(() => {
+    if (!data) return { markedDates: {}, scores: {} };
 
     const sleeps: SleepEntry[] = data.sleeps ?? [];
     const meals: MealEntry[] = data.meals ?? [];
@@ -53,7 +54,8 @@ export function useMonthScores(
     const observations: ObservationEntry[] = data.observations ?? [];
 
     const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
-    const result: MarkedDates = {};
+    const marked: MarkedDates = {};
+    const scoreMap: Scores = {};
 
     for (const day of days) {
       const dateStr = format(day, 'yyyy-MM-dd');
@@ -71,13 +73,14 @@ export function useMonthScores(
         dayObservations[0],
       );
 
-      result[dateStr] = {
+      marked[dateStr] = {
         dots: [{ color: getScoreColor(score) }],
       };
+      scoreMap[dateStr] = score;
     }
 
-    return result;
+    return { markedDates: marked, scores: scoreMap };
   }, [data, monthStart, monthEnd]);
 
-  return { markedDates, isLoading };
+  return { markedDates, scores, isLoading };
 }

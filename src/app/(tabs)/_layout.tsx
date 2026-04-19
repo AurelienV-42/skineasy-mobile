@@ -20,6 +20,7 @@ const TAB_INDEX_MAP_WITH_ROUTINE: Record<string, number> = {
   index: 0,
   journal: 1,
   routine: 2,
+  profile: 3,
 };
 
 const TAB_INDEX_MAP_WITHOUT_ROUTINE: Record<string, number> = {
@@ -83,6 +84,7 @@ export default function TabsLayout(): React.ReactElement | null {
             <TabTrigger name="index" href="/" />
             <TabTrigger name="journal" href="/journal" />
             {hasRoutineAccess && <TabTrigger name="routine" href="/routine" />}
+            {hasRoutineAccess && <TabTrigger name="profile" href="/profile" />}
           </TabList>
           <FloatingTabBar />
         </Tabs>
