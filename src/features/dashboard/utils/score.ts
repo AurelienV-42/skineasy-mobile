@@ -55,7 +55,17 @@ export function calculateNutritionScore(entries: MealEntry[]): number {
     detailedMeals * nutrition.detailBonusPerMeal,
   );
 
-  return Math.min(100, typeScore + detailBonus);
+  const coverageScore = Math.min(100, typeScore + detailBonus);
+
+  const rated = entries.filter((e) => e.quality != null);
+  if (rated.length === 0) return coverageScore;
+
+  const avgQuality = rated.reduce((sum, e) => sum + (e.quality as number), 0) / rated.length;
+  const qualityScore = avgQuality * nutrition.qualityPointsPerLevel;
+
+  return Math.round(
+    coverageScore * nutrition.coverageWeight + qualityScore * nutrition.qualityWeight,
+  );
 }
 
 export function calculateStressScore(entry: StressEntry | undefined): number {

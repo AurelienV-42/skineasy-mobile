@@ -131,6 +131,7 @@ export interface Database {
           photo_url: string | null;
           note: string | null;
           meal_type: string | null;
+          quality: number | null;
           created_at: string;
         };
         Insert: {
@@ -141,6 +142,7 @@ export interface Database {
           photo_url?: string | null;
           note?: string | null;
           meal_type?: string | null;
+          quality?: number | null;
           created_at?: string;
         };
         Update: {
@@ -151,6 +153,7 @@ export interface Database {
           photo_url?: string | null;
           note?: string | null;
           meal_type?: string | null;
+          quality?: number | null;
           created_at?: string;
         };
         Relationships: [];

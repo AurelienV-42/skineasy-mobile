@@ -230,6 +230,7 @@ async function syncNutritionData(date: Date): Promise<void> {
         food_name: 'HealthKit',
         note: noteLines.join('\n'),
         meal_type: null,
+        quality: 3,
       });
       logger.info('[HealthKit] Nutrition synced for date:', dateString);
     } catch (error) {

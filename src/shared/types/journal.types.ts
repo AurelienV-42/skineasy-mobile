@@ -30,6 +30,9 @@ export type SportIntensity = 1 | 2 | 3 | 4 | 5;
 // Stress Level (1-5 scale)
 export type StressLevel = 1 | 2 | 3 | 4 | 5;
 
+// Meal Quality (1-5 scale, user-rated nutritional quality)
+export type MealQuality = 1 | 2 | 3 | 4 | 5;
+
 /**
  * Sleep Entry
  * One entry per user per day (unique constraint on user_id, date)
@@ -71,6 +74,7 @@ export interface MealEntry {
   food_name: string | null;
   note: string | null;
   meal_type: MealType | null;
+  quality: MealQuality | null; // 1-5 user-rated nutritional quality
   created_at: string;
 }
 
@@ -124,6 +128,7 @@ export interface CreateMealEntryDto {
   food_name?: string | null;
   note?: string | null;
   meal_type?: MealType | null;
+  quality: MealQuality; // 1-5 required on new entries
 }
 
 export interface CreateStressEntryDto {

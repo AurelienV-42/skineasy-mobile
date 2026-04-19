@@ -37,6 +37,11 @@ export const sportIntensitySchema = z.number().int().min(1).max(5);
 export const stressLevelSchema = z.number().int().min(1).max(5);
 
 /**
+ * Meal Quality (1-5 scale, user-rated nutritional quality)
+ */
+export const mealQualitySchema = z.number().int().min(1).max(5);
+
+/**
  * Sleep Entry Schema (API DTO)
  */
 export const sleepEntrySchema = z.object({
@@ -103,6 +108,7 @@ export type SportFormInput = z.infer<typeof sportFormSchema>;
 
 export const mealFormSchema = z.object({
   imageUri: z.string().nullable().optional(), // Local image URI before upload
+  quality: mealQualitySchema,
   food_name: z
     .string()
     .min(1, 'journal.nutrition.foodNameRequired')

@@ -21,3 +21,5 @@
 - Changed home avatar to push /account stack screen when no routine access, navigate to /profile tab otherwise
 - Changed profile screen into a shared component rendered by both tab and stack routes
 - Changed profile subroutes (edit, questionnaire-demo) to live under /account/
+- Added 1-5 meal quality rating at the top of the nutrition form
+- Added quality column on meal_entries and factored it into the nutrition score

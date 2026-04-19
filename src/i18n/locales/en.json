@@ -260,7 +260,18 @@
       "deleteError": "Failed to delete meal",
       "uploadError": "Failed to upload image",
       "listTitle": "Nutrition",
-      "empty": "Enter your data"
+      "empty": "Enter your data",
+      "quality": {
+        "label": "Meal quality",
+        "hint": "Rate from 1 to 5",
+        "level": {
+          "1": "Poor",
+          "2": "Fair",
+          "3": "Average",
+          "4": "Good",
+          "5": "Excellent"
+        }
+      }
     },
     "sport": {
       "title": "Physical Exercise",

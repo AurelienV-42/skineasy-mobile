@@ -118,6 +118,7 @@ CREATE TABLE meal_entries (
   photo_url text,
   note text,
   meal_type text CHECK (meal_type IN ('breakfast', 'lunch', 'dinner', 'snack')),
+  quality smallint CHECK (quality BETWEEN 1 AND 5),
   created_at timestamptz DEFAULT now()
 );
 CREATE INDEX idx_meal_entries_user_date ON meal_entries(user_id, date DESC);

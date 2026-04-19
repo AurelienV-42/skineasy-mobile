@@ -39,6 +39,7 @@ const makeSportEntry = (duration: number, intensity: 1 | 2 | 3 | 4 | 5): SportEn
 const makeMealEntry = (
   mealType: 'breakfast' | 'lunch' | 'dinner' | 'snack' | null,
   hasDetails = false,
+  quality: 1 | 2 | 3 | 4 | 5 | null = null,
 ): MealEntry => ({
   id: 'uuid-1',
   user_id: 'uuid-1',
@@ -47,6 +48,7 @@ const makeMealEntry = (
   food_name: hasDetails ? 'Salad' : null,
   note: null,
   meal_type: mealType,
+  quality,
   created_at: '2025-01-15T00:00:00.000Z',
 });
 
@@ -171,6 +173,32 @@ describe('calculateNutritionScore', () => {
   it('ignores null meal types in unique count', () => {
     const entries = [makeMealEntry(null), makeMealEntry('breakfast')];
     expect(calculateNutritionScore(entries)).toBe(25);
+  });
+
+  it('increases score when meal quality is high', () => {
+    // Single breakfast: coverage = 25. With quality 5 -> qualityScore 100.
+    // 25*0.6 + 100*0.4 = 15 + 40 = 55
+    const entries = [makeMealEntry('breakfast', false, 5)];
+    expect(calculateNutritionScore(entries)).toBe(55);
+  });
+
+  it('decreases score when meal quality is low', () => {
+    // Single breakfast: coverage = 25. With quality 1 -> qualityScore 20.
+    // 25*0.6 + 20*0.4 = 15 + 8 = 23
+    const entries = [makeMealEntry('breakfast', false, 1)];
+    expect(calculateNutritionScore(entries)).toBe(23);
+  });
+
+  it('averages quality across rated entries', () => {
+    // Two meals, quality 2 and 4 -> avg 3 -> qualityScore 60
+    // coverage: 2 types * 25 = 50. 50*0.6 + 60*0.4 = 30 + 24 = 54
+    const entries = [makeMealEntry('breakfast', false, 2), makeMealEntry('lunch', false, 4)];
+    expect(calculateNutritionScore(entries)).toBe(54);
+  });
+
+  it('falls back to coverage-only when no entry has quality', () => {
+    const entries = [makeMealEntry('breakfast', true)];
+    expect(calculateNutritionScore(entries)).toBe(30); // unchanged legacy behavior
   });
 });
 

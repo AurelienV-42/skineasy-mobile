@@ -22,6 +22,9 @@ export const scoreConfig = {
     pointsPerMealType: 25,
     detailBonusPerMeal: 5,
     maxDetailBonus: 20,
+    coverageWeight: 0.6,
+    qualityWeight: 0.4,
+    qualityPointsPerLevel: 20, // 1 -> 20, 5 -> 100
   },
   stress: {
     maxScore: 100,

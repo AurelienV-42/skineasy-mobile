@@ -17,6 +17,7 @@ import {
   ImageIcon,
   MessageSquare,
   Moon,
+  Star,
   Sun,
   Utensils,
   X,
@@ -33,13 +34,14 @@ import {
   useMealEntries,
   useUpdateMeal,
 } from '@features/journal/data/meal.queries';
-import { toast } from '@lib/toast';
 import { mealFormSchema, type MealFormInput } from '@features/journal/schemas/journal.schema';
+import { toast } from '@lib/toast';
 import { Button } from '@shared/components/button';
 import { Input } from '@shared/components/input';
 import { Pressable } from '@shared/components/pressable';
 import { ScreenHeader } from '@shared/components/screen-header';
 import { SectionHeader } from '@shared/components/section-header';
+import type { MealQuality } from '@shared/types/journal.types';
 import { cn } from '@shared/utils/cn';
 import { getTodayUTC, toISODateString } from '@shared/utils/date';
 import { pickImageFromGallery, takePhoto } from '@shared/utils/image';
@@ -51,6 +53,9 @@ const MEAL_TYPES = [
   { id: 'dinner', icon: Moon },
   { id: 'snack', icon: Cookie },
 ] as const;
+
+const QUALITY_LEVELS: readonly MealQuality[] = [1, 2, 3, 4, 5] as const;
+const DEFAULT_QUALITY: MealQuality = 3;
 
 export default function NutritionScreen() {
   const { t } = useTranslation();
@@ -87,6 +92,7 @@ export default function NutritionScreen() {
   } = useForm<MealFormInput>({
     resolver: zodResolver(mealFormSchema),
     mode: 'onChange',
+    defaultValues: { quality: DEFAULT_QUALITY },
   });
 
   // Populate form when editing or with pre-selected meal type
@@ -96,12 +102,14 @@ export default function NutritionScreen() {
         food_name: existingEntry.food_name || '',
         note: existingEntry.note || '',
         meal_type: existingEntry.meal_type,
+        quality: (existingEntry.quality ?? DEFAULT_QUALITY) as MealQuality,
       });
     } else if (params.mealType) {
       reset({
         food_name: existingEntry?.food_name || '',
         note: existingEntry?.note || '',
         meal_type: params.mealType as 'breakfast' | 'lunch' | 'dinner' | 'snack',
+        quality: DEFAULT_QUALITY,
       });
     }
   }, [existingEntry, params.mealType, reset]);
@@ -144,6 +152,7 @@ export default function NutritionScreen() {
       food_name: data.food_name,
       note: data.note || null,
       meal_type: data.meal_type,
+      quality: data.quality as MealQuality,
     };
 
     if (isEditMode && existingEntry) {
@@ -187,6 +196,50 @@ export default function NutritionScreen() {
       icon={Utensils}
       childrenClassName="pt-2 gap-6"
     >
+      {/* Meal Quality Rating (prominent, at top) */}
+      <View>
+        <SectionHeader
+          icon={Star}
+          title={t('journal.nutrition.quality.label')}
+          className="px-0 mb-3"
+        />
+        <Controller
+          control={control}
+          name="quality"
+          render={({ field: { onChange, value } }) => {
+            const current = (value ?? DEFAULT_QUALITY) as MealQuality;
+            return (
+              <View className="items-center">
+                <View className="flex-row gap-2">
+                  {QUALITY_LEVELS.map((level) => {
+                    const isActive = level <= current;
+                    return (
+                      <Pressable
+                        key={level}
+                        onPress={() => onChange(level)}
+                        haptic="light"
+                        className="p-1"
+                        accessibilityLabel={t(`journal.nutrition.quality.level.${level}`)}
+                      >
+                        <Star
+                          size={36}
+                          color={isActive ? colors.secondary : colors.border}
+                          fill={isActive ? colors.secondary : 'transparent'}
+                          strokeWidth={2}
+                        />
+                      </Pressable>
+                    );
+                  })}
+                </View>
+                <Text className="text-sm text-textMuted mt-2">
+                  {t(`journal.nutrition.quality.level.${current}`)}
+                </Text>
+              </View>
+            );
+          }}
+        />
+      </View>
+
       {/* Food Name Input */}
       <View>
         <Controller
@@ -200,7 +253,6 @@ export default function NutritionScreen() {
               onBlur={onBlur}
               maxLength={200}
               error={errors.food_name?.message ? t(errors.food_name.message as string) : undefined}
-              autoFocus
             />
           )}
         />
