@@ -2,6 +2,7 @@
 
 ## 1.0.0
 
+- Fixed autofill on login, signup and password recovery by adding textContentType and passwordRules
 - Changed observations list to 11 positive / 16 negative items with new keys and icons
 - Changed dashboard recommendations to trigger on tightness and new irritant keys
 - Added local notifications (journal 20h daily, bedtime 22h if bad sleep, Sunday 14h meal planning)

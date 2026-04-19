@@ -50,6 +50,7 @@ export function Step4Credentials({
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoComplete="email"
+                textContentType="username"
                 autoFocus
                 returnKeyType="next"
                 onSubmitEditing={() => passwordRef.current?.focus()}
@@ -72,6 +73,8 @@ export function Step4Credentials({
                 showPasswordToggle
                 autoCapitalize="none"
                 autoComplete="new-password"
+                textContentType="newPassword"
+                passwordRules="minlength: 8; required: lower; required: upper; required: digit;"
                 returnKeyType="next"
                 onSubmitEditing={() => confirmPasswordRef.current?.focus()}
                 onBlur={onBlur}
@@ -95,6 +98,8 @@ export function Step4Credentials({
                 showPasswordToggle
                 autoCapitalize="none"
                 autoComplete="new-password"
+                textContentType="newPassword"
+                passwordRules="minlength: 8; required: lower; required: upper; required: digit;"
                 returnKeyType="done"
                 onSubmitEditing={onNext}
                 onBlur={onBlur}

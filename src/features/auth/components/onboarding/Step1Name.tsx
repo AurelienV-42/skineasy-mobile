@@ -39,6 +39,7 @@ export function Step1Name({ onNext, control, errors, isValid }: Step1NameProps) 
                 label={t('auth.firstname')}
                 autoCapitalize="words"
                 autoComplete="given-name"
+                textContentType="givenName"
                 autoFocus
                 returnKeyType="next"
                 onSubmitEditing={() => lastnameRef.current?.focus()}
@@ -61,6 +62,7 @@ export function Step1Name({ onNext, control, errors, isValid }: Step1NameProps) 
                 label={t('auth.lastname')}
                 autoCapitalize="words"
                 autoComplete="family-name"
+                textContentType="familyName"
                 returnKeyType="done"
                 onSubmitEditing={onNext}
                 onBlur={onBlur}

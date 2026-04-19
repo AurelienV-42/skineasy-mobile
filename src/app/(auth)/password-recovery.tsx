@@ -102,6 +102,7 @@ export default function PasswordRecoveryScreen(): React.ReactElement {
                         keyboardType="email-address"
                         autoCapitalize="none"
                         autoComplete="email"
+                        textContentType="emailAddress"
                         autoFocus
                         returnKeyType="done"
                         onSubmitEditing={handleSubmit(onSubmit)}
