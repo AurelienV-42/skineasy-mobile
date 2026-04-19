@@ -52,17 +52,17 @@ Design: `docs/routine-resolution-flow.md`. `resolve-routine` Edge Function is de
 - [x] Routine screen reads result from store, renders 4 branches (i18n under `routine.resolution.*`)
 - [x] Header refresh action invalidates the resolution query
 - [x] Delete `src/features/routine/services/routine.service.ts` (currently throws stubs)
-- [ ] Tests: mock each of the 4 statuses, assert store state + rendered UI
+- [x] Tests: mock each of the 4 statuses, assert store state + rendered UI
 
 ---
 
 ## Phase C — Final cleanup
 
-- [ ] `rg "services/\w+\.service" src/` — should be empty after Phase A
-- [ ] `rg "API_URL|NestJS|/api/v1" src/` — should be empty
-- [ ] `npm run check` passes
-- [ ] `CLAUDE.md` Supabase section matches reality
-- [ ] README: short Supabase setup section pointing at the docs
+- [x] `rg "services/\w+\.service" src/` — should be empty after Phase A
+- [x] `rg "API_URL|NestJS|/api/v1" src/` — should be empty
+- [x] `npm run check` passes
+- [x] `CLAUDE.md` Supabase section matches reality
+- [x] README: short Supabase setup section pointing at the docs
 
 ---
 

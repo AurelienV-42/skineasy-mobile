@@ -1,6 +1,6 @@
 # Routine Resolution Flow
 
-> How the mobile app gets a routine for a user. Replaces webhook/polling thinking with on-demand resolution.
+> How the mobile app gets a routine for a user. Replaces webhook/polling thinking with on-demand resolution fired on **user login**.
 
 ---
 
@@ -8,18 +8,16 @@
 
 1. **Users fill a Typeform** on the website (or an emailed link) — sometimes days or weeks before ever opening the mobile app.
 2. **Later, they sign up / log in** to the mobile app with the same email.
-3. **On opening the Routine tab**, the app should figure out:
-   - "Is there already a generated routine for me?" → show it
-   - "Do we have their Typeform answers on file?" → generate the routine, then show it
-   - "Does Typeform have a response under this email?" → pull it, generate, show
-   - "Have they purchased the routine product?" (`clients.has_routine_access`) → gate shows "fill the form" (link already exists in the app)
-   - "Otherwise" → show a purchase CTA
-
-4. **No backfill of historical responses.** Each routine is generated **at the moment the user first opens the routine tab**. Since the algorithm evolves over time, earlier users get older algorithm versions and later users get improved ones — deliberate, not a bug. We don't pre-generate 8,580 routines with today's algorithm when the 500th version will be much better.
-
-5. **No webhook, no polling cron.** There's no reason to push responses into our DB proactively — we only need them the moment a user asks for their routine.
-
-6. **Email matching is good enough.** Case-insensitive match between `auth.users.email` and Typeform `email` answer. Aliases (`user+app@gmail.com`) are a known gap, tolerable. No manual "link my form" button for now.
+3. **On login / signup completion** (not on Routine tab open), the mobile app fires `resolve-routine` once. The Edge Function figures out:
+   - "Is there already a generated routine for me?" → return it
+   - "Do we have their Typeform answers on file?" → generate the routine, return it
+   - "Does Typeform have a response under this email?" → pull it, generate, return
+   - "Have they purchased the routine product?" (`clients.has_routine_access`) → return `needs_form` so UI shows "fill the form" CTA
+   - "Otherwise" → return `needs_purchase`
+4. **Result is stored in the auth store / user state** so every screen (dashboard, routine tab, notifications) knows the user's access state without re-fetching.
+5. **No backfill of historical responses.** Each routine is generated **at the moment the user first logs in**. Since the algorithm evolves over time, earlier users get older algorithm versions and later users get improved ones — deliberate, not a bug. We don't pre-generate 8,580 routines with today's algorithm when the 500th version will be much better.
+6. **No webhook, no polling cron.** There's no reason to push responses into our DB proactively — we only need them the moment a user logs in for the first time.
+7. **Email matching is good enough.** Case-insensitive match between `auth.users.email` and Typeform `email` answer. Aliases (`user+app@gmail.com`) are a known gap, tolerable. No manual "link my form" button for now.
 
 ---
 
@@ -74,9 +72,29 @@ Errors mapped via `mapSupabaseError` to i18n keys as per the main migration rule
 
 ### Typeform API is hit **at most once per user, ever**
 
-After step 3 succeeds, the response is in `questionnaire_responses` and the routine is in `routines`. All subsequent opens of the Routine tab hit step 1 and return instantly.
+After step 3 succeeds, the response is in `questionnaire_responses` and the routine is in `routines`. All subsequent logins hit step 1 and return instantly.
 
-If the user never had a Typeform response and never purchases, the function never reaches step 3 on any subsequent open — it short-circuits at step 4 based on the cached `clients.has_routine_access` flag.
+If the user never had a Typeform response and never purchases, the function never reaches step 3 on any subsequent login — it short-circuits at step 4 based on the cached `clients.has_routine_access` flag.
+
+### Call site: on login / signup (NOT on tab open)
+
+```
+supabase.auth.signInWithPassword(...)            // or signUp
+   └─> on success, before navigating to tabs
+       └─> call resolve-routine once
+           └─> stash result in user store / query cache
+               ├─ status=ready        → routine is ready for any screen
+               ├─ needs_form          → dashboard can show a card "fill the form", routine tab shows CTA
+               ├─ needs_purchase      → show subtle purchase prompt
+               └─ response_found_generation_pending → temporary, until generate-routine exists
+```
+
+Why here instead of routine-tab open:
+
+- Result is available immediately when user lands on the dashboard (no flash of wrong state)
+- Other surfaces (dashboard, profile) can react to the user's access state without re-fetching
+- Login already has a loading state; a ~500ms API call during login is invisible
+- One API call per session vs potentially many tab-opens
 
 ---
 
