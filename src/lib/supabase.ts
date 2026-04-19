@@ -17,7 +17,7 @@ const mmkvAdapter = {
   },
 };
 
-export const supabase = createClient<Database>(ENV.SUPABASE_URL, ENV.SUPABASE_ANON_KEY, {
+export const supabase = createClient<Database>(ENV.SUPABASE_URL, ENV.SUPABASE_PUBLISHABLE_KEY, {
   auth: {
     storage: mmkvAdapter,
     autoRefreshToken: true,

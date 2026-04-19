@@ -1,11 +1,9 @@
-import Constants from 'expo-constants';
-
 export const ENV = {
-  SUPABASE_URL: (Constants.expoConfig?.extra?.supabaseUrl as string) ?? '',
-  SUPABASE_ANON_KEY: (Constants.expoConfig?.extra?.supabaseAnonKey as string) ?? '',
-  TYPEFORM_ID: (Constants.expoConfig?.extra?.typeformId as string) ?? '',
-  PRESTASHOP_URL: (Constants.expoConfig?.extra?.prestashopUrl as string) ?? 'https://skineasy.com',
-  SENTRY_DSN: (Constants.expoConfig?.extra?.sentryDsn as string) ?? '',
-  DEV_LOGIN_SECRET: (Constants.expoConfig?.extra?.devLoginSecret as string) ?? '',
+  SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL ?? '',
+  SUPABASE_PUBLISHABLE_KEY: process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '',
+  TYPEFORM_ID: process.env.EXPO_PUBLIC_TYPEFORM_ID ?? '',
+  PRESTASHOP_URL: process.env.EXPO_PUBLIC_PRESTASHOP_URL ?? 'https://skineasy.com',
+  SENTRY_DSN: process.env.EXPO_PUBLIC_SENTRY_DSN ?? '',
+  DEV_LOGIN_SECRET: process.env.EXPO_PUBLIC_DEV_LOGIN_SECRET ?? '',
   IS_DEV: __DEV__,
 };

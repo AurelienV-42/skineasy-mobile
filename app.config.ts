@@ -39,12 +39,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     bundler: 'metro',
   },
   extra: {
-    supabaseUrl: process.env.SUPABASE_URL ?? '',
-    supabaseAnonKey: process.env.SUPABASE_ANON_KEY ?? '',
-    typeformId: process.env.TYPEFORM_ID ?? '',
-    prestashopUrl: process.env.PRESTASHOP_URL ?? 'https://skineasy.com',
-    devLoginSecret: process.env.DEV_LOGIN_SECRET ?? '',
-    sentryDsn: process.env.SENTRY_DSN,
     eas: {
       projectId: 'dfbff412-fc10-4a77-b170-eb432c2969b9',
     },
