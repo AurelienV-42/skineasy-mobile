@@ -2,6 +2,8 @@
 
 ## 1.0.0
 
+- Changed observations list to 11 positive / 16 negative items with new keys and icons
+- Changed dashboard recommendations to trigger on tightness and new irritant keys
 - Added local notifications (journal 20h daily, bedtime 22h if bad sleep, Sunday 14h meal planning)
 - Added notifications settings sheet on Profile with 3 toggles persisted in MMKV
 - Added docs/notifications.md covering decisions, triggers, storage and thresholds

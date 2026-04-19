@@ -30,7 +30,7 @@ interface BuildInput {
   observationToday: ObservationEntry | undefined;
 }
 
-const IRRITANT_OBSERVATIONS = ['sensitiveSkin', 'redness', 'drySkin'];
+const IRRITANT_OBSERVATIONS = ['irritation', 'redness', 'skinReaction', 'skinInflammation'];
 const MAX_RECOMMENDATIONS = 3;
 
 export function buildRecommendations({
@@ -43,7 +43,7 @@ export function buildRecommendations({
   const negatives = observationToday?.negatives ?? [];
   const all: Recommendation[] = [];
 
-  if (negatives.includes('drySkin')) {
+  if (negatives.includes('tightness')) {
     all.push({
       id: 'drinkWater',
       icon: GlassWater,

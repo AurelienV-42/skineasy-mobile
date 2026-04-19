@@ -222,31 +222,39 @@ describe('calculateObservationScore', () => {
   });
 
   it('adds points for positives', () => {
-    const entry = makeObservationEntry(['skinHydrated', 'glowingSkin'], []);
+    const entry = makeObservationEntry(['skinHydrated', 'glowingComplexion'], []);
     expect(calculateObservationScore(entry)).toBe(84); // 50 + 24 + 10
   });
 
   it('subtracts points for negatives', () => {
-    const entry = makeObservationEntry([], ['acne', 'redness']);
+    const entry = makeObservationEntry([], ['acneBreakout', 'redness']);
     expect(calculateObservationScore(entry)).toBe(44); // 50 - 16 + 10
   });
 
   it('handles mix of positives and negatives', () => {
-    const entry = makeObservationEntry(['skinHydrated'], ['acne', 'redness', 'drySkin']);
+    const entry = makeObservationEntry(['skinHydrated'], ['acneBreakout', 'redness', 'tightness']);
     expect(calculateObservationScore(entry)).toBe(48); // 50 + 12 - 24 + 10
   });
 
   it('clamps to 0 when heavily negative', () => {
     const entry = makeObservationEntry(
       [],
-      ['acne', 'redness', 'drySkin', 'excessSebum', 'blackheads', 'roughTexture', 'wrinkles'],
+      [
+        'acneBreakout',
+        'redness',
+        'tightness',
+        'excessSebum',
+        'cloggedPores',
+        'roughTexture',
+        'burning',
+      ],
     );
     expect(calculateObservationScore(entry)).toBe(4); // 50 - 56 + 10 = 4
   });
 
   it('clamps to 100 when all positives', () => {
     const entry = makeObservationEntry(
-      ['skinHydrated', 'fewerPimples', 'glowingSkin', 'smootherSkin'],
+      ['skinHydrated', 'fewerImperfections', 'glowingComplexion', 'smoothSkin'],
       [],
     );
     expect(calculateObservationScore(entry)).toBe(100); // 50 + 48 + 10 = 108 -> clamped 100
@@ -269,7 +277,7 @@ describe('calculateDayScore', () => {
     const sports = [makeSportEntry(30, 3)]; // 100
     const stress = makeStressEntry(1); // 100
     const observations = makeObservationEntry(
-      ['skinHydrated', 'fewerPimples', 'glowingSkin', 'smootherSkin'],
+      ['skinHydrated', 'fewerImperfections', 'glowingComplexion', 'smoothSkin'],
       [],
     ); // 100 (clamped)
 
