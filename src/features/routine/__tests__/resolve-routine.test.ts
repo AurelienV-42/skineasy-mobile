@@ -16,9 +16,15 @@ import type { ResolveRoutineResult } from '@features/routine/data/resolve-routin
 const RESOLVED_ROUTINE = {
   id: 'routine-1',
   user_id: 'user-1',
-  status: 'ready',
+  email: 'test@example.com',
+  status: 'active',
+  skin_type: 'seche',
   algorithm_version: 'v1',
+  analysis: null,
+  brand_cohesion_applied: false,
   created_at: '2026-01-01T00:00:00.000Z',
+  updated_at: '2026-01-01T00:00:00.000Z',
+  routine_products: [],
 };
 
 beforeEach(() => {
@@ -39,12 +45,15 @@ describe('resolveRoutine', () => {
     expect(mocks.invoke).toHaveBeenCalledWith('resolve-routine');
   });
 
-  it('returns response_found_generation_pending status', async () => {
-    const payload: ResolveRoutineResult = { status: 'response_found_generation_pending' };
+  it('returns routine_generation_failed status', async () => {
+    const payload: ResolveRoutineResult = {
+      status: 'routine_generation_failed',
+      questionnaire_response_id: 'qr-123',
+    };
     mocks.invoke.mockResolvedValue({ data: payload, error: null });
 
     const result = await resolveRoutine();
-    expect(result.status).toBe('response_found_generation_pending');
+    expect(result.status).toBe('routine_generation_failed');
   });
 
   it('returns needs_form status', async () => {

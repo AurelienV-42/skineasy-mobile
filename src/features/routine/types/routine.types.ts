@@ -63,7 +63,8 @@ export interface TypeContentDto {
 }
 
 export interface ProductDto {
-  id: number;
+  // Supabase UUID. Was `number` in the NestJS era (PrestaShop int IDs) but post-migration everything is UUID.
+  id: string;
   name: string;
   price: number;
   brand: string | null;

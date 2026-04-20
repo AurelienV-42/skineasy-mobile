@@ -85,6 +85,13 @@ function RootLayoutContent() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       logger.info('[_layout] Initial session:', !!session);
       setAuthenticated(!!session);
+      // Cold start with a restored session: onAuthStateChange does not fire SIGNED_IN,
+      // so trigger resolveRoutine here to hydrate the store on app open.
+      if (session) {
+        resolveRoutine()
+          .then(setRoutineResolution)
+          .catch((err: unknown) => logger.error('[_layout] initial resolveRoutine failed:', err));
+      }
     });
 
     const {

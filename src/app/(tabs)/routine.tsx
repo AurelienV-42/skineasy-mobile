@@ -4,7 +4,6 @@ import { Linking, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { resolveRoutine } from '@features/routine/data/resolve-routine.api';
-import { RoutineProcessingState } from '@features/routine/components/RoutineProcessingState';
 import RoutineResultsScreen from '@features/routine/screens/RoutineResultsScreen';
 import { Button } from '@shared/components/button';
 import { Pressable } from '@shared/components/pressable';
@@ -45,16 +44,27 @@ export default function RoutineTab(): React.ReactElement | null {
 
   if (!routineResolution) return null;
 
-  if (routineResolution.status === 'response_found_generation_pending') {
-    return (
-      <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-        <RoutineProcessingState />
-      </SafeAreaView>
-    );
-  }
-
   if (routineResolution.status === 'ready') {
     return <RoutineResultsScreen />;
+  }
+
+  if (routineResolution.status === 'routine_generation_failed') {
+    return (
+      <ResolutionShell onRefresh={handleRefresh}>
+        <AlertCircle size={48} color={colors.error} strokeWidth={1.5} />
+        <Text className="text-2xl font-bold text-text text-center mt-6 mb-3">
+          {t('routine.resolution.generationFailed.title')}
+        </Text>
+        <Text className="text-base text-textMuted text-center mb-8">
+          {t('routine.resolution.generationFailed.message')}
+        </Text>
+        <Button
+          title={t('routine.resolution.generationFailed.retry')}
+          onPress={handleRefresh}
+          haptic="medium"
+        />
+      </ResolutionShell>
+    );
   }
 
   if (routineResolution.status === 'needs_form') {

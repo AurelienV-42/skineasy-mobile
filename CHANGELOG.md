@@ -2,6 +2,13 @@
 
 ## 1.0.0
 
+- Added routine_generation_failed status wired through resolve-routine, UI and i18n
+- Added ResolvedRoutine type with embedded product data and routine_products
+- Added resolved-to-dto adapter mapping Edge Function payload to legacy RoutineDto
+- Changed ProductDto.id from number to string to match Supabase UUIDs
+- Changed useRoutine hook to read from user store via the adapter, no more stub throw
+- Added initial-session resolveRoutine call on cold start so the store hydrates on app open
+- Removed response_found_generation_pending status and RoutineProcessingState path
 - Changed routine step cards to per-product rows with a square checkbox top-right
 - Changed routine completion tracking to per-product keys persisted in MMKV
 - Fixed ScreenHeader title centering by giving left/right wrappers equal flex-1 widths

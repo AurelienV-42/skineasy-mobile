@@ -1,18 +1,31 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 
+import { resolvedRoutineToDto } from '@features/routine/data/resolved-to-dto.adapter';
 import type { RoutineDto } from '@features/routine/types/routine.types';
-import { queryKeys } from '@shared/config/queryKeys';
-import { useAuthStore } from '@shared/stores/auth.store';
+import { useUserStore } from '@shared/stores/user.store';
 
-export function useRoutine() {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+/**
+ * V1: reads the routine payload from the user store (set by resolveRoutine on app open / login)
+ * and adapts it to the legacy RoutineDto contract used by RoutineResultsScreen.
+ *
+ * No TanStack Query here — the source of truth is the Zustand store that resolve-routine hydrates.
+ * Loading / error states are derived from the store.
+ */
+export function useRoutine(): {
+  data: RoutineDto | null;
+  isLoading: boolean;
+  isError: boolean;
+} {
+  const routineResolution = useUserStore((state) => state.routineResolution);
 
-  return useQuery<RoutineDto | null, Error>({
-    queryKey: queryKeys.routineLast(),
-    queryFn: async (): Promise<RoutineDto | null> => {
-      throw new Error('common.error');
-    },
-    enabled: isAuthenticated,
-    staleTime: 5 * 60 * 1000,
-  });
+  const data = useMemo<RoutineDto | null>(() => {
+    if (!routineResolution || routineResolution.status !== 'ready') return null;
+    return resolvedRoutineToDto(routineResolution.routine);
+  }, [routineResolution]);
+
+  return {
+    data,
+    isLoading: routineResolution === null,
+    isError: routineResolution !== null && routineResolution.status === 'routine_generation_failed',
+  };
 }

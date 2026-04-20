@@ -433,6 +433,11 @@
         "title": "Service unavailable",
         "message": "Unable to retrieve your questionnaire right now. Please try again in a few minutes.",
         "retry": "Try again"
+      },
+      "generationFailed": {
+        "title": "Something went wrong",
+        "message": "We couldn't generate your routine. Your answers are saved — please try again in a moment.",
+        "retry": "Try again"
       }
     },
     "summary": {

@@ -434,6 +434,11 @@
         "title": "Service indisponible",
         "message": "Impossible de récupérer ton questionnaire pour le moment. Réessaie dans quelques minutes.",
         "retry": "Réessayer"
+      },
+      "generationFailed": {
+        "title": "Un problème est survenu",
+        "message": "Nous n'avons pas pu générer ta routine. Tes réponses sont bien enregistrées, réessaie dans un instant.",
+        "retry": "Réessayer"
       }
     },
     "summary": {

@@ -2,17 +2,48 @@ import { mapSupabaseError } from '@lib/error-mapper';
 import { supabase } from '@lib/supabase';
 import { logger } from '@shared/utils/logger';
 
+export interface ResolvedRoutineProduct {
+  id: string;
+  routine_id: string;
+  product_id: string;
+  category: string;
+  priority: number;
+  created_at: string;
+  product: {
+    id: string;
+    name: string;
+    brand: string | null;
+    price: number | null;
+    url: string | null;
+    illustration: string | null;
+    feature: string | null;
+    fonction: string | null;
+    type: string | null;
+    contenance: string | null;
+  } | null;
+}
+
 export interface ResolvedRoutine {
   id: string;
   user_id: string;
+  email: string | null;
   status: string;
+  skin_type: string;
   algorithm_version: string | null;
+  analysis: {
+    skinStates?: string[];
+    healthConditions?: Record<string, unknown>;
+    matchedSkinTypeRuleId?: string | null;
+  } | null;
+  brand_cohesion_applied: boolean | null;
   created_at: string;
+  updated_at: string;
+  routine_products: ResolvedRoutineProduct[];
 }
 
 export type ResolveRoutineResult =
   | { status: 'ready'; routine: ResolvedRoutine }
-  | { status: 'response_found_generation_pending' }
+  | { status: 'routine_generation_failed'; questionnaire_response_id: string }
   | { status: 'needs_form' }
   | { status: 'needs_purchase' }
   | { status: 'typeform_unavailable' };

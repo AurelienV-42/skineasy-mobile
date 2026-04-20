@@ -73,16 +73,22 @@ describe('useUserStore', () => {
     it.each<ResolveRoutineResult>([
       { status: 'needs_form' },
       { status: 'needs_purchase' },
-      { status: 'response_found_generation_pending' },
+      { status: 'routine_generation_failed', questionnaire_response_id: 'qr-123' },
       { status: 'typeform_unavailable' },
       {
         status: 'ready',
         routine: {
           id: 'r-1',
           user_id: 'u-1',
-          status: 'ready',
+          email: null,
+          status: 'active',
+          skin_type: 'seche',
           algorithm_version: 'v1',
+          analysis: null,
+          brand_cohesion_applied: false,
           created_at: '2026-01-01T00:00:00.000Z',
+          updated_at: '2026-01-01T00:00:00.000Z',
+          routine_products: [],
         },
       },
     ])('setRoutineResolution stores status "$status"', (result) => {
