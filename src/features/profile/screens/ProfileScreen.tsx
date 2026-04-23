@@ -163,7 +163,7 @@ export function ProfileScreen(): React.ReactElement {
   };
 
   return (
-    <ScreenHeader title={t('profile.title')} edges={['top']}>
+    <ScreenHeader title={t('profile.title')} edges={['top']} className="bg-background">
       {!!user && (
         <View className="items-center mb-6">
           <Avatar

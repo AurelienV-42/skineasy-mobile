@@ -69,7 +69,10 @@ export function ScreenHeader({
   );
 
   return (
-    <SafeAreaView edges={edges} className={cn('flex-1 bg-surface', className)}>
+    <SafeAreaView
+      edges={edges}
+      className={cn('flex-1', !className.includes('bg-') && 'bg-surface', className)}
+    >
       {/* Custom Header */}
       <Animated.View
         style={animStyles[0]}

@@ -2,6 +2,8 @@
 
 ## 1.0.0
 
+- Changed routine and profile screens to use bg-background matching home and journal
+- Changed ScreenHeader to skip default bg-surface when a bg class is passed
 - Added ability to hide routine products per-device via MMKV-backed store
 - Added AllProductsSheet listing every product with a toggleable eye icon
 - Changed RoutineSummaryCard to open AllProductsSheet instead of expanding carousel
