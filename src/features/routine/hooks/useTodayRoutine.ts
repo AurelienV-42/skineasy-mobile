@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { useHiddenProductsStore } from '@features/routine/stores/hiddenProductsStore';
 import type {
   ProductSelectionProducts,
   RoutineDto,
@@ -25,26 +26,29 @@ function getTodayDayOfWeek(): number {
 function getStepsWithProducts(
   steps: { order: number; category: string; estimatedMinutes: number }[],
   products: ProductSelectionProducts,
+  hiddenIds: Record<string, boolean>,
 ): RoutineStepWithProducts[] {
   const categoryOccurrence = new Map<string, number>();
 
-  return steps.map((step) => {
-    const cat = step.category as keyof ProductSelectionProducts;
-    const occurrence = (categoryOccurrence.get(cat) || 0) + 1;
-    categoryOccurrence.set(cat, occurrence);
+  return steps
+    .map((step) => {
+      const cat = step.category as keyof ProductSelectionProducts;
+      const occurrence = (categoryOccurrence.get(cat) || 0) + 1;
+      categoryOccurrence.set(cat, occurrence);
 
-    const categoryProducts = products[cat] || [];
-    // Distribute products: each step gets product at its occurrence index
-    const stepProducts =
-      categoryProducts.length > 1
-        ? [categoryProducts[occurrence - 1]].filter(Boolean)
-        : categoryProducts;
+      const categoryProducts = products[cat] || [];
+      // Distribute products: each step gets product at its occurrence index
+      const stepProducts =
+        categoryProducts.length > 1
+          ? [categoryProducts[occurrence - 1]].filter(Boolean)
+          : categoryProducts;
 
-    return {
-      step: step as RoutineStepWithProducts['step'],
-      products: stepProducts,
-    };
-  });
+      return {
+        step: step as RoutineStepWithProducts['step'],
+        products: stepProducts.filter((p) => !hiddenIds[p.id]),
+      };
+    })
+    .filter((s) => s.products.length > 0);
 }
 
 /**
@@ -54,6 +58,8 @@ function getStepsWithProducts(
  * @returns Today's morning and evening routine with products, or null if no routine
  */
 export function useTodayRoutine(routine: RoutineDto | null | undefined): TodayRoutine | null {
+  const hiddenIds = useHiddenProductsStore((s) => s.hiddenIds);
+
   return useMemo(() => {
     if (!routine) return null;
 
@@ -69,15 +75,15 @@ export function useTodayRoutine(routine: RoutineDto | null | undefined): TodayRo
     return {
       dayName: todaySchedule.dayName,
       morning: {
-        steps: getStepsWithProducts(todaySchedule.morning.steps, products),
+        steps: getStepsWithProducts(todaySchedule.morning.steps, products, hiddenIds),
         estimatedMinutes: todaySchedule.morning.estimatedMinutes,
       },
       evening: {
-        steps: getStepsWithProducts(todaySchedule.evening.steps, products),
+        steps: getStepsWithProducts(todaySchedule.evening.steps, products, hiddenIds),
         estimatedMinutes: todaySchedule.evening.estimatedMinutes,
       },
     };
-  }, [routine]);
+  }, [routine, hiddenIds]);
 }
 
 /**
@@ -90,6 +96,8 @@ export function useRoutineForDay(
   routine: RoutineDto | null | undefined,
   dayOfWeek: number,
 ): TodayRoutine | null {
+  const hiddenIds = useHiddenProductsStore((s) => s.hiddenIds);
+
   return useMemo(() => {
     if (!routine) return null;
 
@@ -104,13 +112,13 @@ export function useRoutineForDay(
     return {
       dayName: daySchedule.dayName,
       morning: {
-        steps: getStepsWithProducts(daySchedule.morning.steps, products),
+        steps: getStepsWithProducts(daySchedule.morning.steps, products, hiddenIds),
         estimatedMinutes: daySchedule.morning.estimatedMinutes,
       },
       evening: {
-        steps: getStepsWithProducts(daySchedule.evening.steps, products),
+        steps: getStepsWithProducts(daySchedule.evening.steps, products, hiddenIds),
         estimatedMinutes: daySchedule.evening.estimatedMinutes,
       },
     };
-  }, [routine, dayOfWeek]);
+  }, [routine, dayOfWeek, hiddenIds]);
 }

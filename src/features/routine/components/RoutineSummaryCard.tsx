@@ -1,57 +1,17 @@
-import { Baby, ChevronDown, Droplets, Package } from 'lucide-react-native';
-import { useMemo, useState } from 'react';
+import { Baby, ChevronRight, Droplets } from 'lucide-react-native';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, ScrollView, Text, View } from 'react-native';
-import Animated, {
-  FadeInDown,
-  interpolate,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import { Text, View } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
+import { AllProductsSheet } from '@features/routine/components/AllProductsSheet';
 import type {
-  ProductCategory,
   ProductSelectionDto,
   RoutineSummaryDto,
   SkinAnalysisDto,
 } from '@features/routine/types/routine.types';
-import { CATEGORY_LABELS } from '@features/routine/types/routine.types';
 import { Pressable } from '@shared/components/pressable';
 import { colors } from '@theme/colors';
-
-interface ProductCarouselItemProps {
-  category: string;
-  productName: string;
-  imageUrl: string | null;
-}
-
-function ProductCarouselItem({ category, productName, imageUrl }: ProductCarouselItemProps) {
-  return (
-    <View className="w-24 mr-3 items-center">
-      {/* Product Image */}
-      <View className="w-20 h-20 rounded-xl bg-background border border-border overflow-hidden mb-2">
-        {imageUrl ? (
-          <Image source={{ uri: imageUrl }} className="w-full h-full" resizeMode="cover" />
-        ) : (
-          <View className="w-full h-full items-center justify-center bg-background">
-            <Package size={24} color={colors.textMuted} />
-          </View>
-        )}
-      </View>
-      {/* Category */}
-      <Text className="text-xs font-medium text-primary text-center" numberOfLines={1}>
-        {category}
-      </Text>
-      {/* Product Name */}
-      <Text className="text-xs text-textMuted text-center" numberOfLines={2}>
-        {productName}
-      </Text>
-    </View>
-  );
-}
-
-const CAROUSEL_HEIGHT = 130;
 
 interface RoutineSummaryCardProps {
   summary: RoutineSummaryDto;
@@ -65,42 +25,11 @@ export function RoutineSummaryCard({
   productSelection,
 }: RoutineSummaryCardProps) {
   const { t } = useTranslation();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const animationProgress = useSharedValue(0);
+  const [showAllSheet, setShowAllSheet] = useState(false);
 
   const concerns = summary.primaryConcerns.join(' · ');
   const isPregnancySafe = analysis.healthConditions.isPregnancySafe;
-
-  // Flatten all products from all categories with images
-  const allProducts = useMemo(() => {
-    return Object.entries(productSelection.products)
-      .flatMap(([category, products]) =>
-        products.map((product) => ({
-          categoryKey: category,
-          category: CATEGORY_LABELS[category as ProductCategory] || category,
-          name: product.name,
-          id: product.id,
-          imageUrl: product.illustrationUrl || null,
-        })),
-      )
-      .filter((p) => p.name);
-  }, [productSelection.products]);
-
-  const toggleExpand = () => {
-    const newExpanded = !isExpanded;
-    setIsExpanded(newExpanded);
-    animationProgress.value = withTiming(newExpanded ? 1 : 0, { duration: 300 });
-  };
-
-  const carouselAnimatedStyle = useAnimatedStyle(() => ({
-    height: interpolate(animationProgress.value, [0, 1], [0, CAROUSEL_HEIGHT]),
-    opacity: animationProgress.value,
-    overflow: 'hidden' as const,
-  }));
-
-  const chevronAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${interpolate(animationProgress.value, [0, 1], [0, 180])}deg` }],
-  }));
+  const hasProducts = summary.totalProducts > 0;
 
   return (
     <Animated.View
@@ -126,44 +55,25 @@ export function RoutineSummaryCard({
         )}
       </View>
 
-      {/* View Products Dropdown */}
-      {allProducts.length > 0 && (
-        <>
-          <Pressable
-            onPress={toggleExpand}
-            haptic="light"
-            className="flex-row items-center justify-between mt-3 pt-3 border-t border-primary/10"
-            accessibilityLabel={t('routine.summary.viewProducts')}
-          >
-            <Text className="text-sm font-medium text-primary">
-              {t('routine.summary.viewProducts')} ({summary.totalProducts})
-            </Text>
-            <Animated.View style={chevronAnimatedStyle}>
-              <ChevronDown size={20} color={colors.primary} />
-            </Animated.View>
-          </Pressable>
-
-          {/* Collapsible Product Carousel */}
-          <Animated.View style={carouselAnimatedStyle} className="-mx-4">
-            <View className="pt-3">
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerClassName="px-4"
-              >
-                {allProducts.map((product) => (
-                  <ProductCarouselItem
-                    key={`${product.categoryKey}-${product.id}`}
-                    category={product.category}
-                    productName={product.name}
-                    imageUrl={product.imageUrl}
-                  />
-                ))}
-              </ScrollView>
-            </View>
-          </Animated.View>
-        </>
+      {hasProducts && (
+        <Pressable
+          onPress={() => setShowAllSheet(true)}
+          haptic="light"
+          className="flex-row items-center justify-between mt-3 pt-3 border-t border-primary/10"
+          accessibilityLabel={t('routine.summary.viewProducts')}
+        >
+          <Text className="text-sm font-medium text-primary">
+            {t('routine.summary.viewProducts')} ({summary.totalProducts})
+          </Text>
+          <ChevronRight size={18} color={colors.primary} />
+        </Pressable>
       )}
+
+      <AllProductsSheet
+        visible={showAllSheet}
+        onClose={() => setShowAllSheet(false)}
+        allProducts={productSelection.products}
+      />
     </Animated.View>
   );
 }

@@ -453,7 +453,11 @@
       "application": "Application",
       "keyIngredient": "Ingrédient clé",
       "irritation": "Potentiel d'irritation",
-      "buy": "Acheter"
+      "buy": "Acheter",
+      "hide": "Ne plus afficher ce produit"
+    },
+    "hiddenProducts": {
+      "restore": "Réafficher"
     }
   },
   "profile": {

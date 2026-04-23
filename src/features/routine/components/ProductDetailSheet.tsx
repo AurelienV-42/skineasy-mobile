@@ -1,9 +1,10 @@
-import { ExternalLink } from 'lucide-react-native';
+import { ExternalLink, EyeOff } from 'lucide-react-native';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, Linking, ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import RenderHtml, { type MixedStyleDeclaration } from 'react-native-render-html';
 
+import { useHiddenProductsStore } from '@features/routine/stores/hiddenProductsStore';
 import type { ProductDto } from '@features/routine/types/routine.types';
 import { BottomSheet } from '@shared/components/bottom-sheet';
 import { Card } from '@shared/components/card';
@@ -26,12 +27,20 @@ interface ProductDetailSheetProps {
 export function ProductDetailSheet({ product, visible, onClose }: ProductDetailSheetProps) {
   const { t } = useTranslation();
   const { width } = useWindowDimensions();
+  const hideProduct = useHiddenProductsStore((s) => s.hideProduct);
 
   const handleBuyPress = useCallback(async () => {
     if (!product?.url) return;
     haptic.heavy();
     await Linking.openURL(product.url);
   }, [product]);
+
+  const handleHidePress = useCallback(() => {
+    if (!product) return;
+    haptic.medium();
+    hideProduct(product.id);
+    onClose();
+  }, [product, hideProduct, onClose]);
 
   if (!product) return null;
 
@@ -138,6 +147,15 @@ export function ProductDetailSheet({ product, visible, onClose }: ProductDetailS
             <Text className="text-white font-semibold ml-2">{t('routine.productDetail.buy')}</Text>
           </Pressable>
         )}
+
+        {/* Hide Product Button */}
+        <Pressable
+          onPress={handleHidePress}
+          className="mt-3 rounded-xl py-3 px-4 flex-row items-center justify-center border border-border"
+        >
+          <EyeOff size={16} color={colors.textMuted} />
+          <Text className="text-textMuted font-medium ml-2">{t('routine.productDetail.hide')}</Text>
+        </Pressable>
       </ScrollView>
     </BottomSheet>
   );

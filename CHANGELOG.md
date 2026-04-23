@@ -2,6 +2,11 @@
 
 ## 1.0.0
 
+- Added ability to hide routine products per-device via MMKV-backed store
+- Added AllProductsSheet listing every product with a toggleable eye icon
+- Changed RoutineSummaryCard to open AllProductsSheet instead of expanding carousel
+- Changed useTodayRoutine to filter hidden products and drop empty steps
+- Added hide-product action in ProductDetailSheet that closes the sheet
 - Changed dashboard indicators to a 2-row horizontal carousel with column pagination
 - Changed observations screen to keep save button sticky outside the scroll view
 - Fixed meal photo RCTURLRequestHandler warning by signing photo_url in getEntriesByDateRange
