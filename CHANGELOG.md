@@ -2,6 +2,7 @@
 
 ## 1.0.0
 
+- Fixed JUMP_TO navigation errors by always registering routine/profile TabTriggers
 - Fixed silent failures in gallery/camera pickers by letting errors propagate instead of swallowing them
 - Added pick/take photo error toasts and processing overlay during meal photo upload
 - Changed nutrition indicator on home to a Lucide smiley (Frown/Meh/Smile) based on average meal quality
