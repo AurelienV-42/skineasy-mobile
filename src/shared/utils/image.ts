@@ -34,39 +34,24 @@ const IMAGE_COMPRESSION = {
 export async function pickImageFromGallery(
   onPermissionDenied?: PermissionDeniedHandler,
 ): Promise<string | null> {
-  try {
-    logger.info('[Image] Requesting gallery permissions');
+  const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (status !== 'granted') {
-      logger.warn('[Image] Gallery permission denied');
-      onPermissionDenied?.();
-      return null;
-    }
-
-    logger.info('[Image] Launching image picker');
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (result.canceled) {
-      logger.info('[Image] Image picker canceled');
-      return null;
-    }
-
-    const imageUri = result.assets[0].uri;
-    logger.info('[Image] Image selected:', imageUri);
-
-    return imageUri;
-  } catch (error) {
-    logger.error('[Image] Error picking image from gallery:', error);
+  if (status !== 'granted') {
+    logger.warn('[Image] Gallery permission denied');
+    onPermissionDenied?.();
     return null;
   }
+
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ['images'],
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  });
+
+  if (result.canceled) return null;
+
+  return result.assets[0].uri;
 }
 
 /**
@@ -78,39 +63,23 @@ export async function pickImageFromGallery(
 export async function takePhoto(
   onPermissionDenied?: PermissionDeniedHandler,
 ): Promise<string | null> {
-  try {
-    logger.info('[Image] Requesting camera permissions');
+  const { status } = await ImagePicker.requestCameraPermissionsAsync();
 
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-
-    if (status !== 'granted') {
-      logger.warn('[Image] Camera permission denied');
-      onPermissionDenied?.();
-      return null;
-    }
-
-    logger.info('[Image] Launching camera');
-
-    // Launch camera
-    const result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1, // Get full quality, we'll compress manually
-    });
-
-    if (result.canceled) {
-      logger.info('[Image] Camera canceled');
-      return null;
-    }
-
-    const imageUri = result.assets[0].uri;
-    logger.info('[Image] Photo captured:', imageUri);
-
-    return imageUri;
-  } catch (error) {
-    logger.error('[Image] Error taking photo:', error);
+  if (status !== 'granted') {
+    logger.warn('[Image] Camera permission denied');
+    onPermissionDenied?.();
     return null;
   }
+
+  const result = await ImagePicker.launchCameraAsync({
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  });
+
+  if (result.canceled) return null;
+
+  return result.assets[0].uri;
 }
 
 /**

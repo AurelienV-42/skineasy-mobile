@@ -2,6 +2,8 @@
 
 ## 1.0.0
 
+- Fixed silent failures in gallery/camera pickers by letting errors propagate instead of swallowing them
+- Added pick/take photo error toasts and processing overlay during meal photo upload
 - Changed nutrition indicator on home to a Lucide smiley (Frown/Meh/Smile) based on average meal quality
 - Changed NutritionScreen save/delete buttons to sticky footer outside the scroll view
 - Added tap on dashboard date label to open the journal CalendarModal for day selection
