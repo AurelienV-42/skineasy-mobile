@@ -2,6 +2,7 @@
 
 ## 1.0.0
 
+- Added tap on dashboard date label to open the journal CalendarModal for day selection
 - Changed stress indicator icon from Smile to Zap (lightning bolt)
 - Changed routine and profile screens to use bg-background matching home and journal
 - Changed ScreenHeader to skip default bg-surface when a bg class is passed

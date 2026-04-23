@@ -19,12 +19,14 @@ import { colors } from '@theme/colors';
 interface DateNavigationProps {
   selectedDate: Date;
   onDateChange: (date: Date) => void;
+  onPressDate?: () => void;
   className?: string;
 }
 
 export function DateNavigation({
   selectedDate,
   onDateChange,
+  onPressDate,
   className,
 }: DateNavigationProps): React.ReactElement {
   const { t, i18n } = useTranslation();
@@ -62,12 +64,18 @@ export function DateNavigation({
       </Pressable>
 
       {/* Date Display */}
-      <View className="flex-row items-baseline gap-2">
+      <Pressable
+        onPress={onPressDate}
+        haptic="light"
+        disabled={!onPressDate}
+        className="flex-row items-baseline gap-2"
+        accessibilityLabel={t('dashboard.navigation.selectDate')}
+      >
         <Text className="text-xl font-bold text-primaryDark">{getDateLabel()}</Text>
         <View className="flex-row items-baseline">
           <Text className="text-text-muted font-light">{dayNumber + ' ' + monthName}</Text>
         </View>
-      </View>
+      </Pressable>
 
       {/* Next Day - disabled if today */}
       <Pressable

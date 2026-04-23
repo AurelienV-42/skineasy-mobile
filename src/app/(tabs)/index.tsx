@@ -1,3 +1,4 @@
+import { format, parse } from 'date-fns';
 import { useRouter } from 'expo-router';
 import { Layers } from 'lucide-react-native';
 import { useState } from 'react';
@@ -7,6 +8,7 @@ import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { DateNavigation } from '@features/dashboard/components/DateNavigation';
+import { CalendarModal } from '@features/journal/components/CalendarModal';
 import { DayProgressDots } from '@features/dashboard/components/DayProgressDots';
 import { IndicatorsList } from '@features/dashboard/components/IndicatorsList';
 import { RecipeOfTheDay } from '@features/dashboard/components/RecipeOfTheDay';
@@ -33,6 +35,7 @@ export default function DashboardScreen(): React.ReactElement {
 
   // Selected date state
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [calendarVisible, setCalendarVisible] = useState(false);
 
   // Convert selected date to UTC string for API
   const dateString = toUTCDateString(selectedDate);
@@ -72,7 +75,11 @@ export default function DashboardScreen(): React.ReactElement {
               style={animStyles[0]}
               className="px-4 flex-row justify-between items-center"
             >
-              <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
+              <DateNavigation
+                selectedDate={selectedDate}
+                onDateChange={setSelectedDate}
+                onPressDate={() => setCalendarVisible(true)}
+              />
               <Avatar
                 avatar={user?.avatar_url}
                 firstname={user?.first_name}
@@ -126,6 +133,12 @@ export default function DashboardScreen(): React.ReactElement {
           </Animated.View> */}
         </View>
       </ScrollView>
+      <CalendarModal
+        visible={calendarVisible}
+        onClose={() => setCalendarVisible(false)}
+        selectedDate={format(selectedDate, 'yyyy-MM-dd')}
+        onDateSelect={(dateString) => setSelectedDate(parse(dateString, 'yyyy-MM-dd', new Date()))}
+      />
     </SafeAreaView>
   );
 }
