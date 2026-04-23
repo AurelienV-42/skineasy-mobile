@@ -163,6 +163,8 @@ export function IndicatorsList({
     router.push({ pathname: JOURNAL_PATHS[type], params: { date } });
   };
 
+  const columnCount = Math.ceil(items.length / 2);
+
   const handleScroll = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
       const { contentOffset, contentSize, layoutMeasurement } = e.nativeEvent;
@@ -172,20 +174,28 @@ export function IndicatorsList({
         return;
       }
       if (contentOffset.x >= maxOffset - 1) {
-        setActiveIndex(items.length - 1);
+        setActiveIndex(columnCount - 1);
         return;
       }
       const idx = Math.round(contentOffset.x / SNAP_INTERVAL);
-      setActiveIndex(Math.max(0, Math.min(items.length - 1, idx)));
+      setActiveIndex(Math.max(0, Math.min(columnCount - 1, idx)));
     },
-    [items.length],
+    [columnCount],
   );
+
+  const columns = useMemo<IndicatorItem[][]>(() => {
+    const result: IndicatorItem[][] = [];
+    for (let i = 0; i < items.length; i += 2) {
+      result.push(items.slice(i, i + 2));
+    }
+    return result;
+  }, [items]);
 
   return (
     <View>
       <FlatList
-        data={items}
-        keyExtractor={(item) => item.key}
+        data={columns}
+        keyExtractor={(col, index) => `col-${index}-${col[0]?.key ?? ''}`}
         horizontal
         showsHorizontalScrollIndicator={false}
         snapToInterval={SNAP_INTERVAL}
@@ -193,31 +203,35 @@ export function IndicatorsList({
         contentContainerStyle={{ paddingHorizontal: HORIZONTAL_PADDING }}
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        renderItem={({ item, index }) => (
+        renderItem={({ item: column, index }) => (
           <View
             style={{
               width: CARD_WIDTH,
-              marginRight: index === items.length - 1 ? 0 : GAP,
+              marginRight: index === columns.length - 1 ? 0 : GAP,
+              gap: GAP,
             }}
           >
-            <IndicatorCard
-              icon={item.icon}
-              label={item.label}
-              value={item.value}
-              level={item.level}
-              isEmpty={item.isEmpty}
-              onPress={() => navigateToJournal(item.key)}
-            />
+            {column.map((item) => (
+              <IndicatorCard
+                key={item.key}
+                icon={item.icon}
+                label={item.label}
+                value={item.value}
+                level={item.level}
+                isEmpty={item.isEmpty}
+                onPress={() => navigateToJournal(item.key)}
+              />
+            ))}
           </View>
         )}
       />
 
       <View className="flex-row justify-center items-center gap-1.5 mt-3">
-        {items.map((item, index) => {
+        {columns.map((column, index) => {
           const isActive = index === activeIndex;
           return (
             <View
-              key={item.key}
+              key={`dot-${index}-${column[0]?.key ?? ''}`}
               style={{
                 width: isActive ? 16 : 6,
                 height: 6,
