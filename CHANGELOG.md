@@ -2,6 +2,7 @@
 
 ## 1.0.0
 
+- Fixed iOS password autofill suggestions on login and register by deferring email autofocus until after entrance animation
 - Fixed Bitwarden/iOS password autofill on login by adding webcredentials associated domain and switching to current-password autoComplete
 - Added product_type_content lookup in resolve-routine edge function and plumbed type_content through the adapter
 - Added locale-aware FR/EN selection in resolved-to-dto adapter for type content, skin labels, states, conditions and day names

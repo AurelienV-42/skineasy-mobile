@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'expo-router';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Text, TextInput, View } from 'react-native';
@@ -21,9 +21,15 @@ export default function LoginScreen() {
   const { t } = useTranslation();
   const { mutate: login, isPending } = useLogin();
   const { mutate: devLogin, isPending: isDevPending } = useDevLogin();
+  const emailRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const animStyles = useEntranceAnimation(4);
+
+  useEffect(() => {
+    const t = setTimeout(() => emailRef.current?.focus(), 350);
+    return () => clearTimeout(t);
+  }, []);
 
   const {
     control,
@@ -64,12 +70,12 @@ export default function LoginScreen() {
                   name="email"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
+                      ref={emailRef}
                       label={t('auth.email')}
                       keyboardType="email-address"
                       autoCapitalize="none"
                       autoComplete="email"
                       textContentType="username"
-                      autoFocus
                       returnKeyType="next"
                       onSubmitEditing={() => passwordRef.current?.focus()}
                       onBlur={onBlur}

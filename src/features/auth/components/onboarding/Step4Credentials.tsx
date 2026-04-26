@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Linking, Text, TextInput, View } from 'react-native';
@@ -26,8 +26,14 @@ export function Step4Credentials({
   isLoading,
 }: Step4CredentialsProps) {
   const { t } = useTranslation();
+  const emailRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
   const confirmPasswordRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    const focusTimer = setTimeout(() => emailRef.current?.focus(), 350);
+    return () => clearTimeout(focusTimer);
+  }, []);
 
   return (
     <KeyboardScrollView contentContainerStyle={{ flexGrow: 1 }} bottomOffset={100}>
@@ -46,12 +52,12 @@ export function Step4Credentials({
             name="email"
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
+                ref={emailRef}
                 label={t('auth.email')}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoComplete="email"
                 textContentType="username"
-                autoFocus
                 returnKeyType="next"
                 onSubmitEditing={() => passwordRef.current?.focus()}
                 onBlur={onBlur}
