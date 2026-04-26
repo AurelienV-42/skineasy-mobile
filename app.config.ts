@@ -17,7 +17,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: false,
     bundleIdentifier: process.env.BUNDLE_ID ?? 'com.skineasy.app',
-    associatedDomains: ['applinks:skineasy.com'],
+    associatedDomains: ['applinks:skineasy.com', 'webcredentials:skineasy.com'],
     config: {
       usesNonExemptEncryption: false,
     },

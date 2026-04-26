@@ -94,7 +94,7 @@ export default function LoginScreen() {
                       secureTextEntry
                       showPasswordToggle
                       autoCapitalize="none"
-                      autoComplete="password"
+                      autoComplete="current-password"
                       textContentType="password"
                       returnKeyType="done"
                       onSubmitEditing={handleSubmit(onSubmit)}
