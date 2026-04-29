@@ -2,3 +2,4 @@ node_modules/
 dist/
 .expo/
 *.lock
+src/uniwind-types.d.ts
