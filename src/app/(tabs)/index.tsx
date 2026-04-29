@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, View } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from '@shared/components/styled-rn';
 
 import { DateNavigation } from '@features/dashboard/components/DateNavigation';
 import { CalendarModal } from '@features/journal/components/CalendarModal';

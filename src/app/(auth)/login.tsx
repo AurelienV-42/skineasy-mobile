@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Text, TextInput, View } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from '@shared/components/styled-rn';
 
 import { useDevLogin, useLogin } from '@features/auth/data/auth.queries';
 import { LoginInput, loginSchema } from '@features/auth/schemas/auth.schema';

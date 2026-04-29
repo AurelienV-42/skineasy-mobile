@@ -1,25 +1,67 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import 'uniwind';
 
-@layer base {
-  :root {
-    --color-primary: 125 96 78;
-    --color-primary-dark: 46 35 25;
-    --color-secondary: 232 76 63;
-    --color-background: 244 233 224;
-    --color-surface: 255 249 245;
-    --color-text: 107 85 68;
-    --color-text-muted: 154 138 122;
-    --color-text-light: 196 181 168;
-    --color-error: 232 76 63;
-    --color-success: 23 178 106;
-    --color-warning: 255 151 126;
-    --color-border: 224 201 184;
-    --color-border-focus: 23 178 106;
-    --color-cream: 244 233 224;
-    --color-cream-muted: 224 201 184;
-    --color-brown-dark: 46 35 25;
-    --color-brown-light: 125 96 78;
-  }
+@theme {
+  /* Colors - keep names identical to NativeWind config so className strings don't change */
+  --color-primary: rgb(125 96 78);
+  --color-primary-dark: rgb(46 35 25);
+  --color-secondary: rgb(232 76 63);
+  --color-background: rgb(244 233 224);
+  --color-surface: rgb(255 249 245);
+  --color-text: rgb(107 85 68);
+  --color-text-muted: rgb(154 138 122);
+  --color-text-light: rgb(196 181 168);
+  --color-error: rgb(232 76 63);
+  --color-success: rgb(23 178 106);
+  --color-warning: rgb(255 151 126);
+  --color-border: rgb(224 201 184);
+  --color-border-focus: rgb(23 178 106);
+  --color-cream: rgb(244 233 224);
+  --color-cream-muted: rgb(224 201 184);
+  --color-brown-dark: rgb(46 35 25);
+  --color-brown-light: rgb(125 96 78);
+
+  /* Fonts (Chocolates) */
+  --font-normal: 'ChocolatesRegular';
+  --font-medium: 'ChocolatesMedium';
+  --font-semibold: 'ChocolatesSemibold';
+  --font-bold: 'ChocolatesBold';
+
+  /* Spacing - 4px-grid named tokens */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 48px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Font sizes with line height (1.2x for Chocolates) */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 0.9rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.05rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.2rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.35rem;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.5rem;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 1.8rem;
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: 2.25rem;
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: 2.7rem;
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 3.6rem;
+  --text-6xl: 3.75rem;
+  --text-6xl--line-height: 4.5rem;
 }

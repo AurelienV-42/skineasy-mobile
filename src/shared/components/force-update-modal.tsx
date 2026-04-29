@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Image, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from '@shared/components/styled-rn';
 
 import assets from '@assets';
 import { Button } from '@shared/components/button';

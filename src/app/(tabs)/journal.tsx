@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from '@shared/components/styled-rn';
 
 import { CalendarDayDetail } from '@features/calendar/components/CalendarDayDetail';
 import { calculateDayScore } from '@features/dashboard/utils/score';

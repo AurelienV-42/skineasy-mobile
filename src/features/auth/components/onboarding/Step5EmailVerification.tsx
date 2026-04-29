@@ -3,7 +3,7 @@ import { MailWarning } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppState, Linking, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from '@shared/components/styled-rn';
 
 import { Background } from '@shared/components/background';
 import { Button } from '@shared/components/button';

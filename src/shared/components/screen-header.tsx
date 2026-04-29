@@ -4,9 +4,10 @@ import { createContext, ReactNode, useContext, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { Edge, SafeAreaView } from 'react-native-safe-area-context';
+import { Edge } from 'react-native-safe-area-context';
 
 import { Pressable } from '@shared/components/pressable';
+import { SafeAreaView } from '@shared/components/styled-rn';
 import { useEntranceAnimation } from '@shared/hooks/useEntranceAnimation';
 import { cn } from '@shared/utils/cn';
 import { colors } from '@theme/colors';

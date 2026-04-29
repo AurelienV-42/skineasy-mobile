@@ -1,7 +1,7 @@
 import { AlertCircle, RefreshCw, ShoppingCart } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { Linking, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from '@shared/components/styled-rn';
 
 import { resolveRoutine } from '@features/routine/data/resolve-routine.api';
 import RoutineResultsScreen from '@features/routine/screens/RoutineResultsScreen';

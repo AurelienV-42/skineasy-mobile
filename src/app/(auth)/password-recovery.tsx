@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from '@shared/components/styled-rn';
 
 import { useForgotPassword } from '@features/auth/data/auth.queries';
 import { ForgotPasswordInput, forgotPasswordSchema } from '@features/auth/schemas/auth.schema';

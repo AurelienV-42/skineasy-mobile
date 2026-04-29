@@ -2,6 +2,10 @@
 
 ## 1.0.0
 
+- Changed styling stack from NativeWind v4 + Tailwind v3 to Uniwind v1.6 + Tailwind v4 with @theme tokens in src/global.css
+- Removed nativewind, tailwindcss v3, tailwind.config.js, NativeWind babel preset and jsxImportSource
+- Added withUniwind SafeAreaView wrapper at src/shared/components/styled-rn.tsx and updated 14 import sites
+- Added Uniwind tech spec at docs/specs/tech/migrate-to-uniwind.md
 - Fixed collapsed search TextInput in SportTypeSelector bottom sheet and added missing placeholder
 - Changed dependency audit: aligned Expo SDK 54 patches, bumped true-sheet, supabase-js, tanstack-query, i18next, react-i18next, react-hook-form, nativewind, lucide-react-native, and dev tooling
 - Removed unused @expo-google-fonts/roboto and expo-status-bar packages
