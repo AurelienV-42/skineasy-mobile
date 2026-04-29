@@ -1,8 +1,8 @@
 import { forwardRef } from 'react';
-import { ScrollView } from 'react-native';
 import {
   KeyboardAwareScrollView,
   KeyboardAwareScrollViewProps,
+  KeyboardAwareScrollViewRef,
 } from 'react-native-keyboard-controller';
 
 export interface KeyboardScrollViewProps extends KeyboardAwareScrollViewProps {
@@ -26,7 +26,7 @@ export interface KeyboardScrollViewProps extends KeyboardAwareScrollViewProps {
  * </KeyboardScrollView>
  * ```
  */
-export const KeyboardScrollView = forwardRef<ScrollView, KeyboardScrollViewProps>(
+export const KeyboardScrollView = forwardRef<KeyboardAwareScrollViewRef, KeyboardScrollViewProps>(
   ({ bottomOffset = 16, children, ...props }, ref) => {
     return (
       <KeyboardAwareScrollView

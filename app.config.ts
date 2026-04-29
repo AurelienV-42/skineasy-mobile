@@ -8,7 +8,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   orientation: 'portrait',
   icon: './assets/icon.png',
   userInterfaceStyle: 'light',
-  newArchEnabled: true,
   splash: {
     image: './assets/splash-icon.png',
     resizeMode: 'contain',
@@ -28,7 +27,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#F4E9E0',
     },
     package: process.env.BUNDLE_ID ?? 'com.skineasy.app',
-    edgeToEdgeEnabled: true,
     softwareKeyboardLayoutMode: 'pan',
     intentFilters: [
       {

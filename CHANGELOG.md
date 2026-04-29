@@ -2,6 +2,9 @@
 
 ## 1.0.0
 
+- Changed Expo SDK from 54 to 55 with React Native 0.83.6 and React 19.2 plus aligned native modules
+- Removed app.config.ts newArchEnabled and android.edgeToEdgeEnabled flags now defaulted in SDK 55
+- Fixed KeyboardScrollView ref type from ScrollView to KeyboardAwareScrollViewRef for keyboard-controller 1.x
 - Changed styling stack from NativeWind v4 + Tailwind v3 to Uniwind v1.6 + Tailwind v4 with @theme tokens in src/global.css
 - Removed nativewind, tailwindcss v3, tailwind.config.js, NativeWind babel preset and jsxImportSource
 - Added withUniwind SafeAreaView wrapper at src/shared/components/styled-rn.tsx and updated 14 import sites
