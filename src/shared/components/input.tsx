@@ -1,6 +1,6 @@
 import { Eye, EyeOff } from 'lucide-react-native';
 import { forwardRef, useEffect, useRef, useState } from 'react';
-import { Animated, Text, TextInput, View, type TextInputProps } from 'react-native';
+import { Animated, Platform, Text, TextInput, View, type TextInputProps } from 'react-native';
 
 import { Pressable } from '@shared/components/pressable';
 import { useScrollContext } from '@shared/components/screen-header';
@@ -152,11 +152,12 @@ export const Input = forwardRef<TextInput, InputProps>(
           style={{
             height: multiline ? multilineHeight : 24 + 40, // Icon Size + padding vertical
             opacity: props.editable === false ? 0.6 : 1,
-            shadowColor: isFocused ? colors.primary : '#000',
-            shadowOffset: { width: 0, height: isFocused ? 4 : 2 },
-            shadowOpacity: props.editable === false ? 0 : isFocused ? 0.15 : 0.05,
-            shadowRadius: isFocused ? 8 : 4,
-            elevation: props.editable === false ? 0 : isFocused ? 4 : 1,
+            ...(Platform.OS === 'ios' && {
+              shadowColor: isFocused ? colors.primary : '#000',
+              shadowOffset: { width: 0, height: isFocused ? 4 : 2 },
+              shadowOpacity: props.editable === false ? 0 : isFocused ? 0.15 : 0.05,
+              shadowRadius: isFocused ? 8 : 4,
+            }),
           }}
         >
           {/* Floating Label */}

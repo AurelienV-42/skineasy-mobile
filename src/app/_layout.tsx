@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font';
 import * as Notifications from 'expo-notifications';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 import { Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -140,6 +141,7 @@ function RootLayoutContent() {
 
   return (
     <>
+      <StatusBar style="dark" />
       <Stack
         screenOptions={{
           headerShown: false,

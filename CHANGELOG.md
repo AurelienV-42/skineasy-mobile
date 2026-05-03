@@ -2,6 +2,8 @@
 
 ## 1.0.0
 
+- Added expo-status-bar with dark style in root layout for the light theme app
+- Fixed Input inner-shadow flicker on Android by removing elevation and gating shadow props to iOS
 - Fixed Card pressed/selected state on Android by removing elevation and aligning shadow across pressed/unpressed states on iOS
 - Fixed Button "inner shadow" artifact on Android (notably outline "Connect as") by skipping elevation and gating shadow to iOS
 - Changed ObservationsScreen padding to live on the ScrollView contentContainer so card/chip shadows are not horizontally clipped
