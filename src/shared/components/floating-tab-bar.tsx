@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect';
 import { useState } from 'react';
-import { LayoutChangeEvent, StyleSheet, View } from 'react-native';
+import { LayoutChangeEvent, Platform, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -30,7 +30,8 @@ export function FloatingTabBar(): React.ReactElement {
   const [sheetVisible, setSheetVisible] = useState(false);
   const [containerWidth, setContainerWidth] = useState(0);
 
-  const bottomPosition = Math.max(insets.bottom, 16);
+  const bottomPosition =
+    Platform.OS === 'android' ? insets.bottom + 12 : Math.max(insets.bottom, 16);
   const glassAvailable = isLiquidGlassAvailable();
 
   const allTabs = hasRoutineAccess ? [...BASE_TABS, ...ROUTINE_TABS] : BASE_TABS;
@@ -72,7 +73,7 @@ export function FloatingTabBar(): React.ReactElement {
         </View>
       )}
 
-      {containerWidth > 0 && glassAvailable && (
+      {containerWidth > 0 && (
         <Animated.View style={[styles.bubble, bubbleAnimatedStyle]} pointerEvents="none">
           <View style={styles.bubbleTint} pointerEvents="none" />
         </Animated.View>

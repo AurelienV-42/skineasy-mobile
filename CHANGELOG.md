@@ -2,6 +2,11 @@
 
 ## 1.0.0
 
+- Fixed Android push token registration log spam by deduping rapid AppState transitions and latching after permanent failures (e.g. missing FCM credentials)
+- Fixed floating tab bar overlapping the Android system navigation bar by basing the bottom offset on safe-area inset
+- Fixed missing active-tab bubble on Android by removing the iOS-only liquid-glass gate
+- Fixed disabled Input visual on Android: removed native underline, applied muted text color, dropped elevation/shadow when not editable
+- Fixed GlassContainer fallback on Android: tint color now applied as background, no elevation on translucent fills (kept iOS shadow on tinted variant)
 - Added HealthBanner on dashboard nudging iOS users without HealthKit authorization to connect, dismissible via MMKV
 - Added Sync Apple Health row in profile (production), state-aware label (Connect/Sync/Syncing) with relative last-sync timestamp
 - Changed HealthKitSyncButton to a minimal single-line UI; debug sheet and long-press now gated behind **DEV**

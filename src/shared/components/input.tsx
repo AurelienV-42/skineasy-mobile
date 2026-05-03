@@ -151,11 +151,12 @@ export const Input = forwardRef<TextInput, InputProps>(
           )}
           style={{
             height: multiline ? multilineHeight : 24 + 40, // Icon Size + padding vertical
+            opacity: props.editable === false ? 0.6 : 1,
             shadowColor: isFocused ? colors.primary : '#000',
             shadowOffset: { width: 0, height: isFocused ? 4 : 2 },
-            shadowOpacity: isFocused ? 0.15 : 0.05,
+            shadowOpacity: props.editable === false ? 0 : isFocused ? 0.15 : 0.05,
             shadowRadius: isFocused ? 8 : 4,
-            elevation: isFocused ? 4 : 1,
+            elevation: props.editable === false ? 0 : isFocused ? 4 : 1,
           }}
         >
           {/* Floating Label */}
@@ -188,7 +189,16 @@ export const Input = forwardRef<TextInput, InputProps>(
               showPasswordToggle && secureTextEntry ? 'pr-14' : 'pr-4',
             )}
             textAlignVertical={multiline ? 'top' : 'center'}
-            style={[{ fontSize: 14, lineHeight: 18, paddingTop: multiline ? 12 : 0 }, style]}
+            style={[
+              {
+                fontSize: 14,
+                lineHeight: 18,
+                paddingTop: multiline ? 12 : 0,
+                color: props.editable === false ? colors.textMuted : colors.text,
+              },
+              style,
+            ]}
+            underlineColorAndroid="transparent"
             onFocus={handleFocus}
             onBlur={handleBlur}
             multiline={multiline}

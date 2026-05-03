@@ -1,5 +1,5 @@
 import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect';
-import { LayoutChangeEvent, StyleSheet, View, ViewStyle } from 'react-native';
+import { LayoutChangeEvent, Platform, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { colors } from '@theme/colors';
 
@@ -38,8 +38,18 @@ export function GlassContainer({
     );
   }
 
+  const isTransparent = !tintColor || tintColor === 'transparent';
+
   return (
-    <View style={[styles.container, styles.fallback, style]} onLayout={onLayout}>
+    <View
+      style={[
+        styles.container,
+        isTransparent ? styles.fallbackTransparent : styles.fallbackOpaque,
+        !isTransparent && { backgroundColor: tintColor },
+        style,
+      ]}
+      onLayout={onLayout}
+    >
       {children}
     </View>
   );
@@ -52,12 +62,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.creamMuted,
   },
-  fallback: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 8,
+  fallbackOpaque: {
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 6,
+      },
+      default: {},
+    }),
   },
+  fallbackTransparent: {},
 });
