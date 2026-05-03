@@ -158,7 +158,7 @@ export default function NutritionScreen() {
     if (imageWasModified && localImageUri) {
       setIsUploading(true);
       try {
-        uploadedPath = await uploadMealPhoto(localImageUri, toISODateString(dateToUse));
+        uploadedPath = await uploadMealPhoto(localImageUri, dateToUse);
       } catch {
         toast.error(t('common.error'), t('journal.nutrition.uploadError'));
         setIsUploading(false);

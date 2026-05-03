@@ -34,7 +34,8 @@ export async function getMealByDate(date: string): Promise<MealEntry[]> {
 export async function uploadMealPhoto(uri: string, date: string): Promise<string> {
   const userId = await getUserId();
   const compressed = await compressImage(uri);
-  const path = `${userId}/${date}/${Date.now()}.jpg`;
+  const dateSegment = date.split('T')[0];
+  const path = `${userId}/${dateSegment}/${Date.now()}.jpg`;
   const { path: storagePath } = await uploadFile('meal-photos', path, compressed, {
     contentType: 'image/jpeg',
   });

@@ -2,6 +2,7 @@
 
 ## 1.0.0
 
+- Fixed meal photo upload on Android by switching Supabase Storage payload from Blob to ArrayBuffer and stripping ISO time from the storage path
 - Changed onboarding to skip the Apple Health sync step on Android
 - Added expo-status-bar with dark style in root layout for the light theme app
 - Fixed Input inner-shadow flicker on Android by removing elevation and gating shadow props to iOS
