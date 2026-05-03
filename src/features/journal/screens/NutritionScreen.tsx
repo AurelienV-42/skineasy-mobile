@@ -427,6 +427,7 @@ export default function NutritionScreen() {
                 onBlur={onBlur}
                 multiline
                 numberOfLines={3}
+                placeholder={t('journal.nutrition.notePlaceholder')}
                 error={errors.note?.message ? t(errors.note.message as string) : undefined}
               />
             )}
